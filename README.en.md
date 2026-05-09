@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.3.1-blue)](./SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -323,6 +323,7 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 Full changelog in [SKILL.md version record](./SKILL.md#-版本记录).
 
+- **V1.3.1** (2026-05-09) — External code review patch: closed unclosed bash fence in SKILL.md; added **B-7.0 hard safety gate** requiring explicit per-item user confirmation before any DELETE; sanitized `--task` input in `scripts/guandata.py` to block path traversal (`../`, reserved `.` / `..`); aligned frontmatter description version number.
 - **V1.3** (2026-05-09) — Tool-agnostic. Native support for Claude Code / OpenClaw / Codex / Hermes (gbrain). Added repo-root `AGENTS.md` (Codex project instructions + Hermes resolver) and `manifest.json` (tool-agnostic metadata); removed all `~/.claude/skills/` hardcoded paths; README adds Compatibility section listing per-tool install commands.
 - **V1.2** (2026-05-09) — Adopted OpenAI Codex's ExecPlan spec; added B-17.11 (SmartETL-tailored ExecPlan skeleton + four-section workflow), B-12 engineering pointer; references/ adds execplan-spec.md + agents-rule.md
 - **V1.1** (2026-05-09) — Integrated CTO Zhang Jin's two experience docs: B-17 full-chain rewrite methodology + Part C custom chart
