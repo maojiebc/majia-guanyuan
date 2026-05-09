@@ -250,9 +250,28 @@ class GuandataClient:
     # 当前 task ID（通过 --task 参数设置）
     _task_id: Optional[str] = None
 
+    # 安全 task 名：字母数字 + 中日韩字符 + _ - .，禁止路径穿越
+    _TASK_ID_PATTERN = re.compile(
+        r'^[A-Za-z0-9_.一-鿿぀-ヿ가-힯-]{1,64}$'
+    )
+
     @classmethod
     def set_task(cls, task_id: Optional[str]):
-        """设置当前任务 ID，用于隔离不同任务的缓存"""
+        """设置当前任务 ID，用于隔离不同任务的缓存。
+
+        安全约束：拒绝包含 / \\ .. 或超长的 task 名，防止路径穿越把
+        缓存写到 .cache/tasks 目录之外。允许字母/数字/中日韩字符/
+        下划线/短横线/点，长度 1–64。
+        """
+        if task_id is None:
+            cls._task_id = None
+            return
+        if (not cls._TASK_ID_PATTERN.match(task_id)) or task_id in ('.', '..'):
+            raise ValueError(
+                f"非法 --task 名：{task_id!r}。"
+                "只允许字母/数字/中日韩字符/下划线/短横线/点，长度 1-64，"
+                "禁止 / \\ . .. 等路径分隔符与保留名。"
+            )
         cls._task_id = task_id
 
     @classmethod

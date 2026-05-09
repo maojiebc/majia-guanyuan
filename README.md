@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.3.1-blue)](./SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -323,6 +323,7 @@ guanyuan-majia/
 
 完整变更历史见 [SKILL.md 末尾的版本记录](./SKILL.md#-版本记录)。
 
+- **V1.3.1** (2026-05-09) — 外部代码审查修复（patch）：补上 SKILL.md 未闭合代码块、新增 B-7.0 删除前硬性安全闸（agent 必须用户逐项确认才能 DELETE）、scripts/guandata.py `--task` 加输入校验封堵路径穿越、frontmatter description 版本号对齐。
 - **V1.3** (2026-05-09) — 工具无关化。原生兼容 Claude Code / OpenClaw / Codex / Hermes (gbrain)。新增仓库根 `AGENTS.md`（Codex 项目指令 + Hermes resolver）+ `manifest.json`（工具无关元数据）；去掉所有 `~/.claude/skills/` 类硬编码路径；README 加 Compatibility 章节列出每工具安装命令。
 - **V1.2** (2026-05-09) — 吸收 OpenAI Codex 的 ExecPlan 规范，新增 B-17.11 用 ExecPlan 管理重写工程（SmartETL 改写专用骨架 + 四个活文档章节实战用法）+ B-12 工程化指针；`references/` 加 execplan-spec.md + agents-rule.md
 - **V1.1** (2026-05-09) — 整合 CTO 张进的两份经验：B-17 全链路重写方法论 + Part C 自定义图表

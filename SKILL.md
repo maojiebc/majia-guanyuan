@@ -1,10 +1,10 @@
 ---
 name: guanyuan-majia
-description: 观远 BI（马甲专版 V1.1）— 数据查询/建卡/取数 + ETL 治理/写入/删除 + 自定义图表开发 全链路。Part A：用 guandata.py 做数据获取与分析（list-datasets / get-columns / search-values / create-and-get / create-card / get-card-data / delete-cards / create-page / release-page / list-pages）+ guancli 只读探索（ds/etl/page/card/metric/task/form/fetch）。Part B：用 guancli 做 ETL 治理与写入全链路（POST /api/directory ETL/DATA_SET 双树建目录、POST /api/etl/direct-save create+update 同接口、POST /api/etl/execute、GET /api/task 拿真实错误、DELETE /api/data-source 先于 DELETE /api/etl、批量扫描判断 ETL/字段去留、ODS/DIM/DWD/DWS/APP 五层分层、字段使用度双源审计、v2→v3 批量改造 SDK、CTO 张进的 SmartETL 全链路重写方法论：全链路追到原始源/旧资产只读/新链只允许 SQL 节点/双层结构+数值验收/副本页卡片级验收/差异追踪 5 步法/空快照处理标准/ExecPlan+modeling+evidence 交付物），10 类高频报错修复。Part C：自定义图表 HTML/CSS/JS 注入开发与排障（renderChart 4 参数 runtime 契约、payload_json 截断判断、固定卡片/overlay/z-index/stacking context、复制页 card id 重定位、懒加载 iframe、路由切换销毁注入物、live 浏览器验收、payload_json 拆列方案）。触发词：查数据、做图表、看报表、营业额、门店、会员、订单、分析、建卡、取数、删卡、ETL 治理、循环依赖、字段使用度、新建 ETL、修改 ETL、direct-save、ETL 报错、execute 失败、批量迁移 ETL、SmartETL 改写、全链路重写、副本页验收、差异追踪、空快照、自定义图表、HTML 注入、JS 注入、payload_json、overlay、固定卡片、z-index、看 BI HTTP API。
-version: "1.3"
+description: 观远 BI（马甲专版 V1.3）— 数据查询/建卡/取数 + ETL 治理/写入/删除 + 自定义图表开发 全链路。Part A：用 guandata.py 做数据获取与分析（list-datasets / get-columns / search-values / create-and-get / create-card / get-card-data / delete-cards / create-page / release-page / list-pages）+ guancli 只读探索（ds/etl/page/card/metric/task/form/fetch）。Part B：用 guancli 做 ETL 治理与写入全链路（POST /api/directory ETL/DATA_SET 双树建目录、POST /api/etl/direct-save create+update 同接口、POST /api/etl/execute、GET /api/task 拿真实错误、DELETE /api/data-source 先于 DELETE /api/etl、批量扫描判断 ETL/字段去留、ODS/DIM/DWD/DWS/APP 五层分层、字段使用度双源审计、v2→v3 批量改造 SDK、CTO 张进的 SmartETL 全链路重写方法论：全链路追到原始源/旧资产只读/新链只允许 SQL 节点/双层结构+数值验收/副本页卡片级验收/差异追踪 5 步法/空快照处理标准/ExecPlan+modeling+evidence 交付物），10 类高频报错修复。Part C：自定义图表 HTML/CSS/JS 注入开发与排障（renderChart 4 参数 runtime 契约、payload_json 截断判断、固定卡片/overlay/z-index/stacking context、复制页 card id 重定位、懒加载 iframe、路由切换销毁注入物、live 浏览器验收、payload_json 拆列方案）。触发词：查数据、做图表、看报表、营业额、门店、会员、订单、分析、建卡、取数、删卡、ETL 治理、循环依赖、字段使用度、新建 ETL、修改 ETL、direct-save、ETL 报错、execute 失败、批量迁移 ETL、SmartETL 改写、全链路重写、副本页验收、差异追踪、空快照、自定义图表、HTML 注入、JS 注入、payload_json、overlay、固定卡片、z-index、看 BI HTTP API。
+version: "1.3.1"
 ---
 
-# 观远 BI · 马甲专版（V1.3）
+# 观远 BI · 马甲专版（V1.3.1）
 
 ## 🧭 Part 选择
 
@@ -18,7 +18,7 @@ version: "1.3"
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part A/B 实证）+ 观远 CTO 张进（Part B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（V1.2 ExecPlan 规范）
-> **版本**：V1.3（2026-05-09）· **作用域**：本地私有 BI 实例
+> **版本**：V1.3.1（2026-05-09，patch）· **作用域**：本地私有 BI 实例
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见仓库根 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 
 ---
@@ -188,8 +188,7 @@ find .cache/data -name "*.csv" -mtime +7 -delete
 
 # 清理所有缓存（彻底清空）
 rm -rf .cache/*
-
-
+```
 
 ### 缓存文件格式
 
@@ -1029,6 +1028,19 @@ guancli etl get <DFID> --raw \
 
 ## B-7. 第五步：删除拓扑
 
+### ⛔ B-7.0 删除前的硬性安全闸（V1.3.1 新增）
+
+**Agent 在执行任何 `DELETE /api/data-source/` 或 `DELETE /api/etl/` 前必须满足以下全部条件，否则拒绝执行：**
+
+1. **用户已逐项明确确认**：列出本次将删除的所有 dsId / etlId（含 ETL 名 + 输出表名 + 路径），用户回复"确认删除"或等价明确指令。**模糊回复（如"嗯"、"可以"、"清理一下"）不算确认。**
+2. **下游引用已切流**：通过 `guancli ds get <dsId> --assoc` 或 B-10 双源审计验证目标 ds 的下游 ETL 与看板（page）已切到 v2，无任何活跃引用。
+3. **新链路对账通过**：v2 对应 ETL `status:FINISHED`，行数与 v1 差异 <1%，关键字段一致（参考 B-7.3 checklist）。
+4. **批量删除分批确认**：单次删除 ≤ 5 张表；超过 5 张必须分批，每批单独走步骤 1。
+
+**Agent 默认行为**：在 ETL 治理 / 重写 / 字段裁剪等任务里，**永远不要主动建议删除**。把待删清单作为 `governance-report.md` / `migration-status.md` 的一节产出给用户审阅，由用户主动指令"删 X / 删这一批"才执行。**新旧并行是默认终态，不是过渡态**——除非用户明确要求收敛。
+
+> 这条闸跟 B-13 红线、B-17.10 完成标准里的"对账确认后再处理旧表"一脉相承。**误删一张被看板用着的 ds，恢复成本高过保留旧链一年。**
+
 ### B-7.1 关键约束：先 ds 后 etl
 
 ```bash
@@ -1412,7 +1424,8 @@ sql = sql.replace(
 - ❌ 不要假设 INPUT_DATASET 字段名干净 —— 先看 `relativeFieldAlias` 和实际预览。
 - ❌ 不要 execute 完就走人 —— `status:FINISHED` 是任务触发结果，不是 ETL 执行结果。要 `GET /api/task/<id>` 拿 `result.error`。
 - ❌ 不要假设节点 ID 重排不影响 SQL —— 删除 INPUT_DATASET 后 input 位置式索引会变。
-- ❌ 不要为了"清理"删旧 ETL —— 并行做新链路、对账确认后再处理旧表。
+- ❌ **未经用户逐项明确确认，绝不执行任何 DELETE 操作**（含 `/api/data-source/` 和 `/api/etl/`）—— Agent 默认行为是把待删清单产出给用户审阅，由用户明确指令才执行。详见 **B-7.0 删除前的硬性安全闸**。模糊回复（"嗯"、"可以"、"清理一下"）不算确认。
+- ❌ 不要为了"清理"删旧 ETL —— 并行做新链路、对账确认后再处理旧表。新旧并行是默认终态，不是过渡态。
 - ❌ 不要直接 `DELETE /api/etl/<id>` —— 必须先 `DELETE /api/data-source/<dsId>` 再删 ETL。
 - ❌ 不要试 `DELETE /api/dataset/`、`/datasource/`、`/ds/` —— 正确是 `/api/data-source/`（带连字符）。
 - ❌ 不要给 INPUT_DATASET 用没有运行权限的 dsId —— 保存能过，执行会拿不到数据。
@@ -2053,6 +2066,11 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
+- **V1.3.1** (2026-05-09)：基于外部代码审查的修复版本（patch release，无新功能）。
+  - 🐛 **P1 修复**：SKILL.md L185 附近 ` ```bash ` 代码块未闭合 ——补上关闭 fence，确保后续 Markdown 结构不错位。
+  - 🛡️ **P2 安全**：新增 **B-7.0 删除前的硬性安全闸** —— Agent 在执行任何 `DELETE /api/data-source/` 或 `DELETE /api/etl/` 前必须满足四条硬约束（用户逐项明确确认 / 下游引用已切流 / 新链路对账通过 / 批量分批确认）。Agent 默认行为是产出待删清单供用户审阅，永远不主动删除。B-13 红线同步加一条最显眼的"未经用户逐项明确确认，绝不执行任何 DELETE 操作"。
+  - 🛡️ **P2 安全**：`scripts/guandata.py` 的 `set_task()` 加输入校验，拒绝包含 `/` `\` `..` 或保留名（`.` / `..`）或超长（>64）的 task 名，封堵 `--task ../../x` 类路径穿越漏洞。回归测试 8 种攻击向量全部 reject，正常中文/字母数字 task 名继续 accept。
+  - 📝 **P3 一致性**：frontmatter `description` 里残留的 "V1.1" 字样改为 "V1.3"，跟 `version` 字段对齐。
 - **V1.3** (2026-05-09)：工具无关化 — skill 现在不只跑在 Claude Code 上，原生兼容 OpenClaw、Codex、Hermes (gbrain)。
   - 新增 **仓库根 `AGENTS.md`** —— 给 Codex 作项目级指令，给 Hermes 作 resolver 文件，给其他 AGENTS.md-aware 工具（Cursor / Aider 等）作 navigation pointer。
   - 新增 **`manifest.json`** —— 工具无关的 skill 元数据清单，含 compatibility 矩阵、triggers 数组、dependencies、credits 结构化字段。
