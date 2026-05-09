@@ -43,24 +43,36 @@ The `SKILL.md` frontmatter (`name: guanyuan-majia`, `description: ...`, `version
 
 ## Repo layout (one-liner per file)
 
-    SKILL.md              ← Main agent doc (Part A + B + C). All Parts live here.
+    SKILL.md              ← Main agent doc (router + key rules; V1.5.0 progressive disclosure).
     AGENTS.md             ← This file (Codex/Hermes/Cursor entry).
     README.md             ← Human-facing 中文 README.
     README.en.md          ← Human-facing English README.
     ATTRIBUTIONS.md       ← Credits to contributors.
     LICENSE               ← MIT.
-    manifest.json         ← Tool-agnostic metadata (name/version/triggers/entry).
+    manifest.json         ← Tool-agnostic metadata (name/version/compatibility/entry).
+    package.json          ← npm package descriptor (V1.4.0+, scoped @supermajia).
     config.example.json   ← Credentials template.
     config.json           ← (gitignored) Real credentials.
     .gitignore
+    .npmignore            ← Defense-in-depth alongside package.json `files` whitelist.
+    bin/
+      install.js          ← npm CLI: install/list/uninstall to 4 agent tools (V1.4.0+).
     scripts/
       guandata.py         ← Part A main script (cards / fetch / delete / publish).
       zonedata_builder/   ← zoneData builder module.
-    references/
-      execplan-spec.md          ← OpenAI Codex ExecPlan full spec.
-      agents-rule.md            ← OpenAI Codex minimal scheduling rule.
-      etl-rewrite-original.md   ← CTO Zhang Jin SmartETL rewrite (original).
-      custom-chart-playbook.md  ← CTO Zhang Jin custom chart playbook (original).
+    references/            ← V1.5.0 progressive-disclosure playbooks (12 files):
+      part-a-commands.md         ← Full Part A command catalog (V1.5.0).
+      part-a-cards.md            ← Card params + 26 chart types + 6 examples (V1.5.0).
+      part-b-errors.md           ← Part B 10-category error fixes detailed (V1.5.0).
+      part-b-payload.md          ← ETL payload schema deep-dive (V1.5.0).
+      part-b-sdk.md              ← v2→v3 bulk refactoring SDK (V1.5.0).
+      part-b17-fullchain-rewrite.md  ← Full B-17 methodology (V1.5.0).
+      part-c-payload-json.md     ← C-3 payload_json troubleshooting (V1.5.0).
+      guancli-commands.md        ← guancli 9-category command quick-ref (V1.5.0).
+      execplan-spec.md           ← OpenAI Codex ExecPlan full spec (V1.2 original).
+      agents-rule.md             ← OpenAI Codex minimal scheduling rule (V1.2 original).
+      etl-rewrite-original.md    ← CTO Zhang Jin SmartETL rewrite (V1.1 original).
+      custom-chart-playbook.md   ← CTO Zhang Jin custom chart playbook (V1.1 original).
 
 ## Verification
 

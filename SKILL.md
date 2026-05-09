@@ -884,7 +884,22 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-- **V1.5.0** (2026-05-09)：架构重构 — Progressive Disclosure 改造，性能不变，省 token，结构更合理。
+- **V1.5.0** (2026-05-09)：🏗️ Progressive Disclosure 架构重构 — 性能不变、内容零损耗，但每次触发省 ~1.2 万 token。
+  - **SKILL.md 瘦身**：2087 行（89 KB）→ 913 行（48 KB），减 56%。主文档变成**路由层 + 关键规则 + 决策框架**，详情下沉。
+  - **保留在主文档**（agent 触发即载）：Part 选择路由表 + Part A 关键规则 + B-1 API 全图 + B-2 治理扫描决策框架 + B-3/B-5/B-6/B-7 实操步骤（**B-7.0 V1.3.1 删除安全闸完整保留**）+ B-9 10 类报错速查表（一行一条）+ B-10 字段审计 + B-12 经验十条 + B-13 红线 19 条 + B-14 API 速查 + B-15 实战 ID 速查 + B-17 入口指针 + 决策口诀 + Part C 全章节（仅 C-3 拆出）。
+  - **拆出到 `references/` 8 个新文件**（按需按 Part 拉取，主文档给出明确指针）：
+    - `part-a-commands.md` — Part A 完整命令清单 + 缓存机制 + `--task` 隔离
+    - `part-a-cards.md` — 卡片参数 + 26 图表类型 + metric/filters/sorting/字段名/filterType 全格式 + 6 个建卡示例
+    - `part-b-errors.md` — Part B 10 类报错的详细方案（每条含触发、根因、修复、回归测试）
+    - `part-b-payload.md` — ETL payload schema 深入（节点字段、relativeFieldAlias、位置式 input 索引）
+    - `part-b-sdk.md` — v2→v3 批量改造 SDK（transformV2ToV3 7 步）+ 时间窗口缩减实战
+    - `part-b17-fullchain-rewrite.md` — B-17 全链路重写方法论全章节（4 件交付 + 8 硬规则 + 5 步工作流 + 三层验收 + 差异追踪 5 步法 + 空快照处理 + ExecPlan 工作法）
+    - `part-c-payload-json.md` — C-3 payload_json 排障详解（截断判断 3 步 + 拆列推荐方案 + 实战 case）
+    - `guancli-commands.md` — guancli 9 大类命令完整速查（ds / etl / metric / metric_attribution / task / page / card / form / fetch）+ 工具选择决策表
+  - **保留在 `references/` 不变**（贡献者原文留档，与马甲蒸馏版区分）：
+    - `custom-chart-playbook.md` / `etl-rewrite-original.md`（CTO 张进原文）
+    - `execplan-spec.md` / `agents-rule.md`（OpenAI Codex 原文）
+  - **同步 bump**：`package.json` / `manifest.json` / npm tarball 都升 1.5.0。
   - 🏗️ **SKILL.md 大瘦身**：主文档从 2087 行 / 89 KB → ~913 行 / ~48 KB（瘦 56%），每次 skill 触发省 ~1.2 万 token。
   - 📦 **拆出 8 个 references/ 文件**（马甲蒸馏版）：part-a-commands / part-a-cards / guancli-commands / part-b-payload（含原 B-8 复用模板）/ part-b-errors / part-b-sdk / part-b17-fullchain-rewrite / part-c-payload-json。每个 references 文件自包含 + 反向链接到主文相关章节。
   - 🎯 **保留主文的章节**（高频/必读/决策框架）：Part 选择表、Part A 关键规则 + 命令骨架 8 条、B-0 工作流、B-1 API 全图、B-2 治理扫描（决策框架）、B-3 建目录、B-4 骨架（详见 references）、B-5 拿真错三步、B-6 校验工具集、B-7 删除拓扑（**含 V1.3.1 安全闸完整保留**）、B-9 速查表（10 类报错 1 行 1 条，详方案见 references）、B-10 字段审计、B-11 SDK 速查、B-12 经验 10 条、B-13 红线（19 条全保留）、B-14 API 速查、B-15 实战 ID、B-17 入口指针 + 决策口诀、Part C 全章节（仅 C-3 拆 references）。
