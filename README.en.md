@@ -5,7 +5,7 @@
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
 [![npm](https://img.shields.io/npm/v/@supermajia/guanyuan-bi?label=npm&color=cb3837)](https://www.npmjs.com/package/@supermajia/guanyuan-bi)
-[![Skill Version](https://img.shields.io/badge/skill-v1.4.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.5.0-blue)](./SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -304,9 +304,17 @@ guanyuan-majia/
 ├── scripts/
 │   ├── guandata.py                   # Part A main script (cards / fetch / delete / publish)
 │   └── zonedata_builder/             # zoneData builder module
-└── references/                       # Deep reference docs
-    ├── custom-chart-playbook.md      # CTO Zhang Jin's full custom chart playbook (original)
-    ├── etl-rewrite-original.md       # CTO Zhang Jin's SmartETL rewrite experience (original)
+└── references/                       # Deep reference docs (V1.5.0 progressive disclosure: 12 files)
+    ├── part-a-commands.md            # Full Part A command catalog + cache mechanism (V1.5.0)
+    ├── part-a-cards.md               # Card parameters + 26 chart types + 6 examples (V1.5.0)
+    ├── part-b-errors.md              # Part B 10-category error detailed fixes (V1.5.0)
+    ├── part-b-payload.md             # ETL payload schema deep-dive (V1.5.0)
+    ├── part-b-sdk.md                 # v2→v3 bulk refactoring SDK (V1.5.0)
+    ├── part-b17-fullchain-rewrite.md # Full B-17 full-chain rewrite methodology (V1.5.0)
+    ├── part-c-payload-json.md        # C-3 payload_json troubleshooting deep-dive (V1.5.0)
+    ├── guancli-commands.md           # guancli 9-category command quick-ref (V1.5.0)
+    ├── custom-chart-playbook.md      # CTO Zhang Jin's full custom chart playbook (V1.1)
+    ├── etl-rewrite-original.md       # CTO Zhang Jin's SmartETL rewrite experience (V1.1)
     ├── execplan-spec.md              # OpenAI Codex ExecPlan specification (V1.2)
     └── agents-rule.md                # OpenAI Codex minimal scheduling rule (V1.2)
 ```
@@ -355,6 +363,7 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 Full changelog in [SKILL.md version record](./SKILL.md#-版本记录).
 
+- **V1.5.0** (2026-05-09) — 🏗️ Progressive Disclosure refactor. `SKILL.md` shrunk from 2087 lines (89KB) to 913 lines (48KB), saving ~12K tokens per skill invocation. High-frequency content (Part router, decision framework, key APIs, error quick-ref, redlines, ID lookup) stays in the main doc; detailed playbooks moved into 8 new `references/` files (part-a-commands / part-a-cards / part-b-errors / part-b-payload / part-b-sdk / part-b17-fullchain-rewrite / part-c-payload-json / guancli-commands). Performance unchanged, zero content loss.
 - **V1.4.0** (2026-05-09) — 📦 npm-packaged. Published [`@supermajia/guanyuan-bi`](https://www.npmjs.com/package/@supermajia/guanyuan-bi) to npm registry. Added `bin/install.js` with built-in CLI (`install` / `list` / `uninstall` commands) that auto-detects Claude Code / OpenClaw / Codex / Hermes and never overwrites the user's `config.json`. One-line install: `npx @supermajia/guanyuan-bi install`.
 - **V1.3.1** (2026-05-09) — External code review patch: closed unclosed bash fence in SKILL.md; added **B-7.0 hard safety gate** requiring explicit per-item user confirmation before any DELETE; sanitized `--task` input in `scripts/guandata.py` to block path traversal (`../`, reserved `.` / `..`); aligned frontmatter description version number.
 - **V1.3** (2026-05-09) — Tool-agnostic. Native support for Claude Code / OpenClaw / Codex / Hermes (gbrain). Added repo-root `AGENTS.md` (Codex project instructions + Hermes resolver) and `manifest.json` (tool-agnostic metadata); removed all `~/.claude/skills/` hardcoded paths; README adds Compatibility section listing per-tool install commands.

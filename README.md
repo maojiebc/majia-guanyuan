@@ -5,7 +5,7 @@
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
 [![npm](https://img.shields.io/npm/v/@supermajia/guanyuan-bi?label=npm&color=cb3837)](https://www.npmjs.com/package/@supermajia/guanyuan-bi)
-[![Skill Version](https://img.shields.io/badge/skill-v1.4.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.5.0-blue)](./SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -302,9 +302,17 @@ guanyuan-majia/
 ├── scripts/
 │   ├── guandata.py                   # Part A 主脚本（建卡 / 取数 / 删卡 / 发布页面）
 │   └── zonedata_builder/             # zoneData 构建模块
-└── references/                       # 深度参考资料
-    ├── custom-chart-playbook.md      # CTO 张进自定义图表完整排障手册原文
-    ├── etl-rewrite-original.md       # CTO 张进 SmartETL 改写经验原文
+└── references/                       # 深度参考资料 (V1.5.0 progressive disclosure 重构后 12 份)
+    ├── part-a-commands.md            # Part A 完整命令清单 + 缓存机制（V1.5.0）
+    ├── part-a-cards.md               # 卡片参数 + 26 图表类型 + 6 示例（V1.5.0）
+    ├── part-b-errors.md              # Part B 10 类报错详方案（V1.5.0）
+    ├── part-b-payload.md             # ETL payload schema 详解（V1.5.0）
+    ├── part-b-sdk.md                 # v2→v3 批量改造 SDK（V1.5.0）
+    ├── part-b17-fullchain-rewrite.md # B-17 全链路重写方法论全章节（V1.5.0）
+    ├── part-c-payload-json.md        # C-3 payload_json 排障详解（V1.5.0）
+    ├── guancli-commands.md           # guancli 9 大类命令速查（V1.5.0）
+    ├── custom-chart-playbook.md      # CTO 张进自定义图表完整排障手册原文（V1.1）
+    ├── etl-rewrite-original.md       # CTO 张进 SmartETL 改写经验原文（V1.1）
     ├── execplan-spec.md              # OpenAI Codex ExecPlan 规范（V1.2）
     └── agents-rule.md                # OpenAI Codex 极简调度规则（V1.2）
 ```
@@ -353,6 +361,7 @@ guanyuan-majia/
 
 完整变更历史见 [SKILL.md 末尾的版本记录](./SKILL.md#-版本记录)。
 
+- **V1.5.0** (2026-05-09) — 🏗️ Progressive Disclosure 架构重构。SKILL.md 从 2087 行（89KB）压到 913 行（48KB），单次触发省 ~1.2 万 token；高频内容（Part 路由、决策框架、关键 API、报错速查、红线、ID 速查）留主文档，详细操作手册下沉到 `references/` 8 个新文件（part-a-commands / part-a-cards / part-b-errors / part-b-payload / part-b-sdk / part-b17-fullchain-rewrite / part-c-payload-json / guancli-commands）。性能不变、内容零损耗。
 - **V1.4.0** (2026-05-09) — 📦 npm package 化。发布 [`@supermajia/guanyuan-bi`](https://www.npmjs.com/package/@supermajia/guanyuan-bi) 到 npm registry，新增 `bin/install.js` 内置 CLI（`install` / `list` / `uninstall` 三命令），自动检测 Claude Code / OpenClaw / Codex / Hermes 4 个 agent 工具并安装，永不覆盖用户的 `config.json`。一行安装：`npx @supermajia/guanyuan-bi install`。
 - **V1.3.1** (2026-05-09) — 外部代码审查修复（patch）：补上 SKILL.md 未闭合代码块、新增 B-7.0 删除前硬性安全闸（agent 必须用户逐项确认才能 DELETE）、scripts/guandata.py `--task` 加输入校验封堵路径穿越、frontmatter description 版本号对齐。
 - **V1.3** (2026-05-09) — 工具无关化。原生兼容 Claude Code / OpenClaw / Codex / Hermes (gbrain)。新增仓库根 `AGENTS.md`（Codex 项目指令 + Hermes resolver）+ `manifest.json`（工具无关元数据）；去掉所有 `~/.claude/skills/` 类硬编码路径；README 加 Compatibility 章节列出每工具安装命令。
