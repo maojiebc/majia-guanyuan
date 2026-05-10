@@ -1,0 +1,24 @@
+{
+  "name": "guanyuan-majia-marketplace",
+  "owner": {
+    "name": "maojiebc (超级马甲)",
+    "email": "m9224@163.com"
+  },
+  "metadata": {
+    "description": "guanyuan-majia · 观远 BI / Guandata 全链路 Agent Skill — 数据查询 + ETL 治理与写入 + 自定义图表注入排障，工具无关（Claude Code / OpenClaw / Codex / Hermes 通用）",
+    "version": "1.6.0",
+    "homepage": "https://github.com/maojiebc/guanyuan-majia",
+    "repository": "https://github.com/maojiebc/guanyuan-majia"
+  },
+  "plugins": [
+    {
+      "name": "guanyuan-majia",
+      "description": "观远 BI 全链路 Skill — Part A 数据查询 / Part B ETL 治理与 SmartETL 全链路重写 / Part C 自定义图表 HTML/CSS/JS 注入与排障。60+ 战例 + 10 类报错手册 + 30 条法则白皮书。",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.5.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.6.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -23,6 +23,10 @@
 ## 概述
 
 本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
+
+<p align="center">
+  <img src="./docs/architecture.svg" alt="guanyuan-majia 三块拼图：Part A 数据查询 / Part B ETL 治理 / Part C 自定义图表" width="100%"/>
+</p>
 
 | Part | 能力 | 触发场景 |
 |---|---|---|
@@ -361,6 +365,25 @@ guanyuan-majia/
 | "自定义图表脚本不执行 / payload_json 报错" | **C** |
 | "固定卡片错位 / overlay 切页残留" | **C** |
 | "renderChart 第一个参数到底是啥" | **C** |
+
+---
+
+## 👤 作者 / 联系
+
+**马甲（@maojiebc）** · 超级马甲
+
+如果这份 skill 帮到你，欢迎在以下任意渠道找我交流踩坑实录、提需求、报 bug，也欢迎勾兑用户运营 / 数据中台 / BI 工程的实战经验：
+
+| 渠道 | 链接 |
+|---|---|
+| 📧 Email | [m9224@163.com](mailto:m9224@163.com) |
+| 🐙 GitHub | [github.com/maojiebc](https://github.com/maojiebc) |
+| 🪝 ClawHub | [clawhub.ai/maojiebc](https://clawhub.ai/maojiebc) |
+| 🐦 X | [@maojiebc](https://x.com/maojiebc) |
+| 📕 小红书 | [超级马甲](https://xhslink.com/m/4fQMJeHHWKC) |
+| 📰 微信公众号 | **超级马甲** |
+
+> 这份 skill 是 14 年用户运营 + 观远 BI 实战 + 60+ 张 ETL 写入实证沉淀出来的，问题/合作随时聊。
 
 ---
 

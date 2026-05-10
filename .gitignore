@@ -6,6 +6,9 @@ config.json
 .cache/
 data/columns_cache/
 
+# Local dual-agent sync lock (per-machine; not for distribution)
+.skill-sync.json
+
 # macOS
 .DS_Store
 .AppleDouble

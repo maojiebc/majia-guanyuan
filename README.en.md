@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.5.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.6.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -23,6 +23,10 @@
 ## Overview
 
 This Skill consolidates three categories of Guandata BI operations into **a single Claude Code Skill**, so AI can handle daily reporting + serious ETL governance + frontend custom chart debugging — all in one place.
+
+<p align="center">
+  <img src="./docs/architecture.svg" alt="guanyuan-majia three-pillar map: Part A data query / Part B ETL governance / Part C custom charts" width="100%"/>
+</p>
 
 | Part | Capability | When to use |
 |---|---|---|
@@ -363,6 +367,25 @@ guanyuan-majia/
 | "Custom chart script not running / payload_json error" | **C** |
 | "Fixed card misaligned / overlay leaks across routes" | **C** |
 | "What's the first arg of renderChart actually?" | **C** |
+
+---
+
+## 👤 Author / Contact
+
+**Majia (@maojiebc)** · 超级马甲 (Super Majia)
+
+If this skill helps you, find me on any of these channels — happy to chat about field experience, take feature requests, hear bug reports, or trade notes on user operations / data platforms / BI engineering work:
+
+| Channel | Link |
+|---|---|
+| 📧 Email | [m9224@163.com](mailto:m9224@163.com) |
+| 🐙 GitHub | [github.com/maojiebc](https://github.com/maojiebc) |
+| 🪝 ClawHub | [clawhub.ai/maojiebc](https://clawhub.ai/maojiebc) |
+| 🐦 X | [@maojiebc](https://x.com/maojiebc) |
+| 📕 Xiaohongshu | [Super Majia](https://xhslink.com/m/4fQMJeHHWKC) |
+| 📰 WeChat Official Account | **超级马甲** |
+
+> Built from 14 years of user-operations work, hands-on Guandata BI in production, and 60+ verified ETL write operations.
 
 ---
 

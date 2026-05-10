@@ -3,7 +3,7 @@ name: guanyuan-majia
 description: 观远 BI（Guandata）全链路操作 — 数据查询/建卡/取数（Part A）、ETL 治理/写入/删除（Part B，含 SmartETL 全链路重写 + 字段使用度审计 + ExecPlan 工程化）、自定义图表 HTML/CSS/JS 注入与排障（Part C）。当用户提到 营业额/门店/会员/订单/建卡/取数/报表/ETL/direct-save/payload_json/自定义图表/观远/Guandata/BI 时使用。马甲业务实战版，60+ ETL 战例、10 类报错手册、Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "1.5.3"
+  version: "1.6.0"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/guanyuan-majia
   openclaw:
