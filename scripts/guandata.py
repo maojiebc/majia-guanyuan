@@ -1173,8 +1173,8 @@ class GuandataClient:
                     "chartMain": {
                         "categories": ["示例门店A"],
                         "series": [
-                            {"name": "堂食", "data": [{"y": 600000.0}]},
-                            {"name": "外卖", "data": [{"y": 3000.0}]}
+                            {"name": "渠道A", "data": [{"y": 600000.0}]},
+                            {"name": "渠道B", "data": [{"y": 3000.0}]}
                         ]
                     }
                 }
@@ -1182,9 +1182,9 @@ class GuandataClient:
             示例（交叉表）:
                 {
                     "chartMain": {
-                        "data": [[{"v": 114480}], [{"v": 4650}]],
-                        "row": {"values": [[{"title": "南京市"}], [{"title": "扬州市"}]]},
-                        "column": {"values": [[{"title": "客流量"}]]},
+                        "data": [[{"v": 100000}], [{"v": 5000}]],
+                        "row": {"values": [[{"title": "城市A"}], [{"title": "城市B"}]]},
+                        "column": {"values": [[{"title": "订单数"}]]},
                         "count": 15
                     }
                 }

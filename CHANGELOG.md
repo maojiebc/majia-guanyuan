@@ -5,6 +5,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [1.7.1] — 2026-05-11
+
+### Security / Sanitization
+- **Removed all business-identifying data** from public docs and code examples.
+  Previously, docstring examples in `scripts/guandata.py`, multiple references
+  pages, `docs/architecture.svg`, and the B-15 ID quick-reference contained
+  real customer brand name, real store name, real internal directory IDs, and
+  customer-specific field naming (`销售额`, `实收金额`, `客户数` etc.).
+  All replaced with generic equivalents (`销售额`, `实收金额`, `客户数`, `示例门店A`,
+  `城市A/B`, `<v2_etl_dir_id>` placeholders). No code behavior change.
+
 ## [1.7.0] — 2026-05-11
 
 ### Added

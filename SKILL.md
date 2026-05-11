@@ -3,7 +3,7 @@ name: guanyuan-majia
 description: 观远 BI（Guandata）全链路操作 — 数据查询/建卡/取数（Part A）、ETL 治理/写入/删除（Part B，含 SmartETL 全链路重写 + 字段使用度审计 + ExecPlan 工程化）、自定义图表 HTML/CSS/JS 注入与排障（Part C）。当用户提到 营业额/门店/会员/订单/建卡/取数/报表/ETL/direct-save/payload_json/自定义图表/观远/Guandata/BI 时使用。马甲业务实战版，60+ ETL 战例、10 类报错手册、Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/guanyuan-majia
   openclaw:
@@ -27,7 +27,7 @@ metadata:
           - guancli
 ---
 
-# 观远 BI · 马甲专版（V1.7.0）
+# 观远 BI · 马甲专版（V1.7.1）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -645,25 +645,27 @@ checkStatus(v3Name)                    // guancli etl search → parse Status
 
 ---
 
-## B-15. 实战 ID 速查（马甲业务侧）
+## B-15. 实战 ID 速查（模板）
+
+> 跨多日的大型重构（B-17 / 30+ 表）建议在仓库根维护一份本地 ID 速查表，避免每次都用 `guancli` 翻树。下面是模板，把 `<...>` 占位符替换成你自己 BI 实例里的真实 ID。**不要把这份表 commit 到公开仓库。**
 
 | 名称 | ID | 说明 |
 |---|---|---|
-| 旧 ETL 父目录（v1 会员数据库） | `<v1_etl_dir_id>` | v1 ETL 目录 |
-| 旧数据集父目录（马甲的会员数据库） | `<v1_ds_dir_id>` | v1 数据集目录 |
-| **v2 ETL 目录**（会员数仓_v2） | `<v2_etl_dir_id>` | 新建 ETL 落这里 |
-| **v2 数据集目录**（会员数仓_v2） | `<v2_ds_dir_id>` | OUTPUT_DATASET 落这里 |
+| 旧 ETL 父目录 | `<v1_etl_dir_id>` | v1 ETL 目录 |
+| 旧数据集父目录 | `<v1_ds_dir_id>` | v1 数据集目录 |
+| **v2 ETL 目录** | `<v2_etl_dir_id>` | 新建 ETL 落这里 |
+| **v2 数据集目录** | `<v2_ds_dir_id>` | OUTPUT_DATASET 落这里 |
 | 数据集树根目录 | `<ds_root_id>` | dirPath 第一层 |
 | ETL 树根目录 | `<etl_root_id>` | – |
-| PoC ETL（dim_store_name_map_v2） | `<poc_etl_id>` | 第一个跑通的最小 ETL |
+| PoC ETL | `<poc_etl_id>` | 第一个跑通的最小 ETL |
 | PoC 输出数据集 | `<poc_output_ds_id>` | 同上输出 |
-| PoC 输入数据集（一个编号多个名字） | `<poc_input_ds_id>` | 593 行小表，权限可运行 |
+| PoC 输入数据集 | `<poc_input_ds_id>` | 小表，权限可运行 |
 
 如果上面 ID 失效（被删/改名），用以下命令重新拿：
 
 ```bash
-guancli fetch GET /api/directory/ETL/authorized-tree | jq '.response | .. | objects | select(.name=="会员数仓_v2")'
-guancli fetch GET /api/directory/DATA_SET/authorized-tree | jq '.response | .. | objects | select(.name=="会员数仓_v2")'
+guancli fetch GET /api/directory/ETL/authorized-tree | jq '.response | .. | objects | select(.name=="<你的 v2 目录名>")'
+guancli fetch GET /api/directory/DATA_SET/authorized-tree | jq '.response | .. | objects | select(.name=="<你的 v2 目录名>")'
 ```
 
 ---
