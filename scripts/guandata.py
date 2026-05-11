@@ -229,6 +229,7 @@ class GuandataClient:
                 # 更新响应中的过期时间
                 data["response"]["expire_at"] = self.token_expire_at
                 data["response"]["expire_in"] = self.TOKEN_LIFETIME
+                self._save_token_to_disk()
 
             return data
 
@@ -241,6 +242,53 @@ class GuandataClient:
         """
         self.token = token
         self.token_expire_at = time.time() + expires_in
+
+    # ===== Token 磁盘持久化 =====
+
+    @classmethod
+    def _get_token_file(cls) -> str:
+        return os.path.join(cls.SKILL_ROOT, '.cache', 'token.json')
+
+    def _save_token_to_disk(self) -> None:
+        if not self.token:
+            return
+        token_file = self._get_token_file()
+        os.makedirs(os.path.dirname(token_file), exist_ok=True)
+        with open(token_file, 'w') as f:
+            json.dump({
+                "token": self.token,
+                "expire_at": self.token_expire_at,
+                "base_url": self.base_url,
+                "login_id": self._login_id,
+            }, f)
+
+    def _load_token_from_disk(self) -> bool:
+        try:
+            with open(self._get_token_file()) as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return False
+        if data.get("base_url") != self.base_url or data.get("login_id") != self._login_id:
+            return False
+        expire_at = data.get("expire_at", 0)
+        if time.time() >= expire_at:
+            return False
+        self.token = data["token"]
+        self.token_expire_at = expire_at
+        return True
+
+    async def ensure_auth(self) -> bool:
+        """认证入口：磁盘缓存 → 内存 → API 登录，三级回退"""
+        if not self._is_token_expired():
+            return True
+        if self._load_token_from_disk():
+            return True
+        try:
+            await self.login(self._login_domain, self._login_id, self._login_secret)
+            return True
+        except Exception as e:
+            print(f'❌ 认证失败: {type(e).__name__}: {e}')
+            return False
 
     # ===== 缓存目录配置（统一放在 skill 根目录下的 .cache/ 中，支持 task 隔离）=====
 
@@ -310,8 +358,10 @@ class GuandataClient:
             json.dump(data, f, ensure_ascii=False, indent=2)
         return path
 
-    def _save_to_cache_csv(self, headers: list, rows: list, prefix: str = "data") -> str:
-        """保存数据到本地缓存文件（CSV），返回文件路径"""
+    def _save_to_cache_csv(self, headers: list, rows: list, prefix: str = "data",
+                           field_metadata: list = None) -> str:
+        """保存数据到本地缓存文件（CSV），返回文件路径。
+        field_metadata 非空时同时生成 _meta.json 伴生文件。"""
         import csv
         self._ensure_data_cache_dir()
         ts = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 精确到毫秒
@@ -321,7 +371,6 @@ class GuandataClient:
             writer = csv.writer(f)
             writer.writerow(headers)
             for row in rows:
-                # 处理可能的 dict 类型 cell
                 clean = []
                 for cell in row:
                     if isinstance(cell, dict):
@@ -329,6 +378,14 @@ class GuandataClient:
                     else:
                         clean.append(cell)
                 writer.writerow(clean)
+        if field_metadata:
+            meta_path = path.replace('.csv', '_meta.json')
+            with open(meta_path, 'w', encoding='utf-8') as mf:
+                json.dump({
+                    "source_csv": os.path.basename(path),
+                    "exported_at": datetime.now().isoformat(),
+                    "fields": field_metadata,
+                }, mf, ensure_ascii=False, indent=2)
         return path
 
     @staticmethod
@@ -1144,14 +1201,23 @@ class GuandataClient:
         if filters:
             body["filters"] = filters
 
-        async with httpx.AsyncClient(timeout=self.DATA_TIMEOUT) as client:
-            response = await client.post(
-                f"{self.base_url}/public-api/card/{card_id}/data",
-                json=body,
-                headers=self._get_headers(),
-            )
-            response.raise_for_status()
-            return response.json()
+        for _attempt in range(2):
+            async with httpx.AsyncClient(timeout=self.DATA_TIMEOUT) as client:
+                response = await client.post(
+                    f"{self.base_url}/public-api/card/{card_id}/data",
+                    json=body,
+                    headers=self._get_headers(),
+                )
+                if response.status_code in (401, 403) and _attempt == 0:
+                    self.token = None
+                    self.token_expire_at = None
+                    try:
+                        await self.login(self._login_domain, self._login_id, self._login_secret)
+                        continue
+                    except Exception:
+                        pass
+                response.raise_for_status()
+                return response.json()
 
     @staticmethod
     def normalize_card_data(raw: Dict) -> Dict:
@@ -1226,6 +1292,21 @@ class GuandataClient:
                 f'chartMain 为空或缺少 row.meta。'
                 f'请检查观远卡片是否已正确配置图表类型和字段。'
             )
+
+    @staticmethod
+    def extract_field_metadata(raw: Dict) -> List[Dict]:
+        """从 get_card_data 原始响应中提取字段元信息（类型/粒度/别名等）"""
+        response = raw.get("response", raw)
+        cm = response.get("chartMain", {})
+        fields = []
+        for source, role in [("row", "dimension"), ("column", "metric")]:
+            for m in cm.get(source, {}).get("meta", []):
+                entry = {"name": m.get("title", ""), "role": role}
+                for key in ("fieldId", "type", "metaType", "granularity", "alias", "annotation"):
+                    if m.get(key):
+                        entry[key] = m[key]
+                fields.append(entry)
+        return fields
 
     async def create_card_smart(
         self,
@@ -1688,7 +1769,7 @@ async def resolve_ds_id(client: GuandataClient, ds_input: str) -> str:
 
 async def cmd_list_datasets(args):
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.search_datasets_list(use_cache=not args.refresh)
     datasets = result.get('contents', [])
     
@@ -1772,7 +1853,7 @@ async def cmd_list_datasets(args):
 
 async def cmd_get_columns(args):
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     args.ds_id = await resolve_ds_id(client, args.ds_id)
 
     # 先拉数据集列表获取 datasourceModifyTime
@@ -1852,7 +1933,7 @@ async def cmd_query(args):
         sys.exit(1)
     
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     args.ds_id = await resolve_ds_id(client, args.ds_id)
     
     filter_obj = None
@@ -1980,7 +2061,7 @@ async def cmd_search_values(args):
         sys.exit(1)
 
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.search_column_values(
         ds_id=args.ds_id,
         fd_id=fd_id,
@@ -2004,7 +2085,7 @@ async def cmd_search_values(args):
 
 async def cmd_list_pages(args):
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.search_pages()
     
     if args.json:
@@ -2062,7 +2143,7 @@ async def cmd_list_pages(args):
 async def cmd_create_page(args):
     """创建BI页面"""
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
 
     result = await client.create_page(
         name=args.name,
@@ -2090,7 +2171,7 @@ async def cmd_get_page_cards(args):
         sys.exit(1)
 
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.get_page_cards(args.pg_id)
 
     if args.json:
@@ -2106,7 +2187,7 @@ async def cmd_get_page_cards(args):
 async def cmd_create_card(args):
     """创建卡片 — 直接调用 client.create_card_smart"""
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
 
     try:
         params = json.loads(args.params_json)
@@ -2143,7 +2224,7 @@ async def cmd_create_card(args):
 
 async def cmd_get_card_data(args):
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
 
     if not args.card_id:
         print('❌ 缺少 card_id')
@@ -2198,8 +2279,10 @@ async def cmd_get_card_data(args):
     # 统一格式输出
     norm = client.normalize_card_data(result)
 
-    # 保存到本地缓存 (CSV)
-    csv_path = client._save_to_cache_csv(norm['headers'], norm['rows'], f"card_{args.card_id[:8]}")
+    # 保存到本地缓存 (CSV + 元数据)
+    field_meta = client.extract_field_metadata(result)
+    csv_path = client._save_to_cache_csv(norm['headers'], norm['rows'], f"card_{args.card_id[:8]}",
+                                          field_metadata=field_meta)
 
     if args.json:
         norm['_raw'] = result
@@ -2293,7 +2376,7 @@ async def cmd_delete_cards(args):
         sys.exit(1)
 
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.batch_delete_cards(args.card_ids, args.pg_id)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
@@ -2306,7 +2389,7 @@ async def cmd_release_page(args):
         sys.exit(1)
 
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
     result = await client.release_page(args.pg_id)
     
     if 'error' in result:
@@ -2368,11 +2451,72 @@ async def cmd_clean_cache(args):
     print(f'   保留 {days} 天内的文件')
 
 
+async def cmd_status(args):
+    """显示配置、Token、缓存状态"""
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config.json')
+    print('=== 观远 BI CLI 状态 ===\n')
+
+    print(f'配置文件: {config_path}')
+    try:
+        with open(config_path) as f:
+            cfg = json.load(f)
+        print(f'  base_url:       {cfg.get("base_url", "(未设置)")}')
+        print(f'  domain:         {cfg.get("domain", "(未设置)")}')
+        print(f'  login_id:       {cfg.get("login_id", "(未设置)")}')
+        print(f'  password:       {"***" if cfg.get("password") else "(未设置)"}')
+        print(f'  version:        {cfg.get("version", "(未设置)")}')
+        print(f'  default_pg:     {cfg.get("default_pg_id") or "(未设置)"}')
+        print(f'  default_folder: {cfg.get("default_folder_id") or "(未设置)"}')
+    except FileNotFoundError:
+        print('  ❌ 配置文件不存在')
+    except json.JSONDecodeError:
+        print('  ❌ 配置文件格式错误')
+
+    print()
+    token_file = GuandataClient._get_token_file()
+    print(f'Token 文件: {token_file}')
+    try:
+        with open(token_file) as f:
+            tok = json.load(f)
+        expire_at = tok.get("expire_at", 0)
+        remaining = expire_at - time.time()
+        if remaining > 0:
+            mins = int(remaining // 60)
+            print(f'  状态:    ✅ 有效（剩余 {mins} 分钟）')
+        else:
+            print(f'  状态:    ❌ 已过期')
+        print(f'  base_url:  {tok.get("base_url", "")}')
+        print(f'  login_id:  {tok.get("login_id", "")}')
+    except FileNotFoundError:
+        print('  状态: ⚠️ 无缓存 token（首次使用或已过期）')
+    except json.JSONDecodeError:
+        print('  状态: ❌ token 文件损坏')
+
+    print()
+    cache_dir = os.path.join(GuandataClient.SKILL_ROOT, '.cache')
+    if os.path.isdir(cache_dir):
+        total = 0
+        for _root, _dirs, files in os.walk(cache_dir):
+            total += len(files)
+        print(f'缓存目录: {cache_dir} ({total} 文件)')
+    else:
+        print(f'缓存目录: {cache_dir} (空)')
+
+
+async def cmd_set_token(args):
+    """手动设置 JWT token 并保存到磁盘"""
+    client = GuandataClient()
+    client.set_token(args.token, expires_in=args.expires)
+    client._save_token_to_disk()
+    print(f'✅ Token 已保存（有效期 {args.expires // 60} 分钟）')
+    print(f'   文件: {client._get_token_file()}')
+
+
 async def cmd_create_and_get(args):
     """一步创建卡片并获取渲染数据"""
     import time
     client = GuandataClient()
-    await client.login(GuandataClient.DEFAULT_DOMAIN, GuandataClient.DEFAULT_LOGIN_ID, GuandataClient.DEFAULT_LOGIN_SECRET)
+    await client.ensure_auth()
 
     try:
         params = json.loads(args.params_json)
@@ -2476,8 +2620,10 @@ async def cmd_create_and_get(args):
             # 统一格式输出
             norm = client.normalize_card_data(data)
 
-            # 保存到本地缓存 (CSV)
-            csv_path = client._save_to_cache_csv(norm['headers'], norm['rows'], f"create_{params.get('ds_id','')[:8]}")
+            # 保存到本地缓存 (CSV + 元数据)
+            field_meta = client.extract_field_metadata(data)
+            csv_path = client._save_to_cache_csv(norm['headers'], norm['rows'], f"create_{params.get('ds_id','')[:8]}",
+                                                  field_metadata=field_meta)
 
             if not args.json:
                 if norm['count'] == 0:
@@ -2599,6 +2745,14 @@ def main():
 
     p = subparsers.add_parser('clean-cache', help='清理过期缓存（默认保留7天）')
     p.add_argument('--days', type=int, default=7, help='保留最近N天的缓存')
+
+    # status
+    subparsers.add_parser('status', help='显示配置和认证状态')
+
+    # set-token
+    p = subparsers.add_parser('set-token', help='手动设置 JWT token')
+    p.add_argument('token', help='JWT token 字符串')
+    p.add_argument('--expires', type=int, default=7200, help='有效期（秒，默认7200）')
     
     args = parser.parse_args()
     
@@ -2624,6 +2778,8 @@ def main():
         'create-and-get': cmd_create_and_get,
         'clean-cache': cmd_clean_cache,
         'release-page': cmd_release_page,
+        'status': cmd_status,
+        'set-token': cmd_set_token,
     }
     
     asyncio.run(cmd_map[args.command](args))

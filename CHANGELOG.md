@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [1.7.0] — 2026-05-11
+
+### Added
+- **Token disk persistence** — JWT saved to `.cache/token.json`, survives across
+  process restarts. Three-tier auth cascade: disk cache → in-memory → API login.
+  Eliminates redundant `/public-api/sign-in` calls on every invocation.
+- **401/403 auto-retry** — `get_card_data` now catches server-side token rejection,
+  force re-authenticates, and retries the request once before failing.
+- **CSV metadata sidecar** — `get-card-data` and `create-and-get` now emit a
+  `_meta.json` companion alongside each cached CSV, containing field-level metadata
+  (name, type, metaType, fieldId, granularity, alias, annotation, role).
+- **`status` command** — one-shot diagnostics: config, token validity, cache stats.
+- **`set-token` command** — paste a JWT from the browser to bypass credential login.
+- `extract_field_metadata()` static method on `GuandataClient`.
+- `ensure_auth()` public method replacing explicit `login()` in all 13 cmd functions.
+
+### Changed
+- All cmd functions now call `ensure_auth()` instead of unconditional `login()`.
+- Command skeleton in SKILL.md updated from 8 to 10 commands.
+
 ## [1.6.0] — 2026-05-10
 
 ### Added

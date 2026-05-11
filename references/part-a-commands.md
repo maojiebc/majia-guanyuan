@@ -129,6 +129,21 @@ with open('.cache/data/xxx.csv', encoding='utf-8-sig') as f:
 # rows[i][j] 是第 i 行第 j 列的值（字符串）
 ```
 
+### CSV 元数据伴生文件（V1.7.0+）
+
+`get-card-data` 和 `create-and-get` 导出 CSV 时自动生成 `_meta.json` 伴生文件，包含字段类型信息。下游脚本读 `_meta.json` 可知维度/指标、数据类型，无需再调 `get-columns`。
+
+---
+
+## 诊断与认证（V1.7.0+）
+
+```bash
+$SCRIPT status                           # 配置、token、缓存一览
+$SCRIPT set-token <jwt> [--expires 7200] # 手动设置 JWT
+```
+
+Token 登录后自动存 `.cache/token.json`，2 小时内复用。`get-card-data` 遇 401/403 自动重试一次。
+
 ---
 
 ## 错误处理
@@ -136,6 +151,6 @@ with open('.cache/data/xxx.csv', encoding='utf-8-sig') as f:
 | 状态码 | 处理 |
 |--------|------|
 | 500 | 终止，服务器问题 |
-| 401 | 终止，登录失效 |
-| 403 | 终止，无权限 |
+| 401 | 自动重试一次（V1.7.0+），仍失败则终止 |
+| 403 | 自动重试一次（V1.7.0+），仍失败则终止 |
 | 404 | 终止，资源不存在 |
