@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [1.7.2] — 2026-05-11
+
+### Changed
+- **Author/contact section consolidated** — removed the duplicate `## 作者` /
+  `## Author` block at the bottom of `README.md` and `README.en.md` (it duplicated
+  channels already covered by the canonical `## 👤 作者 / 联系` template above).
+- **Skill version badge** synced from stale `v1.6.0` to `v1.7.2`.
+
+### Fixed
+- **ClawHub link** in author/contact template — `https://clawhub.ai/maojiebc`
+  → `https://clawhub.ai/p/maojiebc` (followed `majia-ota-skill` v0.5.2 template fix).
+
 ## [1.7.1] — 2026-05-11
 
 ### Security / Sanitization

@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.6.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.7.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -378,7 +378,7 @@ guanyuan-majia/
 |---|---|
 | 📧 Email | [m9224@163.com](mailto:m9224@163.com) |
 | 🐙 GitHub | [github.com/maojiebc](https://github.com/maojiebc) |
-| 🪝 ClawHub | [clawhub.ai/maojiebc](https://clawhub.ai/maojiebc) |
+| 🪝 ClawHub | [clawhub.ai/p/maojiebc](https://clawhub.ai/p/maojiebc) |
 | 🐦 X | [@maojiebc](https://x.com/maojiebc) |
 | 📕 小红书 | [超级马甲](https://xhslink.com/m/4fQMJeHHWKC) |
 | 📰 微信公众号 | **超级马甲** |
@@ -428,21 +428,6 @@ guanyuan-majia/
 - 📝 你跑通了新的 BI HTTP API endpoint：欢迎补充到 Part B 的 API 全图
 - 🎨 自定义图表新场景：欢迎补充到 Part C
 - 📚 文档优化、翻译、错别字修正：直接 PR
-
----
-
-## 作者
-
-**超级马甲｜马甲**
-
-从门店和会员运营现场长出来的数据与 AI Agent 实战派。长期关注连锁品牌会员、私域增长、用户运营、数据体系、BI/ETL 治理和 AI 工具落地。
-
-这个 Skill 是把观远 BI 的查询、建卡、ETL 治理、SmartETL 重写和自定义图表排障，沉淀成可复用的 Agent 能力。
-
-- 公众号：超级马甲
-- 小红书：[超级马甲](https://xhslink.com/m/4fQMJeHHWKC)
-- X：[@maojiebc](https://x.com/maojiebc)
-- GitHub：[@maojiebc](https://github.com/maojiebc)
 
 ---
 

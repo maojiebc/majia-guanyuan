@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.6.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v1.7.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -380,7 +380,7 @@ If this skill helps you, find me on any of these channels — happy to chat abou
 |---|---|
 | 📧 Email | [m9224@163.com](mailto:m9224@163.com) |
 | 🐙 GitHub | [github.com/maojiebc](https://github.com/maojiebc) |
-| 🪝 ClawHub | [clawhub.ai/maojiebc](https://clawhub.ai/maojiebc) |
+| 🪝 ClawHub | [clawhub.ai/p/maojiebc](https://clawhub.ai/p/maojiebc) |
 | 🐦 X | [@maojiebc](https://x.com/maojiebc) |
 | 📕 Xiaohongshu | [Super Majia](https://xhslink.com/m/4fQMJeHHWKC) |
 | 📰 WeChat Official Account | **超级马甲** |
@@ -430,21 +430,6 @@ Issues and PRs welcome:
 - 📝 Tested a new BI HTTP API endpoint? Add it to Part B's API map
 - 🎨 New custom chart scenario? Add it to Part C
 - 📚 Doc improvements, translations, typo fixes — PR directly
-
----
-
-## Author
-
-**Super Majia | Majia**
-
-A field-born data and AI Agent operator from retail membership and private-domain operations. I focus on loyalty programs, CRM, store operations, user growth, data systems, BI/ETL governance, and practical AI tooling.
-
-This Skill packages Guandata BI querying, card creation, ETL governance, SmartETL rewrites, and custom chart debugging into reusable Agent capabilities.
-
-- WeChat Official Account: 超级马甲
-- Xiaohongshu: [超级马甲](https://xhslink.com/m/4fQMJeHHWKC)
-- X: [@maojiebc](https://x.com/maojiebc)
-- GitHub: [@maojiebc](https://github.com/maojiebc)
 
 ---
 
