@@ -5,6 +5,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.0.1] — 2026-05-12
+
+### Changed
+- `manifest.json` `displayName`: `"Majia-Guanyuan · Guandata BI Skill"` → `"观远 BI · 马甲实战版"`. ClawHub 卡片大标题从该字段读取，旧值在卡片上显示为英文 "Majia Guanyuan"，与品牌"超级马甲"的中文调性不一致，统一为中文营销名。
+- `slug` 保持 `majia-guanyuan`（URL / `npx` / `gh skill install` 仍走该名），仅展示名变更。
+
 ## [2.0.0] — 2026-05-12
 
 ### BREAKING / Renamed

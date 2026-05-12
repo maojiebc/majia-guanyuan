@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/skill-manifest",
   "name": "majia-guanyuan",
-  "displayName": "Majia-Guanyuan · Guandata BI Skill",
-  "version": "2.0.0",
+  "displayName": "观远 BI · 马甲实战版",
+  "version": "2.0.1",
   "description": "Tool-agnostic Claude Code / OpenClaw / Codex / Hermes skill for Guandata BI (观远 BI). Three capabilities: data query & card creation (Part A), ETL governance & write (Part B, incl. SmartETL full-chain rewrite & ExecPlan), custom chart dev & debugging (Part C). Battle-tested with 60+ ETL operations. Progressive disclosure keeps SKILL.md as the router and references/ as detailed playbooks. Install via `gh skill`, `git clone` + `node bin/install.js install`, `npx github:maojiebc/majia-guanyuan install`, or ClawHub/OpenClaw.",
   "license": "MIT",
   "author": "maojiebc",
