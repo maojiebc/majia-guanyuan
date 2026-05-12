@@ -1,12 +1,12 @@
-# guanyuan-majia · Tool-Agnostic Agent Skill for Guandata BI
+# majia-guanyuan · Tool-Agnostic Agent Skill for Guandata BI
 
 > **Tool-agnostic** Agent Skill for **Guandata BI (观远 BI)** — Data analysis / ETL governance & write / Custom chart development, **all-in-one**.
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.7.3-blue)](./SKILL.md)
-[![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
-[![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
+[![Skill Version](https://img.shields.io/badge/skill-v2.0.0-blue)](./SKILL.md)
+[![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
+[![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -25,7 +25,7 @@
 This Skill consolidates three categories of Guandata BI operations into **a single Claude Code Skill**, so AI can handle daily reporting + serious ETL governance + frontend custom chart debugging — all in one place.
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="guanyuan-majia three-pillar map: Part A data query / Part B ETL governance / Part C custom charts" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan three-pillar map: Part A data query / Part B ETL governance / Part C custom charts" width="100%"/>
 </p>
 
 | Part | Capability | When to use |
@@ -103,10 +103,10 @@ This skill is **tool-agnostic**. Any agent that supports the `SKILL.md` frontmat
 
 | Tool | Status | Install path | Entry | Notes |
 |---|:---:|---|---|---|
-| **Claude Code** | ✅ Verified | `~/.claude/skills/guanyuan-majia/` | `SKILL.md` | Native support |
-| **OpenClaw** | ✅ Verified | `~/.openclaw/skills/guanyuan-majia/` or `<workspace>/skills/guanyuan-majia/` | `SKILL.md` | Case-sensitive |
-| **Codex (OpenAI)** | ✅ Verified | `~/.codex/skills/guanyuan-majia/` or `<repo>/.codex/skills/guanyuan-majia/` | `SKILL.md` + repo-root `AGENTS.md` (project instructions) | See [Codex skills docs](https://developers.openai.com/codex/skills) |
-| **Hermes / gbrain** | ✅ Verified | `<workspace>/skills/guanyuan-majia/` | `SKILL.md` + repo-root `AGENTS.md` (resolver) | See [garrytan/gbrain](https://github.com/garrytan/gbrain) |
+| **Claude Code** | ✅ Verified | `~/.claude/skills/majia-guanyuan/` | `SKILL.md` | Native support |
+| **OpenClaw** | ✅ Verified | `~/.openclaw/skills/majia-guanyuan/` or `<workspace>/skills/majia-guanyuan/` | `SKILL.md` | Case-sensitive |
+| **Codex (OpenAI)** | ✅ Verified | `~/.codex/skills/majia-guanyuan/` or `<repo>/.codex/skills/majia-guanyuan/` | `SKILL.md` + repo-root `AGENTS.md` (project instructions) | See [Codex skills docs](https://developers.openai.com/codex/skills) |
+| **Hermes / gbrain** | ✅ Verified | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` + repo-root `AGENTS.md` (resolver) | See [garrytan/gbrain](https://github.com/garrytan/gbrain) |
 | **Cursor / Aider** etc. | 🟡 Theoretical | Anywhere | `AGENTS.md` as project instructions | Only the navigation pointer parts apply |
 | Others | 🟡 Universal | Anywhere | `manifest.json` as tool-agnostic metadata | frontmatter + manifest dual fallback |
 
@@ -118,21 +118,21 @@ This skill is **tool-agnostic**. Any agent that supports the `SKILL.md` frontmat
 
 ```bash
 # Install to user-level Codex / Claude Code / OpenClaw / Qoder, etc.
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent codex --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent claude-code --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent openclaw --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent qoder --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent codex --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent claude-code --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent openclaw --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent qoder --scope user
 
 # Preview before installing
-gh skill preview maojiebc/guanyuan-majia guanyuan-majia
+gh skill preview maojiebc/majia-guanyuan majia-guanyuan
 ```
 
 ### ⭐ Option 1: Clone + built-in install CLI (recommended)
 
 ```bash
 # Clone, then auto-install to every agent tool present on this machine
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/guanyuan-majia
-cd ~/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/majia-guanyuan
+cd ~/majia-guanyuan
 node bin/install.js install                  # auto-detect all
 node bin/install.js install --tool claude-code
 node bin/install.js install --tool openclaw
@@ -149,8 +149,8 @@ node bin/install.js uninstall --tool codex   # remove (auto-backs-up your config
 
 ```bash
 # One-liner; npx fetches from GitHub and runs bin/install.js
-npx github:maojiebc/guanyuan-majia install --tool claude-code
-npx github:maojiebc/guanyuan-majia install --tool all
+npx github:maojiebc/majia-guanyuan install --tool claude-code
+npx github:maojiebc/majia-guanyuan install --tool all
 ```
 
 **`bin/install.js` behavior** (same for both options):
@@ -163,19 +163,19 @@ npx github:maojiebc/guanyuan-majia install --tool all
 
 ```bash
 # Claude Code
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.claude/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.claude/skills/majia-guanyuan
 
 # OpenClaw (personal)
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.openclaw/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.openclaw/skills/majia-guanyuan
 
 # Codex (personal)
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.codex/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.codex/skills/majia-guanyuan
 
 # Codex (project-local)
-git clone https://github.com/maojiebc/guanyuan-majia.git <your-repo>/.codex/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git <your-repo>/.codex/skills/majia-guanyuan
 
 # Hermes / gbrain (workspace-level)
-git clone https://github.com/maojiebc/guanyuan-majia.git <your-workspace>/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git <your-workspace>/skills/majia-guanyuan
 ```
 
 Then configure credentials (same for all tools):
@@ -189,8 +189,8 @@ vim config.json  # fill in BI base_url / login_id / password / default_pg_id / d
 ### Option 4: OpenClaw / ClawHub one-line install
 
 ```bash
-openclaw skills install guanyuan-majia
-clawhub install guanyuan-majia
+openclaw skills install majia-guanyuan
+clawhub install majia-guanyuan
 ```
 
 > ClawHub may show a security scan warning: this skill includes a local Python client that encodes the BI login credential as required by the Guandata API and sends it only to the user-configured `base_url`. Before installing from registries, review [SECURITY.md](./SECURITY.md) and inspect [scripts/guandata.py](./scripts/guandata.py).
@@ -198,7 +198,7 @@ clawhub install guanyuan-majia
 ### Option 5: Hermes skillpack install (if published to gbrain registry)
 
 ```bash
-gbrain skillpack install guanyuan-majia
+gbrain skillpack install majia-guanyuan
 ```
 
 ### Dependencies (same for all tools)
@@ -250,7 +250,7 @@ Copy `config.example.json` to `config.json` and fill in real credentials:
 
 ```bash
 # cwd = skill install dir, all paths are relative
-cd <install_path>  # e.g. ~/.claude/skills/guanyuan-majia/
+cd <install_path>  # e.g. ~/.claude/skills/majia-guanyuan/
 
 SCRIPT="python3 ./scripts/guandata.py"
 
@@ -316,7 +316,7 @@ new GDPlugin().init(renderChart);
 ## 📁 Directory Structure
 
 ```text
-guanyuan-majia/
+majia-guanyuan/
 ├── SKILL.md                          # Main doc for AI (Part A + B + C)
 ├── AGENTS.md                         # Codex project instructions / Hermes resolver (V1.3)
 ├── manifest.json                     # Tool-agnostic skill metadata (V1.3)
@@ -406,21 +406,9 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-Full changelog in [SKILL.md version record](./SKILL.md#-版本记录).
+**Latest: V2.0.0** (2026-05-12) — Renamed to `majia-guanyuan` + aligned with `@guandata/guancli@1.0.19` (ChatBI theme query / SuperApp / multi-env auth / connectivity probe) + Node ≥20.
 
-- **V1.5.3** (2026-05-10) — 📣 Distribution trust and brand entry polish. Aligns `SKILL.md` frontmatter with the Agent Skills spec; restores `LICENSE` to standard MIT text; adds `gh skill`, skills.sh, and ClawHub install paths plus the Super Majia author section; adds `SECURITY.md` and `llms.txt`; renames internal login parameters to reduce registry false positives.
-- **V1.5.2** (2026-05-09) — 📦 ClawHub publication prep. Adds `metadata.openclaw` to `SKILL.md`; adds WorkBuddy / Qoder compatibility badges; syncs version metadata to 1.5.2.
-- **V1.5.1** (2026-05-09) — 🪶 npm path simplified. Repo uses **git as the single source of truth**, not published to npm registry. The `bin/install.js` CLI experience is preserved; entry point switches from `npx @supermajia/guanyuan-bi` to `node bin/install.js` or `npx github:maojiebc/guanyuan-majia install` (npx natively supports GitHub URLs without npm registry). `package.json` / `manifest.json` / `.npmignore` retained as runtime metadata for the local install CLI; reusable should npm publishing be revived later.
-- **V1.5.0** (2026-05-09) — 🏗️ Progressive Disclosure refactor. `SKILL.md` shrunk from 2087 lines (89KB) to 913 lines (48KB), saving ~12K tokens per skill invocation. High-frequency content (Part router, decision framework, key APIs, error quick-ref, redlines, ID lookup) stays in the main doc; detailed playbooks moved into 8 new `references/` files (part-a-commands / part-a-cards / part-b-errors / part-b-payload / part-b-sdk / part-b17-fullchain-rewrite / part-c-payload-json / guancli-commands). Performance unchanged, zero content loss.
-- **V1.4.0** (2026-05-09) — 🛠️ Cross-tool install CLI added. New `bin/install.js` with `install` / `list` / `uninstall` commands (plus `--tool` / `--force` / `--dry-run` flags) auto-detects Claude Code / OpenClaw / Codex / Hermes and installs/upgrades into each, never overwriting the user's `config.json`. `package.json` / `.npmignore` shipped as packaging metadata (clarified to be local-only in V1.5.1).
-- **V1.3.1** (2026-05-09) — External code review patch: closed unclosed bash fence in SKILL.md; added **B-7.0 hard safety gate** requiring explicit per-item user confirmation before any DELETE; sanitized `--task` input in `scripts/guandata.py` to block path traversal (`../`, reserved `.` / `..`); aligned frontmatter description version number.
-- **V1.3** (2026-05-09) — Tool-agnostic. Native support for Claude Code / OpenClaw / Codex / Hermes (gbrain). Added repo-root `AGENTS.md` (Codex project instructions + Hermes resolver) and `manifest.json` (tool-agnostic metadata); removed all `~/.claude/skills/` hardcoded paths; README adds Compatibility section listing per-tool install commands.
-- **V1.2** (2026-05-09) — Adopted OpenAI Codex's ExecPlan spec; added B-17.11 (SmartETL-tailored ExecPlan skeleton + four-section workflow), B-12 engineering pointer; references/ adds execplan-spec.md + agents-rule.md
-- **V1.1** (2026-05-09) — Integrated CTO Zhang Jin's two experience docs: B-17 full-chain rewrite methodology + Part C custom chart
-- **V1.0** (2026-05-09) — Renamed `guandata70` → `guanyuan-majia`, added Part B: full ETL governance & write guide
-- **V0.x** (2026-03-30) — guandata70 initial version (by 小小郑3号), Guandata BI 7.0+ adapter
-
----
+Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 
 ## 🤝 Contributing
 

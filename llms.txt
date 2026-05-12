@@ -1,15 +1,15 @@
-# guanyuan-majia
+# majia-guanyuan
 
 > A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It packages data querying, card creation, ETL governance/write workflows, SmartETL full-chain rewrites, and custom chart debugging into reusable AI agent instructions and scripts.
 
 ## Primary Links
 
-- Repository: https://github.com/maojiebc/guanyuan-majia
-- Skill entry: https://github.com/maojiebc/guanyuan-majia/blob/main/SKILL.md
-- Chinese README: https://github.com/maojiebc/guanyuan-majia/blob/main/README.md
-- English README: https://github.com/maojiebc/guanyuan-majia/blob/main/README.en.md
-- Security policy: https://github.com/maojiebc/guanyuan-majia/blob/main/SECURITY.md
-- Attribution: https://github.com/maojiebc/guanyuan-majia/blob/main/ATTRIBUTIONS.md
+- Repository: https://github.com/maojiebc/majia-guanyuan
+- Skill entry: https://github.com/maojiebc/majia-guanyuan/blob/main/SKILL.md
+- Chinese README: https://github.com/maojiebc/majia-guanyuan/blob/main/README.md
+- English README: https://github.com/maojiebc/majia-guanyuan/blob/main/README.en.md
+- Security policy: https://github.com/maojiebc/majia-guanyuan/blob/main/SECURITY.md
+- Attribution: https://github.com/maojiebc/majia-guanyuan/blob/main/ATTRIBUTIONS.md
 
 ## Skill Contents
 

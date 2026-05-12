@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/skill-manifest",
-  "name": "guanyuan-majia",
-  "displayName": "Guanyuan-Majia · Guandata BI Skill",
-  "version": "1.7.1",
-  "description": "Tool-agnostic Claude Code / OpenClaw / Codex / Hermes skill for Guandata BI (观远 BI). Three capabilities: data query & card creation (Part A), ETL governance & write (Part B, incl. SmartETL full-chain rewrite & ExecPlan), custom chart dev & debugging (Part C). Battle-tested with 60+ ETL operations. Progressive disclosure keeps SKILL.md as the router and references/ as detailed playbooks. Install via `gh skill`, `git clone` + `node bin/install.js install`, `npx github:maojiebc/guanyuan-majia install`, or ClawHub/OpenClaw.",
+  "name": "majia-guanyuan",
+  "displayName": "Majia-Guanyuan · Guandata BI Skill",
+  "version": "2.0.0",
+  "description": "Tool-agnostic Claude Code / OpenClaw / Codex / Hermes skill for Guandata BI (观远 BI). Three capabilities: data query & card creation (Part A), ETL governance & write (Part B, incl. SmartETL full-chain rewrite & ExecPlan), custom chart dev & debugging (Part C). Battle-tested with 60+ ETL operations. Progressive disclosure keeps SKILL.md as the router and references/ as detailed playbooks. Install via `gh skill`, `git clone` + `node bin/install.js install`, `npx github:maojiebc/majia-guanyuan install`, or ClawHub/OpenClaw.",
   "license": "MIT",
   "author": "maojiebc",
   "authorDisplayName": "超级马甲",
@@ -17,29 +17,29 @@
     "xiaohongshu": "https://xhslink.com/m/4fQMJeHHWKC",
     "wechatOfficialAccount": "超级马甲"
   },
-  "homepage": "https://github.com/maojiebc/guanyuan-majia",
-  "repository": "https://github.com/maojiebc/guanyuan-majia",
+  "homepage": "https://github.com/maojiebc/majia-guanyuan",
+  "repository": "https://github.com/maojiebc/majia-guanyuan",
   "entry": "SKILL.md",
   "compatibility": {
     "claude-code": {
       "supported": true,
-      "installPath": "~/.claude/skills/guanyuan-majia/",
+      "installPath": "~/.claude/skills/majia-guanyuan/",
       "entry": "SKILL.md"
     },
     "openclaw": {
       "supported": true,
-      "installPath": "~/.openclaw/skills/guanyuan-majia/",
+      "installPath": "~/.openclaw/skills/majia-guanyuan/",
       "entry": "SKILL.md"
     },
     "codex": {
       "supported": true,
-      "installPath": "~/.codex/skills/guanyuan-majia/",
+      "installPath": "~/.codex/skills/majia-guanyuan/",
       "entry": "SKILL.md",
       "projectInstructions": "AGENTS.md"
     },
     "hermes": {
       "supported": true,
-      "installPath": "<workspace>/skills/guanyuan-majia/",
+      "installPath": "<workspace>/skills/majia-guanyuan/",
       "entry": "SKILL.md",
       "resolver": "AGENTS.md"
     }
@@ -70,7 +70,7 @@
   "dependencies": {
     "system": ["jq", "bash"],
     "python": ["httpx>=0.20"],
-    "node": ["@guandata/guancli@^1.0.18"]
+    "node": ["@guandata/guancli@^1.0.19"]
   },
   "config": {
     "template": "config.example.json",

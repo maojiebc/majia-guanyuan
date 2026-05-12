@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * @supermajia/guanyuan-bi installer
+ * @supermajia/majia-guanyuan installer
  *
  * 把 skill 内容（SKILL.md / scripts/ / references/ 等）复制到目标 agent 工具的
  * skill 目录，并初始化 config.json（从 config.example.json 拷贝）。
  *
  * Usage:
- *   npx @supermajia/guanyuan-bi install                  # 自动检测可用工具，全装
- *   npx @supermajia/guanyuan-bi install --tool claude-code
- *   npx @supermajia/guanyuan-bi install --tool all       # 4 工具都装
- *   npx @supermajia/guanyuan-bi install --dry-run        # 只显示要做什么，不动文件
- *   npx @supermajia/guanyuan-bi uninstall --tool claude-code
- *   npx @supermajia/guanyuan-bi list                     # 列出已装的工具
+ *   npx @supermajia/majia-guanyuan install                  # 自动检测可用工具，全装
+ *   npx @supermajia/majia-guanyuan install --tool claude-code
+ *   npx @supermajia/majia-guanyuan install --tool all       # 4 工具都装
+ *   npx @supermajia/majia-guanyuan install --dry-run        # 只显示要做什么，不动文件
+ *   npx @supermajia/majia-guanyuan uninstall --tool claude-code
+ *   npx @supermajia/majia-guanyuan list                     # 列出已装的工具
  *
  * 安全约束：
  * - 默认不覆盖已存在的 config.json（含真凭据）
@@ -24,7 +24,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const SKILL_NAME = 'guanyuan-majia';
+const SKILL_NAME = 'majia-guanyuan';
 const PKG_DIR = path.resolve(__dirname, '..');
 
 const TOOLS = {
@@ -123,10 +123,10 @@ function parseArgs(argv) {
 // ---------- commands ----------
 
 function cmdHelp() {
-  log(`@supermajia/guanyuan-bi installer
+  log(`@supermajia/majia-guanyuan installer
 
 Usage:
-  npx @supermajia/guanyuan-bi <command> [options]
+  npx @supermajia/majia-guanyuan <command> [options]
 
 Commands:
   install              Install the skill (default: auto-detect available tools)
@@ -146,19 +146,19 @@ Options:
   --version, -v        Print version
 
 Examples:
-  npx @supermajia/guanyuan-bi install
-  npx @supermajia/guanyuan-bi install --tool claude-code
-  npx @supermajia/guanyuan-bi install --tool all --force
-  npx @supermajia/guanyuan-bi uninstall --tool claude-code
-  npx @supermajia/guanyuan-bi list
+  npx @supermajia/majia-guanyuan install
+  npx @supermajia/majia-guanyuan install --tool claude-code
+  npx @supermajia/majia-guanyuan install --tool all --force
+  npx @supermajia/majia-guanyuan uninstall --tool claude-code
+  npx @supermajia/majia-guanyuan list
 
-Documentation: https://github.com/maojiebc/guanyuan-majia
+Documentation: https://github.com/maojiebc/majia-guanyuan
 `);
 }
 
 function cmdVersion() {
   const pkg = JSON.parse(fs.readFileSync(path.join(PKG_DIR, 'package.json'), 'utf8'));
-  log(`@supermajia/guanyuan-bi v${pkg.version}`);
+  log(`@supermajia/majia-guanyuan v${pkg.version}`);
 }
 
 function cmdList() {
@@ -274,7 +274,7 @@ function cmdInstall(args) {
     }
     log(`  pip install httpx                                    # Part A dependency`);
     log(`  npm install -g @guandata/guancli && guancli auth login   # Part B/C dependency`);
-    log(`\nDocs: https://github.com/maojiebc/guanyuan-majia`);
+    log(`\nDocs: https://github.com/maojiebc/majia-guanyuan`);
   }
 }
 

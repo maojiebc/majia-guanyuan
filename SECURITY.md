@@ -2,7 +2,7 @@
 
 ## Credential handling
 
-`guanyuan-majia` is designed to run locally against a user's own Guandata BI instance.
+`majia-guanyuan` is designed to run locally against a user's own Guandata BI instance.
 
 - `config.json` is intentionally excluded by `.gitignore`.
 - The sample `config.example.json` contains placeholders only.

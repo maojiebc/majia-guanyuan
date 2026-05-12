@@ -1,4 +1,4 @@
-# AGENTS.md — guanyuan-majia
+# AGENTS.md — majia-guanyuan
 
 This file is read by:
 - **OpenAI Codex** as project-level instructions (when cwd is inside this repo)
@@ -26,13 +26,13 @@ Before performing any work in this repo, always:
 
 | Tool | Install path | Entry |
 |---|---|---|
-| Claude Code | `~/.claude/skills/guanyuan-majia/` | `SKILL.md` |
-| OpenClaw | `~/.openclaw/skills/guanyuan-majia/` or `<workspace>/skills/guanyuan-majia/` | `SKILL.md` |
-| Codex | `~/.codex/skills/guanyuan-majia/` or `<repo>/.codex/skills/guanyuan-majia/` | `SKILL.md` (this `AGENTS.md` provides project-level instructions) |
-| Hermes / gbrain | `<workspace>/skills/guanyuan-majia/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
+| Claude Code | `~/.claude/skills/majia-guanyuan/` | `SKILL.md` |
+| OpenClaw | `~/.openclaw/skills/majia-guanyuan/` or `<workspace>/skills/majia-guanyuan/` | `SKILL.md` |
+| Codex | `~/.codex/skills/majia-guanyuan/` or `<repo>/.codex/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` provides project-level instructions) |
+| Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: guanyuan-majia`, `description: ...`, `version: "1.3"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `version: "1.3"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 

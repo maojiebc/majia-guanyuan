@@ -1,12 +1,12 @@
-# guanyuan-majia · 观远 BI 通用 Agent Skill
+# majia-guanyuan · 观远 BI 通用 Agent Skill
 
 > **工具无关**的观远 BI / Guandata Agent Skill — 数据查询 / ETL 治理与写入 / 自定义图表开发，**全栈三合一**。
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v1.7.3-blue)](./SKILL.md)
-[![GitHub Release](https://img.shields.io/github/v/release/maojiebc/guanyuan-majia?label=release&color=success)](https://github.com/maojiebc/guanyuan-majia/releases)
-[![skills.sh](https://skills.sh/b/maojiebc/guanyuan-majia)](https://skills.sh/maojiebc/guanyuan-majia)
+[![Skill Version](https://img.shields.io/badge/skill-v2.0.0-blue)](./SKILL.md)
+[![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
+[![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-✓-orange)](https://docs.claude.com/en/docs/claude-code/skills)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-✓-blueviolet)](https://docs.openclaw.ai/tools/skills)
@@ -25,7 +25,7 @@
 本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="guanyuan-majia 三块拼图：Part A 数据查询 / Part B ETL 治理 / Part C 自定义图表" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan 三块拼图：Part A 数据查询 / Part B ETL 治理 / Part C 自定义图表" width="100%"/>
 </p>
 
 | Part | 能力 | 触发场景 |
@@ -102,10 +102,10 @@
 
 | 工具 | 状态 | 安装路径 | 入口文件 | 备注 |
 |---|:---:|---|---|---|
-| **Claude Code** | ✅ 已验证 | `~/.claude/skills/guanyuan-majia/` | `SKILL.md` | 原生支持 |
-| **OpenClaw** | ✅ 已验证 | `~/.openclaw/skills/guanyuan-majia/` 或 `<workspace>/skills/guanyuan-majia/` | `SKILL.md` | 大小写敏感 |
-| **Codex (OpenAI)** | ✅ 已验证 | `~/.codex/skills/guanyuan-majia/` 或 `<repo>/.codex/skills/guanyuan-majia/` | `SKILL.md` + 仓库根 `AGENTS.md`（项目指令） | 见 [Codex skills docs](https://developers.openai.com/codex/skills) |
-| **Hermes / gbrain** | ✅ 已验证 | `<workspace>/skills/guanyuan-majia/` | `SKILL.md` + 仓库根 `AGENTS.md`（resolver） | 见 [garrytan/gbrain](https://github.com/garrytan/gbrain) |
+| **Claude Code** | ✅ 已验证 | `~/.claude/skills/majia-guanyuan/` | `SKILL.md` | 原生支持 |
+| **OpenClaw** | ✅ 已验证 | `~/.openclaw/skills/majia-guanyuan/` 或 `<workspace>/skills/majia-guanyuan/` | `SKILL.md` | 大小写敏感 |
+| **Codex (OpenAI)** | ✅ 已验证 | `~/.codex/skills/majia-guanyuan/` 或 `<repo>/.codex/skills/majia-guanyuan/` | `SKILL.md` + 仓库根 `AGENTS.md`（项目指令） | 见 [Codex skills docs](https://developers.openai.com/codex/skills) |
+| **Hermes / gbrain** | ✅ 已验证 | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` + 仓库根 `AGENTS.md`（resolver） | 见 [garrytan/gbrain](https://github.com/garrytan/gbrain) |
 | **Cursor / Aider** 等 AGENTS.md-aware | 🟡 理论兼容 | 任意 | `AGENTS.md` 作项目指令 | 仅会用到 Part A/B/C 的 navigation pointer |
 | 其他 | 🟡 通用清单 | 任意 | `manifest.json` 作工具无关元数据 | frontmatter + manifest 双保险 |
 
@@ -117,21 +117,21 @@
 
 ```bash
 # 安装到用户级 Codex / Claude Code / OpenClaw / Qoder 等 agent
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent codex --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent claude-code --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent openclaw --scope user
-gh skill install maojiebc/guanyuan-majia guanyuan-majia --agent qoder --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent codex --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent claude-code --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent openclaw --scope user
+gh skill install maojiebc/majia-guanyuan majia-guanyuan --agent qoder --scope user
 
 # 安装前预览
-gh skill preview maojiebc/guanyuan-majia guanyuan-majia
+gh skill preview maojiebc/majia-guanyuan majia-guanyuan
 ```
 
 ### ⭐ 方式 1：克隆 + 内置 install CLI（推荐）
 
 ```bash
 # 一键克隆 + 自动安装到当前机器上所有已装的 agent 工具
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/guanyuan-majia
-cd ~/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/majia-guanyuan
+cd ~/majia-guanyuan
 node bin/install.js install                  # 自动检测全装
 node bin/install.js install --tool claude-code
 node bin/install.js install --tool openclaw
@@ -148,8 +148,8 @@ node bin/install.js uninstall --tool codex   # 移除（自动备份你的 confi
 
 ```bash
 # 一行装，npx 自动从 GitHub 拉取并跑 bin/install.js
-npx github:maojiebc/guanyuan-majia install --tool claude-code
-npx github:maojiebc/guanyuan-majia install --tool all
+npx github:maojiebc/majia-guanyuan install --tool claude-code
+npx github:maojiebc/majia-guanyuan install --tool all
 ```
 
 **`bin/install.js` 行为**（两种方式相同）：
@@ -162,19 +162,19 @@ npx github:maojiebc/guanyuan-majia install --tool all
 
 ```bash
 # Claude Code
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.claude/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.claude/skills/majia-guanyuan
 
 # OpenClaw（个人级）
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.openclaw/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.openclaw/skills/majia-guanyuan
 
 # Codex（个人级）
-git clone https://github.com/maojiebc/guanyuan-majia.git ~/.codex/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git ~/.codex/skills/majia-guanyuan
 
 # Codex（项目级）
-git clone https://github.com/maojiebc/guanyuan-majia.git <your-repo>/.codex/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git <your-repo>/.codex/skills/majia-guanyuan
 
 # Hermes / gbrain（workspace 级）
-git clone https://github.com/maojiebc/guanyuan-majia.git <your-workspace>/skills/guanyuan-majia
+git clone https://github.com/maojiebc/majia-guanyuan.git <your-workspace>/skills/majia-guanyuan
 ```
 
 然后配置凭据（所有工具相同）：
@@ -188,8 +188,8 @@ vim config.json  # 填入 BI base_url / login_id / password / default_pg_id / de
 ### 方式 4：OpenClaw / ClawHub 一键安装
 
 ```bash
-openclaw skills install guanyuan-majia
-clawhub install guanyuan-majia
+openclaw skills install majia-guanyuan
+clawhub install majia-guanyuan
 ```
 
 > ClawHub 可能显示安全扫描提醒：本 skill 包含一个本地 Python 客户端，会按观远接口要求把登录凭据编码后发送到用户自己配置的 `base_url`。安装前可先阅读 [SECURITY.md](./SECURITY.md) 并检查 [scripts/guandata.py](./scripts/guandata.py)。
@@ -197,7 +197,7 @@ clawhub install guanyuan-majia
 ### 方式 5：Hermes skillpack 安装（如发布到 gbrain registry）
 
 ```bash
-gbrain skillpack install guanyuan-majia
+gbrain skillpack install majia-guanyuan
 ```
 
 ### 依赖（所有工具相同）
@@ -249,7 +249,7 @@ guancli auth login   # 配置 BI 登录
 
 ```bash
 # cwd 切到 skill 安装目录，所有命令用相对路径
-cd <skill_install_path>  # 例如 ~/.claude/skills/guanyuan-majia/
+cd <skill_install_path>  # 例如 ~/.claude/skills/majia-guanyuan/
 
 SCRIPT="python3 ./scripts/guandata.py"
 
@@ -314,7 +314,7 @@ new GDPlugin().init(renderChart);
 ## 📁 目录结构
 
 ```text
-guanyuan-majia/
+majia-guanyuan/
 ├── SKILL.md                          # AI 读的主文档（Part A + B + C）
 ├── AGENTS.md                         # Codex 项目指令 / Hermes resolver（V1.3 新增）
 ├── manifest.json                     # 工具无关 skill 元数据（V1.3 新增）
@@ -372,7 +372,7 @@ guanyuan-majia/
 
 **马甲（@maojiebc）** · 超级马甲
 
-如果这份 skill 帮到你，欢迎在以下任意渠道找我交流踩坑实录、提需求、报 bug，也欢迎勾兑用户运营 / 数据中台 / BI 工程的实战经验：
+如果这份 skill 帮到你，欢迎在以下任意渠道找我交流踩坑实录、提需求、报 bug，也欢迎切磋用户运营 / 数据中台 / BI 工程的实战经验：
 
 | 渠道 | 链接 |
 |---|---|
@@ -404,21 +404,9 @@ guanyuan-majia/
 
 ## 📋 版本记录
 
-完整变更历史见 [SKILL.md 末尾的版本记录](./SKILL.md#-版本记录)。
+**最新：V2.0.0** (2026-05-12) — 重命名为 `majia-guanyuan` + 对齐 `@guandata/guancli@1.0.19` 命令面（ChatBI 主题问数 / SuperApp / 多环境 auth / 连接探测）+ Node ≥20。
 
-- **V1.5.3** (2026-05-10) — 📣 分发可信度与品牌入口修整。`SKILL.md` frontmatter 对齐 Agent Skills 规范；`LICENSE` 恢复为标准 MIT；README 增加 `gh skill` / skills.sh / ClawHub 安装入口和「超级马甲」作者区；新增 `SECURITY.md` 与 `llms.txt`；调整登录参数命名以降低 registry 误报概率。
-- **V1.5.2** (2026-05-09) — 📦 ClawHub 发布准备。`SKILL.md` 增加 `metadata.openclaw`；README 增加 WorkBuddy / Qoder 兼容标识；同步版本到 1.5.2。
-- **V1.5.1** (2026-05-09) — 🪶 npm 路线精简。本仓库以 **git 为唯一 source of truth**，不发布到 npm registry；保留 `bin/install.js` CLI 体验，入口从 `npx @supermajia/guanyuan-bi` 改为 `node bin/install.js` 或 `npx github:maojiebc/guanyuan-majia install`（npx 原生支持 GitHub URL，不依赖 npm registry）。`package.json` / `manifest.json` / `.npmignore` 保留作为本地 install CLI 的运行时元数据，将来若要发 npm 不必重写。
-- **V1.5.0** (2026-05-09) — 🏗️ Progressive Disclosure 架构重构。SKILL.md 从 2087 行（89KB）压到 913 行（48KB），单次触发省 ~1.2 万 token；高频内容（Part 路由、决策框架、关键 API、报错速查、红线、ID 速查）留主文档，详细操作手册下沉到 `references/` 8 个新文件（part-a-commands / part-a-cards / part-b-errors / part-b-payload / part-b-sdk / part-b17-fullchain-rewrite / part-c-payload-json / guancli-commands）。性能不变、内容零损耗。
-- **V1.4.0** (2026-05-09) — 🛠️ 添加跨工具 install CLI。新增 `bin/install.js`（`install` / `list` / `uninstall` 三命令 + `--tool` `--force` `--dry-run` flags），自动检测 Claude Code / OpenClaw / Codex / Hermes 4 个 agent 工具并安装/升级，永不覆盖用户的 `config.json`。同步加 `package.json` / `.npmignore` 作为打包元数据（V1.5.1 后明确仅本地用）。
-- **V1.3.1** (2026-05-09) — 外部代码审查修复（patch）：补上 SKILL.md 未闭合代码块、新增 B-7.0 删除前硬性安全闸（agent 必须用户逐项确认才能 DELETE）、scripts/guandata.py `--task` 加输入校验封堵路径穿越、frontmatter description 版本号对齐。
-- **V1.3** (2026-05-09) — 工具无关化。原生兼容 Claude Code / OpenClaw / Codex / Hermes (gbrain)。新增仓库根 `AGENTS.md`（Codex 项目指令 + Hermes resolver）+ `manifest.json`（工具无关元数据）；去掉所有 `~/.claude/skills/` 类硬编码路径；README 加 Compatibility 章节列出每工具安装命令。
-- **V1.2** (2026-05-09) — 吸收 OpenAI Codex 的 ExecPlan 规范，新增 B-17.11 用 ExecPlan 管理重写工程（SmartETL 改写专用骨架 + 四个活文档章节实战用法）+ B-12 工程化指针；`references/` 加 execplan-spec.md + agents-rule.md
-- **V1.1** (2026-05-09) — 整合 CTO 张进的两份经验：B-17 全链路重写方法论 + Part C 自定义图表
-- **V1.0** (2026-05-09) — 重命名 `guandata70` → `guanyuan-majia`，新增 Part B：ETL 治理与写入完整指南
-- **V0.x** (2026-03-30) — guandata70 初版（小小郑3号），适配观远 BI 7.0+
-
----
+完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 
 ## 🤝 贡献
 

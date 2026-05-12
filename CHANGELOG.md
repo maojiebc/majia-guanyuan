@@ -1,9 +1,82 @@
 # Changelog
 
-All notable changes to **guanyuan-majia** are recorded here.
+All notable changes to **majia-guanyuan** are recorded here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
+
+## [2.0.0] — 2026-05-12
+
+### BREAKING / Renamed
+- **Skill renamed `guanyuan-majia` → `majia-guanyuan`** to align with the
+  `majia-*` family naming style (`majia-ota-skill`, `majia-video-png`,
+  `majia-txt`, etc.). Three coordinated renames:
+  - npm package: `@supermajia/guanyuan-bi` → `@supermajia/majia-guanyuan`
+  - GitHub repo: `maojiebc/guanyuan-majia` → `maojiebc/majia-guanyuan`
+    (GitHub auto-redirects the old URL; existing clones continue to work
+    until users update `git remote set-url origin`)
+  - npm bin: `guanyuan-bi` → `majia-guanyuan`
+  - All file paths in `manifest.json` `compatibility.installPath`, README
+    examples, and SKILL.md install snippets updated.
+- Historical narrative in CHANGELOG / README still references the legacy
+  names for accuracy (e.g. V1.0 "Renamed guandata70 → guanyuan-majia"
+  preserved verbatim).
+
+### Added — command surface aligned with `@guandata/guancli@1.0.19`
+- **`guancli chatbi`** documented in `references/guancli-commands.md` —
+  `list-theme` / `query` (L1 theme query) / `insight` (L2 root-cause).
+  ⚠️ Our test BI instance returns `5001 No static resource` because the
+  ChatBI Public API module is not deployed there; the commands are
+  reachable on instances with the module enabled.
+- **`guancli app`** — `create` / `publish` for SuperApp templates.
+- **`guancli status`** — top-level connectivity probe, distinct from
+  `auth status` (which only inspects the local token).
+- **Multi-environment auth** — full `auth list / use / modify / remove /
+  whoami / detect-domain` matrix + `--profile` flag + `GUANCLI_PROFILE`
+  env var documented. Token persistence path
+  `~/Library/Application Support/guancli/config.json` made explicit.
+
+### Added — SKILL.md routing & coexistence
+- New section in SKILL.md Part A: "guancli V1.0.19 新能力（V2.0 同步）"
+  routes agents to the new chatbi/app/status/auth blocks.
+- New section: "与官方 `guancli` skill 的共存" — clarifies that the
+  official `guancli` skill (installed via `guancli install-skill`, 2026-05-11)
+  is read-only + ChatBI, while `majia-guanyuan` covers write operations
+  + methodology + 60+ ETL war stories. Guidance for resolving double-trigger
+  ambiguity by removing `~/.claude/skills/guancli`.
+- Part C 章节顶部标注社区平行项目 `@wubaoqi/guan-chart-kit` (React+ECharts
+  components for Guandata) + `@wubaoqi/guan-chart-kit-usage-skill` — both
+  published 2026-04-29 by Guandata maintainer wubaoqi. Notes the routing
+  difference (component vs HTML/JS injection).
+
+### Changed
+- `Node.js engines` requirement raised from `>=14.0.0` to `>=20.0.0` to
+  match `@guandata/guancli`'s installation guide (Node 20+, 22+ recommended).
+- Part B intro note rewritten: previously called out only `guanetl-skill`
+  as missing from npm; now names all five sibling skills (`guanetl-skill`
+  `/ guanvis-skill / guands-skill / guanexport-skill / guanadmin-skill`)
+  with the 2026-05-12 npm 404 verification timestamp.
+- `package.json#description` and `manifest.json#displayName` updated to
+  reference V2.0 rename.
+
+### Deferred to next release
+- **Migrate `scripts/guandata.py` auth to guancli token** — the Python
+  client still maintains its own `login() → self._token` flow (2789 lines,
+  fully independent of guancli's token storage). Removing the
+  `password` field from `config.json` requires reworking `_relogin_if_needed`
+  to read `profiles.<name>.uIdToken` from
+  `~/Library/Application Support/guancli/config.json`. Scoped out of V2.0
+  to keep the release pure-documentation / pure-metadata.
+- **`config.example.json` password field removal** — paired with the above.
+
+### Verified
+- `npm install -g @guandata/guancli` → 1.0.19 on Node 25.6.1 ✅
+- `guancli auth status` shows valid uIdToken, password mode, 401 auto-relogin ✅
+- `guancli chatbi list-theme` → 5001 (instance limitation, command shape correct) ✅
+- All keyword renames: 0 residuals for `guanyuan-majia`,
+  `@supermajia/guanyuan-bi`, `maojiebc/guanyuan-majia`.
+- Historical narrative restorations: 8 entries verified manually
+  (V1.0 rename, V1.4.0 npm path, V1.5.1 npm-to-git transition).
 
 ## [1.7.3] — 2026-05-11
 
@@ -63,7 +136,7 @@ Follows `majia-ota-skill` v0.6.1 two-placements rule.
 
 ### Added
 - `.claude-plugin/marketplace.json` — enables Claude Code plugin marketplace
-  install (`/plugin marketplace add maojiebc/guanyuan-majia`). Adds a fourth
+  install (`/plugin marketplace add maojiebc/majia-guanyuan`). Adds a fourth
   install path alongside `gh skill`, `npx skills`, and clone+copy.
 - `CHANGELOG.md` — this file. Consolidates v1.1 → v1.6.0 history that was
   previously scattered across commit messages and only two GitHub Releases.
@@ -158,13 +231,16 @@ Follows `majia-ota-skill` v0.6.1 two-placements rule.
   - 10 类 ETL 高频报错修复手册
   - CTO 张进的全链路重写方法论（4 件交付 + 8 条硬规则 + 5 步标准工作流）
 
-[1.6.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.6.0
-[1.5.3]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.5.3
-[1.5.2]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.5.2
-[1.5.1]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.5.1
-[1.5.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.5.0
-[1.4.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.4.0
-[1.3.1]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.3.1
-[1.3.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.3.0
-[1.2.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.2.0
-[1.1.0]: https://github.com/maojiebc/guanyuan-majia/releases/tag/v1.1.0
+[2.0.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v2.0.0
+[1.7.1]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.7.1
+[1.7.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.7.0
+[1.6.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.6.0
+[1.5.3]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.5.3
+[1.5.2]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.5.2
+[1.5.1]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.5.1
+[1.5.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.5.0
+[1.4.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.4.0
+[1.3.1]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.3.1
+[1.3.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.3.0
+[1.2.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.2.0
+[1.1.0]: https://github.com/maojiebc/majia-guanyuan/releases/tag/v1.1.0

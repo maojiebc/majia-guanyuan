@@ -53,7 +53,7 @@ This skill is built on top of multiple predecessors and contributions from the G
 
 - **GitHub**: https://github.com/maojiebc
 - **Contribution / 贡献**:
-  - V1.0 重新整合：将 guandata70 + ETL 治理与写入实战经验合并为 `guanyuan-majia`
+  - V1.0 重新整合：将 guandata70 + ETL 治理与写入实战经验合并为 `majia-guanyuan`
   - **Part B ETL 治理与写入实证** — 60+ 张 ETL 创建/重构/修复的真实战场记录，包括 11 个已实测 BI HTTP API endpoint、8 维 ETL + 4 维字段去留判断、ODS/DIM/DWD/DWS/APP 五层分层、字段使用度双源审计（page+etl）、v2→v3 批量改造 SDK、10 类高频报错修复手册
   - V1.1 整合 CTO 张进经验
   - V1.2 整合 OpenAI Codex ExecPlan 规范并定制化为 SmartETL 重写场景骨架
@@ -71,7 +71,7 @@ This skill is built on top of multiple predecessors and contributions from the G
 ### @guandata/guancli
 
 - **Author / 作者**: Guandata 官方
-- **Version / 版本**: 1.0.18
+- **Version / 版本**: 1.0.19
 - **NPM**: `npm install -g @guandata/guancli`
 - **Role / 角色**: Part B/C 的所有底层 BI HTTP API 调用都通过 `guancli fetch` 完成。本项目的工程化经验是基于 `guancli` 这套官方 CLI 反推 / 验证 / 总结而成。
 

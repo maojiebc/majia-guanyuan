@@ -155,6 +155,76 @@ guancli fetch POST /api/import/upload-files/CSV --upload file0=/path/to/data.csv
 
 ---
 
+## ChatBI 主题问数 / L2 洞察（V2.0 新增）
+
+`@guandata/guancli@1.0.19` 新增 `chatbi` 子命令，调 ChatBI Public API。后端需要部署 `/api/chat/public-api/...` 路由，没启用的实例会报 `5001 No static resource`（自有 BI 实例 2026-05-12 实测如此）。
+
+```bash
+# 列所有可用主题
+guancli chatbi list-theme
+guancli chatbi list-theme --insight        # 仅列洞察主题
+
+# L1 主题问数
+guancli chatbi query --theme-name "经营主题" --message "最近30天营业收入是多少？"
+
+# L2 洞察分析（解释"为什么变化"）
+guancli chatbi insight --theme-id <theme_id> --message "分析最近30天营业收入变化原因"
+```
+
+`chatbi` 复用当前 profile 的 `uIdToken`，无需额外认证。
+
+## SuperApp 模板（V2.0 新增）
+
+```bash
+# 基于 SuperApp 模版创建新项目
+guancli app create
+
+# 发布到平台
+guancli app publish
+```
+
+详细参数走 `guancli app create --help` / `guancli app publish --help`。
+
+## 连接状态检查（V2.0 新增）
+
+```bash
+# 探测当前 profile 的 base_url 接口连通
+guancli status
+```
+
+区别于 `guancli auth status`：后者只看本地 token 是否有效，前者真发请求探接口。
+
+## 认证与多环境管理（V2.0 补全）
+
+> token 持久化路径：`~/Library/Application Support/guancli/config.json`，含 `profiles.<name>.uIdToken` + `token_refresh_interval_seconds`。401 自动重登已默认启用。
+
+```bash
+# 首次配置
+guancli auth login                          # 交互式输入 base_url / domain / 账号 / 密码
+guancli auth detect-domain --url https://...  # 不知道 domain 时先探
+
+# 多环境管理
+guancli auth list                           # 列出所有已配 profile
+guancli auth use <name>                     # 切默认 profile
+guancli auth modify <name>                  # 改某个 profile（base_url / domain / 账号 / 密码）
+guancli auth remove <name>                  # 删 profile
+
+# 当前会话信息
+guancli auth status                         # token 剩余有效期、登录方式
+guancli auth whoami                         # 当前登录用户 + 实例 ID
+
+# 临时切换 profile（不改默认）
+guancli --profile <name> ds search "..."
+export GUANCLI_PROFILE=<name>               # 或环境变量持久切
+```
+
+**何时建多 profile**：
+- 生产 vs UAT vs 镜像并行测试
+- 不同账号权限（普通账号 vs admin）
+- 跨多家公司的 BI 实例（外包/咨询场景）
+
+---
+
 ## 工具选择决策表
 
 | 场景 | 用什么 | 原因 |
@@ -167,4 +237,8 @@ guancli fetch POST /api/import/upload-files/CSV --upload file0=/path/to/data.csv
 | 任务排查 | `guancli task` | guandata.py 无此能力 |
 | 快速预览数据 | `guancli ds preview` | 自动精简列，输出干净 |
 | 表单 CRUD | `guancli form` | guandata.py 无此能力 |
+| 主题问数 / 洞察分析 | `guancli chatbi` | V2.0 新增，需后端启用 ChatBI Public API |
+| SuperApp 创建/发布 | `guancli app` | V2.0 新增 |
+| 接口连通性探测 | `guancli status` | V2.0 新增，区别于 `auth status` |
+| 多环境切换 | `guancli --profile` / `GUANCLI_PROFILE` | V2.0 补全 |
 | 调未封装的 API | `guancli fetch` | 万能兜底 |

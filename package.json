@@ -1,7 +1,7 @@
 {
-  "name": "@supermajia/guanyuan-bi",
-  "version": "1.7.1",
-  "description": "Tool-agnostic Agent Skill for Guandata BI (观远 BI). Data analysis + ETL governance/write + custom chart development. Compatible with Claude Code, OpenClaw, Codex, Hermes (gbrain). V1.5.0: progressive-disclosure architecture (SKILL.md router + 8 references playbooks) saves ~1.2万 tokens per skill invocation.",
+  "name": "@supermajia/majia-guanyuan",
+  "version": "2.0.0",
+  "description": "Tool-agnostic Agent Skill for Guandata BI (观远 BI). Data analysis + ETL governance/write + custom chart development. Compatible with Claude Code, OpenClaw, Codex, Hermes (gbrain). V1.5.0: progressive-disclosure architecture (SKILL.md router + 8 references playbooks) saves ~1.2万 tokens per skill invocation. V2.0.0: renamed from guanyuan-majia to majia-guanyuan; command surface aligned with @guandata/guancli 1.0.19.",
   "keywords": [
     "claude-code",
     "claude-skill",
@@ -24,18 +24,18 @@
     "custom-chart",
     "execplan"
   ],
-  "homepage": "https://github.com/maojiebc/guanyuan-majia",
+  "homepage": "https://github.com/maojiebc/majia-guanyuan",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maojiebc/guanyuan-majia.git"
+    "url": "git+https://github.com/maojiebc/majia-guanyuan.git"
   },
   "bugs": {
-    "url": "https://github.com/maojiebc/guanyuan-majia/issues"
+    "url": "https://github.com/maojiebc/majia-guanyuan/issues"
   },
   "license": "MIT",
   "author": "maojiebc",
   "bin": {
-    "guanyuan-bi": "./bin/install.js",
+    "majia-guanyuan": "./bin/install.js",
     "supermajia-guanyuan": "./bin/install.js"
   },
   "files": [
@@ -54,7 +54,7 @@
     "references/"
   ],
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "publishConfig": {
     "access": "public"
