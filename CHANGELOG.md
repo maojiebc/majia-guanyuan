@@ -5,6 +5,51 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.0] — 2026-05-13
+
+### Added
+
+- **`references/internal-nexus-install.md`** — 通用"内网 Nexus tarball 安装手册"，
+  覆盖观远官方 `guan*-skill` 系列从微信传 tarball 到 `<bin> install-skill` 的
+  四步法。**重点收录 `xattr -dr com.apple.quarantine` 这一步**——2026-05-13
+  装 `guanvis-skill@0.1.13` 时第一次 `--help` 直接 SIGKILL 的根因，没有任何
+  stderr 输出，纯靠 `xattr -l` 才查出 `com.apple.quarantine: 0082;...;WeChat;`
+  标记。新人/未来的自己肯定再撞，必须沉淀。
+- SKILL.md 顶部新增 **"V2.1 升级提示"** 段——明确 `guanvis-skill@0.1.13` 已通过
+  观远内网 Nexus 私服 (`https://app.mayidata.com/nexus/repository/guandata-web/`)
+  上线，公网 npm 仍 404；其他 4 个兄弟 skill (`guanetl-skill / guands-skill /
+  guanexport-skill / guanadmin-skill`) 公网 + 内网均未确认发包。
+- SKILL.md "写卡片前必读" 段顶部新增 **V2.1 路由提示**：标准 30+ 图表/Page
+  装配需求优先路由到 `guanvis-skill` 的 JS DSL（`card_*.js` / `page.js`），
+  本 skill 的 `create-and-get` / `create-card` 保留作为 fallback + payload
+  底层参考。超出官方组件能力的视觉定制（双 Y 轴叠加、ECharts 自定义渲染、
+  图例改圆点、tooltip HTML 重写、固定卡片/overlay）继续走 Part C。
+
+### Changed
+
+- "与官方 `guancli` skill 的共存" 段从**两件套对照表**升级为**三件套分工表**
+  （`guancli` 1.0.19 / `guanvis-skill` 0.1.13 / `majia-guanyuan` 2.1.0），
+  每行明确版本、主要角色、何时触发。原表述"5 个兄弟 skill 2026-05-12 全部
+  404"修正为"vis 已经能通过内网 Nexus 装，其他 4 个仍 404"。
+- Part B 顶部的"全部 404"⚠️警告同步更新，指向 `internal-nexus-install.md`
+  作为 `guanvis-skill` 的安装路径，Part B 的 ETL 写入/direct-save/execute
+  路径保持不变（等 `guanetl-skill` 落地后再考虑路由切换）。
+- SKILL.md frontmatter `metadata.version` `2.0.1` → `2.1.0`；
+  `manifest.json` `version` 同步；`package.json` `version` + description
+  补充 V2.1 摘要；标题行、作者签名行、"版本记录"段、References 目录索引
+  全部对齐到 V2.1.0 / 2026-05-13。
+- SKILL.md 作者签名行新增**可选依赖**标记：`@guandata/guanvis-skill@^0.1.13`
+  （内网 Nexus 私服分发），与必装的 `@guandata/guancli@^1.0.19` 区分。
+
+### Notes
+
+- **没改 references/ 已有 12 个文件的核心内容**——只新增 `internal-nexus-install.md`。
+  Part A 命令面、Part B-17 SmartETL 改写方法论、Part C 自定义图表 playbook、
+  ExecPlan 规范、张进 CTO 原文等保持原样。
+- **没改 `npm engines` / dependencies**——V2.1 不强制依赖 `guanvis-skill`，
+  它是可选增强，没装也不影响 Part B/C 全部功能。
+- V1.x 历史叙事（"Renamed guandata70 → guanyuan-majia" 等）继续完整保留。
+
 ## [2.0.1] — 2026-05-12
 
 ### Changed
