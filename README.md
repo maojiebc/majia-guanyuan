@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.2-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.3-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,7 +25,7 @@
 本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.2 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板（NEW）" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.3 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板（NEW）" width="100%"/>
 </p>
 
 | Part | 能力 | 触发场景 |
@@ -404,7 +404,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.1** (2026-05-14) — 新增 **Part C-12：HTML 应用化看板生成**（`references/part-c-html-dashboard.md` + `templates/html-dashboard/` 模板包，含 GDHTML runtime 12 个 API + 2 个起手模块 + `patch_selector_linkage.js`）。用户说"更高级/应用化/不限标准看板"时自动切到 SDK 子类型 + DATA_GRID dataView 数据层架构，弥补 `guanvis-skill .linkToAll()` 联不到 custom chart 内部 dataView 的盲区。`guancli card preview` 命令面同步纠正（不再有 `--pg-id`），新增 `.data // .response` jq 兼容写法。
+**最新：V2.1.3** (2026-05-14) — 纯文档 patch：刷新 `docs/architecture.svg` 功能说明图，从 v1.5 "三块拼图"升级到 v2.1.x 现实——新增"三件套生态"条带（guancli 1.0.19 / guanvis-skill 0.1.13 / majia-guanyuan 2.1.3）+ Part C-12 HTML 应用化看板 NEW 高亮模块（粉紫渐变 + glow）+ 底部数字校准。同步生成 2880×1840 @2x DPI PNG 渲染产物（`docs/architecture.png`，供 npm/ClawHub 页面 fallback）。`package.json#files` 把 `docs/` 也补进 npm tarball。
+
+**V2.1.2** (2026-05-14) — V2.1.1 的纯打包 hotfix：`package.json#files` 字段补上 `templates/`，让 npm install 的用户也能拿到 `templates/html-dashboard/` 起手模板包；其他安装路径（GitHub clone / `gh skill install` / ClawHub）从 V2.1.1 起就已经包含 templates/。
+
+**V2.1.1** (2026-05-14) — 新增 **Part C-12：HTML 应用化看板生成**（`references/part-c-html-dashboard.md` + `templates/html-dashboard/` 模板包，含 GDHTML runtime 12 个 API + 2 个起手模块 + `patch_selector_linkage.js`）。用户说"更高级/应用化/不限标准看板"时自动切到 SDK 子类型 + DATA_GRID dataView 数据层架构，弥补 `guanvis-skill .linkToAll()` 联不到 custom chart 内部 dataView 的盲区。`guancli card preview` 命令面同步纠正（不再有 `--pg-id`），新增 `.data // .response` jq 兼容写法。
 
 **V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` 内网 Nexus 上线，Part A 标准建卡路由优先指向它；新增 `references/internal-nexus-install.md` 内网 tarball 安装手册（含 macOS `com.apple.quarantine` 坑）；与官方 skill 共存表升级为三件套分工。
 

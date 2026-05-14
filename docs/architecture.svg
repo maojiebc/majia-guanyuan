@@ -22,7 +22,7 @@
   <text x="720" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">majia-guanyuan · 观远 BI 全链路 Agent Skill</text>
   <g transform="translate(720, 68)">
     <rect x="-70" y="0" width="140" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v2.1.2  ·  2026-05-14</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v2.1.3  ·  2026-05-14</text>
   </g>
   <text x="720" y="116" text-anchor="middle" font-size="13" fill="#64748b">三块拼图 + 三件套生态：覆盖一份 BI 工作的"读数 / 治理 / 自定义"全部场景  ·  工具无关 (Claude Code · OpenClaw · Codex · Hermes/gbrain)</text>
 
@@ -59,7 +59,7 @@
         <rect width="44" height="16" rx="8" fill="#0f172a"/>
         <text x="22" y="11" text-anchor="middle" font-size="10" font-weight="700" fill="#fef3c7">当前</text>
       </g>
-      <text x="195" y="24" font-size="11" fill="#10b981" font-weight="600">2.1.2 · 实战沉淀 + 三块拼图</text>
+      <text x="195" y="24" font-size="11" fill="#10b981" font-weight="600">2.1.3 · 实战沉淀 + 三块拼图</text>
       <text x="20" y="44" font-size="11" fill="#475569">60+ ETL 战例 / 10 类报错 / 30 条法则</text>
       <text x="20" y="60" font-size="11" fill="#64748b">Part B 严肃改造 · Part C 注入 · C-12 HTML 应用看板</text>
     </g>
@@ -161,7 +161,7 @@
       <text x="12" y="92" font-size="11.5" fill="#475569">• GDHTML 共享 runtime（12 个 API）+ SDK 决策</text>
       <text x="12" y="110" font-size="11.5" fill="#475569">• selector → dataView 联动 descriptor patch (.bak 自动备份)</text>
       <text x="12" y="128" font-size="11.5" fill="#475569">• 12 步 pack→patch→upload→verify + API 四层验收</text>
-      <text x="12" y="146" font-size="10.5" fill="#94a3b8" font-style="italic">templates/html-dashboard/ 起手包 (V2.1.2 npm files 修正)</text>
+      <text x="12" y="146" font-size="10.5" fill="#94a3b8" font-style="italic">templates/html-dashboard/ 起手包 (v2.1.3 npm tarball 全量打包)</text>
     </g>
 
     <text x="24" y="438" font-size="11" font-style="italic" fill="#94a3b8">入口指针：SKILL.md → Part C / C-12 + references/part-c-html-dashboard.md</text>

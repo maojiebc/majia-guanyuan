@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.2-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.3-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,7 +25,7 @@
 This Skill consolidates three categories of Guandata BI operations into **a single Claude Code Skill**, so AI can handle daily reporting + serious ETL governance + frontend custom chart debugging — all in one place.
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.2 capability map: three-skill ecosystem (guancli / guanvis-skill / majia-guanyuan) + Part A query + Part B ETL full-stack + Part C front-end injection / Part C-12 HTML application dashboard (NEW)" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.3 capability map: three-skill ecosystem (guancli / guanvis-skill / majia-guanyuan) + Part A query + Part B ETL full-stack + Part C front-end injection / Part C-12 HTML application dashboard (NEW)" width="100%"/>
 </p>
 
 | Part | Capability | When to use |
@@ -406,7 +406,11 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V2.1.1** (2026-05-14) — New **Part C-12: HTML application-style dashboard generation** (`references/part-c-html-dashboard.md` + `templates/html-dashboard/` starter pack with GDHTML runtime + 2 starter modules + `patch_selector_linkage.js`). When users ask for "more advanced / application-like / beyond standard dashboards", auto-routes to SDK subtype + DATA_GRID dataView layer architecture; the descriptor-level patch fills the gap where `guanvis-skill .linkToAll()` cannot reach custom chart internal dataViews. `guancli card preview` command surface corrected (no more `--pg-id`); adds `.data // .response` jq compatibility.
+**Latest: V2.1.3** (2026-05-14) — Documentation-only patch: refreshed `docs/architecture.svg` capability map to reflect the v2.1.x reality — new "three-skill ecosystem" strip (guancli 1.0.19 / guanvis-skill 0.1.13 / majia-guanyuan 2.1.3) + Part C-12 HTML application dashboard NEW highlight block (pink-purple gradient + glow). Also adds a 2880×1840 @2x DPI rendered PNG (`docs/architecture.png`) for npm/ClawHub page fallback. `package.json#files` now ships `docs/` inside the npm tarball.
+
+**V2.1.2** (2026-05-14) — V2.1.1 npm-only packaging hotfix: `package.json#files` adds `templates/`, so `npm install` users finally get the `templates/html-dashboard/` starter pack. Other install paths (GitHub clone, `gh skill install`, ClawHub) already had it since V2.1.1.
+
+**V2.1.1** (2026-05-14) — New **Part C-12: HTML application-style dashboard generation** (`references/part-c-html-dashboard.md` + `templates/html-dashboard/` starter pack with GDHTML runtime + 2 starter modules + `patch_selector_linkage.js`). When users ask for "more advanced / application-like / beyond standard dashboards", auto-routes to SDK subtype + DATA_GRID dataView layer architecture; the descriptor-level patch fills the gap where `guanvis-skill .linkToAll()` cannot reach custom chart internal dataViews. `guancli card preview` command surface corrected (no more `--pg-id`); adds `.data // .response` jq compatibility.
 
 **V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` rolled out via Guandata internal Nexus; Part A standard card-creation now routes to it first; new `references/internal-nexus-install.md` tarball install playbook (incl. macOS `com.apple.quarantine` pitfall); coexistence section upgraded from 2-skill to 3-skill split.
 

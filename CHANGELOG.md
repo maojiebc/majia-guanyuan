@@ -5,6 +5,64 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.3] — 2026-05-14
+
+### Added
+
+- **`docs/architecture.svg`** —— v2.1.x 功能说明图全面刷新。原图是 V1.5.0 时代
+  的"三块拼图"信息架构，没反映：① V2.0.0 的 `majia-guanyuan` 重命名；
+  ② V2.1.0 的 `@guandata/guanvis-skill` 内网 Nexus 三件套共存；
+  ③ V2.1.1 的 Part C-12 HTML 应用化看板生成。新版图重新设计为：
+  - **顶部 header**：版本 chip（v2.1.3 · 2026-05-14，深底黄字 pill）+ 工具无关副标
+  - **三件套共存条带**：guancli 1.0.19（公网必装基底，蓝）/ guanvis-skill 0.1.13
+    （内网 Nexus 可选增强，紫）/ majia-guanyuan 2.1.3（当前 skill，绿，带"当前"标）
+  - **Part A 卡片**：保留 26 图表 / 26 聚合 / 13 操作符等清单，新增"V2.1 路由"
+    底部提示框（标准卡片 → guanvis-skill DSL，本 skill `create-and-get` 作 fallback）
+  - **Part B 卡片**：保留 11 API / 8 维去留判断 / 五层架构等，新增"B-17 ExecPlan"
+    底部高亮（先验数据 → ExecPlan → 重写 → 双跑对比 → 切流，琥珀色块）
+  - **Part C 卡片**：上半部分压缩 C-1 ~ C-11 既有路线（renderChart 契约 / 5 种 data
+    形态 / z-index 基线 / 生命周期销毁），下半部分新增 **C-12 NEW 高亮模块**
+    （粉紫渐变边框 + glow 阴影 + NEW chip）：触发词清单 / 6 模块默认故事线 /
+    GDHTML 12 个 API / selector descriptor patch / 12 步工作流 / 4 层验收
+  - **底部基础设施条**：10 类报错 / 30 条法则 / 60+ 战例（数字校准为 77 ETL /
+    251 数据集 / 86 看板）/ 渐进式披露（标 v1.5 引入，-1.2 万 token / 次）
+  - **footer install**：补 npm 安装路径 `npm i @supermajia/majia-guanyuan`，
+    与 gh skill / npx skills / `/plugin marketplace` 并列
+
+- **`docs/architecture.png`** —— 2880×1840 @2x DPI 渲染产物，Chrome headless
+  生成，覆盖中文字体（-apple-system / PingFang SC / Microsoft YaHei fallback）。
+  npm 包页面 / ClawHub package 页面如果不支持 SVG 渲染，可用 PNG 作为
+  fallback；社交媒体发布也直接拿 PNG。
+
+### Changed
+
+- **`package.json#files`** —— 把 `docs/` 加进 npm tarball。V2.1.2 修了
+  `templates/` 的同一类问题，但 V2.1.1 引入 `docs/architecture.svg` 时也忘了
+  列 `docs/`，所以 V2.1.2 之前 npm install 用户在 README 渲染时其实是看不到
+  capability map 的（broken image）。
+- **`package.json#description`** —— 末尾追加 V2.1.3 摘要句。
+- **SKILL.md / README.md / README.en.md** —— 版本号、徽章、alt 文本、
+  作者签名版本行、"版本记录"段全部对齐到 V2.1.3 / 2026-05-14。
+- **`manifest.json#version`** + **`.skill-sync.json#version`** 同步。
+
+### Notes
+
+- **零 references / templates 变更** —— V2.1.3 是 docs-only patch，
+  `references/part-c-html-dashboard.md` / `templates/html-dashboard/` /
+  `references/guancli-commands.md` 等所有 V2.1.x 引入的核心内容保持原样。
+- **不动现存命令面 / API / 路由规则** —— Part A/B/C 的实操章节、SKILL.md
+  Part 选择表、与官方 skill 共存表全部保持 V2.1.2 状态。
+- **依旧没有 npm dependencies 变化** —— `docs/architecture.png` 是 build
+  产物（headless Chrome 一次性渲染），不需要任何运行时依赖。
+
+### Why this is its own version
+
+V2.1.2 时整个 release pipeline (npm + ClawHub + GitHub release) 已经锁定，
+两个 registry 都拒绝同版本号重发 (`ConvexError: Version already exists`),
+所以 docs-only 改动必须走 patch bump。两者一致行为：
+- npm publish 2.1.2 → "You cannot publish over the previously published version"
+- clawhub skill publish --version 2.1.2 → `ConvexError: Version already exists`
+
 ## [2.1.2] — 2026-05-14
 
 ### Fixed
