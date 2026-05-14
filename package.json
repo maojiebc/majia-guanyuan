@@ -1,7 +1,7 @@
 {
   "name": "@supermajia/majia-guanyuan",
-  "version": "2.1.0",
-  "description": "Tool-agnostic Agent Skill for Guandata BI (观远 BI). Data analysis + ETL governance/write + custom chart development. Compatible with Claude Code, OpenClaw, Codex, Hermes (gbrain). V1.5.0: progressive-disclosure architecture (SKILL.md router + 8 references playbooks) saves ~1.2万 tokens per skill invocation. V2.0.0: renamed from guanyuan-majia to majia-guanyuan; command surface aligned with @guandata/guancli 1.0.19. V2.1.0: @guandata/guanvis-skill@0.1.13 internal-Nexus rollout — Part A standard card creation routed to it; new internal-nexus-install.md playbook with macOS quarantine pitfall.",
+  "version": "2.1.1",
+  "description": "Tool-agnostic Agent Skill for Guandata BI (观远 BI). Data analysis + ETL governance/write + custom chart development + HTML application-style dashboard generation. Compatible with Claude Code, OpenClaw, Codex, Hermes (gbrain). V1.5.0: progressive-disclosure architecture (SKILL.md router + references playbooks) saves ~1.2万 tokens per skill invocation. V2.0.0: renamed from guanyuan-majia to majia-guanyuan; command surface aligned with @guandata/guancli 1.0.19. V2.1.0: @guandata/guanvis-skill@0.1.13 internal-Nexus rollout — Part A standard card creation routed to it; new internal-nexus-install.md playbook with macOS quarantine pitfall. V2.1.1: new Part C-12 — HTML application-style dashboard generation playbook + templates/html-dashboard/ starter pack (GDHTML runtime + 2 starter modules + patch_selector_linkage.js); corrects `card preview` command surface (no more --pg-id), adds .data//.response jq compatibility.",
   "keywords": [
     "claude-code",
     "claude-skill",

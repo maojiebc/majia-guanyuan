@@ -5,6 +5,84 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.1] — 2026-05-14
+
+### Added — Part C-12：HTML 应用化看板生成
+
+- **`references/part-c-html-dashboard.md`**（~360 行）— 完整方法论 15 节，把
+  2026-05-14 在 `app.guandata.com` 上 `<demo-domain>` 实例的 `马甲—测试`
+  页面实测沉淀的 18 个核心要点固化为可执行手册（所有资源 ID 与销售数值已脱敏
+  为占位符与粗粒度）：
+  - 何时切到 HTML 应用看板（用户说"更高级/应用化/不限标准看板"的触发词清单）
+  - 6 模块默认故事线（总览 → 趋势 → 结构 → 四象限 → 行动队列）
+  - **SDK vs ECHARTS_LITE 决策**（混排型 / 经营叙事一律走 `CustomChartSubType.SDK`）
+  - **dataView contract** —— HTML 模块的真实数据接口，列式 `data[N][i] = {name, data}`
+  - 共享 runtime `GDHTML` 的 12 个 API（safeCols / rows / col / money / yuan /
+    pct / esc / bar / stacked / lineSvg / scatterSvg / mount）
+  - **24 字符 alphanumeric ID 严格校验** + dataView 不跨 custom chart 复用
+  - **selector → custom chart dataView 联动 descriptor patch**（弥补 `guanvis-skill`
+    DSL `.linkToAll()` 的盲区，绕开 `/api/card/.../edit/session` 的"只能在草稿页面
+    执行" 60004 报错）
+  - 12 步 pack → patch → upload → verify 工作流（含 zsh `noglob` / `find -delete`
+    glob 兼容、`._package.zip` 不固定名解决方案）
+  - **字段粒度后缀兼容**（`月份` / `月份 (月)` / `年月` / `year_month` 互认）
+  - 四层 API 验收清单（打包 / Page 卡数 / custom chart 内容 / dataView 出数 +
+    selector 联动），明确"浏览器截图不可靠（iframe / GPU 渲染黑屏），API 回读
+    为主验收"
+  - 12 类常见错误表（Card ID 25 字符、resource ID already used、selector 不影响
+    HTML 模块、`/api/card/.../edit/session` 60004、`fromjson` object cannot be parsed、
+    趋势图月份列空、`card data --pg-id` 不存在、中文 jq 字段报错、zsh `no matches
+    found`、`._package.zip`、Chrome 截图黑屏、`data[0]` undefined）
+
+- **`templates/html-dashboard/`** —— 起手模板包：
+  - `charts/html_common.js` — GDHTML 共享 runtime（safeCols / money / yuan / pct /
+    esc / bar / stacked / lineSvg / scatterSvg / mount + 粒度后缀别名表）
+  - `charts/html_base.css` — 共享样式（gd-card / gd-kpi / gd-list / gd-table /
+    gd-tag / gd-grid-2/3/4 响应式）
+  - `charts/html_executive.html` + `.js` — 经营驾驶舱（KPI 行 + 城市 Top + 低效/
+    样板门店双列）
+  - `charts/html_trend.html` + `.js` — 月度渠道趋势（折线 + 12 个月堆叠条 + 图例）
+  - `scripts/patch_selector_linkage.js` — CLI 参数化 patch 脚本（`--selector
+    <name>:<fdId>` + `--targets <cdId,...>`），自动写 `descriptor.json.bak`
+    备份，兼容 `card.settings` 的 string / object 两种形态
+  - `README.md` — 模板使用说明 + 起步命令
+
+### Changed
+
+- SKILL.md frontmatter `description` 扩词，加入 `HTML 看板/应用化/更高级/
+  不限标准看板` 等 V2.1.1 触发词，让 agent 在用户说"更高级"时主动路由到本
+  skill 而不是按标准 BI 看板交付。
+- SKILL.md Part 选择表新增 Part C-12 路由行。
+- SKILL.md Part C 末尾新增 **C-12 章节**（路由说明 + 两条不能跳的坑 +
+  references/templates 链接）。
+- SKILL.md References 目录新增 `part-c-html-dashboard.md` 索引行。
+- **`references/guancli-commands.md`** —— 修正 `card preview` 命令面（V2.1 起
+  没有 `--pg-id` flag，老写法 `card data <id> --pg-id <pg_id>` 已废弃），
+  新增 `.data // .response // .` jq 兼容速查、`settings` string/object 双形态
+  jq 兼容、中文字段 bracket 语法（`jq -r '.[0]["销售额"]'`）。
+- SKILL.md 标题行、frontmatter `metadata.version`、`manifest.json#version`、
+  `package.json#version` 与 description、README / README.en 徽章版本号、
+  "版本记录" 段全部对齐到 V2.1.1 / 2026-05-14。
+
+### Notes
+
+- **没改 v2.1.0 新建的 `internal-nexus-install.md`** —— guanvis-skill 内网安装
+  路径保持不变。
+- **没改 Part C-1 ~ C-11**（既有的"既有页面注入 hack"路线）—— 与 Part C-12
+  的"从零生成 HTML 应用看板"路线并行存在，共享 runtime 契约
+  `renderChart(data, ...)`、dataView 取数模型、API 验证规则，但工具链不同
+  （C-11 是 runtime DOM hack，C-12 是发布期 DSL + descriptor patch）。
+- **没改 dependencies / engines** —— V2.1.1 是 patch 版本，纯文档与模板增量；
+  `templates/html-dashboard/` 不需要新 npm 依赖（patch_selector_linkage.js
+  纯 Node fs/path，无外部依赖）。
+
+### Verified
+
+- 6 个 HTML 模块全量上线（`guanvis-skill upload` 报 `42 succeeded`）✅
+- 目标页卡数 `41`、`城市` / `门店类型` selector 目标从 11 扩到 22 ✅
+- HTML dataView 全量 ~7.37 亿 / `城市 EQ 上海` 过滤后 ~6800 万 /
+  `门店类型 EQ 交通枢纽店` 过滤后 ~9700 万 ✅（粗粒度，原始精确值已脱敏）
+
 ## [2.1.0] — 2026-05-13
 
 ### Added

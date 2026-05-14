@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.1-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -404,7 +404,9 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` 内网 Nexus 上线，Part A 标准建卡路由优先指向它；新增 `references/internal-nexus-install.md` 内网 tarball 安装手册（含 macOS `com.apple.quarantine` 坑）；与官方 skill 共存表升级为三件套分工。
+**最新：V2.1.1** (2026-05-14) — 新增 **Part C-12：HTML 应用化看板生成**（`references/part-c-html-dashboard.md` + `templates/html-dashboard/` 模板包，含 GDHTML runtime 12 个 API + 2 个起手模块 + `patch_selector_linkage.js`）。用户说"更高级/应用化/不限标准看板"时自动切到 SDK 子类型 + DATA_GRID dataView 数据层架构，弥补 `guanvis-skill .linkToAll()` 联不到 custom chart 内部 dataView 的盲区。`guancli card preview` 命令面同步纠正（不再有 `--pg-id`），新增 `.data // .response` jq 兼容写法。
+
+**V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` 内网 Nexus 上线，Part A 标准建卡路由优先指向它；新增 `references/internal-nexus-install.md` 内网 tarball 安装手册（含 macOS `com.apple.quarantine` 坑）；与官方 skill 共存表升级为三件套分工。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 

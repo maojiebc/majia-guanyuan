@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.1-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -406,7 +406,9 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` rolled out via Guandata internal Nexus; Part A standard card-creation now routes to it first; new `references/internal-nexus-install.md` tarball install playbook (incl. macOS `com.apple.quarantine` pitfall); coexistence section upgraded from 2-skill to 3-skill split.
+**Latest: V2.1.1** (2026-05-14) — New **Part C-12: HTML application-style dashboard generation** (`references/part-c-html-dashboard.md` + `templates/html-dashboard/` starter pack with GDHTML runtime + 2 starter modules + `patch_selector_linkage.js`). When users ask for "more advanced / application-like / beyond standard dashboards", auto-routes to SDK subtype + DATA_GRID dataView layer architecture; the descriptor-level patch fills the gap where `guanvis-skill .linkToAll()` cannot reach custom chart internal dataViews. `guancli card preview` command surface corrected (no more `--pg-id`); adds `.data // .response` jq compatibility.
+
+**V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` rolled out via Guandata internal Nexus; Part A standard card-creation now routes to it first; new `references/internal-nexus-install.md` tarball install playbook (incl. macOS `com.apple.quarantine` pitfall); coexistence section upgraded from 2-skill to 3-skill split.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 

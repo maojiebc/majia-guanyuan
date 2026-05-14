@@ -105,13 +105,55 @@ guancli page search "门店"
 # 页面详情（卡片列表 + 布局）
 guancli page get <pg_id>
 guancli page get <pg_id> --brief
+guancli page get <pg_id> --raw          # 返回根字段是 .data
 
 # 卡片元信息（数据集、类型、筛选条件）
 guancli card get <card_id>
+guancli card get <card_id> --raw        # 返回根字段是 .response（注意：和 page get 不同）
 
-# 预览卡片数据
+# 预览卡片数据（V2.1 起：没有 --pg-id flag，老写法 `card data --pg-id` 已废弃）
 guancli card preview <card_id>
+guancli card preview <card_id> --limit 1 --raw
+guancli card preview <card_id> -f json
+guancli card preview <card_id> --filter '城市 EQ 上海' -f json
+guancli card preview <card_id> --filter '门店类型 EQ 交通枢纽店' -f json
+guancli --profile <env> card preview <card_id> -f json    # 多环境
 ```
+
+### jq 兼容速查（V2.1.1 新增）
+
+不同子命令返回根字段不一致，写脚本时统一用 `.data // .response // .`：
+
+```bash
+ROOT='.data // .response // .'
+
+# 通用读法
+guancli page get <pg_id> --raw | jq "$ROOT.cards | length"
+guancli card get <cd_id> --raw | jq "$ROOT.settings"
+
+# selector 联动回读（验证 patch_selector_linkage 是否生效）
+guancli card get <selector_id> --raw \
+  | jq "$ROOT.settings.asFilter.targetCdIds | length"
+```
+
+`settings` 字段可能是 object（线上 API）也可能是 JSON string（资源包 descriptor），统一兼容：
+
+```jq
+if (.settings|type)=="string" then (.settings|fromjson) else .settings end
+```
+
+### 中文字段名用 bracket 语法
+
+```bash
+# ❌ jq: syntax error, unexpected INVALID_CHARACTER
+jq -r '.[0].销售额'
+
+# ✅
+jq -r '.[0]["销售额"]'
+guancli card preview <id> -f json | jq '.[0]["销售额"]'
+```
+
+涉及 HTML 应用看板的完整 selector linkage + dataView 验收命令面，见 [`part-c-html-dashboard.md` §10 / §11](./part-c-html-dashboard.md)。
 
 ## 表单填报 CRUD
 
