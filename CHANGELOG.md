@@ -5,6 +5,38 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.2] — 2026-05-14
+
+### Fixed
+
+- **`package.json#files`** —— 补上遗漏的 `templates/` 条目。V2.1.1 引入的
+  `templates/html-dashboard/` 模板包（GDHTML runtime + 2 起手模块 +
+  `patch_selector_linkage.js`）在 V2.1.1 时因 `files` 字段没列 `templates/`，
+  导致 `npm publish` 打出来的 tarball 不包含整个目录 —— **通过 `npm install
+  @supermajia/majia-guanyuan` 安装的用户拿不到任何模板文件**。这次补上后，
+  npm 安装路径也能拿到完整的 V2.1.1 内容。
+
+### Notes
+
+- **零内容变更** —— V2.1.2 相比 V2.1.1 只差一行 `"templates/"`（加进 files
+  数组）+ 版本号同步。`references/part-c-html-dashboard.md` /
+  `templates/html-dashboard/` / `references/guancli-commands.md` 等所有
+  V2.1.1 引入的内容保持原样。
+- **其他安装路径不受影响** —— GitHub clone / `gh skill install` /
+  ClawHub install / `npx github:maojiebc/majia-guanyuan install` 在 V2.1.1
+  时就已经拿到完整 `templates/`（它们走 git 而不是 npm tarball）。**只有 npm
+  install 用户需要装 2.1.2 才能拿到模板包**。
+- **npm 用户建议直接跳过 2.1.1**：V2.1.1 的 npm 包是不完整的，从
+  V2.1.0 升到 V2.1.2 等同于完整拿到 V2.1.1 的所有内容 + npm files 修正。
+
+### How this was caught
+
+`npm pack --dry-run` 在 V2.1.1 上线后对比 35 个 tarball 文件清单时发现 ——
+references/ 都在但 templates/ 整个目录缺失。GitHub Release / ClawHub
+package id `k97adk7c2m92w508gpskxv3dw986p8xk` / 4 个本地 agent 副本均
+正常含 templates/。Hotfix 路线选择 patch-of-patch (v2.1.2) 而非 force-push
+v2.1.1 tag，以避免已 clone 用户的 ref 漂移。
+
 ## [2.1.1] — 2026-05-14
 
 ### Added — Part C-12：HTML 应用化看板生成
