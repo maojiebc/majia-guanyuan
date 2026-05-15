@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/skill-manifest",
   "name": "majia-guanyuan",
   "displayName": "观远 BI · 马甲实战版",
-  "version": "2.1.3",
-  "description": "Tool-agnostic Claude Code / OpenClaw / Codex / Hermes skill for Guandata BI (观远 BI). Four capabilities: data query & card creation (Part A), ETL governance & write (Part B, incl. SmartETL full-chain rewrite & ExecPlan), custom chart HTML/JS injection & debugging (Part C-1..11), and V2.1.1's new HTML application-style dashboard generation (Part C-12, SDK subtype + DATA_GRID dataView layer + descriptor-level selector linkage patch). Battle-tested with 60+ ETL operations and a 41-card production HTML application dashboard. Progressive disclosure keeps SKILL.md as the router and references/ + templates/ as detailed playbooks. Install via `gh skill`, `git clone` + `node bin/install.js install`, `npx github:maojiebc/majia-guanyuan install`, or ClawHub/OpenClaw.",
+  "version": "2.1.4",
+  "description": "Tool-agnostic Claude Code / OpenClaw / Codex / Hermes skill for Guandata BI (观远 BI). Four capabilities: data query & card creation (Part A), ETL governance & write (Part B, incl. SmartETL full-chain rewrite & ExecPlan), custom chart HTML/JS injection & debugging (Part C-1..11), and V2.1.1's new HTML application-style dashboard generation (Part C-12, SDK subtype + DATA_GRID dataView layer + descriptor-level selector linkage patch). Battle-tested with 60+ ETL operations and a 41-card production HTML application dashboard. V2.1.4 syncs command surface with @guandata/guancli@1.0.21: metric query generalized-query flags (yoy/mom/xtd/recent/percentage/rank/last/adv-calc-json), card preview gains -f excel export + --limit default 10000 + sort lower bound 10000, and 1.0.21 cleaner error output (no more Usage spam) makes Part B error-capture scripts reliable. Progressive disclosure keeps SKILL.md as the router and references/ + templates/ as detailed playbooks. Install via `gh skill`, `git clone` + `node bin/install.js install`, `npx github:maojiebc/majia-guanyuan install`, or ClawHub/OpenClaw.",
   "license": "MIT",
   "author": "maojiebc",
   "authorDisplayName": "超级马甲",
@@ -70,7 +70,7 @@
   "dependencies": {
     "system": ["jq", "bash"],
     "python": ["httpx>=0.20"],
-    "node": ["@guandata/guancli@^1.0.19"]
+    "node": ["@guandata/guancli@^1.0.21"]
   },
   "config": {
     "template": "config.example.json",

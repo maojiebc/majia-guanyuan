@@ -71,7 +71,7 @@ This skill is built on top of multiple predecessors and contributions from the G
 ### @guandata/guancli
 
 - **Author / 作者**: Guandata 官方
-- **Version / 版本**: 1.0.19
+- **Version / 版本**: 1.0.21
 - **NPM**: `npm install -g @guandata/guancli`
 - **Role / 角色**: Part B/C 的所有底层 BI HTTP API 调用都通过 `guancli fetch` 完成。本项目的工程化经验是基于 `guancli` 这套官方 CLI 反推 / 验证 / 总结而成。
 

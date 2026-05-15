@@ -10,8 +10,12 @@ guancli 是观远官方 CLI（`npm install -g @guandata/guancli`），与 guanda
 
 **全局 flag**：
 - `--brief` — 省 token 模式（输出缩减 50%+），探索阶段必用
-- `-f csv` / `-f json` / `-f table` — 切换输出格式
+- `-f csv` / `-f json` / `-f table` / `-f expanded` / `-f excel` — 切换输出格式
+  - `-f excel` 是 1.0.20 新增的 Excel 2003 XML 格式（目前主要在 `card preview` 走通，重定向 `> out.xls` 直接打开；其余子命令视支持范围）
 - `--raw` — 原始 JSON（调试用）
+- `--profile <name>` — 临时切环境，等价于 `GUANCLI_PROFILE=<name>`（V2.0 起）
+
+**错误捕获（V2.1.4 起 / guancli 1.0.21）**：1.0.21 修了运行时报错附带 usage 帮助的 bug，`guancli ... 2>&1 | head -n 5` 之类的脚本现在能直接拿到干净错误信息，**不会再被一长串 `Usage:` / `Available Commands:` 淹没**。本 skill 的 Part B 报错速查表里所有 `head -n 3` 样式的提示都更可靠了。
 
 ---
 
@@ -65,9 +69,55 @@ guancli metric tree
 # 指标详情
 guancli metric get <metric_id>
 
-# 查询指标数据
+# 查询指标数据（基础）
 guancli metric query <metric_id>
+guancli metric query <metric_id> --limit 20
+guancli metric query <metric_id> --dim 日期 --dim 城市
+guancli metric query <metric_id> --filter "城市 EQ 上海"
+guancli metric query <metric_id> --sort-desc 订购数量 --columns "日期,订购数量"
+guancli metric query <metric_id> -f json | jq '.[0]'
 ```
+
+### V2.1.4 起：`metric query` 泛化查询（guancli 1.0.20 新增）
+
+guancli 1.0.20 给 `metric query` 加了一整套"高级指标分析"flag，把同比环比、累计、最近 N 周期、占比、Top N 排名这些常见业务问数能力下放到 CLI 端，**等价于在 BI 里点开"高级计算"面板的全部模式**。这意味着以前要先在 BI 后台配一个新指标实例才能算的同比/累计/占比，现在用一行命令直接出数。
+
+```bash
+# 同比 / 环比 / 周环 / 日环（compare: yoy|mom|qoq|wow|dod）
+guancli metric query <metric_id> --compare yoy                       # 默认 value，绝对值
+guancli metric query <metric_id> --compare mom --compare-value rate  # 环比变化率
+guancli metric query <metric_id> --compare yoy --compare-value rawdata  # 同期原值
+
+# 累计（xtd: ytd|qtd|mtd|wtd|dtd）
+guancli metric query <metric_id> --xtd ytd          # 年累计
+guancli metric query <metric_id> --xtd mtd          # 月累计
+
+# 最近 N 周期（recent: 7d|4w|3m|2q|2y）
+guancli metric query <metric_id> --recent 7d                          # 默认以今天为基准
+guancli metric query <metric_id> --recent 4w --recent-base 2026-05-15 # 指定基准日
+
+# 占比（必须配 --percentage-dim 指定占比维度）
+guancli metric query <metric_id> --percentage --percentage-dim 城市
+
+# Top N 排名
+guancli metric query <metric_id> --rank-top 10 --rank-dim 城市 --rank-order desc
+
+# 期末值（cumulative 期末快照）
+guancli metric query <metric_id> --last
+
+# 终极兜底：直接传原始 AdvMetricSetting JSON
+guancli metric query <metric_id> --adv-calc-json '{"calcType":"yoy",...}'
+```
+
+**何时用哪个**：
+- 用户问"同比/环比/比去年" → `--compare yoy|mom`，要绝对差还是比率走 `--compare-value rate`
+- 用户问"年累计/月累计/今年到今天" → `--xtd ytd|mtd`
+- 用户问"最近一周/最近一个月" → `--recent 7d|4w`，不要手算日期再传 `--filter`
+- 用户问"各城市占比/份额" → `--percentage --percentage-dim 城市`
+- 用户问"Top 10 / 排名前 N" → `--rank-top N --rank-dim 维度 --rank-order desc`
+- 复杂叠加（同比 + Top N + 占比同时要）→ 用 `--adv-calc-json` 直接构造 payload
+
+> **注意**：泛化查询的所有 flag 都对应 BI 后端的 `AdvMetricSetting`，能不能算成功取决于指标定义本身是否带"时间维度"、"占比维度"等元信息。报错 `400 AdvMetricSetting invalid` 一般是指标没配时间维度 → 先 `guancli metric get <metric_id>` 检查再说。
 
 ## 指标归因分析（guandata.py 无此能力）
 
@@ -118,6 +168,13 @@ guancli card preview <card_id> -f json
 guancli card preview <card_id> --filter '城市 EQ 上海' -f json
 guancli card preview <card_id> --filter '门店类型 EQ 交通枢纽店' -f json
 guancli --profile <env> card preview <card_id> -f json    # 多环境
+
+# V2.1.4 起（guancli 1.0.20）：Excel 导出 + 默认 limit 抬到 10000
+guancli card preview <card_id> -f excel > out.xls         # Excel 2003 XML，直接 .xls 打开
+guancli card preview <card_id> -f excel --limit 50000 > full.xls   # 大数据量场景
+# --limit 默认值已抬到 10000（老版本默认 50），平时不再需要手动指定
+# --sort-asc/--sort-desc 排序取数下限固定 10000 行，仍受更大 --limit 限制；
+# 服务端继续截断时命令会拒绝排序（避免输出半截、顺序不可信）
 ```
 
 ### jq 兼容速查（V2.1.1 新增）

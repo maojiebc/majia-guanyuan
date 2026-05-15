@@ -5,6 +5,55 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.4] — 2026-05-15
+
+### Added
+
+- **`references/guancli-commands.md` § 指标平台 — V2.1.4 起：`metric query` 泛化查询（guancli 1.0.20 新增）** ——
+  把 1.0.20 给 `guancli metric query` 加的整套"高级指标分析" flag 完整接入：
+  - `--compare yoy|mom|qoq|wow|dod` + `--compare-value value|rate|rawdata` —— 同比/环比/周环/日环，配 value 出绝对值、rate 出变化率、rawdata 出同期原值
+  - `--xtd ytd|qtd|mtd|wtd|dtd` —— 年/季/月/周/日累计
+  - `--recent 7d|4w|3m|2q|2y`（配 `--recent-base YYYY-MM-DD`）—— 最近 N 周期，业务侧"最近 7 天/4 周"不必再手算日期传 `--filter`
+  - `--percentage --percentage-dim 城市` —— 占比，必须配维度
+  - `--rank-top N --rank-dim 城市 --rank-order asc|desc` —— Top N 排名
+  - `--last` —— 期末值（cumulative 期末快照）
+  - `--adv-calc-json` —— 终极兜底，直接传 `AdvMetricSetting` JSON
+  含"何时用哪个 flag"判断表 + `400 AdvMetricSetting invalid` 排错提示（多半是指标没配时间维度）。
+- **`references/guancli-commands.md` § 页面 & 卡片探索 — `card preview -f excel`（guancli 1.0.20 新增）** ——
+  Excel 2003 XML 格式导出，重定向 `> out.xls` 直接 Excel 打开。同时记录：
+  - `--limit` 默认值从 50 抬到 10000（业务侧默认场景不再需要手指定）
+  - `--sort-asc/--sort-desc` 排序取数下限固定 10000 行，服务端继续截断时命令会拒绝排序避免输出顺序不可信
+- **`references/guancli-commands.md` § 全局 flag — `-f excel` 入 format 清单 + V2.1.4 错误捕获说明（guancli 1.0.21）** ——
+  1.0.21 修了 CLI 运行时报错附带 `Usage:` / `Available Commands:` 大段帮助的 bug。本 skill Part B 的报错速查脚本（`guancli ... 2>&1 | head -n 5` 模式）现在能拿到干净错误信息，不会被 usage 长串覆盖。
+- **`SKILL.md` § "guancli V1.0.21 新能力（V2.0 / V2.1.4 同步）"新增子节"V2.1.4 新对齐：1.0.20 / 1.0.21 增量"** ——
+  把上述三项增量做成路由级提示，告诉 agent "用户问同比/累计/最近/占比/排名/Excel 导出/Part B 报错捕获" 时该想到这些 flag；详细命令面下沉到 references。
+
+### Changed
+
+- **`SKILL.md` 章节标题 + 元数据**：
+  - 章节标题 `## guancli V1.0.19 新能力（V2.0 同步）` → `## guancli V1.0.21 新能力（V2.0 / V2.1.4 同步）`
+  - 章节首段 `@guandata/guancli@1.0.19 的命令面` → `@guandata/guancli@1.0.21 的命令面`
+  - 三件套角色表：官方 `guancli` 版本 `1.0.19` → `1.0.21`、majia-guanyuan `2.1.3` → `2.1.4`，并在官方 guancli 主要角色栏补"指标泛化查询 + card preview Excel 导出"
+  - Part B 引言 `基于 @guandata/guancli@1.0.19 的实证记录` → `基于 @guandata/guancli@1.0.21 的实证记录`
+  - 版本头 `V2.1.3（2026-05-14）`/`@guandata/guancli@^1.0.19` → `V2.1.4（2026-05-15）`/`@guandata/guancli@^1.0.21`
+  - openclaw install 段 npm package 约束 `^1.0.19` → `^1.0.21`
+  - frontmatter `version: "2.1.3"` → `"2.1.4"`
+- **`manifest.json`**：`version` 2.1.3 → 2.1.4；`dependencies.node[0]` `@guandata/guancli@^1.0.19` → `@guandata/guancli@^1.0.21`；description 末尾追加 V2.1.4 摘要句。
+- **`package.json`**：`version` 2.1.3 → 2.1.4；description 末尾追加 V2.1.4 摘要句（含 metric 泛化 flag 全清单 + card preview excel/limit/sort + 1.0.21 错误输出 fix）。
+- **`README.md` / `README.en.md`**：版本记录顶部插入 V2.1.4 entry（中英文），保留 V2.1.3 entry。
+- **`ATTRIBUTIONS.md`**：`@guandata/guancli` Version `1.0.19` → `1.0.21`。
+
+### Notes
+
+- **零 references / templates 新文件** —— V2.1.4 是 docs-only refresh + dep bump，完全在 `references/guancli-commands.md` 和 `SKILL.md` 内增量，没有新建 reference 章节或 template 文件。
+- **依赖约束语义** —— 老约束 `^1.0.19` 按 semver 已经能装到 1.0.21；这次显式 bump 到 `^1.0.21` 是为了在 manifest / SKILL.md / openclaw install 段把"对齐基线"写明，避免下游 agent 用更老的 1.0.19 跑本 skill 的 metric 泛化查询章节示例时找不到 flag。
+- **不引入新工作流** —— `card preview -f excel` 不替代 Part B 的 ds preview / dataset CRUD 任何环节；metric 泛化查询不替代 ChatBI 主题问数。这次只是把已有的 metric/card 探索章节升级到命令面更宽的版本。
+- **业务价值校准** —— 1.0.20 的 metric 泛化查询是这次 release 最重要的变化：以前 BI 后台要点开"高级计算"面板才能算的同比/年累计/Top N 现在一行命令出数，Part B 治理扫描完做"指标 → 业务报表"翻译时少一次后台往返。
+
+### Why this is its own version
+
+V2.1.3 已经把 npm + ClawHub + GitHub release 锁定，两个 registry 都拒绝同版本号重发（`ConvexError: Version already exists` / `You cannot publish over the previously published version`）。本次是命令面同步 + 文档增量 + dep bump，按 V2.1.x 既有节奏走 PATCH bump 即可——和 V2.1.3 同款 docs-only 模式，但带 dep 约束 bump，所以不能复用 V2.1.3 tag。
+
 ## [2.1.3] — 2026-05-14
 
 ### Added

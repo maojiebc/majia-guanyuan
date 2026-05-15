@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.4-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -404,7 +404,9 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.3** (2026-05-14) — 纯文档 patch：刷新 `docs/architecture.svg` 功能说明图，从 v1.5 "三块拼图"升级到 v2.1.x 现实——新增"三件套生态"条带（guancli 1.0.19 / guanvis-skill 0.1.13 / majia-guanyuan 2.1.3）+ Part C-12 HTML 应用化看板 NEW 高亮模块（粉紫渐变 + glow）+ 底部数字校准。同步生成 2880×1840 @2x DPI PNG 渲染产物（`docs/architecture.png`，供 npm/ClawHub 页面 fallback）。`package.json#files` 把 `docs/` 也补进 npm tarball。
+**最新：V2.1.4** (2026-05-15) — 命令面同步 `@guandata/guancli@1.0.21`：① **`metric query` 泛化查询**（1.0.20 新增）完整接入 —— `--compare yoy|mom|qoq|wow|dod`、`--xtd ytd|qtd|mtd|wtd|dtd`、`--recent 7d|4w|3m`（带 `--recent-base`）、`--percentage --percentage-dim`、`--rank-top N --rank-dim ... --rank-order`、`--last`、兜底 `--adv-calc-json`，业务侧"同比/累计/最近 N 天/各城市占比/Top 10"一行命令出数，不必去 BI 后台建派生指标实例；② **`card preview -f excel`**（1.0.20）—— Excel 2003 XML 直接重定向 `.xls`，同时 `--limit` 默认抬到 10000、`--sort-asc/desc` 取数下限 10000；③ **错误输出更干净**（1.0.21），`guancli ... 2>&1 | head -n 5` 不再被 `Usage:` / `Available Commands:` 长串覆盖，Part B 报错速查脚本更可靠。manifest 依赖约束 `^1.0.19 → ^1.0.21`；命令面与判断表写进 [references/guancli-commands.md](references/guancli-commands.md)。
+
+**V2.1.3** (2026-05-14) — 纯文档 patch：刷新 `docs/architecture.svg` 功能说明图，从 v1.5 "三块拼图"升级到 v2.1.x 现实——新增"三件套生态"条带（guancli 1.0.19 / guanvis-skill 0.1.13 / majia-guanyuan 2.1.3）+ Part C-12 HTML 应用化看板 NEW 高亮模块（粉紫渐变 + glow）+ 底部数字校准。同步生成 2880×1840 @2x DPI PNG 渲染产物（`docs/architecture.png`，供 npm/ClawHub 页面 fallback）。`package.json#files` 把 `docs/` 也补进 npm tarball。
 
 **V2.1.2** (2026-05-14) — V2.1.1 的纯打包 hotfix：`package.json#files` 字段补上 `templates/`，让 npm install 的用户也能拿到 `templates/html-dashboard/` 起手模板包；其他安装路径（GitHub clone / `gh skill install` / ClawHub）从 V2.1.1 起就已经包含 templates/。
 
