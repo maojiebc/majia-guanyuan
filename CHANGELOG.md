@@ -5,6 +5,93 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.10] — 2026-05-21
+
+### Added
+
+- **`references/v7-page-card-publish-pipeline.md` §16 移动端 phoneLayout 完整指南 + v7 草稿 save API 死路**
+  —— 来自同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 /
+  03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 /
+  07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配的
+  30+ 轮 API 探索结果。9 节 ~330 行。
+  - **§16.1 v7 BI 草稿/发布机制画像** —— `/page/<pgId>/edit` URL 自动跳
+    `/page/<pgId>_draft/edit`，BI 后端创建草稿，所有 cdId 重新生成临时 ID
+    (`r...` / `h...` / `n...`)；用户在编辑器里拖动 / 改样式走**非 REST 通道**
+    (WebSocket 或 Redux 内部 batch)；点"发布"调 `POST /api/page/<pgId>/release`
+    草稿状态发布到正式，cdId 重映射后草稿被销毁。
+  - **§16.2 草稿 save API 是死路（8 个候选实测全 stub / 404）** —— 完整探测表：
+    `/save` 200 但 GET 回来字段不变（stub）/ `/saveMeta` 404 / `/save-meta` 404 /
+    `/update` 404 / `/draft/save` 404 / `/api/v2/.../save` 500 / `/api/page/save` 500 /
+    `/phoneLayout` 500 / `PUT /phoneLayout` 404 / `PUT /<dpg>` body `{meta:{...}}` 404；
+    body 格式排除：`{meta:{...}}` / 整 page 对象 / `{page:{...}}` / `{pgId,meta}` /
+    `{meta,version}` 全部失败。**chrome network panel 抓 BI 编辑器"发布"按钮**
+    只调一个 `POST /api/page/<pgId>/release`，确认 save 在拖动那一瞬间通过
+    非 REST 通道完成。结论：放弃草稿 save 走 §16.3。
+  - **§16.3 唯一可行路径：guanvis-skill pack → Python 注入 → upload** ——
+    `guanvis-skill upload` 走 transfer API（`/api/manual/template/transfer` +
+    `needIdMapping=false`）**直接覆盖发布版 meta** 不经过草稿。ZIP 结构：
+    `PK-<uuid>/descriptor.json` 含 resource 数组（cards + page）+ `meta.json`
+    包元数据。**关键坑：`page.meta` 必须是 JSON 字符串**不是 object，第一次
+    把 inner meta 当 object 写回报 `error.expected.jsstring`；必须
+    `json.dumps(inner, ensure_ascii=False)` 回字符串再 zip。
+  - **§16.4 phoneLayout 数据结构标准（五字段）** ——
+    `layoutSetting` (col:6, rowHeight:14, mobileHeightUnit:60) +
+    `layout` (每项 `i/w/h/x/y/minW/minH/moved/static/isDraggable/isResizable`) +
+    `layoutItemMap` (selector 必须包在 `group_AUTO_PHONE` 容器里, `cdIds:[selCd]`) +
+    `tabMap: {}` + `mobileAnchorCds: []`。高度换算：customChart 像素 = `h × 14 + 12`，
+    h=15 默认 222px 装不下 4 KPI + 4 图表；h=40 推荐 572px 完整呈现；h=50+ 适合
+    长看板。selector group h=3 是输入框 + label 最小高度。
+  - **§16.5 CSS @media 移动端响应式模板（9 看板验证版）** —— 768px 断点：
+    KPI / grid-2 / grid-3 全 `grid-template-columns: 1fr 1fr !important` (4→2)，
+    `.kpi-value` 28px → 18px，`.chip-toolbar` 自动换行，`.chart-body` 高度统一
+    200/160/180/240px。480px 断点：grid-2 → 1 col。**两个关键 fix**：
+    (a) `html, body { height: auto !important; overflow-y: auto !important }`
+    解锁 PC 端 height:100% 锁死的手机 iframe 滚动；
+    (b) `#dash-root` 加 `-webkit-overflow-scrolling: touch` iOS Safari 惯性滚动。
+  - **§16.6 实战脚本** —— `inject_phone_layout.py` 完整实现（解 ZIP → 自动检测
+    selector cdType=6 → 保留主卡片 cdId → 字符串化 meta → 重新打包）；批量 9 看板
+    shell 模板 `for d in 01-* ... 09-*; do pack → inject → upload; done`。
+  - **§16.7 副作用提示** —— ZIP upload 绕过草稿直接覆盖发布版，用户之前手动
+    拖过的草稿状态会被废；想保留用户值就先 GET 现有 `phoneLayout.layout[].h`
+    再传脚本。下次进编辑器 BI 会基于新发布版重新生成草稿。
+  - **§16.8 何时用 ZIP inject / 何时用编辑器拖** —— 单看板 ad-hoc 5 秒拖；
+    批量 ≥ 3 个 / DSL 升级前 / guanvis-skill page DSL 还不原生支持 phoneLayout
+    时走 ZIP inject；复杂混合布局（多张普通卡 + customChart 各自高度不同）
+    脚本不处理（只处理"单 customChart + 0~1 selector"），编辑器拖。
+  - **§16.9 验证 / 排查 checklist** —— `guancli fetch GET /api/page/<pgId>`
+    看 `meta.phoneLayout.layout` 一行 Python 提取；浏览器
+    `?pageRenderType=phoneView` 直接看渲染；常见错误对应表（5 类症状 → 根因 → 解）。
+
+- **`scripts/inject_phone_layout.py`** —— §16.6 的脚本本体直接进 skill scripts/，
+  用户可以 `cp ~/.agents/skills/majia-guanyuan/scripts/inject_phone_layout.py .`
+  直接用，不用再从 markdown 里复制。CLI：`python3 inject_phone_layout.py
+  <input.zip> <output.zip> <chart_h>`。
+
+### Changed
+
+- **`SKILL.md` frontmatter `description` 加入 V2.1.10 关键触发词** —— Part D
+  描述追加"移动端 phoneLayout ZIP inject"，触发词集合增加：移动端适配 /
+  phoneView / phoneLayout / mobileHeightUnit / _draft 草稿 save API 失败 /
+  error.expected.jsstring / ZIP 注入 phoneLayout / transfer API 覆盖发布版。
+
+- **`SKILL.md` 主标题 `# 观远 BI · 马甲专版（V2.1.9）` → `（V2.1.10）`** —— 版本同步。
+
+- **`SKILL.md` 末尾版本字符串 `V2.1.7` → `V2.1.10`、`metadata.version 2.1.9 → 2.1.10`** ——
+  V2.1.7/V2.1.8/V2.1.9 的末尾版本字符串遗漏未升，这次一并修复。
+
+- **`SKILL.md` references 表行数 `~340` → `~1120`** —— v7-page-card-publish-pipeline.md
+  从 V2.1.6 的 12 节扩到现在的 16 节，行数翻三倍；触发关键词扩到 V2.1.8/V2.1.9/V2.1.10
+  全覆盖。
+
+- **`SKILL.md` Part D `📖 完整 13 节` → `完整 16 节`** —— 同步章节数。
+
+- **`SKILL.md` 版本记录段补齐 V2.1.8 / V2.1.9 entry** —— 之前 SKILL.md 跳过了
+  这两版（CHANGELOG.md 是齐的），现在 SKILL.md 末尾"版本记录"段把 V2.1.8/V2.1.9
+  也补上，和 CHANGELOG.md 对齐。
+
+- **`manifest.json` + `package.json` version `2.1.9` → `2.1.10`** + description
+  重写覆盖 V2.1.10 §16 / V2.1.9 §15 / V2.1.8 §14 全部新增能力。
+
 ## [2.1.9] — 2026-05-21
 
 ### Added

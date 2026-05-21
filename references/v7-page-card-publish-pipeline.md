@@ -789,3 +789,335 @@ fetch('/api/card/<customChartId>/data', {method:'POST', body:'{}',
   headers:{'Content-Type':'application/json'}, credentials:'include'})
   .then(r=>r.json()).then(j=>console.log(j.viewData?.length, 'views'));
 ```
+
+## §16 移动端 phoneLayout 完整指南 + v7 草稿 API 死路（2026-05-21 沉淀）
+
+> **背景**：同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配，30+ 轮验证后总结：**v7 BI 没有可调用的草稿 save REST API**（前端走非 REST 通道），但 **`guanvis-skill pack` 出的 ZIP 里直接注入 `phoneLayout` 字段 → `upload` 走 transfer API 100% 生效**。下面是完整链路。
+
+### §16.1 v7 BI 草稿/发布机制画像（先理解再操作）
+
+v7 BI 把"编辑中"状态用一个伪 pgId `<pgId>_draft` 隔离开来：
+
+| 阶段 | URL / API | 行为 |
+|---|---|---|
+| 用户进入编辑 | `/page/<pgId>/edit` → BI 自动跳转 → `/page/<pgId>_draft/edit` | BI 后端创建草稿快照，所有 cdId 重新生成临时 ID（`r...` / `h...` / `n...`） |
+| 程序读草稿 | `GET /api/page/<pgId>_draft` | 返回完整 page 对象，`meta.layout[].i` 是**临时 cdId**，不是发布版 cdId |
+| 程序读发布版 | `GET /api/page/<pgId>` | 返回正式 page，`meta.layout[].i` 是**发布版 cdId** |
+| 用户拖动 / 改样式 | （前端走**非 REST 通道**） | 自动保存到草稿，但走 WebSocket / Redux 内部 batch，**没有可截获的 REST 端点** |
+| 用户点"发布" | `POST /api/page/<pgId>/release` body=`{}` | 草稿状态发布到正式版，cdId 重映射（临时 → 发布版），**草稿被销毁** |
+
+**确认草稿不存在的信号**：`GET /api/page/<pgId>_draft` → `500 {"error_code":1002,"error_message":"找不到相关页面"}` —— 这是刚发布完或从未进编辑器的状态。
+
+### §16.2 草稿 save API 是死路（8 个候选实测全部 stub / 404）
+
+试图绕过浏览器编辑器、用 `guancli fetch` 直接写草稿 phoneLayout，**8 个候选端点全部失败**：
+
+| 端点 | 状态 | 行为 |
+|---|---|---|
+| `POST /api/page/<pgId>_draft/save` | **200** | 返回 `{"response":"Page saved"}` 但 GET 回来字段不变 = **stub** |
+| `POST /api/page/<pgId>/save` | 200 | 同上 stub |
+| `POST /api/page/<pgId>_draft/saveMeta` | 500 | `No static resource ...` |
+| `POST /api/page/<pgId>_draft/save-meta` | 500 | 同上 |
+| `POST /api/page/<pgId>_draft/update` | 500 | 同上 |
+| `POST /api/page/<pgId>_draft/draft/save` | 500 | 同上 |
+| `POST /api/v2/page/<pgId>_draft/save` | 500 | 同上 |
+| `POST /api/page/save?pgId=<pgId>_draft` | 500 | 同上 |
+| `POST /api/page/<pgId>_draft/phoneLayout` | 500 | 同上 |
+| `PUT /api/page/<pgId>_draft/phoneLayout` | 404 | 同上 |
+| `PUT /api/page/<pgId>_draft` body=`{meta:{...}}` | 404 | 同上 |
+
+**body 格式也排除了**：试过 `{meta:{...}}` / 整个 page 对象 / `{page:{...}}` / `{pgId, meta}` / `{meta, version}` —— 所有格式在 `/save` 都返回 200 但回读不变。
+
+**根因**：v7 BI 前端编辑器的草稿保存走 WebSocket（或者 Redux thunk 内部 batch），**没有公开的 REST endpoint**。chrome network panel 抓 BI 编辑器的"发布"按钮，发现只调一个 `POST /api/page/<pgId>/release` —— **save 已经在拖动那一瞬间通过非 REST 通道完成了**。
+
+**结论**：放弃草稿 save，走 §16.3 的 ZIP inject 路径。
+
+### §16.3 唯一可行路径：guanvis-skill pack → Python 注入 → upload
+
+`guanvis-skill upload` 走的是 BI 的 **transfer API**（`/api/manual/template/transfer` + `needIdMapping=false`），它**直接覆盖发布版的 meta**，不经过草稿。只要在 pack 出的 ZIP 里把 `phoneLayout` 塞进 `page.meta`，upload 后 GET `/api/page/<pgId>` 立刻看到。
+
+**ZIP 结构**：
+
+```
+PK-<uuid>/
+├── descriptor.json   ← 资源数组：cards + page
+└── meta.json         ← package metadata（不动）
+```
+
+**关键点：`page.meta` 必须是 JSON 字符串**
+
+`descriptor.json` 里 page resource 长这样：
+
+```json
+{
+  "resourceId": "<pgId>",
+  "resourceType": 3,
+  "description": "page",
+  "meta": {
+    "payLoadType": "PagePayload",
+    "page": {
+      "pgId": "<pgId>",
+      "name": "...",
+      "meta": "{\"layout\":[...],\"layoutSetting\":{...},...}"   ← ⚠️ 字符串！
+    }
+  }
+}
+```
+
+**第一次踩的坑**：以为 `page.meta` 是 object，直接塞 dict 写回 → upload 报错：
+
+```
+ResourceMeta[page](<pgId>).getPayload: List(
+  (/page/meta, List(JsonValidationError(List(error.expected.jsstring),List()))),
+  (,List(JsonValidationError(List(error.sealed.trait),List()))),
+  (/payLoadType,List())
+)
+```
+
+**正确做法**：解 ZIP → 把字符串 `json.loads()` 成 dict → 改字段 → `json.dumps(..., ensure_ascii=False)` 写回字符串 → 重新打包。
+
+### §16.4 phoneLayout 数据结构标准
+
+完整 phoneLayout 包含 5 个字段，必须全部存在（缺哪个 BI 都可能默认渲染异常）：
+
+```jsonc
+"phoneLayout": {
+  "layoutSetting": {
+    "compact": true,
+    "col": 6,                      // 手机网格 6 列（不是 PC 的 12）
+    "margin": [6, 6],
+    "rowHeight": 14,               // 每个 h 单位 = 14px
+    "cardMargin": 6,
+    "card": { "border": { "radius": 2 } },
+    "page": { "background": { "image": { "enabled": false } } }
+  },
+  "layout": [
+    {
+      "i": "group_AUTO_PHONE",     // selector group（顶部筛选区）
+      "w": 6, "h": 3, "x": 0, "y": 0,
+      "minW": 6, "minH": 2, "maxH": 4,
+      "moved": false, "static": false,
+      "isDraggable": true, "isResizable": true
+    },
+    {
+      "i": "<cardCd>",             // 主卡片（customChart）
+      "w": 6, "h": 40, "x": 0, "y": 3,
+      "minW": 1, "minH": 2,
+      "moved": false, "static": false,
+      "isDraggable": true, "isResizable": true
+    }
+  ],
+  "layoutItemMap": {
+    "group_AUTO_PHONE": { "cdIds": ["<selectorCd>"] }   // group 关联 selector
+  },
+  "tabMap": {},
+  "mobileAnchorCds": []
+}
+```
+
+同时 `layoutSetting.mobileHeightUnit` 设 60（默认 3 太矮，customChart 内容会被截）：
+
+```javascript
+.setLayoutSetting({ mobileHeightUnit: 60 })   // page.js 里加这一行
+```
+
+**高度换算**（v7 实测）：
+- customChart 像素高度 = `h × rowHeight + 上下 margin` ≈ `h × 14 + 12` px
+- **h=15**（BI 默认）= ~222px → 装不下 4 KPI + 4 图表
+- **h=40**（推荐）= ~572px → 4 KPI + 4 图表 + chip toolbar 完整呈现
+- **h=50+** → 适合 6 KPI 或更长的看板，会出现底部留白
+
+**selector group 块**：手机版 BI selector 必须包在 `group_*` 容器里（PC 是直接放 layout，手机是放 group），group h=3 是 selector 输入框 + label 的最小高度。
+
+### §16.5 CSS @media 移动端响应式模板（9 看板通用）
+
+phoneLayout 决定**卡片外框高度**，CSS @media 决定**卡片内部的 KPI/chart/chip 样式**。两者缺一不可。下面是 9 看板验证过的模板，加到 `charts/dashboard.css`（或 `profit.css`）末尾：
+
+```css
+/* ========== 移动端响应式 (BI ?pageRenderType=phoneView) ========== */
+@media (max-width: 768px) {
+  html, body { height: auto !important; overflow-y: auto !important; }
+  #dash-root { padding: 10px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .dash-header { margin-bottom: 10px; }
+  .dash-title { font-size: 16px; }
+  .dash-sub { font-size: 11px; }
+  .kpi-row, .grid-2, .grid-3 {
+    grid-template-columns: 1fr 1fr !important;     /* PC 4 列 → 手机 2 列 */
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+  .kpi-card { padding: 10px 12px; border-radius: 8px; }
+  .kpi-label { font-size: 10px; margin-bottom: 4px; }
+  .kpi-value { font-size: 18px; }                  /* PC 28px → 手机 18px */
+  .kpi-trend { font-size: 10px; }
+  .chart-card { padding: 10px 12px 6px; border-radius: 8px; }
+  .chart-title { font-size: 12px; margin-bottom: 6px; }
+  .chart-title .tag { font-size: 9px; padding: 1px 4px; }
+  .chart-body { height: 200px !important; }
+  .chart-body.h180 { height: 160px !important; }
+  .chart-body.h220 { height: 180px !important; }
+  .chart-body.h320 { height: 240px !important; }
+  table.dash-tbl { font-size: 11px; }
+  table.dash-tbl th { font-size: 9px; padding: 4px 6px; }
+  table.dash-tbl td { padding: 5px 6px; }
+  .chip-toolbar { padding: 6px 8px; font-size: 10px; gap: 2px; }
+  .chip { padding: 3px 8px; font-size: 10px; margin: 0; }   /* chip 自动换行 */
+}
+
+@media (max-width: 480px) {
+  .kpi-row { grid-template-columns: 1fr 1fr !important; }
+  .grid-2 { grid-template-columns: 1fr !important; }        /* 小屏：图表区改单列 */
+  .kpi-value { font-size: 16px; }
+  .chart-body { height: 180px !important; }
+  .chart-body.h180 { height: 150px !important; }
+  .chart-body.h320 { height: 220px !important; }
+}
+```
+
+**两个关键 fix**：
+1. `html, body { height: auto !important; overflow-y: auto !important; }` —— PC 端用 `height: 100%` 会把手机端 iframe 锁死无法滚动；手机端必须 `height: auto`
+2. `#dash-root` 加 `overflow-y: auto; -webkit-overflow-scrolling: touch` —— iOS Safari 惯性滚动
+
+### §16.6 实战脚本（复制可用）
+
+**inject_phone_layout.py**（解 ZIP → 改 page meta → 重新打包）：
+
+```python
+#!/usr/bin/env python3
+"""注入 phoneLayout 到 guanvis-skill pack 出的 ZIP 里。
+用法：python3 inject_phone_layout.py <input.zip> <output.zip> <chart_h>
+"""
+import json, os, shutil, sys, tempfile, zipfile
+
+def inject(input_zip, output_zip, chart_h):
+    tmp = tempfile.mkdtemp(prefix='zinj_')
+    try:
+        with zipfile.ZipFile(input_zip, 'r') as z: z.extractall(tmp)
+        sub = [d for d in os.listdir(tmp) if d.startswith('PK-')]
+        pkdir = os.path.join(tmp, sub[0])
+        desc_path = os.path.join(pkdir, 'descriptor.json')
+        with open(desc_path) as f: desc = json.load(f)
+
+        # 收集 selector cdIds (cdType=6) 和 主卡 cdIds
+        selectors = [r['resourceId'] for r in desc
+                     if r.get('description')=='card'
+                     and r.get('meta',{}).get('card',{}).get('cdType')==6]
+
+        for r in desc:
+            if r.get('description') != 'page': continue
+            page_obj = r['meta']['page']
+            inner = page_obj['meta']
+            if isinstance(inner, str): inner = json.loads(inner)
+            main_card = inner['layout'][0]['i']
+
+            phone = {
+                'layoutSetting': {'compact': True, 'col': 6, 'margin': [6,6],
+                    'rowHeight': 14, 'cardMargin': 6,
+                    'card': {'border': {'radius': 2}},
+                    'page': {'background': {'image': {'enabled': False}}}},
+                'layout': [], 'layoutItemMap': {}, 'tabMap': {}, 'mobileAnchorCds': []
+            }
+            y = 0
+            if selectors:
+                gid = 'group_AUTO_PHONE'
+                phone['layout'].append({'w':6,'h':3,'x':0,'y':y,'i':gid,
+                    'minW':6,'minH':2,'maxH':4,'moved':False,'static':False,
+                    'isDraggable':True,'isResizable':True})
+                phone['layoutItemMap'][gid] = {'cdIds': selectors}
+                y += 3
+            phone['layout'].append({'w':6,'h':chart_h,'x':0,'y':y,'i':main_card,
+                'minW':1,'minH':2,'moved':False,'static':False,
+                'isDraggable':True,'isResizable':True})
+
+            inner['phoneLayout'] = phone
+            inner.setdefault('layoutSetting', {})['mobileHeightUnit'] = 60
+            page_obj['meta'] = json.dumps(inner, ensure_ascii=False)   # ⚠️ 必须字符串
+            break
+
+        with open(desc_path,'w') as f: json.dump(desc, f, ensure_ascii=False)
+        if os.path.exists(output_zip): os.remove(output_zip)
+        with zipfile.ZipFile(output_zip,'w',zipfile.ZIP_DEFLATED) as z:
+            for root,_,files in os.walk(pkdir):
+                for fn in files:
+                    full = os.path.join(root, fn)
+                    z.write(full, os.path.relpath(full, tmp))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+if __name__ == '__main__':
+    inject(sys.argv[1], sys.argv[2], int(sys.argv[3]))
+```
+
+**单看板使用**：
+
+```bash
+cd ./my_dashboard
+guanvis-skill pack -o /tmp/dash.zip .
+python3 inject_phone_layout.py /tmp/dash.zip /tmp/dash_phone.zip 40
+guanvis-skill upload /tmp/dash_phone.zip
+```
+
+**批量 9 看板**：
+
+```bash
+for d in 01-* 02-* 03-* ... 09-*; do
+  cd "$d"
+  guanvis-skill pack -o "/tmp/${d}.zip" .
+  python3 inject_phone_layout.py "/tmp/${d}.zip" "/tmp/${d}_phone.zip" 40
+  guanvis-skill upload "/tmp/${d}_phone.zip"
+  cd -
+done
+```
+
+### §16.7 副作用提示（不可逆）
+
+- ZIP upload 走 transfer API **直接覆盖发布版**，绕过草稿——这意味着用户之前在编辑器里手动拖过的草稿状态会被废掉
+- 下次用户进编辑器，BI 会基于新的发布版重新生成草稿，phoneLayout 就是脚本写的 h=40
+- 想保留用户手动调过的高度，**先 GET 发布版 `meta.phoneLayout`，把 `h` 抠出来传给脚本**，不要无脑 h=40
+
+### §16.8 何时用 ZIP inject / 何时用编辑器手动拖
+
+| 场景 | 推荐 |
+|---|---|
+| 单看板 ad-hoc 调试 | 编辑器手动拖（5 秒搞定） |
+| **批量 ≥ 3 个看板** | **ZIP inject + batch script** |
+| DSL 升级前（`guanvis-skill` 当前 page DSL 不支持 phoneLayout）| **ZIP inject** |
+| 复杂混合布局（4 张普通卡 + 1 张 customChart 各自高度不同）| 编辑器手动拖（脚本只处理"单 customChart + 0~1 selector"） |
+
+### §16.9 验证 / 排查 checklist
+
+```bash
+# 1. 验证 BI 后端 phoneLayout 写入
+guancli fetch GET /api/page/<pgId> | python3 -c "
+import sys,json
+d=json.loads(sys.stdin.read())
+pl=d['response']['meta'].get('phoneLayout',{})
+for it in pl.get('layout',[]):
+    print(f'  i={it[\"i\"][:24]} w={it[\"w\"]} h={it[\"h\"]}')
+print('mobileHeightUnit:',d['response']['meta']['layoutSetting'].get('mobileHeightUnit'))
+"
+
+# 2. 浏览器实际渲染（PC 窗口 resize 到 400x900 模拟手机）
+open "https://<bi-host>/page/<pgId>?pageRenderType=phoneView"
+
+# 3. 如果 phoneLayout 显示是 default h=15，检查 ZIP 注入是否成功
+unzip -p /tmp/dash_phone.zip 'PK-*/descriptor.json' | \
+  python3 -c "import json,sys; d=json.load(sys.stdin)
+for r in d:
+  if r.get('description')=='page':
+    inner=r['meta']['page']['meta']
+    if isinstance(inner,str): inner=json.loads(inner)
+    print('has phoneLayout:', 'phoneLayout' in inner)
+    print('layoutItemMap:', inner.get('phoneLayout',{}).get('layoutItemMap'))
+"
+```
+
+**常见错误对应表**：
+
+| 症状 | 根因 | 解 |
+|---|---|---|
+| upload 报 `error.expected.jsstring` | `page.meta` 写成了 dict 不是 str | `json.dumps(inner)` 写回字符串 |
+| upload 成功但 phoneView 还是默认布局 | mobileHeightUnit 没写 / phoneLayout 缺 layoutItemMap | 检查 ZIP 解出的 inner['phoneLayout'] 完整性 |
+| customChart 内容被截 | h=15 默认太小 | 改 h=40+，或在脚本里参数化 |
+| selector 不显示 / 显示但联动失败 | layoutItemMap 的 cdIds 写错 / 没 group 包裹 | 单 selector 必须放 group_AUTO_PHONE 容器里 |
+| iOS 不能上下滚 | 没加 `-webkit-overflow-scrolling: touch` | 用 §16.5 CSS 模板 |

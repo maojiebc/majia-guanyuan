@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）全链路操作 — 数据查询/建卡/取数（Part A）、ETL 治理/写入/删除（Part B，含 SmartETL 全链路重写 + 字段使用度审计 + ExecPlan 工程化）、自定义图表 HTML/CSS/JS 注入与排障（Part C，含 HTML 应用化看板生成 + selector 联动 descriptor patch）、**V7 Page/Card 发布流水线 + 三态硬规则 + SmartETL 节点化两大静默坑 + customChart 渲染/联动三大坑 + chip toolbar 兜底（Part D，V2.1.9 新增：HTML customChart 不自动调 renderChart 必须 autoBootstrap 兜底 / BI server-side filter 5 种格式全失败 / PAGE_DATA_SDK 初始化卡 pgId / chip toolbar JS 侧 filter 模式 100% 工作；V2.1.8：GROUP_BY 节点 STRING COUNT_DISTINCT 被改 NUL / JOIN_DATA 节点只取 predicates[0] 多键 JOIN 笛卡尔积 / FULL_OUTER 节点被静默吞 / 两层 GROUP_BY 模拟去重；V2.1.6：guanvis-skill 一键 publish / CSV 三态判断 / Spark CTE 中文别名坑 / ETL update dsId 注入）**，以及**餐饮 BI 公式实战库**（V2.1.5 新增：60+ SQL 公式 / RFM 8 类营销策略 / AC/ADS/ADT/Comp 营收 KPI / 6 大 ETL 工程范式 / 39 ETL 索引）。当用户提到 营业额/门店/会员/订单/建卡/取数/报表/ETL/direct-save/payload_json/自定义图表/HTML 看板/应用化/更高级/不限标准看板/观远/Guandata/BI/v7 BI/草稿 60004/CSV 散客 100% 假指标/Spark CTE 中文别名/1012 同名文件/guanvis-skill/复购率/客单价/RFM/DWD 宽表/财务双源对账/AC/ADS/Comp 老店/SmartETL 节点化/COUNT_DISTINCT 输出空/aggrType NUL/JOIN 多谓词笛卡尔积/FULL_OUTER 被吞/两层 GROUP_BY 模拟去重/customChart 看板加载中/renderChart 不调/autoBootstrap/PAGE_DATA_SDK/selector 联动失败/chip toolbar 时使用。马甲业务实战版，60+ ETL 战例、10 类报错手册、Claude Code/OpenClaw/Codex/Hermes 通用。
+description: 观远 BI（Guandata）全链路操作 — 数据查询/建卡/取数（Part A）、ETL 治理/写入/删除（Part B，含 SmartETL 全链路重写 + 字段使用度审计 + ExecPlan 工程化）、自定义图表 HTML/CSS/JS 注入与排障（Part C，含 HTML 应用化看板生成 + selector 联动 descriptor patch）、**V7 Page/Card 发布流水线 + 三态硬规则 + SmartETL 节点化两大静默坑 + customChart 渲染/联动三大坑 + chip toolbar 兜底 + 移动端 phoneLayout ZIP inject（Part D，V2.1.10 新增：v7 草稿 save API 8 端点全 stub / 唯一可行路径 guanvis-skill pack → Python 注入 phoneLayout 到 page.meta 字符串 → upload 走 transfer API 覆盖发布版 / phoneLayout 五字段结构 layoutSetting+layout+layoutItemMap+tabMap+mobileAnchorCds / selector 必须 group_AUTO_PHONE 容器包裹 / mobileHeightUnit=60 + chart h=40 ≈ 580px 装下 4KPI+4 图表 / CSS @media 768px KPI 4→2 grid + height:auto 解锁 iOS 滚动；V2.1.9：HTML customChart 不自动调 renderChart 必须 autoBootstrap 兜底 / BI server-side filter 5 种格式全失败 / PAGE_DATA_SDK 初始化卡 pgId / chip toolbar JS 侧 filter 模式 100% 工作；V2.1.8：GROUP_BY 节点 STRING COUNT_DISTINCT 被改 NUL / JOIN_DATA 节点只取 predicates[0] 多键 JOIN 笛卡尔积 / FULL_OUTER 节点被静默吞 / 两层 GROUP_BY 模拟去重；V2.1.6：guanvis-skill 一键 publish / CSV 三态判断 / Spark CTE 中文别名坑 / ETL update dsId 注入）**，以及**餐饮 BI 公式实战库**（V2.1.5 新增：60+ SQL 公式 / RFM 8 类营销策略 / AC/ADS/ADT/Comp 营收 KPI / 6 大 ETL 工程范式 / 39 ETL 索引）。当用户提到 营业额/门店/会员/订单/建卡/取数/报表/ETL/direct-save/payload_json/自定义图表/HTML 看板/应用化/更高级/不限标准看板/观远/Guandata/BI/v7 BI/草稿 60004/CSV 散客 100% 假指标/Spark CTE 中文别名/1012 同名文件/guanvis-skill/复购率/客单价/RFM/DWD 宽表/财务双源对账/AC/ADS/Comp 老店/SmartETL 节点化/COUNT_DISTINCT 输出空/aggrType NUL/JOIN 多谓词笛卡尔积/FULL_OUTER 被吞/两层 GROUP_BY 模拟去重/customChart 看板加载中/renderChart 不调/autoBootstrap/PAGE_DATA_SDK/selector 联动失败/chip toolbar/移动端适配/phoneView/phoneLayout/mobileHeightUnit/_draft 草稿 save API 失败/error.expected.jsstring/ZIP 注入 phoneLayout/transfer API 覆盖发布版 时使用。马甲业务实战版，60+ ETL 战例、10 类报错手册、Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "2.1.9"
+  version: "2.1.10"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -27,7 +27,7 @@ metadata:
           - guancli
 ---
 
-# 观远 BI · 马甲专版（V2.1.9）
+# 观远 BI · 马甲专版（V2.1.10）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -46,7 +46,7 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part A/B 实证）+ 观远 CTO 张进（Part B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（V1.2 ExecPlan 规范）
-> **版本**：V2.1.7（2026-05-21）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.24`（V2.1.6 起：1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`） · **作用域**：本地私有 BI 实例
+> **版本**：V2.1.10（2026-05-21）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.24`（V2.1.6 起：1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`） · **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git` + `node bin/install.js install`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
@@ -968,7 +968,7 @@ new GDPlugin().init(renderChart);
 > 1. **直接手撸 page+card API 全废**：draft cdId ≠ published cdId 不会自动映射回 published page，光走 `POST /api/page` 拼不出来；走 `guanvis-skill publish` 才能跨过状态机。
 > 2. **CSV 类型三态硬规则**：STRING 字段可以 `<> ''`，日期/数字字段不能（Spark 严格类型直接报错）；CSV 布尔字段实际是 `'TRUE'/'FALSE'` 字符串而非 int 1/0，`= '1'` 永远空表。
 
-📖 **[references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)** — 完整 13 节：v7 草稿/发布机制详解 / HTML 应用看板 SDK 最小骨架（schema.js + card_01_html.js + page.js + charts/dashboard.{html,css,js} 4 文件） / CSV 三态判断硬规则 / Spark SQL 4 个硬限制（中文别名 / 嵌套窗口 / `<> NULL` / 字面量日期）/ ETL update OUTPUT_DATASET dsId 注入脚本（`guancli ds search` 自动查 dsId 注入）/ 数据集上传走 BI UI 手动方案 / pandas to_csv vs to_excel 性能对比 + 向量化 30 倍速差 / JOIN 键全局统一命名（COL_MAP）/ 奶白 `#faf7f2` + 暖蓝 `#2563eb` 主题 / 端到端时间预算（5-7 小时拆解）/ 12 类反模式与硬约束总表 / 工程目录参考结构（scripts/ + etl_payloads/ + dashboards-v3/ 6 子目录）/ 与 Part C-12 的边界关系（C-12 讲已有 page 后怎么写 HTML 内容 + selector patch，本 Part D 讲从零到 6 个看板上线全流程）。
+📖 **[references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)** — 完整 16 节：v7 草稿/发布机制详解 / HTML 应用看板 SDK 最小骨架（schema.js + card_01_html.js + page.js + charts/dashboard.{html,css,js} 4 文件） / CSV 三态判断硬规则 / Spark SQL 4 个硬限制（中文别名 / 嵌套窗口 / `<> NULL` / 字面量日期）/ ETL update OUTPUT_DATASET dsId 注入脚本（`guancli ds search` 自动查 dsId 注入）/ 数据集上传走 BI UI 手动方案 / pandas to_csv vs to_excel 性能对比 + 向量化 30 倍速差 / JOIN 键全局统一命名（COL_MAP）/ 奶白 `#faf7f2` + 暖蓝 `#2563eb` 主题 / 端到端时间预算 / 反模式与硬约束总表 / 工程目录参考结构 / 与 Part C-12 的边界关系 / **§14 SmartETL 节点化两大静默坑（V2.1.8 新增）** / **§15 customChart 三大坑 + autoBootstrap + chip toolbar 兜底（V2.1.9 新增）** / **§16 移动端 phoneLayout ZIP inject + v7 草稿 save API 死路（V2.1.10 新增）**。
 
 ---
 
@@ -989,7 +989,7 @@ new GDPlugin().init(renderChart);
 | [part-b17-fullchain-rewrite.md](references/part-b17-fullchain-rewrite.md) | 全链路 SmartETL 重写、副本页验收、ExecPlan 管理时 | ~290 |
 | [part-c-payload-json.md](references/part-c-payload-json.md) | runtime 拿不到 payload_json / JSON.parse 失败时 | ~60 |
 | [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~360 |
-| [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / `dim_是否新店='1'` 永远空表 / openpyxl 写大表 4 分钟（V2.1.6 新建） | ~340 |
+| [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / SmartETL `COUNT_DISTINCT`/`JOIN_DATA` 多键/`FULL_OUTER` 节点化坑（V2.1.8）/ HTML customChart `renderChart` 不调 + `autoBootstrap` + chip toolbar 兜底（V2.1.9）/ 移动端 phoneLayout v7 草稿 save API 死路 + ZIP inject 唯一可行路径 + CSS @media 模板（V2.1.10） | ~1120 |
 | [internal-nexus-install.md](references/internal-nexus-install.md) | 内网同事发来 `guan*-skill` tarball、本地装观远官方私服 skill 时（V2.1 新建） | ~80 |
 
 **餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL）：**
@@ -1022,7 +1022,23 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V2.1.7** (2026-05-21) — **路由/触发层强化（docs-only）**。重写 `SKILL.md` frontmatter `description`，把 V2.1.6 Part D（v7 BI / `60004` 草稿 / guanvis-skill / CSV 三态 / Spark CTE 中文别名 / `1012` 同名文件）和 V2.1.5 餐饮 BI 公式库（复购率/客单价/RFM/DWD 宽表/财务对账/AC/ADS/Comp）的触发关键词全列了进来——原描述只覆盖 Part A/B/C，新场景的用户语料根本不路由进来。同时新增 `# 🆎 Part D` stub section（紧跟 Part C 后），结构上对齐 Part A/B/C/C-12 的可见度。修三处 V2.1.6 残留版本错位（主标题 `V2.1.5`→`V2.1.7`、openclaw npm 约束 `^1.0.21`→`^1.0.24`、三件套表 `majia-guanyuan` 行 `2.1.5`→`2.1.7`）。零 references / templates / 命令面改动。
+**最新：V2.1.10** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §16 移动端 phoneLayout 完整指南**（~330 行）。沉淀自同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配的 30+ 轮 API 探索：
+- **§16.1 v7 草稿/发布机制画像**：编辑器 URL 自动跳 `<pgId>_draft/edit` → BI 后端创建草稿（cdId 临时化）→ 用户拖动走**非 REST 通道**（WebSocket/Redux 内部）→ `POST /api/page/<pgId>/release` 一键发布并销毁草稿。
+- **§16.2 草稿 save API 是死路**：实测 **8 个候选端点全部失败**（`/save` 200 stub / `/saveMeta` 404 / `/save-meta` 404 / `/update` 404 / `/draft/save` 404 / `/api/v2/.../save` 500 / `/api/page/save` 500 / `/phoneLayout` 404/500）；body 格式（`{meta:{...}}` / 整 page 对象 / `{page:{...}}` / `{pgId,meta}` / `{meta,version}`）全部排除；chrome network panel 抓 BI 编辑器"发布"按钮只调一个 `/release` 确认 save 走非 REST。
+- **§16.3 唯一可行路径：guanvis-skill pack → Python 注入 → upload**：transfer API（`/api/manual/template/transfer` + `needIdMapping=false`）直接覆盖发布版的 page meta；**关键坑：`page.meta` 必须是 JSON 字符串**不是 object，否则 upload 报 `error.expected.jsstring`，必须 `json.dumps(inner, ensure_ascii=False)` 写回。
+- **§16.4 phoneLayout 五字段结构**：`layoutSetting` (col:6, rowHeight:14, mobileHeightUnit:60) + `layout` (含 `i/w/h/x/y/minW/minH/isDraggable/isResizable`) + `layoutItemMap` (selector 必须包在 `group_AUTO_PHONE` 容器里) + `tabMap` + `mobileAnchorCds`；customChart 推荐 `h=40 ≈ 572px` 装下 4 KPI + 4 图表。
+- **§16.5 CSS @media 模板**：768px 断点 KPI 4 列 → 2 列 + 字号缩 + chip 自动换行；480px 断点 grid-2 → 单列；`html, body { height: auto !important; overflow-y: auto !important; }` 解锁 iOS 滚动；`#dash-root` 加 `-webkit-overflow-scrolling: touch` 解锁惯性滚动。
+- **§16.6 完整脚本**：`inject_phone_layout.py`（自动检测 selector cdType=6、保留主卡片 cdId、字符串化 meta）+ 批量 9 看板 `for d in 01-* ... 09-*` shell 模板。
+- **§16.7 副作用**：ZIP upload 绕过草稿直接覆盖发布版，用户手动调过的草稿会被废；想保留就先 GET 现有 `phoneLayout.layout[].h` 再传脚本。
+- **§16.8/§16.9 何时用 / 验证 checklist**：单看板 ad-hoc 用编辑器拖、批量 ≥3 用 ZIP inject；浏览器 `?pageRenderType=phoneView` 直接看渲染。
+
+SKILL.md frontmatter `description` 加 V2.1.10 关键词（移动端适配 / phoneView / phoneLayout / mobileHeightUnit / _draft 草稿 save API 失败 / error.expected.jsstring / ZIP 注入 phoneLayout / transfer API 覆盖发布版）；主标题 `V2.1.9`→`V2.1.10`；末尾版本 `V2.1.7`→`V2.1.10`；`metadata.version` `2.1.9`→`2.1.10`；references 表 `v7-page-card-publish-pipeline.md` 行数 `~340`→`~1120` + 触发关键词扩到 V2.1.8/V2.1.9/V2.1.10 全覆盖；本节版本记录补齐 V2.1.8/V2.1.9 entry（之前 SKILL.md 跳过了，CHANGELOG 是齐的）。
+
+**V2.1.9** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §15 customChart 三大坑 + autoBootstrap + chip toolbar 兜底**（~180 行）。同一天把 8 个 HTML SDK customChart 看板调通：§15.1 BI 不自动调 `renderChart`（同一份代码 03 能跑、07 不能跑，race condition）必须 iframe 顶部 `autoBootstrap` 5s 兜底 `POST /api/card/<cdId>/data`；§15.2 selector 联动失败（autoBootstrap fetch 绕过 BI redux dispatch，实测 7 种 body filter 格式 BI 全不认，`PAGE_DATA_SDK.initPage()` 卡 `pgId`）；§15.3 终极兜底 chip toolbar 模式（每个 dataView 加 `addRow(f("门店类型"))` + JS 顶部 `ALL_TYPES + activeType` state + CSS `.chip` 渐变样式，03/04/06/07/08 5 个看板已用）；§15.4 何时用 selector / 何时用 chip toolbar（基数 ≤10 chip 强推荐、>20 保留 selector）；§15.5 排查 checklist。frontmatter description 加 V2.1.9 关键词；主标题升 V2.1.9。
+
+**V2.1.8** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §14 SmartETL 节点化两大静默坑**。把 SmartETL 5 个标杆 demo 全部从"一段 SQL 全干完"重写为 7-15 节点工程化 demo 时踩出来：（A）**GROUP_BY 节点 STRING `COUNT_DISTINCT` 被改 NUL `aggrType` 输出永远空** —— BI UI 不报错也不阻拦，节点跑完输出 0 行，下游 JOIN 全空，要从 inputDsId 二次校验；（B）**JOIN_DATA 节点 `predicates[]` 只取第 0 个**，多键 JOIN（订单ID + 商品ID + 门店ID）只用订单ID 一个键，5 万订单 × 100 商品 × 1200 门店 跑出 600 万行笛卡尔积；（C）**`FULL_OUTER` join 类型被静默吞**变成 `INNER`；（D）**两层 GROUP_BY 模拟去重计数**（外层 `SUM`、内层 `COUNT_DISTINCT`）才能绕开 (A)。frontmatter description 加 SmartETL 节点化触发关键词；主标题升 V2.1.8。
+
+**V2.1.7** (2026-05-21) — **路由/触发层强化（docs-only）**。重写 `SKILL.md` frontmatter `description`，把 V2.1.6 Part D（v7 BI / `60004` 草稿 / guanvis-skill / CSV 三态 / Spark CTE 中文别名 / `1012` 同名文件）和 V2.1.5 餐饮 BI 公式库（复购率/客单价/RFM/DWD 宽表/财务对账/AC/ADS/Comp）的触发关键词全列了进来——原描述只覆盖 Part A/B/C，新场景的用户语料根本不路由进来。同时新增 `# 🆎 Part D` stub section（紧跟 Part C 后），结构上对齐 Part A/B/C/C-12 的可见度。修三处 V2.1.6 残留版本错位（主标题 `V2.1.5`→`V2.1.7`、openclaw npm 约束 `^1.0.21`→`^1.0.24`、三件套表 `majia-guanyuan` 行 `2.1.5`→`2.1.7`）。零 references / templates / 命令面改动。
 
 **V2.1.6** (2026-05-21) — **新增 `references/v7-page-card-publish-pipeline.md`：V7 Page/Card 发布流水线 + 三态硬规则**（~340 行）。沉淀自 2026-05-20/21 一次"连锁咖啡 BI 演示拍摄录制"全流程实战（90 天 / 1200 门店 / 80K 会员 / 20 张表 / 17 个 ETL / 6 个 HTML 应用化看板）的 12 大踩坑：① **v7 BI 草稿/发布机制**——`POST /api/page+/api/card` 全失败（`60004 此操作只能在草稿页面执行`），draft cdId ≠ published cdId 导致手撸 API 跑不通；**银弹是 `guancli ≥ 1.0.24` 自带 `guanvis-skill`** 一键 `publish .`；② **CSV 三态判断硬规则**——散客订单 `会员ID` 是空字符串 `""` 而非 NULL，`IS NOT NULL` 把所有订单算成会员订单使北极星 #1 指标 = 100% 假数据，必须 `(会员ID IS NOT NULL AND 会员ID <> '')`；③ **STRING vs DATE 类型边界**——日期/数字字段不能 `<> ''`（Spark 严格类型），只有 STRING 字段能；④ **CSV 布尔字段 = 'TRUE'/'FALSE' 字符串**而非 int 1/0，`= '1'` 永远空表；⑤ **Spark CTE 别名必须英文**——`WITH 订单汇总 AS` 报 `PARSE_SYNTAX_ERROR`；⑥ **Window function 不能嵌套在 aggregate function**；⑦ **ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId`** 否则 `1012 同名文件`；⑧ **数据集上传无原生 API**——所有 `POST /api/data-source/*` 失败，用户必须 BI UI 手动；⑨ **大表用 pandas to_csv 比 to_excel 快 50×**（4 分钟 vs 2 秒）；⑩ **JOIN 键全局统一命名**，避免 dim/fact 用不同名字（活动ID vs 关联活动ID）；⑪ **奶白 #faf7f2 主题 + 暖蓝主色** 业务用户接受度远高于深色；⑫ **HTML 应用看板 SDK + DATA_GRID dataView 最小骨架**（4 文件：schema.js / card_01_html.js / page.js / charts/dashboard.{html,css,js}）。SKILL.md 主路由表新增 Part D 入口，触发关键词："v7 BI 端到端搭看板 / 60004 此操作只能在草稿页面执行 / 会员ID IS NOT NULL 算出 100% / Spark WITH 中文别名 报错 / 1012 输出数据集目录中存在同名文件"。`@guandata/guancli` 依赖版本升级 `^1.0.21` → `^1.0.24`（自带 guanvis-skill 公网分发）。
 
