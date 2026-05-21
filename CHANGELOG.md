@@ -5,6 +5,65 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.6] — 2026-05-21
+
+### Added
+
+- **`references/v7-page-card-publish-pipeline.md`：V7 Page/Card 发布流水线 + 三态硬规则** ——
+  全新一篇 ~340 行 reference，沉淀自 2026-05-20/21 一次"连锁咖啡 BI 演示拍摄录制"全流程实战
+  （90 天 / 1200 门店 / 80K 会员 / 20 张表 / 17 个 ETL / 6 个 HTML 应用化看板）的 12 大踩坑：
+
+  - **§1 v7 BI 草稿/发布机制是最大盲区** — 直接 `POST /api/page` + `POST /api/card` + `PUT /api/page/<draft>`
+    在 v7 实例上**全部废**（`60004 此操作只能在草稿页面执行`、draft cdId ≠ published cdId 不映射到 published）。
+    **银弹是 `guancli ≥ 1.0.24` 自带 `guanvis-skill`** 公网分发，`guancli install-skill` 一键装，
+    `guanvis-skill publish .` 30 秒发布整个 page + custom chart + dataView。手撸 API 路径被官方废弃。
+  - **§2 HTML 应用化看板 SDK 最小骨架** — 4 文件（schema.js / card_01_html.js / page.js / charts/dashboard.{html,css,js}）+
+    `createCustomChart().setSubType(CustomChartSubType.SDK).loadContent("charts/dashboard").addDataView(dv)` DSL。
+  - **§3 CSV 三态判断硬规则**（v2 § 12.5 落地标准） — 散客订单 `会员ID` 是空字符串 `""` 而非 NULL，
+    `IS NOT NULL` 把所有订单算成会员订单使北极星 #1 "会员销售占比" = 100% 假数据。
+    必须 `(会员ID IS NOT NULL AND 会员ID <> '')`。**但日期/数字字段不能 `<> ''`**（Spark 严格类型）。
+  - **§4 Spark SQL 4 个硬限制** — CTE 别名必须英文（`WITH 订单汇总 AS` 报 `PARSE_SYNTAX_ERROR Syntax error at or near '订'`）；
+    Window function 不能嵌套在 aggregate function；`<> NULL` 永远 unknown；
+    `WHERE 日期 < '今天'` 字符串字面量永远不匹配。
+  - **§5 ETL Update 模式 OUTPUT_DATASET 必须带 dsId** — 否则 `1012 输出数据集目录中存在同名文件，请修改`。
+    reapply 脚本里要自动用 `guancli ds search <output_name>` 查现有 dsId 注入。
+  - **§6 数据集上传 BI 无原生 API** — `POST /api/data-source/*` 全失败（OPTIONS 只允许 GET/HEAD/DELETE），
+    Claude in Chrome `file_upload` 10MB 限制也走不通。最终方案：BI UI 手动上传（30-45 分钟）。
+  - **§7 pandas to_csv 比 to_excel 快 50×** — 50 店 / 90 天 / 45 万订单，openpyxl 写 4-5 分钟，CSV 写 2-3 秒。
+    行数 > 5 万自动转 CSV，向量化（`np.repeat + np.bincount`）比 `dict.append + DataFrame()` 快 30 倍。
+  - **§8 JOIN 键全局统一命名** — `campaign_id` 在 dim 里叫 "活动ID" 在 fact 里叫 "关联活动ID" 会让 ETL JOIN 写两套，
+    必须 `COL_MAP` 里统一（活动ID / 订单ID / 会员ID 全表同名）。
+  - **§9 奶白主题 #faf7f2 + 暖蓝 #2563eb** — 业务用户对深色主题（`#0f172a` 等）有强抵触，默认走奶白。
+    ECharts 不要用 `dark` 主题。
+  - **§10 端到端时间预算** — 完整 demo 真实耗时 5-7 小时（数据生成 2 min / 上传 30-45 min /
+    ETL 写入执行 15-25 min / **看板 3-4 h 写代码占大头**），guanvis-skill 把"看板创建"从 2-3 小时探索压到 30 秒发布。
+  - **§11 12 类反模式与硬约束总表**
+  - **§12 完整 demo 工程目录参考结构**（scripts/ + etl_payloads/ + dashboards-v3/ 6 子目录）
+  - **§13 与 Part C-12 的关系** — Part C-12 讲"已有 page+card 后如何写 HTML 内容 + selector descriptor patch"，
+    本文件讲"从零到 6 个看板上线"端到端流程。
+
+- **`SKILL.md` 主路由表新增 Part D 入口**，触发关键词：
+  - "v7 BI 实例上端到端搭多个 HTML 应用看板"
+  - "手撸 POST /api/page+/api/card 被 60004 此操作只能在草稿页面执行 卡住"
+  - "CSV 散客 会员ID IS NOT NULL 算出 100% 假指标"
+  - "Spark WITH 中文别名 报 PARSE_SYNTAX_ERROR"
+  - "ETL update 报 1012 输出数据集目录中存在同名文件"
+
+- **📚 References 目录新增 `v7-page-card-publish-pipeline.md` 条目**
+
+### Changed
+
+- **frontmatter** `version: "2.1.5"` → `"2.1.6"`
+- **manifest.json** `version: "2.1.5"` → `"2.1.6"`，`description` 扩展到 5 大能力（新增 Part D）
+- **依赖版本升级** `@guandata/guancli@^1.0.21` → `@guandata/guancli@^1.0.24`
+  （1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`，无需再走内网 Nexus 私服）
+- **README 介绍升级提示** `V2.1` 段落补提 `1.0.24` 自带分发新事实（V2.1 时还是内网 Nexus）
+
+### Compatibility
+
+- 纯 docs + 路由表增量，零 breaking change。已有 Part A/B/C/餐饮公式库用户继续按原方式触发。
+- 新依赖 `@guandata/guancli@^1.0.24` 向下兼容 `1.0.21+` 的所有命令面（`metric query` / `card preview -f excel` 等）。
+
 ## [2.1.5] — 2026-05-18
 
 ### Added

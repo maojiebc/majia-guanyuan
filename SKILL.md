@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）全链路操作 — 数据查询/建卡/取数（Part A）、ETL 治理/写入/删除（Part B，含 SmartETL 全链路重写 + 字段使用度审计 + ExecPlan 工程化）、自定义图表 HTML/CSS/JS 注入与排障（Part C，含 V2.1.1 新增的 HTML 应用化看板生成 + selector 联动 descriptor patch）。当用户提到 营业额/门店/会员/订单/建卡/取数/报表/ETL/direct-save/payload_json/自定义图表/HTML 看板/应用化/更高级/不限标准看板/观远/Guandata/BI 时使用。马甲业务实战版，60+ ETL 战例、10 类报错手册、Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "2.1.5"
+  version: "2.1.6"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -41,11 +41,12 @@ metadata:
 | 30+ 张表批量迁移 / 跨多日工程 / 复杂重构需要项目化追踪 | **B-17.11 ExecPlan 工作法**（同上文件 §11） |
 | 自定义图表 HTML/CSS/JS 注入、固定卡片/overlay、payload_json 取数、路由清理 | **Part C：自定义图表开发与排障** |
 | 从零生成 HTML 化经营分析应用（用户说"更高级 / 应用化 / 自定义模块 / 最完美 / 不限标准看板"）| **Part C-12：HTML 应用化看板生成**（拆到 [references/part-c-html-dashboard.md](references/part-c-html-dashboard.md)） |
+| **v7 BI 实例**上端到端搭多个 HTML 应用看板 / 手撸 `POST /api/page+/api/card` 被 `60004 此操作只能在草稿页面执行` 卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报 `PARSE_SYNTAX_ERROR` / ETL update 报 `1012 输出数据集目录中存在同名文件` | **Part D：V7 Page/Card 发布流水线 + 三态硬规则**（V2.1.6 新增，拆到 [references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)） |
 | 写餐饮业务公式（AC / ADS / 复购率 / 新老客 / 用餐时段 / 留存流失 / RFM / Comp 老店）/ 查字段口径 / 排数据质量坑 / **ETL 工程范式（DWD 宽表 / 双源对账 / 评价 pipeline）** | **餐饮 BI 公式实战库**（[references/restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md)，V2.1.5 蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL，全脱敏） |
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part A/B 实证）+ 观远 CTO 张进（Part B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（V1.2 ExecPlan 规范）
-> **版本**：V2.1.5（2026-05-18）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.21` · **可选**：`@guandata/guanvis-skill@^0.1.13`（内网 Nexus 私服分发，见 [references/internal-nexus-install.md](references/internal-nexus-install.md)） · **作用域**：本地私有 BI 实例
+> **版本**：V2.1.6（2026-05-21）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.24`（**V2.1.6 新增**：1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`） · **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git` + `node bin/install.js install`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
@@ -967,6 +968,7 @@ new GDPlugin().init(renderChart);
 | [part-b17-fullchain-rewrite.md](references/part-b17-fullchain-rewrite.md) | 全链路 SmartETL 重写、副本页验收、ExecPlan 管理时 | ~290 |
 | [part-c-payload-json.md](references/part-c-payload-json.md) | runtime 拿不到 payload_json / JSON.parse 失败时 | ~60 |
 | [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~360 |
+| [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / `dim_是否新店='1'` 永远空表 / openpyxl 写大表 4 分钟（V2.1.6 新建） | ~340 |
 | [internal-nexus-install.md](references/internal-nexus-install.md) | 内网同事发来 `guan*-skill` tarball、本地装观远官方私服 skill 时（V2.1 新建） | ~80 |
 
 **餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL）：**
@@ -999,7 +1001,9 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V2.1.5** (2026-05-18) — **新增 `references/restaurant-bi-formulas/`：餐饮连锁 BI 公式实战库**（10 个 markdown，2881 行，全脱敏）。蒸馏自两段连续的餐饮 BI 分析师履职 + 39 个生产 ETL，含：① **公式手册**（7 章 60+ SQL）—— 日期时间/顾客会员（RFM 8 类 × 营销策略 + R 阈值多档分级）/营收 KPI（AC/ADS/ADT/Comp/CRM%）/渠道门店（多渠道评价 pipeline）/券折扣/SQL 工具箱/数据质量陷阱；② **6 大 ETL 工程范式**（08 章）—— 10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 工程哲学 / 财务双源对账 / POS 系统识别归一化 / 会员生命周期多输出 / Cohort 日期×门店网格；③ **39 个 V1 生产 ETL 索引清单**（09 章）—— 按 11 业务域分类（基础维表/DWD/会员档案/顾客行为/财务营收/营销目标/私域社群/活动券/评价管理/业务标签/数据质量）+ 每 ETL 节点/输入/输出/SQL 速查 + 复用决策表。SKILL.md 主路由表新增餐饮业务公式入口；frontmatter `version: "2.1.4"` → `"2.1.5"`；纯 docs 增量 + 索引扩充，零 breaking change。
+**最新：V2.1.6** (2026-05-21) — **新增 `references/v7-page-card-publish-pipeline.md`：V7 Page/Card 发布流水线 + 三态硬规则**（~340 行）。沉淀自 2026-05-20/21 一次"连锁咖啡 BI 演示拍摄录制"全流程实战（90 天 / 1200 门店 / 80K 会员 / 20 张表 / 17 个 ETL / 6 个 HTML 应用化看板）的 12 大踩坑：① **v7 BI 草稿/发布机制**——`POST /api/page+/api/card` 全失败（`60004 此操作只能在草稿页面执行`），draft cdId ≠ published cdId 导致手撸 API 跑不通；**银弹是 `guancli ≥ 1.0.24` 自带 `guanvis-skill`** 一键 `publish .`；② **CSV 三态判断硬规则**——散客订单 `会员ID` 是空字符串 `""` 而非 NULL，`IS NOT NULL` 把所有订单算成会员订单使北极星 #1 指标 = 100% 假数据，必须 `(会员ID IS NOT NULL AND 会员ID <> '')`；③ **STRING vs DATE 类型边界**——日期/数字字段不能 `<> ''`（Spark 严格类型），只有 STRING 字段能；④ **CSV 布尔字段 = 'TRUE'/'FALSE' 字符串**而非 int 1/0，`= '1'` 永远空表；⑤ **Spark CTE 别名必须英文**——`WITH 订单汇总 AS` 报 `PARSE_SYNTAX_ERROR`；⑥ **Window function 不能嵌套在 aggregate function**；⑦ **ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId`** 否则 `1012 同名文件`；⑧ **数据集上传无原生 API**——所有 `POST /api/data-source/*` 失败，用户必须 BI UI 手动；⑨ **大表用 pandas to_csv 比 to_excel 快 50×**（4 分钟 vs 2 秒）；⑩ **JOIN 键全局统一命名**，避免 dim/fact 用不同名字（活动ID vs 关联活动ID）；⑪ **奶白 #faf7f2 主题 + 暖蓝主色** 业务用户接受度远高于深色；⑫ **HTML 应用看板 SDK + DATA_GRID dataView 最小骨架**（4 文件：schema.js / card_01_html.js / page.js / charts/dashboard.{html,css,js}）。SKILL.md 主路由表新增 Part D 入口，触发关键词："v7 BI 端到端搭看板 / 60004 此操作只能在草稿页面执行 / 会员ID IS NOT NULL 算出 100% / Spark WITH 中文别名 报错 / 1012 输出数据集目录中存在同名文件"。`@guandata/guancli` 依赖版本升级 `^1.0.21` → `^1.0.24`（自带 guanvis-skill 公网分发）。
+
+**V2.1.5** (2026-05-18) — **新增 `references/restaurant-bi-formulas/`：餐饮连锁 BI 公式实战库**（10 个 markdown，2881 行，全脱敏）。蒸馏自两段连续的餐饮 BI 分析师履职 + 39 个生产 ETL，含：① **公式手册**（7 章 60+ SQL）—— 日期时间/顾客会员（RFM 8 类 × 营销策略 + R 阈值多档分级）/营收 KPI（AC/ADS/ADT/Comp/CRM%）/渠道门店（多渠道评价 pipeline）/券折扣/SQL 工具箱/数据质量陷阱；② **6 大 ETL 工程范式**（08 章）—— 10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 工程哲学 / 财务双源对账 / POS 系统识别归一化 / 会员生命周期多输出 / Cohort 日期×门店网格；③ **39 个 V1 生产 ETL 索引清单**（09 章）—— 按 11 业务域分类（基础维表/DWD/会员档案/顾客行为/财务营收/营销目标/私域社群/活动券/评价管理/业务标签/数据质量）+ 每 ETL 节点/输入/输出/SQL 速查 + 复用决策表。SKILL.md 主路由表新增餐饮业务公式入口；frontmatter `version: "2.1.4"` → `"2.1.5"`；纯 docs 增量 + 索引扩充，零 breaking change。
 
 **V2.1.4** (2026-05-15) — 命令面同步 `@guandata/guancli@1.0.21`：① **`metric query` 泛化查询**（1.0.20 新增）完整接入 —— `--compare yoy|mom`、`--xtd ytd|mtd`、`--recent 7d|4w`、`--percentage --percentage-dim`、`--rank-top N --rank-dim`、`--last`、兜底 `--adv-calc-json`，业务侧"同比/累计/最近 N 天/占比/Top N"一行命令出数，命令面与判断表写进 [references/guancli-commands.md](references/guancli-commands.md)；② **`card preview -f excel` 导出**（1.0.20）+ `--limit` 默认抬到 10000 + 排序取数下限 10000；③ **错误输出更干净**（1.0.21），`guancli ... 2>&1 | head` 不再被 Usage 帮助淹没，Part B 报错速查脚本更可靠。manifest 依赖约束 `@guandata/guancli@^1.0.19` → `^1.0.21`；版本与依赖元数据全部对齐。
 
