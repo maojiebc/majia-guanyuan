@@ -5,6 +5,104 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.13] — 2026-05-22
+
+### Added
+
+- **`references/ai-native-ads-design.md`** — AI-native ADS 设计方法论完整指南
+  （~340 行，9 个 §小节，majia-guanyuan **哲学层文档**，不是操作手册，是范式判断）。
+  沉淀自 v2.1.12 SuperApp demo 跑完后用户的根判断：「光数据治理没用，必须按适配 AI
+  的方式数据架构重搭一遍，要是在历史业务积累上做东西，估计全是阻碍」。这条心得
+  不是凑出来的策略，是反复对照"新建底表一路畅通"和"历史宽表寸步难行"两种状态
+  后蒸馏出来的范式判断。本文展开为可落地的方法论：
+
+  - **§1 现象层：demo 一路畅通 vs 历史包袱寸步难行**。回头看
+    `ads_会员经营任务池` 32 字段，每个字段的设计本身就是 AI-native 的：
+    `推荐动作 / 推荐权益 / 推荐原因` 推荐结果预计算 + 落字符串 → LLM 直接当
+    prompt 输入；`会员等级 / 人群标签 / 角色标签` 低基数中文枚举 → LLM 一眼看懂
+    "沉睡 / 流失 / 活跃"；`任务优先级` P0/P1/P2 标准化标签；
+    `任务生成 / 截止 / 失效时间` 全 TIMESTAMP；`门店名称` 城市+地标+编号拼成完整
+    字符串 → LLM 自动用"0783 店小张"做角色扮演。**反过来历史业务积累的宽表**：
+    `proc_act_type_v3 = 'P_CB_VCH'`（要查 dim_action_type 码表）/ `seg_id = 7`
+    （要 LEFT JOIN dim_segment）/ `store_code = 'S00769'`（要 JOIN dim_store
+    拼名字）/ `coupon_rule_json = '{"rule_type":3,...}'`（LLM 还得 parse 业务规则）
+    → LLM 根本看不懂码值，prompt 里塞这些写不出"老熟客闲聊"话术。
+  - **§2 本质层：两种 schema 假设的根本差异**。传统 BI 默认消费者是「写 SQL 的人」
+    （可以查码表、可以 JOIN、可以 parse JSON、可以现场拼字段），AI-native ADS 默认
+    消费者是「LLM + 业务方」（LLM 的"现场计算能力"远不如 SQL 引擎，**所有该问的、
+    能猜的、要算的东西都要提前 ETL 进去**）。9 个维度的对比表（消费者 / 字段命名 /
+    维度取值 / 复合语义 / 推荐 / 标签 / 时间 / 优先级 / 行级权限 / 主要服务）说清这
+    一假设差。
+  - **§3 推倒重来 ≠ 重做 ODS / DWD**：**只动 ADS 层**。业务系统不动（一线零干扰）/
+    ODS 不动（合规 + 审计源头）/ DIM 不动（企业级标准码值）/ DWD 不动（按
+    `restaurant-bi-formulas/08-etl-engineering-patterns.md` 的"10-CTE DWD 宽表底座"
+    那套）/ ADS **整层重建**（这才是给 LLM + SuperApp 直接消费的层）。一个客户可能
+    有 1 张 DWD 主宽表 + N 张 AI-native ADS（每个 AI 应用一张）。
+  - **§4 七条字段约束**（每条都给具体对照 + LLM 友好性原因）：
+    1. 维度全用中文枚举值（`人群标签="沉睡"` 不要 `seg_id=7`）
+    2. 推荐 / 标签字段提前 ETL 算好（不让 LLM 临时拼）
+    3. 复合语义直接拼好（`门店名称="上海CBD0769店"` 不要 `store_code`）
+    4. 时间字段统一 `TIMESTAMP YYYY-MM-DD HH:mm:ss`（不要 epoch / 不要数字格式）
+    5. 优先级 / 排序字段强约束取值（P0/P1/P2 不要 1/2/3 不要 high/mid/low）
+    6. 数值字段提前算好（不让 LLM 算 ROI / 净利率 / 折扣率）
+    7. 行级权限字段冗余进表（不让 LLM 推断或拼多表 JOIN）
+  - **§5 完整命名公约模板**：直接给 `ads_会员经营任务池` 的字段示例（任务ID /
+    任务优先级 STRING / 任务类型 STRING / 推荐动作 STRING / 预计价值 DOUBLE /
+    任务生成时间 TIMESTAMP / 触达状态 STRING / 转化阶段 STRING 等），核心特征：全部
+    中文字段名 + 全部字符串枚举值 + 复合字段提前拼好 + 时间统一格式 + 推荐字段是
+    ETL 算法的输出。
+  - **§6 客户视角的预算分配建议**：旧叙事（治理 100% / 12 个月项目周期 / 产出：删
+    冗余 + 改命名 / 业务方无感知）vs 新叙事（治理 30% + 重搭 ADS 30% + AI 应用 40% /
+    3 个月项目周期 / 产出：3-5 个 AI 应用上线 / 业务方天天用 / 可量化 ROI）。
+    **关键判断**：**治理预算的一半挪去重搭 ADS + 上 AI 应用，产出比直接治理高一个
+    数量级**——治理只清"脏数据"，重搭才换"schema 假设"。
+  - **§7 与既有 Part 的关系表**：Part A 数据查询（正交）/ Part B ETL 治理（**正交补充**，
+    Part B 是 ETL 操作手册"怎么写 / 怎么治"，本文是"要不要治 vs 要不要重搭"的判断）/
+    Part B-17 全链路重写（**同源**：B-17 是把一条 SmartETL 链改写成 SQL 版，本文是
+    战略升级版"为什么要重搭一整层 ADS"）/ Part C 自定义图表（互补）/ Part D V7 Page
+    （正交）/ **Part E SuperApp 强依赖本文**（前置假设：SuperApp 能跑顺的前提是 ADS
+    是 AI-native）/ `restaurant-bi-formulas` 餐饮 BI 公式实战库（**兼容**：DWD 宽表
+    底座不动，新建 DWD 之上的 ADS 层）。
+  - **§8 反模式 8 条**：从"enum code 落 ADS 表"、"通用宽表覆盖所有场景"、"epoch 时间
+    字段"、"推荐字段让 LLM 现场算"、到 **"把 SuperApp 当目标，跳过 ADS 重搭"**
+    （最严重——历史宽表喂给 LLM 出不来好结果，demo 永远做不通）。
+  - **§9 何时回到这份文档**：6 种触发场景 → 跳转表。
+
+### Changed
+
+- **SKILL.md 路由层**新增"客户问治理 vs 重搭"路由行（不属于 Part A-E 任一，单独放
+  方法论位）。`metadata.version` `2.1.12` → `2.1.13`；主标题 `V2.1.12` → `V2.1.13`；
+  顶部 banner 版本字符串同步；frontmatter `description` 加 AI-native ADS 关键词组
+  （AI-native ADS / 数据架构重搭 / 底表治理 vs 重搭 / AI 友好字段 / 中文枚举 /
+  预算分配）。版本记录段 ≤ 3 条规则：V2.1.10 推到 CHANGELOG，保留 V2.1.13 /
+  V2.1.12 / V2.1.11。
+- **README.md / README.en.md** Skill Version badge `v2.1.12` → `v2.1.13`；架构图 alt
+  `v2.1.12 功能图` → `v2.1.13 功能图` 把 AI-native ADS 方法论写进去（哲学层文档：
+  客户上 LLM/SuperApp 前判断治理 vs 重搭、ODS/DIM/DWD 不动 ADS 重建、7 条字段约束、
+  预算分配 30+30+40）。"📋 版本记录" / "📋 Version History" 段加 V2.1.13 entry +
+  删 V2.1.10（≤ 3 条规则）。
+- **`package.json` / `manifest.json`** version `2.1.12` → `2.1.13`；description 顶部
+  加 V2.1.13 一句话短摘要 + 整体能力描述从 "Six capabilities" 改为 "Six capabilities
+  + philosophy doc"。
+
+### Zero changes
+
+- 已有 `references/` 一行未改（除了新增 ai-native-ads-design.md 自身）
+- 已有 `templates/` / `scripts/` 一行未改
+- 命令面 / 依赖版本（`@guandata/guancli@^1.0.24`）一行未改
+- 既有 Part A/B/C/D/E 章节一行未改
+
+### Rationale
+
+patch bump 2.1.12 → 2.1.13 —— 新增的是 **哲学层方法论文档**（不是新脚本 / 不是新命令
+/ 不是新依赖），属于 "docs + 知识沉淀" 范畴。沿用 v2.1.9 / v2.1.10 / v2.1.12 同类
+"新增 reference 文档"都用 patch 的惯例。
+
+这条心得的特殊之处在于**它不是 Part 而是横切层**——不像 Part A-E 各自管一类操作，
+本文是给 Part E（SuperApp）和 restaurant-bi-formulas（ETL 工程范式）做**前置判断**
+的：客户值不值得做 SuperApp / 做之前要不要先重搭 ADS / 怎么跟客户算预算账。所以在
+Part 选择表里单独放一行，不归到任何已有 Part 下。
+
 ## [2.1.12] — 2026-05-22
 
 ### Added
