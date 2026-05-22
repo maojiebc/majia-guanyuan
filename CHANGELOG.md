@@ -5,6 +5,44 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.11] — 2026-05-22
+
+### Changed
+
+- **首次落地 ota-skill v0.14.0 Step 5.5（README/SKILL.md 用户首屏 HARD GATE）**。
+  v2.1.10 发布时 README 堆了 V2.1.10/.9/.8/.7/.6/.5/.4/.3/.2/.1/.0 一长串 11 条
+  版本记录，翻不到底；README 顶部架构图 alt 还标着 "v2.1.3 功能图" 实际是 v2.1.10。
+  这两类隐患在 ota-skill v0.14.0 升级为 HARD GATE 后，这里执行首次落地：
+
+  1. **版本记录段截断到最新 3 条 entry**：
+     - `README.md` "## 📋 版本记录" 段 V2.1.10..V2.1.0 共 11 条 → 留 V2.1.11/V2.1.10/V2.1.9 共 3 条
+     - `README.en.md` "## 📋 Version History" 同样裁剪
+     - `SKILL.md` 末尾 "## 📋 版本记录" 同样裁剪
+     - 三个文件都保留段末 "完整变更历史见 CHANGELOG.md / GitHub Releases" wrap-up
+     - CHANGELOG.md（本文件）**不动**，继续承担完整 keep-a-changelog 历史的角色
+
+  2. **架构图 alt 文字同步到 v2.1.11**：
+     - `README.md` 顶部 `<img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.3 功能图..."/>` → 改成 v2.1.11，把 Part D（V7 发布流水线 + customChart autoBootstrap + chip toolbar + 移动端 phoneLayout ZIP inject）+ 餐饮 BI 公式实战库都写进 alt 文字
+     - `README.en.md` 同样
+     - **注意**：本次只改 alt 文字，没重新生成 svg/png 内容（svg 上还画着 v2.1.3 时代的"三块拼图"+ Part C-12 NEW 高亮，未反映后续 V2.1.5 餐饮库 / V2.1.6-V2.1.10 Part D 五段新增能力）。重画 svg 留给下一次有时间时做。
+
+  3. **所有 version 字符串对齐**：
+     - `README.md` / `README.en.md` Skill Version badge `v2.1.10-blue` → `v2.1.11-blue`
+     - `SKILL.md` 主标题 `（V2.1.10）` → `（V2.1.11）`
+     - `SKILL.md` 末尾"版本"字符串 `V2.1.10（2026-05-21）` → `V2.1.11（2026-05-22）`
+     - `SKILL.md` `metadata.version: "2.1.10"` → `"2.1.11"`
+     - `manifest.json` + `package.json` version → 2.1.11，description 顶部加 V2.1.11 一句话短摘要
+
+  4. **新增 V2.1.11 entry** 写进 README.md / README.en.md / SKILL.md 末尾的版本记录段，保持 ≤ 3 条规则下三个文件全部以 V2.1.11/V2.1.10/V2.1.9 收尾。
+
+### Zero changes
+
+- `references/` 一行未改
+- `templates/` / `scripts/` 一行未改
+- 命令面 / 依赖版本 一行未改
+
+纯文档整理 + 工程治理 patch — patch bump 2.1.10 → 2.1.11 合规。
+
 ## [2.1.10] — 2026-05-21
 
 ### Added

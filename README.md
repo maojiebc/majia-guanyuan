@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.10-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.11-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,7 +25,7 @@
 本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.3 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板（NEW）" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.11 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板 + Part D V7 发布流水线（v7 草稿/release + customChart autoBootstrap + chip toolbar + 移动端 phoneLayout ZIP inject）+ 餐饮 BI 公式实战库" width="100%"/>
 </p>
 
 | Part | 能力 | 触发场景 |
@@ -404,27 +404,13 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.10** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §16 移动端 phoneLayout 完整指南 + v7 草稿 save API 死路**（~330 行）。沉淀自同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配的 30+ 轮 API 探索：v7 BI 草稿 save 没有可用 REST 端点（**8 个候选端点全部 stub / 404**），前端走非 REST 通道（WebSocket / Redux 内部 batch）；唯一可行路径是 `guanvis-skill pack` → Python 脚本注入 phoneLayout 到 `page.meta` 字符串（**必须 `json.dumps` 不能塞 dict，否则 `error.expected.jsstring`**）→ `guanvis-skill upload` 走 transfer API 直接覆盖发布版。配套：phoneLayout 五字段结构（selector 必须包在 `group_AUTO_PHONE` 容器、`mobileHeightUnit:60`、customChart `h=40 ≈ 572px` 装下 4 KPI + 4 图表）+ CSS @media 768px/480px 模板（KPI 4→2 col + `html, body { height: auto }` 解锁 iOS 滚动）+ `scripts/inject_phone_layout.py` 工具脚本可直接复用。
+**最新：V2.1.11** (2026-05-22) — **docs-only patch：落地 ota-skill v0.14.0 新 Step 5.5（README/SKILL.md 用户首屏 HARD GATE）**。规则：版本徽章同步、版本记录段 ≤ 3 条 entry、visual asset alt 文字同步。本次执行：(a) README.md / README.en.md / SKILL.md 末尾的"版本记录" / "Version History" 段从堆叠 11 条（V2.1.10..V2.1.0）截断到只留最新 3 条（V2.1.11 / V2.1.10 / V2.1.9），更早的归 CHANGELOG.md；(b) README 顶部架构图 alt 从 "v2.1.3 功能图" 同步到 "v2.1.11 功能图"，把 Part D（V7 发布流水线 + customChart autoBootstrap + chip toolbar + 移动端 phoneLayout ZIP inject）+ 餐饮 BI 公式实战库都写进 alt；(c) Skill Version badge / SKILL.md 主标题 / 末尾版本字符串 / metadata.version / manifest+package version 全部同步到 v2.1.11。零代码 / 零 references 改动。
+
+**V2.1.10** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §16 移动端 phoneLayout 完整指南 + v7 草稿 save API 死路**（~330 行）。沉淀自同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配的 30+ 轮 API 探索：v7 BI 草稿 save 没有可用 REST 端点（**8 个候选端点全部 stub / 404**），前端走非 REST 通道（WebSocket / Redux 内部 batch）；唯一可行路径是 `guanvis-skill pack` → Python 脚本注入 phoneLayout 到 `page.meta` 字符串（**必须 `json.dumps` 不能塞 dict，否则 `error.expected.jsstring`**）→ `guanvis-skill upload` 走 transfer API 直接覆盖发布版。配套：phoneLayout 五字段结构（selector 必须包在 `group_AUTO_PHONE` 容器、`mobileHeightUnit:60`、customChart `h=40 ≈ 572px` 装下 4 KPI + 4 图表）+ CSS @media 768px/480px 模板（KPI 4→2 col + `html, body { height: auto }` 解锁 iOS 滚动）+ `scripts/inject_phone_layout.py` 工具脚本可直接复用。
 
 **V2.1.9** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §15 customChart 三大坑 + autoBootstrap + chip toolbar 兜底**（~180 行）。同一天把 8 个 HTML SDK customChart 看板调通：§15.1 BI 不自动调 `renderChart`（race condition，同一份代码 03 能跑 07 不能跑）必须 iframe 顶部 `autoBootstrap` 5 秒兜底 `POST /api/card/<cdId>/data` 拿数据手动喂 `renderChart`；§15.2 selector 联动失败（autoBootstrap 绕过 BI redux dispatch + 7 种 body filter 格式 BI 全不认 + `PAGE_DATA_SDK.initPage()` 卡 `pgId`）；§15.3 终极兜底 chip toolbar 模式（每个 dataView 加 `addRow(f("门店类型"))` + JS 顶部 state + CSS 渐变样式，03/04/06/07/08 5 个看板已用）；§15.4 何时用 selector / 何时用 chip toolbar（基数 ≤10 强推 chip）；§15.5 排查 checklist。
 
-**V2.1.8** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §14 SmartETL 节点化两大静默坑**。SmartETL 5 个标杆 demo 从"一段 SQL 全干完"重写为 7-15 节点工程化时踩出：(A) **GROUP_BY 节点 STRING `COUNT_DISTINCT` 被改 NUL `aggrType` 输出永远空**（UI 不报错节点跑完 0 行，下游 JOIN 全空，必须从 inputDsId 校验）；(B) **JOIN_DATA 节点 `predicates[]` 只取第 0 个**，多键 JOIN（订单 ID + 商品 ID + 门店 ID）只用第一个键跑出 600 万行笛卡尔积；(C) **`FULL_OUTER` join 静默降级为 `INNER`**；(D) **两层 GROUP_BY 模拟去重计数** 才能绕开 (A)。
 
-**V2.1.7** (2026-05-21) — **路由/触发层强化（docs-only）**。重写 `SKILL.md` frontmatter `description`，把 V2.1.6 Part D（v7 BI / `60004` 草稿 / guanvis-skill / CSV 三态 / Spark CTE 中文别名 / `1012` 同名文件）和 V2.1.5 餐饮 BI 公式库（复购率/客单价/RFM/DWD 宽表/财务对账/AC/ADS/Comp）的触发关键词全列了进来——原描述只覆盖 Part A/B/C，新场景的用户语料根本不路由进来。同时新增 `# 🆎 Part D` stub section（紧跟 Part C 后），结构上对齐 Part A/B/C/C-12 的可见度。修三处 V2.1.6 残留版本错位（主标题 V2.1.5→V2.1.7、openclaw npm 约束 `^1.0.21→^1.0.24`、三件套表 `majia-guanyuan` 行 2.1.5→2.1.7）。零 references / templates / 命令面改动。
-
-**V2.1.6** (2026-05-21) — **新增 `references/v7-page-card-publish-pipeline.md`：V7 Page/Card 发布流水线 + 三态硬规则**（~340 行）。沉淀自一次"连锁咖啡 BI 演示拍摄录制"全流程实战（90 天 / 1200 门店 / 80K 会员 / 20 张表 / 17 个 ETL / 6 个 HTML 应用化看板）的 12 大踩坑：① v7 BI 草稿/发布机制 `POST /api/page+/api/card` 全失败（`60004 此操作只能在草稿页面执行`），银弹是 `guancli ≥ 1.0.24` 自带 `guanvis-skill` 一键 `publish .`；② CSV 三态判断硬规则——`会员ID IS NOT NULL` 把散客算成会员使北极星指标 = 100% 假数据；③ STRING vs DATE 类型边界；④ CSV 布尔字段 `'TRUE'/'FALSE'`；⑤ Spark CTE 别名必须英文；⑥ Window 不能嵌套在 aggregate；⑦ ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId`；⑧ 数据集上传无原生 API；⑨ pandas to_csv 比 to_excel 快 50×；⑩ JOIN 键全局命名；⑪ 奶白主题；⑫ HTML SDK 最小骨架。SKILL.md 主路由表新增 Part D 入口。`@guandata/guancli` 依赖升级 `^1.0.21 → ^1.0.24`（自带 guanvis-skill 公网分发）。
-
-**V2.1.5** (2026-05-18) — **新增 `references/restaurant-bi-formulas/`：餐饮连锁 BI 公式实战库**（10 个 markdown，2881 行，已完全脱敏）。蒸馏自两段连续的餐饮 BI 分析师履职 + 39 个生产 ETL，含：① **公式手册**（7 章 60+ SQL）—— 日期时间 / 顾客会员（RFM 8 类 × 营销策略 + R 阈值多档分级）/ 营收 KPI（AC/ADS/ADT/Comp/CRM%）/ 渠道门店（多渠道评价 pipeline）/ 券折扣 / SQL 工具箱 / 数据质量陷阱；② **6 大 ETL 工程范式**（08 章）—— 10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 工程哲学 / 财务双源对账 / POS 系统识别归一化 / 会员生命周期多输出 / Cohort 日期×门店网格；③ **39 个 V1 生产 ETL 索引清单**（09 章）—— 按 11 业务域分类 + 每 ETL 的节点/输入/输出/SQL 速查 + 复用决策表。SKILL.md 主路由表新增餐饮业务公式入口。零 breaking change，纯 docs 增量。详细变更见 [CHANGELOG.md](./CHANGELOG.md)。
-
-**V2.1.4** (2026-05-15) — 命令面同步 `@guandata/guancli@1.0.21`：① **`metric query` 泛化查询**（1.0.20 新增）—— `--compare yoy|mom|qoq|wow|dod`、`--xtd ytd|qtd|mtd|wtd|dtd`、`--recent 7d|4w|3m`、`--percentage`、`--rank-top N`、`--last`、兜底 `--adv-calc-json`；② **`card preview -f excel`**（1.0.20）—— Excel 2003 XML 直接重定向 `.xls`；③ **错误输出更干净**（1.0.21）。manifest 依赖约束 `^1.0.19 → ^1.0.21`。
-
-**V2.1.3** (2026-05-14) — 纯文档 patch：刷新 `docs/architecture.svg` 功能说明图，从 v1.5 "三块拼图"升级到 v2.1.x 现实——新增"三件套生态"条带（guancli 1.0.19 / guanvis-skill 0.1.13 / majia-guanyuan 2.1.3）+ Part C-12 HTML 应用化看板 NEW 高亮模块（粉紫渐变 + glow）+ 底部数字校准。同步生成 2880×1840 @2x DPI PNG 渲染产物（`docs/architecture.png`，供 npm/ClawHub 页面 fallback）。`package.json#files` 把 `docs/` 也补进 npm tarball。
-
-**V2.1.2** (2026-05-14) — V2.1.1 的纯打包 hotfix：`package.json#files` 字段补上 `templates/`，让 npm install 的用户也能拿到 `templates/html-dashboard/` 起手模板包；其他安装路径（GitHub clone / `gh skill install` / ClawHub）从 V2.1.1 起就已经包含 templates/。
-
-**V2.1.1** (2026-05-14) — 新增 **Part C-12：HTML 应用化看板生成**（`references/part-c-html-dashboard.md` + `templates/html-dashboard/` 模板包，含 GDHTML runtime 12 个 API + 2 个起手模块 + `patch_selector_linkage.js`）。用户说"更高级/应用化/不限标准看板"时自动切到 SDK 子类型 + DATA_GRID dataView 数据层架构，弥补 `guanvis-skill .linkToAll()` 联不到 custom chart 内部 dataView 的盲区。`guancli card preview` 命令面同步纠正（不再有 `--pg-id`），新增 `.data // .response` jq 兼容写法。
-
-**V2.1.0** (2026-05-13) — `guanvis-skill@0.1.13` 内网 Nexus 上线，Part A 标准建卡路由优先指向它；新增 `references/internal-nexus-install.md` 内网 tarball 安装手册（含 macOS `com.apple.quarantine` 坑）；与官方 skill 共存表升级为三件套分工。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 
