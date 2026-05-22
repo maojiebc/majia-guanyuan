@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）全链路 — Part A 查数/建卡、Part B ETL 治理/SmartETL 全链路重写/ExecPlan、Part C 自定义图表 HTML/CSS/JS 注入/HTML 应用化看板、**Part D V7 Page/Card 发布流水线（v7 草稿 60004 + guanvis-skill publish + CSV 三态 + Spark CTE 中文别名 + 1012 同名文件；V2.1.8 SmartETL 节点化 GROUP_BY STRING COUNT_DISTINCT/JOIN_DATA predicates[0] 多键笛卡尔积/FULL_OUTER 被吞；V2.1.9 customChart renderChart 不调 + autoBootstrap + chip toolbar 兜底；V2.1.10 移动端 phoneLayout 8 端点 save 全 stub → guanvis-skill pack + 注入 page.meta JSON 字符串 + upload 走 transfer API 覆盖发布版 + CSS @media 模板）**、餐饮 BI 公式实战库（V2.1.5：60+ SQL/RFM/AC/ADS/Comp/39 ETL 索引）。触发：营业额/门店/会员/订单/ETL/payload_json/自定义图表/HTML 看板/应用化/观远/Guandata/v7 BI/60004 草稿/CSV 100% 假指标/Spark CTE 中文别名/1012/guanvis-skill/复购率/客单价/RFM/DWD/AC/ADS/Comp/SmartETL 节点化/COUNT_DISTINCT 输出空/JOIN 笛卡尔积/customChart 加载中/autoBootstrap/chip toolbar/移动端适配/phoneView/phoneLayout/草稿 save 失败/error.expected.jsstring/ZIP 注入 phoneLayout。Claude Code/OpenClaw/Codex/Hermes 通用。
+description: 观远 BI（Guandata）全链路 Agent Skill — Part A 查数/建卡、Part B ETL 治理/SmartETL 全链路重写/ExecPlan、Part C 自定义图表 HTML/CSS/JS 注入/HTML 应用化看板、Part D V7 Page/Card 发布流水线（v7 草稿 60004 + guanvis-skill publish + CSV 三态 + Spark CTE 中文别名 + 1012 同名文件 + customChart autoBootstrap/chip toolbar 兜底 + 移动端 phoneLayout ZIP inject）、**Part E SuperApp 开放应用开发流水线（V2.1.12 新增：guancli app create/publish + 数据集异步预览 3 步 + form 建表反向工程 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕过 unwrap）**、餐饮 BI 公式实战库（V2.1.5：60+ SQL/RFM/AC/ADS/Comp/39 ETL 索引）。触发：营业额/门店/会员/订单/ETL/payload_json/自定义图表/HTML 看板/应用化/观远/Guandata/v7 BI/60004 草稿/Spark CTE 中文别名/guanvis-skill/复购率/客单价/RFM/DWD/SmartETL 节点化/customChart 加载中/autoBootstrap/chip toolbar/移动端 phoneLayout/SuperApp/超级应用/open-apps/任务池工作台/AI 副驾/触达话术/form 建表/写回 form/llm-config 裸数组/ILLEGAL_JSON_RES/credentials include。Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "2.1.11"
+  version: "2.1.12"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -27,7 +27,7 @@ metadata:
           - guancli
 ---
 
-# 观远 BI · 马甲专版（V2.1.11）
+# 观远 BI · 马甲专版（V2.1.12）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -42,11 +42,12 @@ metadata:
 | 自定义图表 HTML/CSS/JS 注入、固定卡片/overlay、payload_json 取数、路由清理 | **Part C：自定义图表开发与排障** |
 | 从零生成 HTML 化经营分析应用（用户说"更高级 / 应用化 / 自定义模块 / 最完美 / 不限标准看板"）| **Part C-12：HTML 应用化看板生成**（拆到 [references/part-c-html-dashboard.md](references/part-c-html-dashboard.md)） |
 | **v7 BI 实例**上端到端搭多个 HTML 应用看板 / 手撸 `POST /api/page+/api/card` 被 `60004 此操作只能在草稿页面执行` 卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报 `PARSE_SYNTAX_ERROR` / ETL update 报 `1012 输出数据集目录中存在同名文件` | **Part D：V7 Page/Card 发布流水线 + 三态硬规则**（V2.1.6 新增，拆到 [references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)） |
+| **SuperApp / 超级应用 / 开放应用**开发流水线 / `guancli app create/publish` / `--app-id` 不传变成每次新建 / 数据集异步预览 3 步 / **`form_xxx` 建表反向工程**（脚手架没暴露建表 API，实测 `POST /survey-engine/api/form/add`）/ **BI 中转 LLM 报 NOT_JSON_RES / ILLEGAL_JSON_RES**（响应被塞在 error_message）/ `/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞 / 同源 fetch credentials 不带 cookie / 客户端模拟流式打字效果 / 任务池工作台「看 + 想 + 选 + 做 + 留痕」闭环 | **Part E：SuperApp 开放应用开发流水线**（V2.1.12 新增，拆到 [references/part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md)） |
 | 写餐饮业务公式（AC / ADS / 复购率 / 新老客 / 用餐时段 / 留存流失 / RFM / Comp 老店）/ 查字段口径 / 排数据质量坑 / **ETL 工程范式（DWD 宽表 / 双源对账 / 评价 pipeline）** | **餐饮 BI 公式实战库**（[references/restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md)，V2.1.5 蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL，全脱敏） |
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part A/B 实证）+ 观远 CTO 张进（Part B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（V1.2 ExecPlan 规范）
-> **版本**：V2.1.11（2026-05-22）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.24`（V2.1.6 起：1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`） · **作用域**：本地私有 BI 实例
+> **版本**：V2.1.12（2026-05-22）· **环境**：Node ≥20 · **依赖**：`@guandata/guancli@^1.0.24`（V2.1.6 起：1.0.24 自带 `guanvis-skill` 公网分发，`guancli install-skill` 一键装到 `~/.agents/skills/`；V2.1.12 起：`guancli app create/publish` 用于 SuperApp 开发流水线） · **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git` + `node bin/install.js install`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
@@ -990,6 +991,7 @@ new GDPlugin().init(renderChart);
 | [part-c-payload-json.md](references/part-c-payload-json.md) | runtime 拿不到 payload_json / JSON.parse 失败时 | ~60 |
 | [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~360 |
 | [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / SmartETL `COUNT_DISTINCT`/`JOIN_DATA` 多键/`FULL_OUTER` 节点化坑（V2.1.8）/ HTML customChart `renderChart` 不调 + `autoBootstrap` + chip toolbar 兜底（V2.1.9）/ 移动端 phoneLayout v7 草稿 save API 死路 + ZIP inject 唯一可行路径 + CSS @media 模板（V2.1.10） | ~1120 |
+| [part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md) | SuperApp 开放应用开发流水线 / `guancli app create/publish` 不读 `.env` 必须显式传 `--app-id` / 脚手架 bi-services 速查 / 数据集异步预览 3 步链路 / **`/survey-engine/api/form/add` 建表反向工程**（脚手架没暴露） / **BI LLM 中转 NOT_JSON_RES/ILLEGAL_JSON_RES 三路径解析模板**（含从 error_message 抠 LLM 响应）/ 客户端模拟流式 + prompt 模板 / 原生 fetch + credentials: 'include' 绕过脚手架 `get` unwrap / `<base href>` + Router basename / 设计纪律 + 反模式表 + 决策树（V2.1.12 新建） | ~620 |
 | [internal-nexus-install.md](references/internal-nexus-install.md) | 内网同事发来 `guan*-skill` tarball、本地装观远官方私服 skill 时（V2.1 新建） | ~80 |
 
 **餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL）：**
@@ -1022,7 +1024,19 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V2.1.11** (2026-05-22) — **docs-only patch：首次落地 ota-skill v0.14.0 Step 5.5（README/SKILL.md 用户首屏 HARD GATE）**。规则：版本徽章同步 + 版本记录段 ≤ 3 条 entry + visual asset alt 同步。本次执行：版本墙从堆叠 11 条截断到最新 3 条（V2.1.11/V2.1.10/V2.1.9）+ README 架构图 alt 从 v2.1.3 同步到 v2.1.11 + 各处 version string 全部对齐。零 references / 代码改动。
+**最新：V2.1.12** (2026-05-22) — **`references/part-e-superapp-pipeline.md` 新建：SuperApp 开放应用开发流水线**（~620 行，18 个 §小节）。沉淀自同一天在 workshop513 域上从零跑通一个完整 SuperApp demo「会员经营任务池 OS」（appId=`ve2f78b92e329450e95549ff`，业务闭环：拉 `ads_会员经营任务池` 50000 行 → AI 生成触达话术 → 用户选话术 → 写回 `form_任务执行记录` → 刷新还原状态）的多轮反向工程：
+
+- **§1-§4 SuperApp 定位 + 三 API + guancli app 命令实测**：`open-apps` 后端实体名 + URL 模式 `/<host>/open-apps/<appId>/` + 必须 SPA + 管理员权限。**关键坑：`guancli app publish` 不读 `.env` 的 `VITE_APP_ID`**，必须命令行显式传 `--app-id` 才走 update（否则每次新建一个 app）。包大小基准 172 KB JS / 14 KB CSS（gzip 后 57 + 3.5 KB）。
+- **§5 数据集异步预览三步链路**：`previewDatasetDataWithFilterAsync → pollTaskUntilFinished（result.response.value 双层嵌套）→ readDatasetPreviewFile`，columns 用 `col.name` 索引（不是 fdId 不是 title）。
+- **§6 BI 表单建表反向工程**（脚手架完全没暴露）：实测 **`POST /survey-engine/api/form/add`** 是真正入口，body 必含 `settings: {}`（否则 NPE on `Form.getSettings()`）；字段 `fdId` 后端重写、`keyId` 开发者控（**varchar(20) 上限**，UUID 36 字符爆 PSQLException）；查询返回行**按 fdId 索引**而非 keyId/name；字段值可能裸字符串或数组要兼容；**删除 API 报 NPE on `submitterEditable`**（建表 settings 字段不全，下次建表得补）。
+- **§7 BI LLM 中转两个 JSON 校验 bug**：`/api/llm-config/list` 返回**裸数组**被脚手架 `unwrapBIResponse` 吞掉；`/api/llm/chat/completions` stream=true 报 `NOT_JSON_RES`、stream=false 报 `ILLEGAL_JSON_RES` **但完整 LLM 响应被塞在 `error_message` 字段**。**三路径解析模板**：Path 1 `json.response.choices[0].message.content` / Path 2 `json.choices[0].message.content` / Path 3 从 `error_message` 抠 `"非法的JSON结构: {...}"` 后 `JSON.parse`。客户端模拟流式：按字符切片 + `setTimeout` 30ms tick。prompt 模板针对餐饮触达话术（claude-opus-4-6 实测命中率高，自动用门店编号做角色扮演 + 自然语气 + 时间锚点）。
+- **§8 脚手架 core/request.ts 的 `get`/`getJSON` 陷阱**：默认 `responseType: 'auto'` + `validateStatus: 200-299`，**SuperApp 同源域内 cookie 透传不稳**。稳妥做法：BI 内部 API 用原生 `fetch('/api/...', { credentials: 'include' })`。
+- **§9-§14 路由/dev vs 生产 URL/设计纪律/ESLint/内置 UI/部署细节/边界判断**：`<base href>` + `BrowserRouter basename` 自动适配；dev 走 `dev-proxy.mjs` 转发 `VITE_BI_HOST`、生产走 `detectBIBaseRouteUrl(pathname)`；设计纪律沿用 `docs/design/DESIGN-workbench-light.md`（单数 ≤ 40px / 圆角 ≤ 8px / 三层 token / 禁紫蓝渐变）；ESLint 文件 ≤ 400 行 / 函数复杂度 ≤ 10；`/dev` 和 `/publish` 内置 UI；登录浏览器才能看到产物（curl 拿到的是 BI 主 SPA shell）。
+- **§15-§18 实战案例 + 反模式表 + 工程目录 + 何时回查表**：从「数据集字段 `推荐动作: 电话回访+召回券`」→「LLM 生成 3 条带情感的话术」→「用户选一条真写回 form」→「下次刷新还原状态」的完整叙事链——Page 做不到第二段以后的事，这就是 SuperApp 不可替代的边界。
+
+SKILL.md frontmatter `description` 加 V2.1.12 关键词（SuperApp / 超级应用 / open-apps / guancli app publish / app-id / 任务池工作台 / AI 副驾 / 触达话术 / form 建表 / 写回 form / survey-engine / llm-config 裸数组 / ILLEGAL_JSON_RES / NOT_JSON_RES / credentials include）；主标题 V2.1.11 → V2.1.12；`metadata.version` 2.1.11 → 2.1.12；Part 选择表新增 Part E 路由行；References 目录新增 `part-e-superapp-pipeline.md` 入口（~620 行）；版本记录从 V2.1.11/V2.1.10/V2.1.9 截断为 V2.1.12/V2.1.11/V2.1.10（V2.1.9 推到 CHANGELOG）。
+
+**V2.1.11** (2026-05-22) — **docs-only patch：首次落地 ota-skill v0.14.0 Step 5.5（README/SKILL.md 用户首屏 HARD GATE）**。规则：版本徽章同步 + 版本记录段 ≤ 3 条 entry + visual asset alt 同步。本次执行：版本墙从堆叠 11 条截断到最新 3 条（V2.1.11/V2.1.10/V2.1.9）+ README 架构图 alt 从 v2.1.3 同步到 v2.1.11 + 各处 version string 全部对齐。零 references / 代码改动。
 
 **V2.1.10** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §16 移动端 phoneLayout 完整指南**（~330 行）。沉淀自同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配的 30+ 轮 API 探索：
 - **§16.1 v7 草稿/发布机制画像**：编辑器 URL 自动跳 `<pgId>_draft/edit` → BI 后端创建草稿（cdId 临时化）→ 用户拖动走**非 REST 通道**（WebSocket/Redux 内部）→ `POST /api/page/<pgId>/release` 一键发布并销毁草稿。
@@ -1033,10 +1047,6 @@ new GDPlugin().init(renderChart);
 - **§16.6 完整脚本**：`inject_phone_layout.py`（自动检测 selector cdType=6、保留主卡片 cdId、字符串化 meta）+ 批量 9 看板 `for d in 01-* ... 09-*` shell 模板。
 - **§16.7 副作用**：ZIP upload 绕过草稿直接覆盖发布版，用户手动调过的草稿会被废；想保留就先 GET 现有 `phoneLayout.layout[].h` 再传脚本。
 - **§16.8/§16.9 何时用 / 验证 checklist**：单看板 ad-hoc 用编辑器拖、批量 ≥3 用 ZIP inject；浏览器 `?pageRenderType=phoneView` 直接看渲染。
-
-SKILL.md frontmatter `description` 加 V2.1.10 关键词（移动端适配 / phoneView / phoneLayout / mobileHeightUnit / _draft 草稿 save API 失败 / error.expected.jsstring / ZIP 注入 phoneLayout / transfer API 覆盖发布版）；主标题 `V2.1.9`→`V2.1.10`；末尾版本 `V2.1.7`→`V2.1.10`；`metadata.version` `2.1.9`→`2.1.10`；references 表 `v7-page-card-publish-pipeline.md` 行数 `~340`→`~1120` + 触发关键词扩到 V2.1.8/V2.1.9/V2.1.10 全覆盖；本节版本记录补齐 V2.1.8/V2.1.9 entry（之前 SKILL.md 跳过了，CHANGELOG 是齐的）。
-
-**V2.1.9** (2026-05-21) — **`references/v7-page-card-publish-pipeline.md` §15 customChart 三大坑 + autoBootstrap + chip toolbar 兜底**（~180 行）。同一天把 8 个 HTML SDK customChart 看板调通：§15.1 BI 不自动调 `renderChart`（同一份代码 03 能跑、07 不能跑，race condition）必须 iframe 顶部 `autoBootstrap` 5s 兜底 `POST /api/card/<cdId>/data`；§15.2 selector 联动失败（autoBootstrap fetch 绕过 BI redux dispatch，实测 7 种 body filter 格式 BI 全不认，`PAGE_DATA_SDK.initPage()` 卡 `pgId`）；§15.3 终极兜底 chip toolbar 模式（每个 dataView 加 `addRow(f("门店类型"))` + JS 顶部 `ALL_TYPES + activeType` state + CSS `.chip` 渐变样式，03/04/06/07/08 5 个看板已用）；§15.4 何时用 selector / 何时用 chip toolbar（基数 ≤10 chip 强推荐、>20 保留 selector）；§15.5 排查 checklist。frontmatter description 加 V2.1.9 关键词；主标题升 V2.1.9。
 
 
 

@@ -5,6 +5,98 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.12] — 2026-05-22
+
+### Added
+
+- **`references/part-e-superapp-pipeline.md`** — SuperApp 开放应用开发流水线完整指南
+  （~620 行，18 个 §小节）。沉淀自同一天在 workshop513 域（`https://app.guandata.com`）
+  上从零跑通一个完整 SuperApp demo「会员经营任务池 OS」的多轮反向工程：
+  - **§1-4 SuperApp 定位 + 三 API + guancli app 命令实测**：`open-apps` 是后端实体名，
+    URL 模式 `/<bi-host>/open-apps/<appId>/`，必须 SPA，复用 BI 同源 `/api`、`/static`、
+    cookie，发布需管理员权限。关键坑：**`guancli app publish` CLI 不读 `.env` 的
+    `VITE_APP_ID`**（只对脚手架自带 `/publish` UI 生效），不传 `--app-id` 默认走 create
+    新建一个 app —— 我这次第一次踩到，平台上多了一条占位 app 才发现。
+  - **§5 数据集异步预览三步链路**：`previewDatasetDataWithFilterAsync(dsId, {limit})`
+    拿 taskId → `getTaskStatus(taskId)` 轮询直到 `FINISHED`（`result.response.value` 双层
+    嵌套拿 fileName）→ `readDatasetPreviewFile({taskId, fileName})` 拿
+    `columns: BIField[] + preview: string[][]`。**`columns` 用 `col.name` 索引**而非
+    `col.fdId` / `col.title`。
+  - **§6 BI 表单建表反向工程**（脚手架 `bi-services/form.ts` 完全没暴露建表 API）：
+    实测尝试 `/form/create` / `/folder/create-form` / `/forms` / `/api/directory/FORM` 等
+    8 个候选端点全部 404 / 405 / 500，最终找到 **`POST /survey-engine/api/form/add`**
+    是真正的建表入口。Body 必填 `settings: {}` 否则 NPE on `Form.getSettings()`；
+    字段 `fdId` 后端重写为 `a_xxx-yyyy-...` 38 字符（传什么都被覆盖）；字段 `keyId`
+    开发者控制但 DB 是 **varchar(20)**（UUID 36 字符爆 `PSQLException: value too long for
+    type character varying(20)`），应该用 `task_id` / `member_id` 这种语义化短串；
+    **查询返回行按 `fdId` 索引**而非 keyId/name，代码需要先 `getFormDetail` 缓存
+    `keyId → fdId` 映射；字段值可能裸字符串也可能数组要兼容；删除数据 API 报
+    `NPE on submitterEditable`（建表 settings 字段不全），是个遗留坑下次建表得补。
+  - **§7 BI 的 LLM 中转两个 JSON 校验 bug**：
+    - `/api/llm-config/list` 返回**裸数组**（不是 BIUniversalJsonResponse 包装），脚手架
+      `listAvailableLLMServices()` 默认走 `unwrapBIResponse` 拿 `data.response` 得到
+      undefined，调用方 `configs[0]` 触发 TypeError 被 catch 吞，前端误以为"未配置 LLM"。
+    - `/api/llm/chat/completions` **stream=true 报 `NOT_JSON_RES`**（期望 JSON 但 LLM
+      返回 SSE），**stream=false 报 `ILLEGAL_JSON_RES` 但完整 LLM 响应被塞在
+      `error_message` 字段**：`"非法的JSON结构: {\"choices\":[{...}]}"`。
+    - **三路径解析模板**：Path 1 `json.response.choices[0].message.content` (BI 标准包装) /
+      Path 2 `json.choices[0].message.content` (BI pass-through) / Path 3 从
+      `error_message` 用正则 `^非法的JSON结构:\s*({[\s\S]+})$` 抠 JSON.parse
+      （实测命中这条）。
+    - 拿不到真流式 → **客户端模拟流式**：按字符切片 + `setTimeout 30ms tick`（60 步走完），
+      视觉上有"AI 正在打字"效果。
+    - **prompt 模板**针对餐饮触达话术（claude-opus-4-6 实测命中率高，自动用门店编号做
+      角色扮演 + 自然语气 + 时间锚点，避开"您好""尊敬的会员"营销腔）。
+  - **§8 脚手架 `core/request.ts` 的 `get` / `getJSON` 陷阱**：默认 `responseType: 'auto'` +
+    `validateStatus: 200-299`，但 SuperApp **生产域**里 cookie 透传不稳（实测 `get()`
+    调 `/api/llm-config/list` 失败，curl 直接打能正常拿数组）。**稳妥做法**：BI 内部 API
+    用原生 `fetch(url, { credentials: 'include' })`。`fetchFromLLMChat` 用
+    `responseType: 'response'` 拿原始 Response 绕过 unwrap 是对的。
+  - **§9-13 路由 / dev vs 生产 URL / 设计纪律 / ESLint / 部署细节**：`<base href>` 自动
+    注入（`/open-apps/<appId>/`），`BrowserRouter basename` 自动适配；dev 走
+    `dev-proxy.mjs` 转发 `VITE_BI_HOST`、生产走 `detectBIBaseRouteUrl(pathname)`；
+    设计纪律沿用 `docs/design/DESIGN-workbench-light.md`（单数 ≤ 40px / 圆角 ≤ 8px /
+    三层 token / 禁紫蓝渐变 / `npm run design:lint` 机械自检）；ESLint 单文件 ≤ 400 行 /
+    单函数复杂度 ≤ 10。
+  - **§14 SuperApp vs Page 边界决策树**：只是"看数据"用 Page；需要"写回 / 触发动作 /
+    嵌入 LLM"任一动作类需求才走 SuperApp。反面案例：把 SuperApp 当"换皮 Page" —— 工程
+    成本高 10×，无价值增量。
+  - **§15 实战案例数据全集**：appId `ve2f78b92e329450e95549ff` / 数据底座
+    `ads_会员经营任务池` (dsId `nda316bda403346669b3fa1d`, 50000 行 / 32 字段) / 写回表
+    `form_任务执行记录` (fmId `a_5ab553-4754-4d89-a7f2-7d7ab38f27fa`, 8 字段) / LLM
+    claude-opus-4-6 (llmConfigId `u7c1aaf61fc6d40f1ab6f332`) / 包大小 172 KB JS /
+    14 KB CSS（gzip 57 + 3.5 KB）。
+  - **§16 反模式表**（8 条）：从 "把 SuperApp 当换皮 Page"、"用 MPA"、"用 UUID 36 字符
+    做 keyId"、到 "把执行历史存 localStorage" —— 每条都对应一个替代方案。
+  - **§17 工程目录参考结构** + **§18 何时回查表**：12 种触发场景 → 对应 §小节快速跳转。
+
+### Changed
+
+- **SKILL.md 路由层**新增 Part E 入口行（Part 选择表 + References 目录）。`metadata.version`
+  `2.1.11` → `2.1.12`；主标题 `V2.1.11` → `V2.1.12`；frontmatter `description` 加
+  SuperApp 关键词组（控制在 1024 字符内通过 skills-ref validate）。版本记录段 ≤ 3 条
+  规则：V2.1.9 推到 CHANGELOG，保留 V2.1.12 / V2.1.11 / V2.1.10。
+- **README.md / README.en.md** Skill Version badge `v2.1.11` → `v2.1.12`；架构图 alt
+  `v2.1.11 功能图` → `v2.1.12 功能图` 把 Part E 写进去（注意 svg 本身没重画，alt 同步即可
+  —— 这次只是 ota-skill HARD GATE 的 alt 同步要求，下次有时间再重画）。
+  "📋 版本记录" / "📋 Version History" 段加 V2.1.12 entry + 删 V2.1.9（≤ 3 条规则）。
+- **`package.json` / `manifest.json`** version `2.1.11` → `2.1.12`；description 顶部加
+  V2.1.12 一句话短摘要 + 把整体能力从 "Five capabilities" 改为 "Six capabilities"
+  （Part A/B/C/C-12/D + Part E）。
+
+### Zero changes
+
+- 已有 `references/` 一行未改（除了新增 Part E 文档自身）
+- 已有 `templates/` / `scripts/` 一行未改
+- 命令面 / 依赖版本（`@guandata/guancli@^1.0.24`）一行未改
+
+### Rationale
+
+patch bump 2.1.11 → 2.1.12 —— 虽然新增了完整一个 Part 的 reference 文档（620 行 + 18 个
+小节 + 6 个反向工程发现 + 实战案例完整数据集），但**未引入新脚本 / 未改命令面 / 未升
+依赖**，属于 "docs + 知识沉淀" 范畴。沿用 v2.1.10 / v2.1.9 / v2.1.8 同类"新增 reference
+文档"都用 patch 的惯例。
+
 ## [2.1.11] — 2026-05-22
 
 ### Changed

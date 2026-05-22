@@ -278,3 +278,22 @@ wbcc12714d05249f4a615f8d
 页面
 找不到相关页面
 
+# ---- Part E SuperApp v2.1.12 §15 实战案例 demo 资源 ID（不是 secret，是 demo 案例可追溯标识）----
+# appId: workshop513 域上的 SuperApp 实例 ID（公开 demo）
+ve2f78b92e329450e95549ff
+# dsId: ads_会员经营任务池 公开数据集 ID
+nda316bda403346669b3fa1d
+# fmId: form_任务执行记录 公开表 ID
+a_5ab553-4754-4d89-a7f2-7d7ab38f27fa
+# llmConfigId: workshop513 域的 LLM 配置 ID（claude-opus-4-6）
+u7c1aaf61fc6d40f1ab6f332
+
+# ---- Part E SuperApp v2.1.12 chinese_name_shape 误报 ----
+# "拆子组件到独立文件" 中"独"+"立"被识别为人名 shape
+拆子组件到独立文件
+# "拆 extractXxx、isTerminalYyy 等 helper" 中代码示例 helper 名
+extractXxx
+isTerminalYyy
+# "用户在 BI 后台手动删脏数据" 是工程描述，非人名
+用户在 BI 后台手动删脏数据
+
