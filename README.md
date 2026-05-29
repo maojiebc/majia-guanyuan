@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.13-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v2.1.14-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,7 +25,7 @@
 本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.13 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板 + Part D V7 发布流水线（v7 草稿/release + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）+ Part E SuperApp 开放应用开发流水线（guancli app publish + form 建表反向工程 + LLM 中转 ILLEGAL_JSON_RES 三路径解析）+ AI-native ADS 设计方法论（哲学层文档：客户上 LLM/SuperApp 前判断治理 vs 重搭、ODS/DIM/DWD 不动 ADS 重建、7 条字段约束、预算分配 30+30+40）+ 餐饮 BI 公式实战库" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.14 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板 + Part D V7 发布流水线（v7 草稿/release + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）+ Part E SuperApp 开放应用开发流水线（guancli app publish + form 建表反向工程 + LLM 中转 ILLEGAL_JSON_RES 三路径解析）+ AI-native ADS 设计方法论（哲学层文档：客户上 LLM/SuperApp 前判断治理 vs 重搭、ODS/DIM/DWD 不动 ADS 重建、7 条字段约束、预算分配 30+30+40）+ 餐饮 BI 公式实战库" width="100%"/>
 </p>
 
 | Part | 能力 | 触发场景 |
@@ -404,12 +404,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.13** (2026-05-22) — **`references/ai-native-ads-design.md` 新建：AI-native ADS 设计方法论**（~340 行，9 个 §小节，majia-guanyuan **哲学层文档**——不是操作手册，是范式判断）。沉淀自 v2.1.12 SuperApp demo 跑完后用户的根判断：「光数据治理没用，必须按适配 AI 的方式数据架构重搭一遍，要是在历史业务积累上做东西，估计全是阻碍」。本文把这条心得展开为可落地的方法论：(§1) 现象层 demo 一路畅通 vs 历史包袱寸步难行（`ads_会员经营任务池` 32 字段 AI-native vs `proc_act_type_v3=P_CB_VCH / seg_id=7` 历史宽表）；(§2) 本质层两种 schema 假设差异（消费者是"写 SQL 的人" vs "LLM + 业务方"）；(§3) **推倒重来 ≠ 重做 ODS/DWD**——只动 ADS 层（ODS/DIM/DWD 不动，新建 1 张 DWD 主宽表 + N 张面向 AI 应用场景的 AI-native ADS）；(§4) **7 条字段约束**：中文枚举（`人群标签="沉睡"`） + 推荐预算好（`推荐动作=STRING`） + 复合直接拼好（`门店名称=城市+地标+编号`） + TIMESTAMP 统一 + 优先级强约束（P0/P1/P2） + 数值字段提前算好 + 行级权限字段冗余进表；(§5) 完整命名公约模板；(§6) **客户预算分配建议**——旧叙事 100% 治理 12 个月业务无感知 vs 新叙事 治理 30% + 重搭 ADS 30% + AI 应用 40%（3 个月业务可量化 ROI），**治理预算的一半挪去重搭 ADS，对 LLM 应用的产出比直接治理高一个数量级**——治理只清"脏数据"，重搭才换"schema 假设"；(§7) 与 Part D `restaurant-bi-formulas` DWD 宽表底座兼容互补 + Part E SuperApp 强依赖本文；(§8) 反模式 8 条，最严重是"把 SuperApp 当目标，跳过 ADS 重搭"——历史宽表喂给 LLM 出不来好结果，demo 永远做不通。
+**最新：V2.1.14** (2026-05-29) — **guancli 命令面对齐 1.0.29**。`references/guancli-commands.md` 补齐 1.0.25→1.0.29 新命令（实测确认，不臆造）：`ds execute-sql`（对数据集跑只读 SQL + 跨集 JOIN，1.0.26）、`metric project`（指标主题缩范围，1.0.27）、`server-version`/`bi-version`（BI 版本查询，1.0.25，泛化查询要 ≥ 8.2.1）、`card preview --dynamic-field/--dynamic-param/-o/--columns/--precision`（动态字段+参数+写文件，1.0.28/1.0.29）；SKILL.md guancli 章节 + 三件套表 + Part B 引子 + `part-a-commands.md` SQL 直查指针同步；依赖 `^1.0.24` → `^1.0.29`。纯命令面对齐 + 文档补充，无 Part 结构变化 / 无代码改动；本地 guancli 同步升级 1.0.19 → 1.0.29。
+
+**V2.1.13** (2026-05-22) — **`references/ai-native-ads-design.md` 新建：AI-native ADS 设计方法论**（~340 行，9 个 §小节，majia-guanyuan **哲学层文档**——不是操作手册，是范式判断）。沉淀自 v2.1.12 SuperApp demo 跑完后用户的根判断：「光数据治理没用，必须按适配 AI 的方式数据架构重搭一遍，要是在历史业务积累上做东西，估计全是阻碍」。本文把这条心得展开为可落地的方法论：(§1) 现象层 demo 一路畅通 vs 历史包袱寸步难行（`ads_会员经营任务池` 32 字段 AI-native vs `proc_act_type_v3=P_CB_VCH / seg_id=7` 历史宽表）；(§2) 本质层两种 schema 假设差异（消费者是"写 SQL 的人" vs "LLM + 业务方"）；(§3) **推倒重来 ≠ 重做 ODS/DWD**——只动 ADS 层（ODS/DIM/DWD 不动，新建 1 张 DWD 主宽表 + N 张面向 AI 应用场景的 AI-native ADS）；(§4) **7 条字段约束**：中文枚举（`人群标签="沉睡"`） + 推荐预算好（`推荐动作=STRING`） + 复合直接拼好（`门店名称=城市+地标+编号`） + TIMESTAMP 统一 + 优先级强约束（P0/P1/P2） + 数值字段提前算好 + 行级权限字段冗余进表；(§5) 完整命名公约模板；(§6) **客户预算分配建议**——旧叙事 100% 治理 12 个月业务无感知 vs 新叙事 治理 30% + 重搭 ADS 30% + AI 应用 40%（3 个月业务可量化 ROI），**治理预算的一半挪去重搭 ADS，对 LLM 应用的产出比直接治理高一个数量级**——治理只清"脏数据"，重搭才换"schema 假设"；(§7) 与 Part D `restaurant-bi-formulas` DWD 宽表底座兼容互补 + Part E SuperApp 强依赖本文；(§8) 反模式 8 条，最严重是"把 SuperApp 当目标，跳过 ADS 重搭"——历史宽表喂给 LLM 出不来好结果，demo 永远做不通。
 
 **V2.1.12** (2026-05-22) — **`references/part-e-superapp-pipeline.md` 新建：SuperApp 开放应用开发流水线**（~620 行，18 个 §小节）。沉淀自同一天在 workshop513 域上从零跑通一个完整 SuperApp demo「会员经营任务池 OS」（appId=`ve2f78b92e329450e95549ff`，业务闭环：拉 `ads_会员经营任务池` 50000 行 → AI 生成 3 段触达话术（claude-opus-4-6 自动用门店编号做角色扮演 + 自然语气 + 时间锚点）→ 用户选其中一条 → 写回 `form_任务执行记录` → 刷新还原状态）的多轮反向工程：(1) **`guancli app publish` 不读 `.env` 的 `VITE_APP_ID`**，必须命令行显式传 `--app-id` 才走 update；(2) **`POST /survey-engine/api/form/add` 是真正的建表入口**（脚手架 `form.ts` 完全没暴露），必填 `settings: {}` 否则 NPE on `Form.getSettings()`；字段 `fdId` 后端重写、`keyId` 开发者控但 **varchar(20)** 上限（UUID 36 字符爆 PSQLException）、**查询返回行按 fdId 索引**而非 keyId/name；(3) **BI LLM 中转两个 JSON 校验 bug**：`/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞、`/api/llm/chat/completions` stream=true 报 `NOT_JSON_RES` / stream=false 报 `ILLEGAL_JSON_RES` **但完整 LLM 响应被塞在 `error_message` 字段**，**三路径解析模板**（标准包装 / pass-through / 从 `error_message` 抠 JSON）+ 客户端模拟流式打字效果；(4) SuperApp 同源域里脚手架 `core/request.ts` 的 `get`/`getJSON` cookie 透传不稳，**BI 内部 API 必须用原生 `fetch(..., { credentials: 'include' })`**；(5) `<base href>` + `BrowserRouter basename` 自动适配 / dev 走 dev-proxy 转发 / 生产走 `detectBIBaseRouteUrl`；(6) 设计纪律沿用 `docs/design/DESIGN-workbench-light.md`（单数 ≤ 40px / 圆角 ≤ 8px / 三层 token 不同源）；(7) ESLint 文件 ≤ 400 行 / 函数复杂度 ≤ 10。
-
-**V2.1.11** (2026-05-22) — **docs-only patch：落地 ota-skill v0.14.0 新 Step 5.5（README/SKILL.md 用户首屏 HARD GATE）**。规则：版本徽章同步、版本记录段 ≤ 3 条 entry、visual asset alt 文字同步。本次执行：(a) README.md / README.en.md / SKILL.md 末尾的"版本记录" / "Version History" 段从堆叠 11 条（V2.1.10..V2.1.0）截断到只留最新 3 条（V2.1.11 / V2.1.10 / V2.1.9），更早的归 CHANGELOG.md；(b) README 顶部架构图 alt 从 "v2.1.3 功能图" 同步到 "v2.1.11 功能图"，把 Part D（V7 发布流水线 + customChart autoBootstrap + chip toolbar + 移动端 phoneLayout ZIP inject）+ 餐饮 BI 公式实战库都写进 alt；(c) Skill Version badge / SKILL.md 主标题 / 末尾版本字符串 / metadata.version / manifest+package version 全部同步到 v2.1.11。零代码 / 零 references 改动。
-
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。

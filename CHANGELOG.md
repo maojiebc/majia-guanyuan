@@ -5,6 +5,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [2.1.14] — 2026-05-29
+
+### Added
+
+- **`references/guancli-commands.md`** 补齐 guancli 1.0.25 → 1.0.29 的新命令面（参数用 1.0.29 二进制实测确认，不臆造）：
+  - **`ds execute-sql`**（1.0.26）—— 对一个 / 多个数据集跑只读 SQL（含跨数据集 JOIN）：数据集名称当临时表名、中文/空格用反引号、`--inputs` / `--sql` / `--limit`、JSON/CSV/表格输出、旧版 public-api fallback。新增独立章节「数据集直查 SQL」，并在 `part-a-commands.md` 加「临时 SQL 直查」指针（与 `create-and-get` 互补：一个探查、一个留存）。
+  - **`metric project [keyword]`**（1.0.27）—— 列指标主题（ID / 名称 / 备注 / 指标数），可按关键词模糊筛，先缩范围再 `metric search`。
+  - **`server-version` / `bi-version`**（1.0.25）—— 查 BI 实例版本号，新增独立小节；并在 `metric query` 泛化查询段标注「泛化查询要求 BI ≥ 8.2.1，先 `server-version` 确认」。
+  - **`card preview` 增强**（1.0.28 / 1.0.29）—— `--dynamic-field`（动态维度卡指定取哪个字段）、`--dynamic-param`（动态参数覆盖，仅图表卡片）、`-o/--output`（写文件，结果 >1000 行自动落文件）、`--columns` / `--precision`。
+  - **工具选择决策表**新增 3 行：`ds execute-sql` / `metric project` / `server-version`。
+
+### Changed
+
+- **依赖** `@guandata/guancli` `^1.0.24` → **`^1.0.29`**（`manifest.json` + `SKILL.md` frontmatter / 版本行）。
+- **`SKILL.md`** guancli 路由章节标题与正文版本号 `1.0.21` → `1.0.29`，新增「V2.1.14 新对齐：1.0.22 → 1.0.29 增量」子节；三件套共存表「官方 guancli」行 `1.0.21` → `1.0.29`（能力补 数据集直查 SQL / 动态字段），本 skill 行 `2.1.7` → `2.1.14`；Part B 引子 `1.0.21` → `1.0.29`。
+- **`ATTRIBUTIONS.md`** guancli 版本 `1.0.21` → `1.0.29`。
+
+### Notes
+
+- **纯命令面对齐 + 文档补充** —— 无 Part 结构变化、无 breaking、无代码改动。本地 guancli 同步从 1.0.19 升级到 1.0.29。
+- 用户首屏版本记录段（README / README.en / SKILL.md 末尾）按 HARD GATE 保留最新 3 条（V2.1.14 / V2.1.13 / V2.1.12），V2.1.11 归入本 CHANGELOG。
+
 ## [2.1.13] — 2026-05-22
 
 ### Added

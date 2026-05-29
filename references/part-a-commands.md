@@ -62,6 +62,19 @@ $SCRIPT delete-cards <pg_id> <card_id1> <card_id2> ...
 
 ---
 
+## 🔎 临时 SQL 直查（探查补充，guancli 1.0.26+）
+
+`guandata.py` 负责"建卡留存"，但很多时候你只想**临时跑个 SQL 看眼数据 / 把两个数据集关联起来核对**，不想落卡片。这时用 guancli 的 `ds execute-sql`（只读 SQL）：
+
+```bash
+guancli ds execute-sql --inputs <ds_id> --sql 'SELECT 城市, COUNT(*) AS 人数 FROM `会员明细` GROUP BY 城市' -f csv
+guancli ds execute-sql --inputs <ds1>,<ds2> --sql 'SELECT a.`城市`, SUM(b.`营业额`) FROM `门店` a JOIN `流水` b ON a.`门店ID`=b.`门店ID` GROUP BY a.`城市`'   # 跨数据集 JOIN
+```
+
+数据集名称当临时表名（中文/空格用反引号包裹）；BI 侧需开"高级 SQL 查询"。完整说明见 [guancli-commands.md § 数据集直查 SQL](./guancli-commands.md)。**要留存成卡片仍走上面的 `create-and-get`**。
+
+---
+
 ## 💾 数据缓存机制
 
 **`create-and-get`、`get-card-data` 命令都会自动将数据保存到本地 CSV 缓存文件。**
