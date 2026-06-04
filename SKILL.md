@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源 / guanadmin 管理）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表。Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanadmin
 ---
 
-# 观远 BI · 马甲实战版（V3.0.0）
+# 观远 BI · 马甲实战版（V3.0.1）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -49,7 +49,7 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.0.0（2026-06-04）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanadmin + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.0.1（2026-06-04）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanadmin + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
@@ -910,11 +910,11 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V3.0.0** (2026-06-04) — **官方全家桶之上的「实战增益层」重定位（ground-up 重构）**。观远官方 BI 全家桶 2026-06-03 全部公网化后，本 skill 从"非官方起家、自造全栈 + fallback"彻底重构：**退役 2789 行自造 HTTP 客户端 `scripts/guandata.py`**、删 ~1600 行死代码（`zonedata_builder` 重复嵌套）、删 4 个镜像官方命令 / 已过时的 references（`guancli-commands` / `part-a-commands` / `part-a-cards` / `internal-nexus-install`），共约 -5500 行。**Part A 整段重写为「路由层」**：标准查数→`guancli`、建卡/发布/截图→`guanvis`、ETL→`guanetl`、数据流→`guanwf`、数据源/数据集→`guands`、管理员→`guanadmin`，本 skill 不再自造这些。**保留并聚焦官方够不着的硬骨头**：Part B 整库治理判断 + 10 类引擎报错 + 双源审计 + B-17 全链路重写、Part C 既有页注入排障、Part C-12 descriptor patch 联 dataView、Part D v7 状态机绕过 + 节点化静默坑 + phoneLayout、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮 BI 公式库。品牌字统一「马甲实战版」；前置依赖改官方聚合包 `@guandata/guanskill`，认证走 `guancli auth login`（不再要 config.json）；纠正"数据集上传无原生 API"旧结论（`guands` 已支持）。**Breaking**：`scripts/guandata.py` 退役，调用方改用官方命令（旧实现可从 git `v2.1.14` tag 取回）。
+**最新：V3.0.1** (2026-06-04) — **registry 渲染补丁（无功能改动）**。README 架构图从相对路径 `./docs/architecture.svg` 改成**绝对 raw URL 指向新增的 `docs/architecture.png`**——相对路径只在 GitHub 仓库页渲染，ClawHub / npm 包页拿不到图（首图空白）；换绝对 PNG 后三处都显示。顺带清掉 references 目录树里的 `（V2.1.x）` 历史版本标注、ClawHub 重发把 14 个 tag 的版本钉刷齐。
+
+**V3.0.0** (2026-06-04) — **官方全家桶之上的「实战增益层」重定位（ground-up 重构）**。观远官方 BI 全家桶 2026-06-03 全部公网化后，本 skill 从"非官方起家、自造全栈 + fallback"彻底重构：**退役 2789 行自造 HTTP 客户端 `scripts/guandata.py`**、删 ~1600 行死代码（`zonedata_builder` 重复嵌套）、删 4 个镜像官方命令 / 已过时的 references（`guancli-commands` / `part-a-commands` / `part-a-cards` / `internal-nexus-install`），共约 -5500 行。**Part A 整段重写为「路由层」**：标准查数→`guancli`、建卡/发布/截图→`guanvis`、ETL→`guanetl`、数据流→`guanwf`、数据源/数据集→`guands`、管理员→`guanadmin`，本 skill 不再自造这些。**保留并聚焦官方够不着的硬骨头**：Part B 整库治理判断 + 10 类引擎报错 + 双源审计 + B-17 全链路重写、Part C 既有页注入排障、Part C-12 descriptor patch 联 dataView、Part D v7 状态机绕过 + 节点化静默坑 + phoneLayout、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮 BI 公式库。品牌字统一「马甲实战版」；前置依赖改官方聚合包 `@guandata/guanskill`，认证走 `guancli auth login`（不再要 config.json）；纠正"数据集上传无原生 API"旧结论（`guands` 已支持）。**Breaking**：`scripts/guandata.py` 退役，调用方改用官方命令（旧实现可从 git `v2.1.14` tag 取回）。
 
 **V2.1.15** (2026-06-04) — **官方观远 BI skill 全家桶首次公网化 + guancli 1.0.31 对齐**。2026-06-03 观远把整套 BI skill 打成聚合包 `@guandata/guanskill` 推上公网 npm（`npm i -g @guandata/guanskill && guanskill install-skill` 一键装齐 7 命令 + 7 skill 到 `~/.agents/skills/`）：`guancli@1.0.31` · `guanvis@0.1.22`（原 `guanvis-skill`，去 `-skill` 后缀，命令改 `guanvis publish/pack/upload`，新增 `guanvis screenshot` 服务端截图）· `guands@0.1.13` · `guanetl@0.1.12` · `guanexport@0.1.9`（PNG 已迁 `guanvis screenshot`，逐步下线）· `guanadmin@0.1.6` · **新增 `guanwf@0.1.4`（工作流数据流 Dataflow：`edit→export→save-draft→save`）**。SKILL.md「升级提示」+「与官方全家桶的共存」整段重写（三件套 → 全家桶 7+1 路由矩阵）、新增 guancli 1.0.30/1.0.31 增量（card preview 值格式化+保留 raw / `--dynamic-field` 多选 / `ds execute-sql` 不再发 `X-AUTH-TOKEN` / `install-skill` WorkBuddy 路径）、所有 `guanvis-skill <cmd>` 命令例改 `guanvis <cmd>`；README badge + 架构图 alt + 版本记录同步；`internal-nexus-install.md` 标注被公网取代（仅留历史）；依赖 `^1.0.29` → `^1.0.31`；本地工具链同步升级到全家桶。纯生态对齐 + 文档，无 Part 结构变化 / 无代码改动。
-
-**V2.1.14** (2026-05-29) — **guancli 命令面对齐 1.0.29**。`references/guancli-commands.md` 补齐 1.0.25→1.0.29 新命令（实测确认，不臆造）：`ds execute-sql`（对数据集跑只读 SQL + 跨集 JOIN，1.0.26）、`metric project`（指标主题缩范围，1.0.27）、`server-version`/`bi-version`（BI 版本查询，1.0.25，泛化查询要 BI ≥ 8.2.1）、`card preview --dynamic-field/--dynamic-param/-o/--columns/--precision`（动态字段+参数+写文件，1.0.28/1.0.29）；SKILL.md guancli 章节 + 三件套表 + Part B 引子 + `part-a-commands.md` SQL 直查指针同步；依赖 `^1.0.24` → `^1.0.29`。纯命令面对齐 + 文档补充，无 Part 结构变化 / 无代码改动；本地 guancli 同步升级 1.0.19 → 1.0.29。
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。

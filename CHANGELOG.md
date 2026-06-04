@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.0.1] — 2026-06-04
+
+### Changed
+
+- **README 架构图改绝对 URL + 新增 `docs/architecture.png`** —— `<img src>` 从相对路径 `./docs/architecture.svg` 改成 `https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png`。**根因**：相对路径只在 GitHub 仓库页解析；ClawHub / npm 包页渲染 README 但不托管仓库文件，相对路径拿不到图 → 首图整块空白。新增 PNG（Chrome headless 2x 渲染，2880×1840，CJK 走系统 PingFang SC），绝对 raw PNG 在 GitHub / ClawHub / npm 三处都渲染。
+- **清掉 references 目录树的 `（V2.1.x）` 历史版本标注** —— README / README.en「📁 目录结构」段里 `…（V2.1.1）` 这类"引入版本"标注在 v3 页面上读着像残留，去掉。
+- **ClawHub 14 个 tag 版本钉刷齐** —— v3.0.0 发布只带了部分 tag，`agent-skills / business-intelligence / chinese / claude-code / data-analysis / guandata-bi / metric-query / mobile-adaptation / phonelayout / rfm-analysis` 还钉在 2.1.x；3.0.1 重发带全 tag 刷到 3.0.1。
+- svg / png 版本标 v3.0.0 → v3.0.1，badge / H1 / metadata.version 同步。
+
+### Notes
+
+- **无功能 / 无 Part 结构改动** —— 纯 registry 渲染 + 元数据补丁。催生 majia-ota-skill v0.17.0：README 引用的 visual asset 必须用**绝对 URL**（相对路径在 ClawHub / npm 不渲染）；ClawHub 页 = README 冻结/不可改，发版必带全 tag 刷版本钉。
+
 ## [3.0.0] — 2026-06-04
 
 > **Ground-up 重构 ——「官方全家桶之上的实战增益层」重定位。** 观远官方 BI 全家桶 2026-06-03 全部公网化后，本 skill 不再"非官方起家、自造全栈 + fallback"，而是退到官方之上的增益层：标准能力一律路由官方，只留官方够不着的硬骨头。共约 **-5500 行**。
