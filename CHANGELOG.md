@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.0.2] — 2026-06-05
+
+### Added
+
+- **workshop513 实盘实测沉淀**（BI 8.2.1-hf6，全 7 个官方 skill 读写跑通）—— v3 路由全部验证正确；新增 2 条只有真跑才知道的硬边界：
+  - **Part B**：`guanetl edit` 逆向在此实例 **5/5 全失败**（API direct-save / BI UI / guanetl 自己 create+save 出来的全中，生成空 `etl.go`、`-v` 无报错、紧接 `save` 有清空线上 ETL 风险）→ 改现有 ETL 继续走 Part B `guancli fetch`。最小复现已提交观远官方。
+  - **Part D**：删 guanvis-published 页面唯一可行 `DELETE /api/page/<id>?force=true`（卡片内嵌 `page.cards`、`/api/card` 删报 1002、guanvis 拒覆盖空页）；删 ETL `DELETE /api/etl/<id>` 连带删输出集（先 ETL 后 ds，别用 `guanetl delete --cascade`）。
+
+### Notes
+
+- **无功能 / 无 Part 结构改动**——纯实测边界 + 路由验证。guanvis build→preview→publish(3.1s)/screenshot、guancli 读路径、guands calc-field 写均实测通过。
+- 用户首屏版本记录保留最新 3 条（V3.0.2 / V3.0.1 / V3.0.0），V2.1.15 归 CHANGELOG。
+
 ## [3.0.1] — 2026-06-04
 
 ### Changed

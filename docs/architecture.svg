@@ -32,7 +32,7 @@
   <text x="720" y="50" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">观远 BI · 马甲实战版 · 全链路 Agent Skill</text>
   <g transform="translate(720, 64)">
     <rect x="-86" y="0" width="172" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.0.1  ·  2026-06-04</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.0.2  ·  2026-06-05</text>
   </g>
   <text x="720" y="112" text-anchor="middle" font-size="13.5" fill="#475569">官方全家桶之上的实战增益层　·　标准活路由官方，硬骨头落到本 skill 三支柱</text>
   <text x="720" y="132" text-anchor="middle" font-size="11.5" fill="#94a3b8">工具无关 (Claude Code · OpenClaw · Codex · Hermes/gbrain)　·　前置 npm i -g @guandata/guanskill</text>
