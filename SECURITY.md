@@ -4,12 +4,11 @@
 
 `majia-guanyuan` is designed to run locally against a user's own Guandata BI instance.
 
-- `config.json` is intentionally excluded by `.gitignore`.
-- The sample `config.example.json` contains placeholders only.
-- The Python client sends login credentials only to the `base_url` configured by the user.
-- The project does not send BI credentials, tokens, datasets, card data, or ETL payloads to any third-party service.
+- As of v3.0.0 this skill no longer ships its own HTTP client. Authentication is handled by the official toolchain via `guancli auth login` (the family of `guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin` shares one profile). This skill does not read `config.json`.
+- All BI network calls are made by the official `@guandata/guanskill` CLIs, which talk only to the host configured by the user.
+- This skill does not send BI credentials, tokens, datasets, card data, or ETL payloads to any third-party service.
 
-Before installing any Agent Skill from a public registry, inspect its `SKILL.md`, scripts, and dependencies. For this repository, the main script is [scripts/guandata.py](./scripts/guandata.py), and all network calls are made to the configured Guandata BI host.
+Before installing any Agent Skill from a public registry, inspect its `SKILL.md`, scripts, and dependencies. For this repository, the only bundled script is [scripts/inject_phone_layout.py](./scripts/inject_phone_layout.py) — a pure local ZIP transform (no network calls). All BI access is delegated to the official Guandata CLIs.
 
 ## Reporting a vulnerability
 

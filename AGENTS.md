@@ -9,18 +9,25 @@ This file is read by:
 
 A Claude Code Skill for **Guandata BI (观远 BI)** — a tool-agnostic agent skill packaged so it works with **Claude Code**, **OpenClaw**, **Hermes/gbrain**, **Codex**, and any other agent that recognizes `SKILL.md` frontmatter.
 
-Three capabilities packaged into one skill:
-- **Part A** — Data query & card creation
-- **Part B** — ETL governance, write, delete (incl. full-chain rewrite methodology and ExecPlan workflow)
-- **Part C** — Custom chart development & debugging
+**V3.0.0 重定位 — 「马甲实战版」**: after the official Guandata BI skill family went public on 2026-06-03 (`@guandata/guanskill`: guancli / guanvis / guanetl / guanwf / guands / guanadmin + per-skill AI skills), this skill was refactored ground-up from a self-built full-stack + fallback into a **battle-tested gain-layer on top of the official family**. The self-built HTTP client `scripts/guandata.py` (2789 lines) was retired and ~1600 lines of dead code removed. **Standard query / card / ETL / dataset CRUD all route to the official family**; this skill keeps only what the official DSL/commands can't reach.
+
+Current structure — a router layer plus the hard-bone Parts:
+- **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`)
+- **Part B** — ETL governance, write, delete (incl. SmartETL full-chain rewrite methodology and ExecPlan workflow)
+- **Part C** — Custom chart HTML/CSS/JS injection & debugging on existing pages
+- **Part C-12** — HTML application-style dashboard generation (descriptor patch linking selector → custom-chart dataView)
+- **Part D** — V7 Page/Card publish pipeline (draft/release state-machine bypass + node-level silent traps + mobile phoneLayout ZIP-inject)
+- **Part E** — SuperApp open-app development pipeline (reverse-engineering)
+- **AI-native ADS design methodology** — philosophy-layer doc (governance vs rebuild judgment)
+- **Restaurant-chain BI formula playbook** — 60+ SQL / RFM / Comp / DWD wide-table patterns
 
 ## Required reading order for any task
 
 Before performing any work in this repo, always:
 
-1. Read `SKILL.md` (the main doc, ~2000 lines). The `## 🧭 Part 选择` table at the top tells you which Part (A/B/C) covers the user's request.
-2. Read only the relevant Part section in detail. Don't load the whole SKILL.md unnecessarily — Part B alone covers most ETL work.
-3. Check `config.example.json` for the credential schema. The user's real `config.json` is `.gitignore`-d.
+1. Read `SKILL.md` (the main doc, ~940 lines). The `## 🧭 Part 选择` table at the top tells you which Part (router layer / B / C / C-12 / D / E / ADS / restaurant formulas) covers the user's request.
+2. Read only the relevant Part section in detail. Don't load the whole SKILL.md unnecessarily — each Part points to its own `references/` playbook for the full tables.
+3. Authentication is via `guancli auth login` (the whole official family shares one profile). This skill no longer reads `config.json` — credentials live in the guancli profile, not in this repo.
 
 ## Tool-specific entry points
 
@@ -32,47 +39,53 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `version: "1.3"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.0.0"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
-- **Do not commit `config.json`** — it contains real BI credentials. Already in `.gitignore`. The committed template is `config.example.json`.
-- **Do not modify `references/`** — they're verbatim original docs from contributors (CTO Zhang Jin SmartETL rewrite + custom chart playbook, OpenAI Codex ExecPlan spec, AGENTS.md spec). Cite, don't edit.
-- **Do not strip version frontmatter** in `SKILL.md`. Bump `version` and update the version log section per the changelog convention when making changes.
+- **Authentication is via `guancli auth login`** — the official family shares one profile; this skill no longer reads `config.json`. Do not commit any `config.json` (still in `.gitignore` defensively). `config.example.json` is kept as a legacy schema reference only.
+- **Do not re-route standard work to self-built code** — standard query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
+- **Do not edit contributor originals in `references/`** — `etl-rewrite-original.md` + `custom-chart-playbook.md` (CTO Zhang Jin), `execplan-spec.md` + `agents-rule.md` (OpenAI Codex) are verbatim. Cite, don't edit. (The 马甲-distilled references and `restaurant-bi-formulas/` are maintained docs and may be updated.)
+- **Do not strip version frontmatter** in `SKILL.md`. Bump `metadata.version` and update the version log section per the changelog convention when making changes.
 - **Do not add tool-specific code paths** (e.g., `if claude_code: ...`) inside scripts or SKILL.md. The skill is tool-agnostic on purpose.
 
 ## Repo layout (one-liner per file)
 
-    SKILL.md              ← Main agent doc (router + key rules; V1.5.0 progressive disclosure).
+    SKILL.md              ← Main agent doc (router layer + key rules; progressive disclosure).
     AGENTS.md             ← This file (Codex/Hermes/Cursor entry).
     README.md             ← Human-facing 中文 README.
     README.en.md          ← Human-facing English README.
+    CHANGELOG.md          ← Full version history.
     ATTRIBUTIONS.md       ← Credits to contributors.
+    SECURITY.md           ← Security policy.
     LICENSE               ← MIT.
+    llms.txt              ← llms.txt index.
     manifest.json         ← Tool-agnostic metadata (name/version/compatibility/entry).
-    package.json          ← npm package descriptor (V1.4.0+, scoped @supermajia).
-    config.example.json   ← Credentials template.
-    config.json           ← (gitignored) Real credentials.
+    package.json          ← npm package descriptor (scoped @supermajia).
+    config.example.json   ← Legacy credential schema (auth now via `guancli auth login`).
     .gitignore
     .npmignore            ← Defense-in-depth alongside package.json `files` whitelist.
     bin/
-      install.js          ← npm CLI: install/list/uninstall to 4 agent tools (V1.4.0+).
+      install.js          ← npm CLI: install/list/uninstall to 4 agent tools.
     scripts/
-      guandata.py         ← Part A main script (cards / fetch / delete / publish).
-      zonedata_builder/   ← zoneData builder module.
-    references/            ← V1.5.0 progressive-disclosure playbooks (12 files):
-      part-a-commands.md         ← Full Part A command catalog (V1.5.0).
-      part-a-cards.md            ← Card params + 26 chart types + 6 examples (V1.5.0).
-      part-b-errors.md           ← Part B 10-category error fixes detailed (V1.5.0).
-      part-b-payload.md          ← ETL payload schema deep-dive (V1.5.0).
-      part-b-sdk.md              ← v2→v3 bulk refactoring SDK (V1.5.0).
-      part-b17-fullchain-rewrite.md  ← Full B-17 methodology (V1.5.0).
-      part-c-payload-json.md     ← C-3 payload_json troubleshooting (V1.5.0).
-      guancli-commands.md        ← guancli 9-category command quick-ref (V1.5.0).
-      execplan-spec.md           ← OpenAI Codex ExecPlan full spec (V1.2 original).
-      agents-rule.md             ← OpenAI Codex minimal scheduling rule (V1.2 original).
-      etl-rewrite-original.md    ← CTO Zhang Jin SmartETL rewrite (V1.1 original).
-      custom-chart-playbook.md   ← CTO Zhang Jin custom chart playbook (V1.1 original).
+      inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
+    templates/            ← html-dashboard template pack (Part C-12).
+    docs/                 ← Supplementary docs.
+    references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ dir):
+      part-b-errors.md           ← Part B 10-category error fixes detailed.
+      part-b-payload.md          ← ETL payload schema deep-dive.
+      part-b-sdk.md              ← v2→v3 bulk refactoring SDK.
+      part-b17-fullchain-rewrite.md  ← Full B-17 SmartETL full-chain rewrite methodology.
+      part-c-payload-json.md     ← C-3 payload_json troubleshooting.
+      part-c-html-dashboard.md   ← Part C-12 HTML application-style dashboard methodology.
+      v7-page-card-publish-pipeline.md  ← Part D v7 publish pipeline (16 sections).
+      part-e-superapp-pipeline.md  ← Part E SuperApp open-app development pipeline.
+      ai-native-ads-design.md    ← AI-native ADS design methodology (philosophy layer).
+      restaurant-bi-formulas/    ← Restaurant-chain BI formula playbook (dir: README + 9 topic files).
+      execplan-spec.md           ← OpenAI Codex ExecPlan full spec (contributor original).
+      agents-rule.md             ← OpenAI Codex minimal scheduling rule (contributor original).
+      etl-rewrite-original.md    ← CTO Zhang Jin SmartETL rewrite (contributor original).
+      custom-chart-playbook.md   ← CTO Zhang Jin custom chart playbook (contributor original).
 
 ## Verification
 

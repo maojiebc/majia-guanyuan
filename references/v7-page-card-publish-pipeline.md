@@ -1,4 +1,4 @@
-# V7 Page/Card 发布流水线 + guanvis-skill 银弹 + 数据集三态硬规则
+# V7 Page/Card 发布流水线 + guanvis 银弹 + 数据集三态硬规则
 
 > **来源**：2026-05-20/21 一次"连锁咖啡 BI 演示拍摄录制"全流程实战沉淀（90 天 / 1200 门店 / 80K 会员 / 20 张表 / 17 个 ETL / 6 个 HTML 应用化看板）。本文件把 6 类高频踩坑一次性写清，避免下一个看板项目再花 2-3 小时绕圈。
 >
@@ -6,7 +6,7 @@
 
 ---
 
-## §1 **关键发现：v7 BI 实例必须用 guanvis-skill 银弹**
+## §1 **关键发现：v7 BI 实例必须用 guanvis 银弹**
 
 ### §1.1 现象
 
@@ -22,25 +22,25 @@
 
 **根因**：v7 用了 draft cdId ↔ published cdId 的双 ID 映射机制，draft cdId 永远不会出现在 published page 里。手撸 API 走不通。
 
-### §1.2 银弹：guancli ≥ 1.0.24 自带 guanvis-skill
+### §1.2 银弹：guancli ≥ 1.0.24 自带 guanvis
 
 ```bash
 npm install -g @guandata/guancli@latest
-guancli install-skill        # 把 guanvis-skill 装到 ~/.agents/skills/
+guancli install-skill        # 把 guanvis 装到 ~/.agents/skills/
 ```
 
 一次性获得能力：
 - JS DSL：`createCard / createCustomChart / createSelector / createTextCard / createImageCard / createPage`
-- `guanvis-skill init <dsId>` 自动生成 schema.js（含 fdId 完整映射）
-- `guanvis-skill genid N` 生成合法 24 字符 alphanumeric ID
-- `guanvis-skill publish .` **一键** 发布到 BI（内部走 transfer API，绕开 v7 draft/release 复杂度）
+- `guanvis init <dsId>` 自动生成 schema.js（含 fdId 完整映射）
+- `guanvis genid N` 生成合法 24 字符 alphanumeric ID
+- `guanvis publish .` **一键** 发布到 BI（内部走 transfer API，绕开 v7 draft/release 复杂度）
 
 ### §1.3 完整工程目录骨架（每个 page 一个子目录）
 
 ```text
 my-dashboards/
 ├── 01-executive/
-│   ├── schema.js              # guanvis-skill init <dsId> 自动生成
+│   ├── schema.js              # guanvis init <dsId> 自动生成
 │   ├── card_01_html.js        # createCustomChart + DATA_GRID dataView
 │   ├── page.js                # createPage + setParentDir + addFullWidthCard
 │   └── charts/
@@ -56,14 +56,14 @@ my-dashboards/
 
 ```bash
 # 1. 生成 ID
-guanvis-skill genid 4         # page / sdk_card / dv1 / dv2
+guanvis genid 4         # page / sdk_card / dv1 / dv2
 
 # 2. 写 4 个文件（schema.js / card_01_html.js / page.js / charts/dashboard.{html,css,js}）
 # (内容见 §2)
 
 # 3. 一键 publish
 cd 01-executive
-guanvis-skill publish .
+guanvis publish .
 # →  ✓ 01-executive (page)
 #    ✓ ExecutiveDashboard (card)
 #    ✓ ExecDataView (card)
@@ -74,7 +74,7 @@ guanvis-skill publish .
 
 打开 `https://<bi-host>/page/<pgId>` 看 BI UI 验证。
 
-> **不要再手撸** `POST /api/card` + `PUT /api/page` + `POST /save` + `POST /release` 这条路径。guanvis-skill 内部走 transfer API（`POST /api/manual/template/transfer` 带 `needIdMapping=false`），所有 v7 draft/release 复杂度都隐藏起来了。
+> **不要再手撸** `POST /api/card` + `PUT /api/page` + `POST /save` + `POST /release` 这条路径。guanvis 内部走 transfer API（`POST /api/manual/template/transfer` 带 `needIdMapping=false`），所有 v7 draft/release 复杂度都隐藏起来了。
 
 ---
 
@@ -85,7 +85,7 @@ guanvis-skill publish .
 ```javascript
 // dataView 0: BI 自动取数喂给 renderChart(data) 的 data[0]
 var dv1 = createCard(ChartType.DATA_GRID, "看板数据-日级")
-    .setId("u56dfa1e159b55357ac0d6bc")   // guanvis-skill genid 生成
+    .setId("u56dfa1e159b55357ac0d6bc")   // guanvis genid 生成
     .bindDataset(DS)
     .addRow(f("业务日期", { granularity: Granularity.DAY }))
     .addMetric(f("总销售", { aggrType: AggrType.SUM }))
@@ -254,25 +254,32 @@ def update_etl(payload_path, dfid, output_name):
 
 ---
 
-## §6 数据集上传：BI 无原生 API，必须 UI 手动
+## §6 数据集上传/建集：走官方 `guands`
 
-### §6.1 现实
+> **🆕 V3.0.0 更新**：本节早期结论（"BI 无原生上传 API、只能 UI 手动 30-45 分钟"）已被官方全家桶推翻。`@guandata/guanskill` 里的 **`guands`** 已原生支持数据集上传/建集，本 skill 不再需要手撸 `POST /api/data-source/*` 或让用户去 UI 手点。下面保留早期探路记录仅作背景。
 
-`POST /api/data-source`, `/api/data-source/upload`, `/api/data-source/file`, `/api/file/upload`, `/api/excel`, `/api/etl/import-excel` —— **全部失败**（`5001 No static resource` 或 `Method 'POST' is not supported`）。
+### §6.1 走官方 `guands`（推荐路径）
 
-OPTIONS 探测显示这些 endpoint 只允许 DELETE/GET/HEAD/OPTIONS。
+数据集上传/建集一律路由官方 `guands`：
 
-Claude in Chrome 的 `file_upload` 工具有 ≤ 10MB 单次调用 + 必须是 user-shared file 的限制，对 demo 数据集（最大 178MB）也走不通。
+```bash
+# 本地文件直接建集（CSV/Excel）
+guands dataset create-db <文件> -d <数据集目录id> --name <数据集名>
+# 已有数据集追加/覆盖数据
+guands dataset import <dsId> <文件>          # 追加
+guands dataset replace-data <dsId> <文件>    # 全量替换
+```
 
-### §6.2 最实用方案
+字段类型确认、增量更新、定时调度、批量移删也都在 `guands` 里（见路由总表）。**不要再手撸 `POST /api/data-source/*`**。
 
-用户在 BI UI 上手动上传：
+> **早期探路记录（背景，已被 `guands` 取代）**：`guands` 公网化之前，盲发 `POST /api/data-source`, `/api/data-source/upload`, `/api/data-source/file`, `/api/file/upload`, `/api/excel`, `/api/etl/import-excel` 都返回 `5001 No static resource` 或 `Method 'POST' is not supported`（OPTIONS 探测显示只允许 DELETE/GET/HEAD/OPTIONS）；Claude in Chrome 的 `file_upload` 又有 ≤ 10MB + 必须 user-shared file 的限制，对 178MB 的 demo 数据集走不通——所以当时只能退回 BI UI 手动上传。**现在用 `guands` 一条命令即可，这些都不再是阻塞。**
+
+### §6.2 兜底：BI UI 手动上传（仅当 `guands` 不可用时）
+
+实在没有 `guands`（如纯浏览器环境）才退回 UI 手动上传：
 1. **数据准备 → 数据集 → 目标目录 → 新建数据集 → 本地文件 → CSV/Excel → 选文件 → 下一步 → 确认字段类型 → 保存**
 2. 单文件 BI 上限 500MB（CSV，可压缩成 zip）
-
-预估时间：
-- 12 张表（最大 178MB）：30-45 分钟
-- 大表 BI 解析需要 1-2 分钟，期间用户可以并行传下一个
+3. 大表 BI 解析需要 1-2 分钟，期间可以并行传下一个
 
 ### §6.3 上传清单生成（提升用户效率）
 
@@ -361,13 +368,13 @@ ECharts 配色：
 | 阶段 | 实际耗时 |
 |---|---|
 | 数据生成（20 张表 / 670 万行）| **2 分钟**（向量化 + CSV）|
-| 用户上传到 BI（20 张文件）| 30-45 分钟 |
+| 上传到 BI（20 张文件）| **`guands` 批量 create-db 几分钟**（早期 UI 手动是 30-45 分钟，已被 `guands` 取代，见 §6）|
 | 17 个 ETL 写入 + 执行（含错误修复）| **15-25 分钟** |
-| 6 个 HTML 应用化看板（guanvis-skill）| **3-4 小时**（写代码占大头）|
+| 6 个 HTML 应用化看板（guanvis）| **3-4 小时**（写代码占大头）|
 | 浏览器走查 + 微调 | 30-60 分钟 |
 | **总计** | **5-7 小时** |
 
-**关键时间节省**：guanvis-skill 把 v7 page/card 创建从"探 API 2-3 小时还跑不通"压缩到"`publish .` 30 秒"。
+**关键时间节省**：guanvis 把 v7 page/card 创建从"探 API 2-3 小时还跑不通"压缩到"`publish .` 30 秒"。
 
 ---
 
@@ -375,7 +382,7 @@ ECharts 配色：
 
 | 反模式 | 替代 |
 |---|---|
-| 手撸 `POST /api/page` + `POST /api/card` + `PUT /api/page/<draft>` 走 v7 草稿流程 | 用 `guanvis-skill publish .` |
+| 手撸 `POST /api/page` + `POST /api/card` + `PUT /api/page/<draft>` 走 v7 草稿流程 | 用 `guanvis publish .` |
 | 看板 script 全 hard-code 静态数据 | 用 DATA_GRID dataView，BI 自动取数 |
 | 大表用 `df.to_excel(engine="openpyxl")` | 行数 > 5 万自动转 CSV |
 | `WHERE 会员ID IS NOT NULL` 直接判断散客 | `WHERE 会员ID IS NOT NULL AND 会员ID <> ''` |
@@ -416,16 +423,16 @@ demo-工程文件/
     └── 06-experience/           # 体验风险专题
 ```
 
-**6 个看板** = 6 个独立子目录, 每个目录 `guanvis-skill publish .` 各 30 秒发布。
+**6 个看板** = 6 个独立子目录, 每个目录 `guanvis publish .` 各 30 秒发布。
 
 ---
 
 ## §13 与 Part C-12 (HTML 应用化看板) 的关系
 
 - **Part C-12 / `part-c-html-dashboard.md`** 是"已经有 page + custom chart 时如何写 HTML 内容 + selector descriptor patch"
-- **本文件** 是"从零到 6 个看板上线"的端到端流程，重点在 v7 BI 实例 + guanvis-skill 一键发布
+- **本文件** 是"从零到 6 个看板上线"的端到端流程，重点在 v7 BI 实例 + guanvis 一键发布
 
-两者互补：先看本文件知道"用 guanvis-skill"，遇到 selector 联动到 custom chart dataView 时再回 C-12 查 descriptor patch 章节。
+两者互补：先看本文件知道"用 guanvis"，遇到 selector 联动到 custom chart dataView 时再回 C-12 查 descriptor patch 章节。
 
 ---
 
@@ -792,7 +799,7 @@ fetch('/api/card/<customChartId>/data', {method:'POST', body:'{}',
 
 ## §16 移动端 phoneLayout 完整指南 + v7 草稿 API 死路（2026-05-21 沉淀）
 
-> **背景**：同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配，30+ 轮验证后总结：**v7 BI 没有可调用的草稿 save REST API**（前端走非 REST 通道），但 **`guanvis-skill pack` 出的 ZIP 里直接注入 `phoneLayout` 字段 → `upload` 走 transfer API 100% 生效**。下面是完整链路。
+> **背景**：同一天给 9 个 demo 看板（01-高层经营驾驶舱 / 02-会员私域驾驶舱 / 03-会员经营任务池 / 04-门店每日指挥台 / 05-活动权益复盘 / 06-体验风险专题 / 07-单店利润健康 / 08-加盟商单店报告 / 09-总览-ECharts 重构）做移动端适配，30+ 轮验证后总结：**v7 BI 没有可调用的草稿 save REST API**（前端走非 REST 通道），但 **`guanvis pack` 出的 ZIP 里直接注入 `phoneLayout` 字段 → `upload` 走 transfer API 100% 生效**。下面是完整链路。
 
 ### §16.1 v7 BI 草稿/发布机制画像（先理解再操作）
 
@@ -832,9 +839,9 @@ v7 BI 把"编辑中"状态用一个伪 pgId `<pgId>_draft` 隔离开来：
 
 **结论**：放弃草稿 save，走 §16.3 的 ZIP inject 路径。
 
-### §16.3 唯一可行路径：guanvis-skill pack → Python 注入 → upload
+### §16.3 唯一可行路径：guanvis pack → Python 注入 → upload
 
-`guanvis-skill upload` 走的是 BI 的 **transfer API**（`/api/manual/template/transfer` + `needIdMapping=false`），它**直接覆盖发布版的 meta**，不经过草稿。只要在 pack 出的 ZIP 里把 `phoneLayout` 塞进 `page.meta`，upload 后 GET `/api/page/<pgId>` 立刻看到。
+`guanvis upload` 走的是 BI 的 **transfer API**（`/api/manual/template/transfer` + `needIdMapping=false`），它**直接覆盖发布版的 meta**，不经过草稿。只要在 pack 出的 ZIP 里把 `phoneLayout` 塞进 `page.meta`，upload 后 GET `/api/page/<pgId>` 立刻看到。
 
 **ZIP 结构**：
 
@@ -984,7 +991,7 @@ phoneLayout 决定**卡片外框高度**，CSS @media 决定**卡片内部的 KP
 
 ```python
 #!/usr/bin/env python3
-"""注入 phoneLayout 到 guanvis-skill pack 出的 ZIP 里。
+"""注入 phoneLayout 到 guanvis pack 出的 ZIP 里。
 用法：python3 inject_phone_layout.py <input.zip> <output.zip> <chart_h>
 """
 import json, os, shutil, sys, tempfile, zipfile
@@ -1052,9 +1059,9 @@ if __name__ == '__main__':
 
 ```bash
 cd ./my_dashboard
-guanvis-skill pack -o /tmp/dash.zip .
+guanvis pack -o /tmp/dash.zip .
 python3 inject_phone_layout.py /tmp/dash.zip /tmp/dash_phone.zip 40
-guanvis-skill upload /tmp/dash_phone.zip
+guanvis upload /tmp/dash_phone.zip
 ```
 
 **批量 9 看板**：
@@ -1062,9 +1069,9 @@ guanvis-skill upload /tmp/dash_phone.zip
 ```bash
 for d in 01-* 02-* 03-* ... 09-*; do
   cd "$d"
-  guanvis-skill pack -o "/tmp/${d}.zip" .
+  guanvis pack -o "/tmp/${d}.zip" .
   python3 inject_phone_layout.py "/tmp/${d}.zip" "/tmp/${d}_phone.zip" 40
-  guanvis-skill upload "/tmp/${d}_phone.zip"
+  guanvis upload "/tmp/${d}_phone.zip"
   cd -
 done
 ```
@@ -1081,7 +1088,7 @@ done
 |---|---|
 | 单看板 ad-hoc 调试 | 编辑器手动拖（5 秒搞定） |
 | **批量 ≥ 3 个看板** | **ZIP inject + batch script** |
-| DSL 升级前（`guanvis-skill` 当前 page DSL 不支持 phoneLayout）| **ZIP inject** |
+| DSL 升级前（`guanvis` 当前 page DSL 不支持 phoneLayout）| **ZIP inject** |
 | 复杂混合布局（4 张普通卡 + 1 张 customChart 各自高度不同）| 编辑器手动拖（脚本只处理"单 customChart + 0~1 selector"） |
 
 ### §16.9 验证 / 排查 checklist

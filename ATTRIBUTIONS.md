@@ -19,6 +19,7 @@ This skill is built on top of multiple predecessors and contributions from the G
 - **URL**: https://github.com/zhengyuhe123/guandata
 - **Description**: guandata 原始 GitHub 开源项目，提供了 Python 脚本与观远 BI HTTP API 的初版对接实现。
 - **Contribution / 贡献**: 脚本工程化结构（`guandata.py` 主文件 + `zonedata_builder/` 模块拆分）。
+- **现状 / Status（V3.0.0）**: 由此衍生的自研 HTTP 客户端 `guandata.py` 自 **V3.0.0 起退役**——查数 / 建卡 / ETL / 数据集 CRUD 等能力全部路由观远官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`），本仓库不再内置 HTTP 客户端。其早期工程化结构对本项目 Part A/B 的设计仍有启发，故保留致谢。
 
 ### 3. guandata70 (by 小小郑3号)
 
@@ -61,6 +62,7 @@ This skill is built on top of multiple predecessors and contributions from the G
   - V1.4.0 跨工具 install CLI：写 `bin/install.js`（`install` / `list` / `uninstall`），一行装到任意 agent 工具
   - V1.5.0 progressive disclosure 重构：SKILL.md 从 2087 行（89KB）压到 913 行（48KB），单次触发省 ~1.2 万 token；高频内容留主文档，详细操作手册下沉到 `references/` 8 个新蒸馏版（与贡献者原文区分）
   - V1.5.1 npm 路线精简：明确以 git 为唯一 source of truth，不发布 npm；保留 `node bin/install.js` + `npx github:` 两条一行装入口
+  - **V3.0.0 重定位**：观远官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`）公网化后，**退役自研 HTTP 客户端 `guandata.py`**，删镜像官方命令的章节，把标准查数 / 建卡 / ETL / 数据集 CRUD 全部路由官方；本 skill 收敛为"官方全家桶之上的实战增益层"（Part B 治理判断 + 报错手册、Part C/C-12 自定义图表注入、Part D v7 状态机绕过、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮公式库）
   - 所有文档双语化（中文 / 英文）
   - 公开发布到 GitHub
 
@@ -71,7 +73,7 @@ This skill is built on top of multiple predecessors and contributions from the G
 ### @guandata/guancli
 
 - **Author / 作者**: Guandata 官方
-- **Version / 版本**: 1.0.29
+- **Version / 版本**: 1.0.31
 - **NPM**: `npm install -g @guandata/guancli`
 - **Role / 角色**: Part B/C 的所有底层 BI HTTP API 调用都通过 `guancli fetch` 完成。本项目的工程化经验是基于 `guancli` 这套官方 CLI 反推 / 验证 / 总结而成。
 

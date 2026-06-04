@@ -1,10 +1,10 @@
-# majia-guanyuan · Tool-Agnostic Agent Skill for Guandata BI
+# majia-guanyuan · Guandata BI Battle-Tested Layer · Majia Battle-Tested Edition
 
-> **Tool-agnostic** Agent Skill for **Guandata BI (观远 BI)** — Data analysis / ETL governance & write / Custom chart development, **all-in-one**.
+> **A battle-tested layer on top of the official family** — after Guandata's official BI family (`guancli` query / `guanvis` card-build & publish & screenshot / `guanetl` ETL / `guanwf` dataflow / `guands` data sources / `guanadmin` admin) all went public on 2026-06-03, this skill **stops reinventing the wheel**: standard query / card-build / ETL / dataset CRUD all **route to the official family**, and this skill only tackles the hard bones the official DSL/commands can't reach — ETL governance judgment + engine error manual, custom chart injection + descriptor patch, v7 state-machine bypass, SuperApp reverse-engineering, AI-native ADS methodology, restaurant formula library.
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.14-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.0.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -22,30 +22,39 @@
 
 ## Overview
 
-This Skill consolidates three categories of Guandata BI operations into **a single Claude Code Skill**, so AI can handle daily reporting + serious ETL governance + frontend custom chart debugging — all in one place.
+**V3.0.0 repositioning**: Guandata has shipped "query / card-build / ETL / dataflow / data sources / screenshot / admin" as a public family (`npm i -g @guandata/guanskill`). This skill has been **fully refactored from an early "DIY full-stack + fallback" into "a battle-tested layer on top of the official family"** — retiring the 2789-line DIY HTTP client `guandata.py`, deleting ~1600 lines of dead code, and cutting every section that mirrored official commands.
+
+Two layers:
+- **🧭 Routing layer**: standard query / card-build / ETL / dataset CRUD all **route to the official family** (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`); this skill no longer reinvents these wheels.
+- **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.13 capability map: three-skill ecosystem (guancli / guanvis-skill / majia-guanyuan) + Part A query + Part B ETL full-stack + Part C front-end injection / Part C-12 HTML application dashboard + Part D V7 publish pipeline (v7 draft/release + customChart autoBootstrap + mobile phoneLayout ZIP inject) + Part E SuperApp open-app development pipeline (guancli app publish + form schema reverse-engineering + LLM bridge ILLEGAL_JSON_RES triple-path parsing) + AI-native ADS design methodology (philosophy-layer doc: judge governance vs rebuild before LLM/SuperApp, ODS/DIM/DWD untouched ADS rebuilt, 7 field constraints, budget 30+30+40) + restaurant BI formulas playbook" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v3.0.0 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources / guanadmin admin, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
-| Part | Capability | When to use |
+| Layer | What you want | Goes to |
 |---|---|---|
-| 🅰️ **A** | Data query & card creation | "Show February revenue by city" / "Make me a pivot table" / "Delete this card" |
-| 🅱️ **B** | ETL governance & write | "Scan ETLs and tell me what can be deleted" / "Create a new ETL" / "Why does direct-save fail?" |
+| 🧭 **Routing layer** | Query data, build cards, reports, standard ETL / dataset CRUD | The official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`) |
+| 🅱️ **Part B** | Whole-warehouse ETL governance + engine error manual + dual-source field audit | "Scan ETLs and tell me what to delete" / "Why does direct-save fail?" / "Is this field cut safe?" |
 | 🅱️ **B-17** | Full-chain rewrite methodology | "Rewrite this SmartETL chain as pure SQL" / "Replica page verification / card-level comparison" |
-| 🆎 **C** | Custom chart dev & debugging | "payload_json parsing fails" / "fixed card misaligned" / "overlay leaks across routes" |
+| 🆎 **Part C / C-12** | Custom chart injection debugging + HTML application dashboard | "payload_json parsing fails" / "fixed card misaligned" / "more advanced / application dashboard" |
+| 🇩 **Part D** | v7 draft-release state-machine bypass + phoneLayout | "v7 page+card stuck on 60004" / "how to inject mobile phoneLayout" |
+| 🇪 **Part E** | SuperApp open-app reverse-engineering | "form schema-creation not exposed by scaffold" / "LLM bridge ILLEGAL_JSON_RES" |
+| 🧠 **Methodology / formulas** | AI-native ADS judgment + restaurant BI formulas | "Connect AI to existing BI — govern or rebuild?" / "How to compute repurchase / RFM / avg ticket?" |
 
 ---
 
 ## ✨ Features
 
-### Part A — Data Analysis
+### 🧭 Routing layer (standard work goes to the official family)
 
-- ✅ **26 chart types** one-shot card creation + data fetch (column / line / pivot / combo / bubble...)
-- ✅ **Custom formula fields** — dynamic calculated columns like `SUM(x)/SUM(y)*100` without pre-defining in BI UI
-- ✅ Multi-table / multi-page / per-task isolated cache (`--task` flag)
-- ✅ 26 aggregations + 13 filter operators + 6 date granularities (year/quarter/month/week/day/weekday)
-- ✅ Auto-handles Guandata 7.0+ draft-release mechanism
+- ✅ Standard query / YoY-MoM / Top N / attribution / ChatBI → `guancli`
+- ✅ 74 chart-type JS DSL card-build + Page assembly + server-side screenshot → `guanvis`
+- ✅ Single-ETL create/edit/lint/preview/save/run/schedule/delete → `guanetl`
+- ✅ Workflow Dataflow (DB direct write-back, incremental output) → `guanwf`
+- ✅ Data source + dataset CRUD (create connection, create-db/import/replace-data) → `guands`
+- ✅ Admin-level operations (dynamicCode / adminToken / svc query) → `guanadmin`
+- One-line routing: **standard query → `guancli`; standard card-build/publish/screenshot → `guanvis`; standard ETL → `guanetl`; dataflow → `guanwf`; data source/dataset → `guands`; admin → `guanadmin`.** Hit a field/error/state-machine/reverse-engineering/business-semantics the official can't reach → back to the right Part in this skill.
 
 ### Part B — ETL Governance & Write
 
@@ -82,16 +91,18 @@ This Skill consolidates three categories of Guandata BI operations into **a sing
 
 ### ✅ Suitable
 
-- Daily data analysis and reporting on Guandata BI (6.x / 7.x)
-- ETL governance (cycle detection, field retention judgment, layer redesign)
-- Bulk ETL rebuilding (30+ table v2→v3 migration)
-- Replica page verification / card-level comparison / diff tracking
-- Custom chart HTML/CSS/JS injection development & debugging
+- Already have the official family (`@guandata/guanskill`) installed and want to add "hard bones the official can't reach" on top of the standard commands
+- ETL governance (cycle detection, field retention judgment, layer redesign, whole-warehouse scan)
+- Bulk ETL rebuilding (30+ table v2→v3 migration) / SmartETL full-chain rewrite + replica page verification + card-level comparison
+- Custom chart HTML/CSS/JS injection development & debugging / HTML application dashboard (descriptor patch linking dataView)
+- v7 draft-release state-machine bypass / SuperApp open-app reverse-engineering
+- "Govern vs rebuild" judgment for clients / AI-native ADS data-architecture proposals / restaurant-chain BI business formulas
 - Anyone who can't write code but wants AI to handle the above
 
 ### ❌ Not Suitable
 
 - Other BI platforms (Tableau / Power BI / Superset) — this skill targets **Guandata BI ONLY**
+- **Only standard query / standard card-build / standard ETL** — that's the official family's job; use `guancli` / `guanvis` / `guanetl` directly, you don't need this skill
 - Compliance environments that prohibit raw HTTP API calls
 - Users without BI account or write permissions (Part B requires ETL create + dataset run permissions)
 
@@ -142,7 +153,7 @@ node bin/install.js install --tool all       # all four
 
 # Other commands
 node bin/install.js list                     # show current install state
-node bin/install.js uninstall --tool codex   # remove (auto-backs-up your config.json)
+node bin/install.js uninstall --tool codex   # remove the skill for that tool
 ```
 
 ### Option 2: `npx` from GitHub URL (no clone required)
@@ -154,10 +165,9 @@ npx github:maojiebc/majia-guanyuan install --tool all
 ```
 
 **`bin/install.js` behavior** (same for both options):
-- Copies `SKILL.md` / `AGENTS.md` / `manifest.json` / `scripts/` / `references/` into the target tool's skills directory
-- Seeds `config.json` from `config.example.json` and prompts you to edit it
-- **Never overwrites your existing `config.json`** (real credentials are preserved across reinstalls)
+- Copies `SKILL.md` / `AGENTS.md` / `manifest.json` / `scripts/` / `references/` / `templates/` into the target tool's skills directory
 - Skips already-installed targets by default; use `--force` to overwrite
+- **Auth is not inside the skill**: this skill no longer ships `config.json` — authentication goes through the official family's `guancli auth login` (see "Prerequisites" below)
 
 ### Option 3: Manual `git clone` directly into the tool's skill directory
 
@@ -178,14 +188,6 @@ git clone https://github.com/maojiebc/majia-guanyuan.git <your-repo>/.codex/skil
 git clone https://github.com/maojiebc/majia-guanyuan.git <your-workspace>/skills/majia-guanyuan
 ```
 
-Then configure credentials (same for all tools):
-
-```bash
-cd <install_path>
-cp config.example.json config.json
-vim config.json  # fill in BI base_url / login_id / password / default_pg_id / default_folder_id
-```
-
 ### Option 4: OpenClaw / ClawHub one-line install
 
 ```bash
@@ -193,7 +195,7 @@ openclaw skills install majia-guanyuan
 clawhub install majia-guanyuan
 ```
 
-> ClawHub may show a security scan warning: this skill includes a local Python client that encodes the BI login credential as required by the Guandata API and sends it only to the user-configured `base_url`. Before installing from registries, review [SECURITY.md](./SECURITY.md) and inspect [scripts/guandata.py](./scripts/guandata.py).
+> As of V3.0.0 this skill has retired its DIY HTTP client `guandata.py` and **no longer sends any login credential locally** — all query/write is delegated to official family commands, and authentication goes through `guancli auth login` (credentials managed by the official CLI). See [SECURITY.md](./SECURITY.md).
 
 ### Option 5: Hermes skillpack install (if published to gbrain registry)
 
@@ -201,77 +203,48 @@ clawhub install majia-guanyuan
 gbrain skillpack install majia-guanyuan
 ```
 
-### Dependencies (same for all tools)
+### 🔑 Prerequisites: the official family (same for all tools)
+
+All standard work routes to the official family, so **install the official aggregator and log in once first**:
 
 ```bash
-# Python deps (Part A)
-pip install httpx
+# 1. Install the whole official family in one shot (guancli / guanvis / guanetl / guanwf / guands / guanadmin + their AI skills)
+npm i -g @guandata/guanskill
+guanskill install-skill
 
-# guancli (required for Part B/C)
-npm install -g @guandata/guancli
-guancli auth login   # configure BI login
+# 2. Authenticate (the whole family shares one profile; this skill no longer needs config.json)
+guancli auth login
 ```
 
----
+| Command | Role | Route these needs to it |
+|---|---|---|
+| `guancli` | Read-only analysis hub + form CRUD | Query ETL/dsId/page/card/lineage, `ds execute-sql`, `metric query` YoY-MoM/Top N, attribution, ChatBI, data export |
+| `guanvis` | Standard card-build + Page assembly + server-side screenshot | 74 chart-type JS DSL, selector linkage, custom chart, `guanvis pack/publish/upload`, `guanvis screenshot` → PNG |
+| `guanetl` | ETL write-op loop | Single-ETL create/edit/lint/preview/save/run/schedule/delete |
+| `guanwf` | Workflow Dataflow | Build/edit/save/run dataflows in the workflow engine (DB direct write-back, incremental output) |
+| `guands` | Data source + dataset CRUD | Create connections, `dataset create-db/create-query/import/replace-data`, bulk move/delete, incremental update |
+| `guanadmin` | Admin-level operations | dynamicCode, adminToken, `svc query` backend SVC SQL |
 
-## ⚙️ Configuration
-
-Copy `config.example.json` to `config.json` and fill in real credentials:
-
-```json
-{
-  "version": "6",
-  "base_url": "https://your-bi-instance.example.com/",
-  "domain": "guanbi",
-  "login_id": "your_username@example.com",
-  "password": "<BI_LOGIN_PASSWORD>",
-  "default_pg_id": "your_default_page_id",
-  "default_folder_id": "your_default_folder_id"
-}
-```
-
-| Field | Required | Description |
-|---|:---:|---|
-| `version` | ✅ | `"6"` (Guandata 6.x) or `"7"` (Guandata 7.0+, supports draft/release) |
-| `base_url` | ✅ | BI instance URL, e.g., `https://bi.company.com:8080` |
-| `domain` | ✅ | Login domain, usually `guanbi` (ask your BI admin) |
-| `login_id` | ✅ | BI login account |
-| `password` | ✅ | BI login password (**plaintext, local-only, excluded by .gitignore**) |
-| `default_pg_id` | | Default page ID for cards when `pg_id` is not specified |
-| `default_folder_id` | | Default folder ID for new pages |
-
-> ⚠️ `config.json` is excluded by `.gitignore` and **will never be committed**. Still, handle credentials with care.
+> ⚠️ **Auth no longer uses `config.json`**: V3.0.0 retired the DIY client `guandata.py`; credentials are managed entirely by `guancli auth login`, and this skill no longer reads/writes `config.json`.
 
 ---
 
 ## 🚀 Quick Start
 
-### Part A: Card creation & data fetch
+### 🧭 Routing layer: standard query / card-build (goes to the official family)
 
 ```bash
-# cwd = skill install dir, all paths are relative
-cd <install_path>  # e.g. ~/.claude/skills/majia-guanyuan/
+# Standard query → guancli (no need for this skill)
+guancli ds search revenue --raw
+guancli metric query --ds <ds_id> --dim city --metric gross_revenue:SUM \
+  --filter biz_date:BT:2026-02-01,2026-02-28
 
-SCRIPT="python3 ./scripts/guandata.py"
-
-# 1. List datasets
-$SCRIPT list-datasets
-
-# 2. Get columns
-$SCRIPT get-columns <ds_id>
-
-# 3. One-shot create card + fetch data
-$SCRIPT create-and-get '{
-  "name": "Feb Revenue by City",
-  "ds_id": "<dataset_id>",
-  "chart_type": "BASIC_COLUMN",
-  "pg_id": "<page_id>",
-  "row": ["city"],
-  "metric": [{"name": "gross_revenue", "aggr": "SUM"}],
-  "filters": [{"name": "biz_date", "op": "BT", "value": ["2026-02-01", "2026-02-28"]}],
-  "sorting": [{"name": "gross_revenue", "order": "DESC"}]
-}'
+# Standard card-build + server-side screenshot → guanvis
+guanvis publish .
+guanvis screenshot <page_id> -o out.png
 ```
+
+> Standard query/card-build is the official family's job; this skill **no longer reinvents it**. Only enter the matching Part when you hit one of the "official can't reach" cases below.
 
 ### Part B: Build an ETL
 
@@ -317,28 +290,30 @@ new GDPlugin().init(renderChart);
 
 ```text
 majia-guanyuan/
-├── SKILL.md                          # Main doc for AI (Part A + B + C)
+├── SKILL.md                          # Main doc for AI (routing layer + Part B/C/D/E + methodology)
 ├── AGENTS.md                         # Codex project instructions / Hermes resolver (V1.3)
 ├── manifest.json                     # Tool-agnostic skill metadata (V1.3)
 ├── README.md                         # Chinese README
 ├── README.en.md                      # This file
+├── CHANGELOG.md                      # Full change history
 ├── ATTRIBUTIONS.md                   # Credits & sources
 ├── LICENSE                           # MIT
-├── config.example.json               # Config template (public)
-├── config.json                       # Your real credentials (gitignored)
 ├── .gitignore
 ├── scripts/
-│   ├── guandata.py                   # Part A main script (cards / fetch / delete / publish)
-│   └── zonedata_builder/             # zoneData builder module
-└── references/                       # Deep reference docs (V1.5.0 progressive disclosure: 12 files)
-    ├── part-a-commands.md            # Full Part A command catalog + cache mechanism (V1.5.0)
-    ├── part-a-cards.md               # Card parameters + 26 chart types + 6 examples (V1.5.0)
-    ├── part-b-errors.md              # Part B 10-category error detailed fixes (V1.5.0)
-    ├── part-b-payload.md             # ETL payload schema deep-dive (V1.5.0)
-    ├── part-b-sdk.md                 # v2→v3 bulk refactoring SDK (V1.5.0)
-    ├── part-b17-fullchain-rewrite.md # Full B-17 full-chain rewrite methodology (V1.5.0)
-    ├── part-c-payload-json.md        # C-3 payload_json troubleshooting deep-dive (V1.5.0)
-    ├── guancli-commands.md           # guancli 9-category command quick-ref (V1.5.0)
+│   └── inject_phone_layout.py        # Part D mobile phoneLayout ZIP inject tool
+├── templates/
+│   └── html-dashboard/               # Part C-12 HTML application dashboard template pack (GDHTML runtime + starter modules + selector linkage patch)
+└── references/                       # Deep reference docs (13 files after V3.0.0)
+    ├── part-b-errors.md              # Part B 10-category error detailed fixes
+    ├── part-b-payload.md             # ETL payload schema deep-dive
+    ├── part-b-sdk.md                 # v2→v3 bulk refactoring SDK
+    ├── part-b17-fullchain-rewrite.md # Full B-17 full-chain rewrite methodology + ExecPlan workflow
+    ├── part-c-payload-json.md        # C-3 payload_json troubleshooting deep-dive
+    ├── part-c-html-dashboard.md      # C-12 HTML application dashboard methodology (V2.1.1)
+    ├── v7-page-card-publish-pipeline.md  # Part D v7 draft-release state machine + node silent traps + phoneLayout (V2.1.6+)
+    ├── part-e-superapp-pipeline.md   # Part E SuperApp reverse-engineering pipeline (V2.1.12)
+    ├── ai-native-ads-design.md       # AI-native ADS design methodology (philosophy-layer doc, V2.1.13)
+    ├── restaurant-bi-formulas/       # Restaurant BI formula library (README + 9 chapters, V2.1.5)
     ├── custom-chart-playbook.md      # CTO Zhang Jin's full custom chart playbook (V1.1)
     ├── etl-rewrite-original.md       # CTO Zhang Jin's SmartETL rewrite experience (V1.1)
     ├── execplan-spec.md              # OpenAI Codex ExecPlan specification (V1.2)
@@ -347,26 +322,23 @@ majia-guanyuan/
 
 ---
 
-## 🎯 When to Use Part A / B / C
+## 🎯 Routing quick-ref: standard work to the official family, hard bones to the right Part
 
 | User request | Goes to |
 |---|---|
-| "Show me February revenue by city" | A |
-| "Make me a pivot table" | A |
-| "Delete this card" | A |
-| "Scan our BI ETLs and tell me what can be deleted" | B |
-| "What about ETL circular dependencies?" | B |
-| "Create a new ETL for me" | B |
-| "How to fix direct-save errors" | B |
-| "Field usage audit" | B |
-| "Rewrite this SmartETL chain as pure SQL" | **B-17** |
-| "Replica page verification / card-level comparison" | **B-17** |
-| "How to write conclusions for empty upstream snapshots" | **B-17** |
-| "Diff tracking — is it SQL bug or execution timing?" | **B-17** |
+| "Show February revenue by city" / "Make a pivot table" / "Delete this card" | 🧭 Official family (`guancli` / `guanvis`) |
+| "Create a standard ETL" / "Import a dataset" / "Create a data connection" | 🧭 Official family (`guanetl` / `guands`) |
+| "Scan our BI ETLs and tell me what can be deleted" / "ETL circular dependencies?" | **B** |
+| "How to fix direct-save errors" / "Is this field cut safe to remove?" | **B** |
+| "Rewrite this SmartETL chain as pure SQL" / "Replica page verification / card-level comparison" | **B-17** |
+| "How to write conclusions for empty upstream snapshots" / "Diff tracking — SQL bug or execution timing?" | **B-17** |
 | "30+ table multi-day project — give me an ExecPlan skeleton" | **B-17.11** |
-| "Custom chart script not running / payload_json error" | **C** |
-| "Fixed card misaligned / overlay leaks across routes" | **C** |
-| "What's the first arg of renderChart actually?" | **C** |
+| "Custom chart script not running / payload_json error" / "Fixed card misaligned / overlay leaks across routes" | **C** |
+| "More advanced / application dashboard / selector won't link to custom chart dataView" | **C-12** |
+| "v7 page+card stuck on 60004 draft page" / "How to inject mobile phoneLayout" | **D** |
+| "form schema-creation API not exposed by scaffold" / "LLM bridge throws ILLEGAL_JSON_RES" | **E** |
+| "Connect AI to existing BI — govern or rebuild?" / "How to design AI-native ADS" | **Methodology** |
+| "How to compute repurchase / avg ticket / RFM / comp-store growth" | **Restaurant formulas** |
 
 ---
 
@@ -406,12 +378,11 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V2.1.14** (2026-05-29) — **guancli command surface aligned to 1.0.29**. `references/guancli-commands.md` adds the 1.0.25→1.0.29 commands (verified against the 1.0.29 binary, not guessed): `ds execute-sql` (read-only SQL over one/more datasets incl. cross-dataset JOIN, 1.0.26), `metric project` (narrow metric topics, 1.0.27), `server-version`/`bi-version` (BI version check, 1.0.25; generic metric query needs BI ≥ 8.2.1), `card preview --dynamic-field/--dynamic-param/-o/--columns/--precision` (dynamic field+param + write-to-file, 1.0.28/1.0.29); SKILL.md guancli section + trio table + Part B intro + `part-a-commands.md` SQL-direct pointer synced; dependency `^1.0.24` → `^1.0.29`. Pure command-surface alignment + docs — no Part-structure change, no code change; local guancli upgraded 1.0.19 → 1.0.29.
+**Latest: V3.0.0** (2026-06-04) — **repositioned as "a battle-tested layer on top of the official family" (ground-up refactor)**. After Guandata's official BI family all went public on 2026-06-03, this skill was fully refactored from "started unofficial, DIY full-stack + fallback" into "a battle-tested layer on top of the official family": **retired the 2789-line DIY HTTP client `scripts/guandata.py`**, deleted ~1600 lines of dead code (`zonedata_builder` duplicate nesting), removed 4 mirror-of-official / obsolete references (`guancli-commands` / `part-a-commands` / `part-a-cards` / `internal-nexus-install`) — about -5500 lines total. **The former Part A was rewritten wholesale into a "routing layer"**: standard query→`guancli`, card-build/publish/screenshot→`guanvis`, ETL→`guanetl`, dataflow→`guanwf`, data source/dataset→`guands`, admin→`guanadmin`; this skill no longer reinvents these. **Kept and focused on the hard bones the official can't reach**: Part B whole-warehouse governance judgment + 10-category engine errors + dual-source audit + B-17 full-chain rewrite, Part C existing-page injection debugging, Part C-12 descriptor patch linking dataView, Part D v7 state-machine bypass + node silent traps + phoneLayout, Part E SuperApp reverse-engineering, AI-native ADS methodology, restaurant BI formula library. Brand line unified to "Majia Battle-Tested Edition"; prerequisite switched to the official aggregator `@guandata/guanskill`, auth via `guancli auth login` (no more config.json). **Breaking**: `scripts/guandata.py` retired — callers should use official commands (the old implementation can be recovered from the git `v2.1.14` tag).
 
-**V2.1.13** (2026-05-22) — **NEW `references/ai-native-ads-design.md` — AI-native ADS design methodology** (~340 lines, 9 sections, **philosophy-layer doc** — not an ops manual but a paradigm judgment). Distilled from user's root judgment after running the v2.1.12 SuperApp demo: «light data governance is dead, you must rebuild the data architecture in an AI-friendly shape, otherwise historical business accumulation will block you at every turn». This doc unpacks it as actionable methodology: (§1) phenomenon layer — demo flowed because `ads_会员经营任务池` 32 fields are AI-native by design (string-typed recommendation fields, Chinese enum dimensions, store-number embedded in name); historical wide tables (`proc_act_type_v3='P_CB_VCH'` / `seg_id=7` / `coupon_rule_json` nested-string JSON) block LLM completely. (§2) essence layer — schema assumption difference: traditional BI assumes the consumer is "the SQL writer" (can JOIN / parse JSON / compose fields), AI-native ADS assumes consumer is "LLM + business user" (LLM's on-the-fly compute is far weaker than SQL, so **everything LLM would ask/guess/compute must be pre-ETL'd**). (§3) **rebuild ≠ redo ODS/DWD** — only touch ADS layer; ODS/DIM/DWD untouched (one DWD master wide table + N AI-native ADS, one per AI app). (§4) **7 field constraints**: Chinese enums (`人群标签="沉睡"`) + pre-computed recommendations + composite semantics pre-joined (`门店名称="上海CBD0769店"`) + unified TIMESTAMP + strict-value priorities (P0/P1/P2) + pre-computed numerics + row-level permission fields redundantly stored. (§5) complete naming-convention template. (§6) **client budget allocation**: old narrative 100% governance / 12 months / business invisible vs new narrative 30% governance + 30% ADS rebuild + 40% AI apps / 3 months / quantifiable ROI — **moving half of governance budget to ADS rebuild yields one order of magnitude higher ROI**, since governance only cleans dirty data, rebuild changes the schema assumption. (§7) compatible-complementary with restaurant-bi-formulas DWD wide-table base; Part E SuperApp strongly depends on this doc. (§8) anti-patterns × 8, the worst being "treat SuperApp as goal, skip ADS rebuild" — historical wide tables feed to LLM cannot produce good results, so the demo never works.
+**V2.1.15** (2026-06-04) — **official Guandata BI skill family went public + guancli 1.0.31 alignment**. On 2026-06-03 Guandata shipped the whole BI skill suite to public npm as the aggregator `@guandata/guanskill` — `npm i -g @guandata/guanskill && guanskill install-skill` installs all 7 commands + 7 AI skills into `~/.agents/skills/`: `guancli@1.0.31` · `guanvis@0.1.22` (renamed from guanvis-skill, drops the `-skill` suffix; commands are now `guanvis publish/pack/upload`, plus the new server-side `guanvis screenshot`) · `guands@0.1.13` · `guanetl@0.1.12` · `guanexport@0.1.9` (PNG migrated to `guanvis screenshot`, being phased out) · `guanadmin@0.1.6` · **new `guanwf@0.1.4`** (workflow Dataflow editing: `edit→export→save-draft→save`). SKILL.md "upgrade note" + "coexistence with the official family" rewritten (old trio narrative → full-family 7+1 routing matrix); added the guancli 1.0.30/1.0.31 increment (card preview value-format + raw, `--dynamic-field` multi-select, `ds execute-sql` drops `X-AUTH-TOKEN`, `install-skill` WorkBuddy path); all `guanvis-skill <cmd>` examples → `guanvis <cmd>`; badge + svg alt + version history synced; dependency `^1.0.29` → `^1.0.31`. Pure ecosystem alignment + docs — no Part-structure change, no code change.
 
-**V2.1.12** (2026-05-22) — **NEW `references/part-e-superapp-pipeline.md` — SuperApp open-app development pipeline** (~620 lines, 18 sections). Distilled from building a working SuperApp demo on workshop513 (`https://app.guandata.com`) in a single day: «会员经营任务池 OS» (appId=`ve2f78b92e329450e95549ff`, business loop: pull `ads_会员经营任务池` 50000 rows → AI generates 3 outreach scripts via claude-opus-4-6 (auto-uses store-number for role-play + natural tone + time anchors) → user picks one → write back to `form_任务执行记录` → state survives a full refresh). Reverse-engineering findings: (1) **`guancli app publish` does NOT read `.env`'s `VITE_APP_ID`** — must pass `--app-id` on the command line, otherwise every publish creates a new app; (2) **`POST /survey-engine/api/form/add` is the real form-create endpoint** (scaffold `form.ts` doesn't expose this), required `settings: {}` else NPE on `Form.getSettings()`; field `fdId` is rewritten by backend, `keyId` is developer-controlled but capped at **varchar(20)** (UUID 36 chars triggers PSQLException), **query response indexed by fdId** not keyId/name; (3) **BI LLM bridge has two JSON validation bugs**: `/api/llm-config/list` returns a bare array swallowed by scaffold unwrap; `/api/llm/chat/completions` returns `NOT_JSON_RES` with `stream:true` and `ILLEGAL_JSON_RES` with `stream:false` **but the full LLM response is buried in `error_message`** — needs a **triple-path extractor** (standard-wrap / pass-through / regex-extract from `error_message`) plus client-side simulated streaming; (4) Scaffold `core/request.ts` `get`/`getJSON` doesn't reliably forward cookies in same-origin SuperApp production domain — BI internal APIs must use **native `fetch(..., { credentials: 'include' })`**; (5) `<base href>` + `BrowserRouter basename` handles routing; dev mode uses dev-proxy, prod uses `detectBIBaseRouteUrl`; (6) Design discipline follows `docs/design/DESIGN-workbench-light.md` (numbers ≤ 40px / radius ≤ 8px / three independent token layers); (7) ESLint caps files at 400 lines / functions at complexity 10.
-
+**V2.1.14** (2026-05-29) — **guancli command surface aligned to 1.0.29**. Adds the 1.0.25→1.0.29 commands (verified against the 1.0.29 binary, not guessed): `ds execute-sql` (read-only SQL over one/more datasets incl. cross-dataset JOIN, 1.0.26), `metric project` (narrow metric topics, 1.0.27), `server-version`/`bi-version` (BI version check, 1.0.25; generic metric query needs BI ≥ 8.2.1), `card preview --dynamic-field/--dynamic-param/-o/--columns/--precision` (dynamic field+param + write-to-file, 1.0.28/1.0.29); SKILL.md guancli section + routing table + Part B intro synced; dependency `^1.0.24` → `^1.0.29`. Pure command-surface alignment + docs — no Part-structure change, no code change; local guancli upgraded 1.0.19 → 1.0.29.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 

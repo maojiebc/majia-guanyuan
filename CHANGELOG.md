@@ -5,6 +5,56 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.0.0] — 2026-06-04
+
+> **Ground-up 重构 ——「官方全家桶之上的实战增益层」重定位。** 观远官方 BI 全家桶 2026-06-03 全部公网化后，本 skill 不再"非官方起家、自造全栈 + fallback"，而是退到官方之上的增益层：标准能力一律路由官方，只留官方够不着的硬骨头。共约 **-5500 行**。
+
+### Changed
+
+- **定位整体重写** —— 从"非官方起家、自造全栈 + fallback" → **「官方全家桶之上的实战增益层」**。观远官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`）2026-06-03 全部公网化后，标准查数 / 建卡 / ETL / 数据集 CRUD 一律路由官方，本 skill 只保留官方够不着的硬骨头。
+- **Part A 整段重写为「路由层」** —— 官方全家桶 ↔ 本 skill 分工总表 + 一句话路由 + 降歧义；标准查数→`guancli`、建卡/发布/截图→`guanvis`、ETL→`guanetl`、数据流→`guanwf`、数据源/数据集→`guands`、管理员→`guanadmin`，本 skill 不再自造这些。
+- **前置依赖** `@guandata/guancli@^1.0.31` → 官方聚合包 **`@guandata/guanskill`**；**认证**从 `config.json` 明文 → **`guancli auth login`**（与全家桶共用 profile，不再要 config.json）。
+- **品牌字统一「马甲实战版」**（H1 / README / `manifest.json` `displayName` 等）。
+- **纠正旧结论** —— "数据集上传 BI 无原生 API（`POST /api/data-source/*` 全失败）"已过时：**`guands` 已支持 `create-db` / `import` / `replace-data`**。
+- **frontmatter `description` 重写** —— 改为 v3 实战增益层定位 + 触发词（932 字符，< 1024）。
+
+### Removed
+
+总计约 **-5500 行**（砍冗余 / 历史包袱）：
+
+- **`scripts/guandata.py`**（2789 行自造 BI HTTP 客户端）—— **退役**。建卡→`guanvis`、取数→`guancli`、数据集 CRUD→`guands`、发布→`guanvis publish` 全有官方接手；旧实现可从 git **`v2.1.14`** tag 取回。
+- **`scripts/zonedata_builder/`**（~1600 行死代码，含字节级重复嵌套副本，零引用）。
+- **4 个 references** —— `guancli-commands.md`（391 行官方命令镜像，永远滞后）、`part-a-commands.md` + `part-a-cards.md`（`guandata.py` / 建卡文档，→`guanvis`）、`internal-nexus-install.md`（已被公网取代）。
+- **frontmatter** `requires.config: config.json` + `install.pip httpx`（`guandata.py` 退役后无 Python 运行期依赖）。
+
+### Notes
+
+- **Breaking** —— `scripts/guandata.py` 退役是 breaking change（故 major **3.0.0**）；直接 `import` / 调用 `guandata.py` 的外部脚本需改用官方命令（旧实现可从 git `v2.1.14` tag 取回）。
+- 用户首屏版本记录段（README / README.en / SKILL.md 末尾）按 HARD GATE 保留最新 3 条（V3.0.0 / V2.1.15 / V2.1.14），更早的归入本 CHANGELOG。
+- **官方盲区护城河全部保留强化** —— Part B 整库治理判断 + 10 类引擎报错 + 双源审计 + B-17 全链路重写、Part C 既有页注入排障 + Part C-12 自定义图表 + descriptor patch 联 dataView、Part D v7 状态机绕过 + 节点化静默坑 + phoneLayout、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮 BI 公式库。
+
+## [2.1.15] — 2026-06-04
+
+### Added
+
+- **官方观远 BI skill 全家桶首次公网化**（2026-06-03）—— 观远把整套 BI skill 打成聚合安装包 **`@guandata/guanskill`** 推上公网 npm：`npm i -g @guandata/guanskill` 一次拿齐 7 个命令，`guanskill install-skill` 把对应 AI skill 全装进 `~/.agents/skills/`（覆盖 Antigravity / Claude Code / OpenClaw / Codex / Gemini CLI / Copilot 等 16+ agent 环境）。
+- **`SKILL.md` 新增「V2.1.15 新对齐：1.0.30 → 1.0.31 增量」子节**（1.0.31 二进制实测）：`card preview` 值格式化 + 保留 raw、`--dynamic-field` 多选覆盖（1.0.30）、`ds execute-sql` 认证默认不再发 `X-AUTH-TOKEN`（1.0.31）、`--brief` 简版资源详情提速、`install-skill` 加 WorkBuddy 路径。
+- **新成员 `guanwf@0.1.4`** —— 工作流数据流（Dataflow）编辑闭环（`edit → export → save-draft → save`，源文件 `etl/etl.go` + SQL + `node_*.json`），写进「与官方全家桶的共存」路由矩阵。
+
+### Changed
+
+- **「与官方 guancli skill 的共存」整段重写为「与官方全家桶的共存」** —— 三件套（guancli / guanvis-skill / majia-guanyuan）升级为全家桶 7+1 路由矩阵；删除"guanvis-skill 仅内网 Nexus、其余四兄弟未确认发包"的过期描述。
+- **包/命令名去 `-skill` 后缀** —— `guanvis-skill` → `guanvis`（`@guandata/guanvis@0.1.22`），SKILL.md 所有 `guanvis-skill publish/pack/upload` 命令例改 `guanvis ...`；`guanvis screenshot` 为页面服务端截图新入口（`guanexport` 的 PNG 截图已迁移至此并逐步下线）。
+- **版本矩阵更新**：`guancli@1.0.31` · `guanvis@0.1.22` · `guands@0.1.13` · `guanetl@0.1.12` · `guanexport@0.1.9` · `guanadmin@0.1.6` · `guanwf@0.1.4`。
+- **依赖** `@guandata/guancli` `^1.0.29` → **`^1.0.31`**（`manifest.json` + `package.json` + `SKILL.md` frontmatter / 版本行）。
+- **`references/internal-nexus-install.md`** 顶部加「已被公网取代」横幅（公网 npm 现已可装，内网四步法仅留作历史 / 内网 pre-release 兜底）。
+- **README / manifest / package.json** 版本徽章、架构图 alt、描述前导同步到 V2.1.15。
+
+### Notes
+
+- **纯生态对齐 + 文档** —— 无 Part 结构变化、无 breaking、无代码改动。本地工具链同步升级到全家桶（`guancli` 1.0.29 → 1.0.31 + 6 兄弟 + guanwf）。
+- 用户首屏版本记录段（README / README.en / SKILL.md 末尾）按 HARD GATE 保留最新 3 条（V2.1.15 / V2.1.14 / V2.1.13），V2.1.12 归入本 CHANGELOG。
+
 ## [2.1.14] — 2026-05-29
 
 ### Added

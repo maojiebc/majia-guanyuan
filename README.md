@@ -1,10 +1,10 @@
-# majia-guanyuan · 观远 BI 通用 Agent Skill
+# majia-guanyuan · 观远 BI 实战增益层 · 马甲实战版
 
-> **工具无关**的观远 BI / Guandata Agent Skill — 数据查询 / ETL 治理与写入 / 自定义图表开发，**全栈三合一**。
+> **官方全家桶之上的实战增益层** —— 观远官方 BI 全家桶（`guancli` 查数 / `guanvis` 建卡发布截图 / `guanetl` ETL / `guanwf` 数据流 / `guands` 数据源 / `guanadmin` 管理）2026-06-03 全部公网化后，本 skill **不再自造轮子**：标准查数/建卡/ETL/数据集 CRUD 一律**路由官方全家桶**，只攻官方 DSL/命令够不着的硬骨头 —— ETL 治理判断 + 引擎报错手册、自定义图表注入 + descriptor patch、v7 状态机绕过、SuperApp 反向工程、AI-native ADS 方法论、餐饮公式库。
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v2.1.14-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.0.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -22,30 +22,39 @@
 
 ## 概述
 
-本 Skill 整合了观远 BI 的三大类操作能力到**一份 Claude Code Skill** 里，让 AI 既能日常查数据出报表，又能做严肃的 ETL 治理与写入，还能处理自定义图表的前端注入排障。
+**V3.0.0 重定位**：观远官方已把"查数 / 建卡 / ETL / 数据流 / 数据源 / 截图 / 管理"做成公网全家桶（`npm i -g @guandata/guanskill`）。本 skill 从早期"自造全栈 + fallback"**彻底重构为「官方全家桶之上的实战增益层」**——退役 2789 行自造 HTTP 客户端 `guandata.py`、删 ~1600 行死代码、砍掉所有镜像官方命令的章节。
+
+两层分工：
+- **🧭 路由层**：标准查数 / 建卡 / ETL / 数据集 CRUD 一律**路由给官方全家桶**（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`），本 skill 不再自造这些轮子。
+- **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="./docs/architecture.svg" alt="majia-guanyuan v2.1.14 功能图：三件套生态（guancli / guanvis-skill / majia-guanyuan）+ Part A 取数 + Part B ETL 全栈 + Part C 前端注入 / Part C-12 HTML 应用化看板 + Part D V7 发布流水线（v7 草稿/release + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）+ Part E SuperApp 开放应用开发流水线（guancli app publish + form 建表反向工程 + LLM 中转 ILLEGAL_JSON_RES 三路径解析）+ AI-native ADS 设计方法论（哲学层文档：客户上 LLM/SuperApp 前判断治理 vs 重搭、ODS/DIM/DWD 不动 ADS 重建、7 条字段约束、预算分配 30+30+40）+ 餐饮 BI 公式实战库" width="100%"/>
+  <img src="./docs/architecture.svg" alt="majia-guanyuan v3.0.0 · 马甲实战版 架构图：官方全家桶路由层（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源 / guanadmin 管理，2026-06-03 全部公网化）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论 + 餐饮 BI 公式实战库）" width="100%"/>
 </p>
 
-| Part | 能力 | 触发场景 |
+| 层 | 你想做 | 走 |
 |---|---|---|
-| 🅰️ **A** | 数据查询与卡片创建 | "查 2 月各城市营业额" / "做一张交叉表" / "删掉这张卡片" |
-| 🅱️ **B** | ETL 治理与写入 | "扫一遍 ETL 看哪些可以删" / "建一个 ETL" / "direct-save 报错怎么修" |
+| 🧭 **路由层** | 查数据、建卡、出报表、标准 ETL / 数据集 CRUD | 交给官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`） |
+| 🅱️ **Part B** | ETL 整库治理判断 + 引擎报错手册 + 双源字段审计 | "扫一遍 ETL 看哪些可以删" / "direct-save 报错怎么修" / "字段裁剪安不安全" |
 | 🅱️ **B-17** | 全链路重写方法论 | "把这条 SmartETL 链整个改成 SQL 版" / "副本页验收 / 卡片级对比" |
-| 🆎 **C** | 自定义图表开发与排障 | "payload_json 解析失败" / "固定卡片错位" / "overlay 切页残留" |
+| 🆎 **Part C / C-12** | 自定义图表注入排障 + HTML 应用化看板 | "payload_json 解析失败" / "固定卡片错位" / "更高级/应用化看板" |
+| 🇩 **Part D** | v7 草稿-发布状态机绕过 + phoneLayout | "v7 page+card 被 60004 卡住" / "移动端 phoneLayout 怎么注入" |
+| 🇪 **Part E** | SuperApp 开放应用反向工程 | "form 建表脚手架没暴露" / "LLM 中转 ILLEGAL_JSON_RES" |
+| 🧠 **方法论 / 公式库** | AI-native ADS 判断 + 餐饮 BI 公式 | "想给现有 BI 接 AI，该治理还是该重搭" / "复购率/RFM/客单价怎么算" |
 
 ---
 
 ## ✨ 效果
 
-### 数据分析侧（Part A）
+### 🧭 路由层（标准活交给官方全家桶）
 
-- ✅ 26 种图表类型一键建卡 + 取数（柱状图、折线图、交叉表、组合图、气泡图……）
-- ✅ 自定义公式字段（动态 `SUM(x)/SUM(y)*100` 类计算列，无需提前在 BI 界面建好）
-- ✅ 多表 / 多页面 / 多字段缓存机制（按任务隔离 `--task` 名）
-- ✅ 26 种聚合 + 13 种筛选操作符 + 6 种日期粒度（年/季/月/周/日/星期）
-- ✅ 自动处理观远 7.0+ 的 draft-release 机制
+- ✅ 标准查数 / 同环比 / Top N / 归因 / ChatBI 问数 → `guancli`
+- ✅ 74 种图表 JS DSL 建卡 + Page 装配 + 服务端截图出 PNG → `guanvis`
+- ✅ 单个 ETL 新建/改/lint/preview/save/run/schedule/delete → `guanetl`
+- ✅ 工作流数据流 Dataflow（DB 直连回写、增量输出）→ `guanwf`
+- ✅ 数据源 + 数据集 CRUD（建连接、create-db/import/replace-data）→ `guands`
+- ✅ 管理员级操作（dynamicCode / adminToken / svc query）→ `guanadmin`
+- 一句话路由：**标准查数 → `guancli`；标准建卡/发布/截图 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`；管理员 → `guanadmin`。** 遇到官方够不着的字段/报错/状态机/反向工程/业务口径 → 回到本 skill 对应 Part。
 
 ### ETL 治理写入侧（Part B）
 
@@ -81,16 +90,18 @@
 
 ### ✅ 适合
 
-- 在观远 BI（Guandata 6.x / 7.x）上做日常数据分析、出报表
-- 做 ETL 治理（识别循环依赖、判断字段去留、重新分层）
-- 批量重建 ETL（30+ 张 v2→v3 改造）
-- 做副本页验收 / 卡片级对比 / 差异追踪
-- 自定义图表 HTML/CSS/JS 注入开发与排障
+- 已经装了官方全家桶（`@guandata/guanskill`），想在标准命令之上补"官方够不着的硬骨头"
+- 做 ETL 治理（识别循环依赖、判断字段去留、重新分层、整库扫描）
+- 批量重建 ETL（30+ 张 v2→v3 改造）/ SmartETL 全链路重写 + 副本页验收 + 卡片级对比
+- 自定义图表 HTML/CSS/JS 注入开发与排障 / HTML 应用化看板（descriptor patch 联 dataView）
+- v7 草稿-发布状态机绕过 / SuperApp 开放应用反向工程
+- 给客户做"治理 vs 重搭"判断 / AI-native ADS 数据架构提案 / 餐饮连锁 BI 业务公式
 - 不会写代码但想让 AI 帮你完成上面这些事
 
 ### ❌ 不适合
 
 - 用其他 BI 平台（Tableau / Power BI / Superset）—— 本 skill 只针对**观远 BI / Guandata**
+- **只做标准查数 / 标准建卡 / 标准 ETL** —— 那是官方全家桶的活，直接用 `guancli` / `guanvis` / `guanetl`，不需要本 skill
 - 完全不允许调用底层 HTTP API 的合规环境
 - 没有 BI 账号 + 写权限（Part B 写入需要 ETL 创建权限 + 数据集运行权限）
 
@@ -106,7 +117,7 @@
 | **OpenClaw** | ✅ 已验证 | `~/.openclaw/skills/majia-guanyuan/` 或 `<workspace>/skills/majia-guanyuan/` | `SKILL.md` | 大小写敏感 |
 | **Codex (OpenAI)** | ✅ 已验证 | `~/.codex/skills/majia-guanyuan/` 或 `<repo>/.codex/skills/majia-guanyuan/` | `SKILL.md` + 仓库根 `AGENTS.md`（项目指令） | 见 [Codex skills docs](https://developers.openai.com/codex/skills) |
 | **Hermes / gbrain** | ✅ 已验证 | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` + 仓库根 `AGENTS.md`（resolver） | 见 [garrytan/gbrain](https://github.com/garrytan/gbrain) |
-| **Cursor / Aider** 等 AGENTS.md-aware | 🟡 理论兼容 | 任意 | `AGENTS.md` 作项目指令 | 仅会用到 Part A/B/C 的 navigation pointer |
+| **Cursor / Aider** 等 AGENTS.md-aware | 🟡 理论兼容 | 任意 | `AGENTS.md` 作项目指令 | 仅会用到路由层 + Part B/C/D/E 的 navigation pointer |
 | 其他 | 🟡 通用清单 | 任意 | `manifest.json` 作工具无关元数据 | frontmatter + manifest 双保险 |
 
 ## 📦 安装
@@ -141,7 +152,7 @@ node bin/install.js install --tool all       # 4 个全装
 
 # 其他命令
 node bin/install.js list                     # 列出当前安装情况
-node bin/install.js uninstall --tool codex   # 移除（自动备份你的 config.json）
+node bin/install.js uninstall --tool codex   # 移除该工具下的 skill
 ```
 
 ### 方式 2：`npx` 直接走 GitHub URL（不需要 clone）
@@ -153,10 +164,9 @@ npx github:maojiebc/majia-guanyuan install --tool all
 ```
 
 **`bin/install.js` 行为**（两种方式相同）：
-- 自动复制 `SKILL.md` / `AGENTS.md` / `manifest.json` / `scripts/` / `references/` 等到目标工具的 skill 目录
-- 自动 `cp config.example.json → config.json`，提示你编辑填凭据
-- **永远不覆盖你已有的 `config.json`**（保留真凭据，再装一次也不丢）
+- 自动复制 `SKILL.md` / `AGENTS.md` / `manifest.json` / `scripts/` / `references/` / `templates/` 等到目标工具的 skill 目录
 - 已装时默认跳过，要 `--force` 才覆盖
+- **认证不在 skill 内**：本 skill 不再带 `config.json`——认证统一走官方全家桶的 `guancli auth login`（见下「前置依赖」）
 
 ### 方式 3：手动 `git clone` 直接放到工具 skill 目录
 
@@ -177,14 +187,6 @@ git clone https://github.com/maojiebc/majia-guanyuan.git <your-repo>/.codex/skil
 git clone https://github.com/maojiebc/majia-guanyuan.git <your-workspace>/skills/majia-guanyuan
 ```
 
-然后配置凭据（所有工具相同）：
-
-```bash
-cd <安装路径>
-cp config.example.json config.json
-vim config.json  # 填入 BI base_url / login_id / password / default_pg_id / default_folder_id
-```
-
 ### 方式 4：OpenClaw / ClawHub 一键安装
 
 ```bash
@@ -192,7 +194,7 @@ openclaw skills install majia-guanyuan
 clawhub install majia-guanyuan
 ```
 
-> ClawHub 可能显示安全扫描提醒：本 skill 包含一个本地 Python 客户端，会按观远接口要求把登录凭据编码后发送到用户自己配置的 `base_url`。安装前可先阅读 [SECURITY.md](./SECURITY.md) 并检查 [scripts/guandata.py](./scripts/guandata.py)。
+> V3.0.0 起本 skill 已退役自造 HTTP 客户端 `guandata.py`，**不再在本地发送任何登录凭据**——查数/写入全部委托官方全家桶命令，认证走 `guancli auth login`（凭据由官方 CLI 管理）。安全说明见 [SECURITY.md](./SECURITY.md)。
 
 ### 方式 5：Hermes skillpack 安装（如发布到 gbrain registry）
 
@@ -200,77 +202,48 @@ clawhub install majia-guanyuan
 gbrain skillpack install majia-guanyuan
 ```
 
-### 依赖（所有工具相同）
+### 🔑 前置依赖：官方全家桶（所有工具相同）
+
+本 skill 的标准活全部路由给官方全家桶，所以**先装官方聚合包并登录一次**：
 
 ```bash
-# Python 依赖（Part A）
-pip install httpx
+# 1. 一键装齐官方全家桶（guancli / guanvis / guanetl / guanwf / guands / guanadmin + 各自 AI skill）
+npm i -g @guandata/guanskill
+guanskill install-skill
 
-# guancli（Part B/C 必需）
-npm install -g @guandata/guancli
-guancli auth login   # 配置 BI 登录
+# 2. 认证（全家桶共用一套 profile，本 skill 不再单独要 config.json）
+guancli auth login
 ```
 
----
+| 命令 | 角色 | 路由什么需求给它 |
+|---|---|---|
+| `guancli` | 只读分析中枢 + 表单 CRUD | 查 ETL/dsId/page/card/血缘、`ds execute-sql`、`metric query` 同环比/Top N、归因、ChatBI 问数、取数导出 |
+| `guanvis` | 标准建卡 + Page 装配 + 服务端截图 | 74 种图表 JS DSL、selector 联动、custom chart、`guanvis pack/publish/upload`、`guanvis screenshot` 出 PNG |
+| `guanetl` | ETL 写操作闭环 | 单个 ETL 新建/改/lint/preview/save/run/schedule/delete |
+| `guanwf` | 工作流数据流 Dataflow | 工作流引擎里建/编/存/跑数据流（DB 直连回写、增量输出） |
+| `guands` | 数据源 + 数据集 CRUD | 建连接、`dataset create-db/create-query/import/replace-data`、批量移删、增量更新 |
+| `guanadmin` | 管理员级操作 | dynamicCode、adminToken、`svc query` 跑后端 SVC SQL |
 
-## ⚙️ 配置
-
-把 `config.example.json` 复制为 `config.json` 后填入真实凭据：
-
-```json
-{
-  "version": "6",
-  "base_url": "https://your-bi-instance.example.com/",
-  "domain": "guanbi",
-  "login_id": "your_username@example.com",
-  "password": "<BI_LOGIN_PASSWORD>",
-  "default_pg_id": "your_default_page_id",
-  "default_folder_id": "your_default_folder_id"
-}
-```
-
-| 字段 | 必填 | 说明 |
-|------|:----:|------|
-| `version` | ✅ | `"6"`（观远 BI 6.x）或 `"7"`（观远 BI 7.0+，支持 draft/release） |
-| `base_url` | ✅ | BI 实例地址，如 `https://bi.company.com:8080` |
-| `domain` | ✅ | 登录域，通常为 `guanbi`（具体咨询 BI 管理员） |
-| `login_id` | ✅ | BI 登录账号 |
-| `password` | ✅ | BI 登录密码（**明文，仅供本地使用，已被 .gitignore 排除**） |
-| `default_pg_id` | | 默认页面 ID（建卡时不传 `pg_id` 用这个） |
-| `default_folder_id` | | 默认文件夹 ID（创建新页面时使用） |
-
-> ⚠️ `config.json` 已被 `.gitignore` 排除，**不会被 commit 到仓库**。但请仍然小心保管，不要在公开环境分享。
+> ⚠️ **认证不再用 `config.json`**：V3.0.0 退役了自造客户端 `guandata.py`，凭据统一由 `guancli auth login` 管理，本 skill 不再读写 `config.json`。
 
 ---
 
 ## 🚀 快速开始
 
-### Part A：建卡取数（数据分析）
+### 🧭 路由层：标准查数 / 建卡（交给官方全家桶）
 
 ```bash
-# cwd 切到 skill 安装目录，所有命令用相对路径
-cd <skill_install_path>  # 例如 ~/.claude/skills/majia-guanyuan/
+# 标准查数 → guancli（不需要本 skill）
+guancli ds search 营业额 --raw
+guancli metric query --ds <ds_id> --dim 城市 --metric 销售额:SUM \
+  --filter 营业日期:BT:2026-02-01,2026-02-28
 
-SCRIPT="python3 ./scripts/guandata.py"
-
-# 1. 列数据集
-$SCRIPT list-datasets
-
-# 2. 看字段
-$SCRIPT get-columns <ds_id>
-
-# 3. 一步建卡 + 取数
-$SCRIPT create-and-get '{
-  "name": "2 月各城市营业额",
-  "ds_id": "<dataset_id>",
-  "chart_type": "BASIC_COLUMN",
-  "pg_id": "<page_id>",
-  "row": ["城市"],
-  "metric": [{"name": "销售额", "aggr": "SUM"}],
-  "filters": [{"name": "营业日期", "op": "BT", "value": ["2026-02-01", "2026-02-28"]}],
-  "sorting": [{"name": "销售额", "order": "DESC"}]
-}'
+# 标准建卡 + 服务端截图 → guanvis
+guanvis publish .
+guanvis screenshot <page_id> -o out.png
 ```
+
+> 标准查数/建卡是官方全家桶的活，本 skill **不再自造**。只有遇到下面这些"官方够不着"的场景才进对应 Part。
 
 ### Part B：建 ETL（数据建模）
 
@@ -315,28 +288,30 @@ new GDPlugin().init(renderChart);
 
 ```text
 majia-guanyuan/
-├── SKILL.md                          # AI 读的主文档（Part A + B + C）
+├── SKILL.md                          # AI 读的主文档（路由层 + Part B/C/D/E + 方法论）
 ├── AGENTS.md                         # Codex 项目指令 / Hermes resolver（V1.3 新增）
 ├── manifest.json                     # 工具无关 skill 元数据（V1.3 新增）
 ├── README.md                         # 本文件（中文）
 ├── README.en.md                      # English README
+├── CHANGELOG.md                      # 完整变更历史
 ├── ATTRIBUTIONS.md                   # 致谢与来源
 ├── LICENSE                           # MIT
-├── config.example.json               # 配置模板（公开版）
-├── config.json                       # 你的真实凭据（gitignore 排除，不会 commit）
 ├── .gitignore
 ├── scripts/
-│   ├── guandata.py                   # Part A 主脚本（建卡 / 取数 / 删卡 / 发布页面）
-│   └── zonedata_builder/             # zoneData 构建模块
-└── references/                       # 深度参考资料 (V1.5.0 progressive disclosure 重构后 12 份)
-    ├── part-a-commands.md            # Part A 完整命令清单 + 缓存机制（V1.5.0）
-    ├── part-a-cards.md               # 卡片参数 + 26 图表类型 + 6 示例（V1.5.0）
-    ├── part-b-errors.md              # Part B 10 类报错详方案（V1.5.0）
-    ├── part-b-payload.md             # ETL payload schema 详解（V1.5.0）
-    ├── part-b-sdk.md                 # v2→v3 批量改造 SDK（V1.5.0）
-    ├── part-b17-fullchain-rewrite.md # B-17 全链路重写方法论全章节（V1.5.0）
-    ├── part-c-payload-json.md        # C-3 payload_json 排障详解（V1.5.0）
-    ├── guancli-commands.md           # guancli 9 大类命令速查（V1.5.0）
+│   └── inject_phone_layout.py        # Part D 移动端 phoneLayout ZIP inject 工具
+├── templates/
+│   └── html-dashboard/               # Part C-12 HTML 应用化看板模板包（GDHTML runtime + 起手模块 + selector 联动 patch）
+└── references/                       # 深度参考资料（V3.0.0 后 13 份）
+    ├── part-b-errors.md              # Part B 10 类报错详方案
+    ├── part-b-payload.md             # ETL payload schema 详解
+    ├── part-b-sdk.md                 # v2→v3 批量改造 SDK
+    ├── part-b17-fullchain-rewrite.md # B-17 全链路重写方法论全章节 + ExecPlan 工作法
+    ├── part-c-payload-json.md        # C-3 payload_json 排障详解
+    ├── part-c-html-dashboard.md      # C-12 HTML 应用化看板生成方法论（V2.1.1）
+    ├── v7-page-card-publish-pipeline.md  # Part D v7 草稿/发布状态机 + 节点化静默坑 + phoneLayout（V2.1.6+）
+    ├── part-e-superapp-pipeline.md   # Part E SuperApp 反向工程流水线（V2.1.12）
+    ├── ai-native-ads-design.md       # AI-native ADS 设计方法论（哲学层文档，V2.1.13）
+    ├── restaurant-bi-formulas/       # 餐饮 BI 公式实战库（README + 9 篇分册，V2.1.5）
     ├── custom-chart-playbook.md      # CTO 张进自定义图表完整排障手册原文（V1.1）
     ├── etl-rewrite-original.md       # CTO 张进 SmartETL 改写经验原文（V1.1）
     ├── execplan-spec.md              # OpenAI Codex ExecPlan 规范（V1.2）
@@ -345,26 +320,23 @@ majia-guanyuan/
 
 ---
 
-## 🎯 何时用 Part A / B / C
+## 🎯 路由速查：标准活给官方，硬骨头进对应 Part
 
 | 用户需求 | 走 |
 |---|---|
-| "查一下 2 月各城市营业额" | A |
-| "做一张交叉表给我" | A |
-| "删掉这张卡片" | A |
-| "扫一遍 BI 的 ETL 看哪些可以删" | B |
-| "ETL 之间有循环依赖怎么办" | B |
-| "帮我新建一个 ETL" | B |
-| "direct-save 报错怎么修" | B |
-| "字段使用度审计" | B |
-| "把这条 SmartETL 链整个改成 SQL 版" | **B-17** |
-| "做副本页验收 / 卡片级对比" | **B-17** |
-| "上游空快照怎么写结论" | **B-17** |
-| "差异定位到底在 SQL 还是执行时点" | **B-17** |
+| "查一下 2 月各城市营业额" / "做一张交叉表" / "删掉这张卡片" | 🧭 官方全家桶（`guancli` / `guanvis`） |
+| "建一个标准 ETL" / "上传个数据集" / "建数据连接" | 🧭 官方全家桶（`guanetl` / `guands`） |
+| "扫一遍 BI 的 ETL 看哪些可以删" / "ETL 之间有循环依赖怎么办" | **B** |
+| "direct-save 报错怎么修" / "字段使用度审计安不安全裁" | **B** |
+| "把这条 SmartETL 链整个改成 SQL 版" / "做副本页验收 / 卡片级对比" | **B-17** |
+| "上游空快照怎么写结论" / "差异定位到底在 SQL 还是执行时点" | **B-17** |
 | "30+ 表跨多日工程怎么管 / 给我 ExecPlan 骨架" | **B-17.11** |
-| "自定义图表脚本不执行 / payload_json 报错" | **C** |
-| "固定卡片错位 / overlay 切页残留" | **C** |
-| "renderChart 第一个参数到底是啥" | **C** |
+| "自定义图表脚本不执行 / payload_json 报错" / "固定卡片错位 / overlay 切页残留" | **C** |
+| "更高级 / 应用化看板 / selector 联不到 custom chart dataView" | **C-12** |
+| "v7 page+card 被 60004 草稿页面卡住" / "移动端 phoneLayout 怎么注入" | **D** |
+| "form 建表脚手架没暴露 API" / "LLM 中转报 ILLEGAL_JSON_RES" | **E** |
+| "想给现有 BI 接 AI，该治理还是该重搭" / "AI-native ADS 怎么设计" | **方法论** |
+| "复购率 / 客单价 / RFM / 同店增长怎么算" | **餐饮公式库** |
 
 ---
 
@@ -404,12 +376,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V2.1.14** (2026-05-29) — **guancli 命令面对齐 1.0.29**。`references/guancli-commands.md` 补齐 1.0.25→1.0.29 新命令（实测确认，不臆造）：`ds execute-sql`（对数据集跑只读 SQL + 跨集 JOIN，1.0.26）、`metric project`（指标主题缩范围，1.0.27）、`server-version`/`bi-version`（BI 版本查询，1.0.25，泛化查询要 ≥ 8.2.1）、`card preview --dynamic-field/--dynamic-param/-o/--columns/--precision`（动态字段+参数+写文件，1.0.28/1.0.29）；SKILL.md guancli 章节 + 三件套表 + Part B 引子 + `part-a-commands.md` SQL 直查指针同步；依赖 `^1.0.24` → `^1.0.29`。纯命令面对齐 + 文档补充，无 Part 结构变化 / 无代码改动；本地 guancli 同步升级 1.0.19 → 1.0.29。
+**最新：V3.0.0** (2026-06-04) — **官方全家桶之上的「实战增益层」重定位（ground-up 重构）**。观远官方 BI 全家桶 2026-06-03 全部公网化后，本 skill 从"非官方起家、自造全栈 + fallback"彻底重构为「官方全家桶之上的实战增益层」：**退役 2789 行自造 HTTP 客户端 `scripts/guandata.py`**、删 ~1600 行死代码（`zonedata_builder` 重复嵌套）、删 4 个镜像官方命令 / 已过时的 references（`guancli-commands` / `part-a-commands` / `part-a-cards` / `internal-nexus-install`），共约 -5500 行。**原 Part A 整段重写为「路由层」**：标准查数→`guancli`、建卡/发布/截图→`guanvis`、ETL→`guanetl`、数据流→`guanwf`、数据源/数据集→`guands`、管理员→`guanadmin`，本 skill 不再自造这些。**保留并聚焦官方够不着的硬骨头**：Part B 整库治理判断 + 10 类引擎报错 + 双源审计 + B-17 全链路重写、Part C 既有页注入排障、Part C-12 descriptor patch 联 dataView、Part D v7 状态机绕过 + 节点化静默坑 + phoneLayout、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮 BI 公式库。品牌字统一「马甲实战版」；前置依赖改官方聚合包 `@guandata/guanskill`，认证走 `guancli auth login`（不再要 config.json）。**Breaking**：`scripts/guandata.py` 退役，调用方改用官方命令（旧实现可从 git `v2.1.14` tag 取回）。
 
-**V2.1.13** (2026-05-22) — **`references/ai-native-ads-design.md` 新建：AI-native ADS 设计方法论**（~340 行，9 个 §小节，majia-guanyuan **哲学层文档**——不是操作手册，是范式判断）。沉淀自 v2.1.12 SuperApp demo 跑完后用户的根判断：「光数据治理没用，必须按适配 AI 的方式数据架构重搭一遍，要是在历史业务积累上做东西，估计全是阻碍」。本文把这条心得展开为可落地的方法论：(§1) 现象层 demo 一路畅通 vs 历史包袱寸步难行（`ads_会员经营任务池` 32 字段 AI-native vs `proc_act_type_v3=P_CB_VCH / seg_id=7` 历史宽表）；(§2) 本质层两种 schema 假设差异（消费者是"写 SQL 的人" vs "LLM + 业务方"）；(§3) **推倒重来 ≠ 重做 ODS/DWD**——只动 ADS 层（ODS/DIM/DWD 不动，新建 1 张 DWD 主宽表 + N 张面向 AI 应用场景的 AI-native ADS）；(§4) **7 条字段约束**：中文枚举（`人群标签="沉睡"`） + 推荐预算好（`推荐动作=STRING`） + 复合直接拼好（`门店名称=城市+地标+编号`） + TIMESTAMP 统一 + 优先级强约束（P0/P1/P2） + 数值字段提前算好 + 行级权限字段冗余进表；(§5) 完整命名公约模板；(§6) **客户预算分配建议**——旧叙事 100% 治理 12 个月业务无感知 vs 新叙事 治理 30% + 重搭 ADS 30% + AI 应用 40%（3 个月业务可量化 ROI），**治理预算的一半挪去重搭 ADS，对 LLM 应用的产出比直接治理高一个数量级**——治理只清"脏数据"，重搭才换"schema 假设"；(§7) 与 Part D `restaurant-bi-formulas` DWD 宽表底座兼容互补 + Part E SuperApp 强依赖本文；(§8) 反模式 8 条，最严重是"把 SuperApp 当目标，跳过 ADS 重搭"——历史宽表喂给 LLM 出不来好结果，demo 永远做不通。
+**V2.1.15** (2026-06-04) — **官方观远 BI skill 全家桶首次公网化 + guancli 1.0.31 对齐**。2026-06-03 观远把整套 BI skill 打成聚合包 `@guandata/guanskill` 推上公网 npm，`npm i -g @guandata/guanskill && guanskill install-skill` 一键装齐 7 个命令 + 7 个官方 skill 到 `~/.agents/skills/`：`guancli@1.0.31` · `guanvis@0.1.22`（原 guanvis-skill，去 `-skill` 后缀，命令改 `guanvis publish/pack/upload`，新增 `guanvis screenshot` 服务端截图）· `guands@0.1.13` · `guanetl@0.1.12` · `guanexport@0.1.9`（PNG 已迁 `guanvis screenshot`，逐步下线）· `guanadmin@0.1.6` · **新增 `guanwf@0.1.4`（工作流数据流 Dataflow 编辑）**。SKILL.md「升级提示」+「与官方全家桶的共存」整段重写（旧三套件叙事 → 全家桶 7+1 路由矩阵），新增 guancli 1.0.30/1.0.31 增量，所有 `guanvis-skill <cmd>` 命令例改 `guanvis <cmd>`；架构图 alt + 徽章同步；依赖 `^1.0.29` → `^1.0.31`。纯生态对齐 + 文档，无 Part 结构变化 / 无代码改动。
 
-**V2.1.12** (2026-05-22) — **`references/part-e-superapp-pipeline.md` 新建：SuperApp 开放应用开发流水线**（~620 行，18 个 §小节）。沉淀自同一天在 workshop513 域上从零跑通一个完整 SuperApp demo「会员经营任务池 OS」（appId=`ve2f78b92e329450e95549ff`，业务闭环：拉 `ads_会员经营任务池` 50000 行 → AI 生成 3 段触达话术（claude-opus-4-6 自动用门店编号做角色扮演 + 自然语气 + 时间锚点）→ 用户选其中一条 → 写回 `form_任务执行记录` → 刷新还原状态）的多轮反向工程：(1) **`guancli app publish` 不读 `.env` 的 `VITE_APP_ID`**，必须命令行显式传 `--app-id` 才走 update；(2) **`POST /survey-engine/api/form/add` 是真正的建表入口**（脚手架 `form.ts` 完全没暴露），必填 `settings: {}` 否则 NPE on `Form.getSettings()`；字段 `fdId` 后端重写、`keyId` 开发者控但 **varchar(20)** 上限（UUID 36 字符爆 PSQLException）、**查询返回行按 fdId 索引**而非 keyId/name；(3) **BI LLM 中转两个 JSON 校验 bug**：`/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞、`/api/llm/chat/completions` stream=true 报 `NOT_JSON_RES` / stream=false 报 `ILLEGAL_JSON_RES` **但完整 LLM 响应被塞在 `error_message` 字段**，**三路径解析模板**（标准包装 / pass-through / 从 `error_message` 抠 JSON）+ 客户端模拟流式打字效果；(4) SuperApp 同源域里脚手架 `core/request.ts` 的 `get`/`getJSON` cookie 透传不稳，**BI 内部 API 必须用原生 `fetch(..., { credentials: 'include' })`**；(5) `<base href>` + `BrowserRouter basename` 自动适配 / dev 走 dev-proxy 转发 / 生产走 `detectBIBaseRouteUrl`；(6) 设计纪律沿用 `docs/design/DESIGN-workbench-light.md`（单数 ≤ 40px / 圆角 ≤ 8px / 三层 token 不同源）；(7) ESLint 文件 ≤ 400 行 / 函数复杂度 ≤ 10。
-
+**V2.1.14** (2026-05-29) — **guancli 命令面对齐 1.0.29**。补齐 1.0.25→1.0.29 新命令（实测确认，不臆造）：`ds execute-sql`（对数据集跑只读 SQL + 跨集 JOIN，1.0.26）、`metric project`（指标主题缩范围，1.0.27）、`server-version`/`bi-version`（BI 版本查询，1.0.25，泛化查询要 ≥ 8.2.1）、`card preview --dynamic-field/--dynamic-param/-o/--columns/--precision`（动态字段+参数+写文件，1.0.28/1.0.29）；SKILL.md guancli 章节 + 路由表 + Part B 引子同步；依赖 `^1.0.24` → `^1.0.29`。纯命令面对齐 + 文档补充，无 Part 结构变化 / 无代码改动；本地 guancli 同步升级 1.0.19 → 1.0.29。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 

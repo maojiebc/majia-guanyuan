@@ -3,7 +3,7 @@
  * patch_selector_linkage.js
  *
  * 把 HTML 应用看板的 custom chart dataView 联到原生 selector 上。
- * 用途：补齐 guanvis-skill `.linkToAll()` 没法覆盖到的"selector → custom chart 内部 dataView"链路。
+ * 用途：补齐 guanvis `.linkToAll()` 没法覆盖到的"selector → custom chart 内部 dataView"链路。
  *
  * 用法：
  *   node patch_selector_linkage.js \
@@ -64,7 +64,7 @@ function writeSettings(card, settings) {
 }
 
 function findSelector(descriptor, name) {
-  // descriptor.json 的具体结构因 guanvis-skill 版本而略有差异；
+  // descriptor.json 的具体结构因 guanvis 版本而略有差异；
   // 兼容三种常见路径：descriptor.resources / descriptor.cards / descriptor.page.cards
   const candidates = []
     .concat(descriptor.resources || [])

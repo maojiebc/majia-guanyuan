@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""注入 phoneLayout 到 guanvis-skill pack 出的 ZIP 里。
+"""注入 phoneLayout 到 guanvis pack 出的 ZIP 里。
 
 用法：
   python3 inject_phone_layout.py <input.zip> <output.zip> <chart_height>

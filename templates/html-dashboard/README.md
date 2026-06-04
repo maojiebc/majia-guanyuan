@@ -16,7 +16,7 @@ charts/
 └─ html_trend.js           月度渠道趋势渲染（data[0]：月份 + 渠道 + 销售额）
 
 scripts/
-└─ patch_selector_linkage.js   把 HTML dataView 注入 selector.asFilter（弥补 guanvis-skill linkToAll 的盲区）
+└─ patch_selector_linkage.js   把 HTML dataView 注入 selector.asFilter（弥补 guanvis linkToAll 的盲区）
 ```
 
 ## 使用

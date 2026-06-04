@@ -25,7 +25,7 @@
 | 触发场景 | 走哪条路 |
 |---|---|
 | 用户说 "标准 KPI + 折线 + 柱状图就够了" | Part A（标准卡片）|
-| 用户说 "需要双 Y 轴、ECharts 自定义、tooltip HTML" | guanvis-skill JS DSL（V2.1 路由）|
+| 用户说 "需要双 Y 轴、ECharts 自定义、tooltip HTML" | guanvis JS DSL（V2.1 路由）|
 | 用户说 "更高级 / 应用化 / 自定义模块 / 不限标准 / 最完美" | **本章 — HTML 应用看板** |
 | 既有页面要做固定卡片、overlay、注入式改造 | Part C §C-4（HTML/JS 注入 hack） |
 
@@ -44,7 +44,7 @@
 
 ```text
 观远 Page
-├─ 原生 selector：城市、门店类型、时间、… （走 guanvis-skill 的 selector DSL）
+├─ 原生 selector：城市、门店类型、时间、… （走 guanvis 的 selector DSL）
 ├─ 可见层：HTML SDK 自定义卡片（6 个起步）
 │  ├─ 经营驾驶舱       (createCustomChart + SDK + html_executive)
 │  ├─ 月度渠道增长     (createCustomChart + SDK + html_trend)
@@ -231,7 +231,7 @@ HTML-城市维度卡片数据     (cdId: bbb...)  → 给经营驾驶舱
 ### §6.3 生成前先校验
 
 ```bash
-guanvis-skill genid <count>     # 官方 ID 生成器
+guanvis genid <count>     # 官方 ID 生成器
 ```
 
 或本地用稳定 ID 生成器，必须自检：
@@ -246,7 +246,7 @@ guanvis-skill genid <count>     # 官方 ID 生成器
 
 ### §7.1 问题：DSL 的 linkToAll 联不上 HTML 模块
 
-`guanvis-skill` 的 `.linkToAll()` 只会把 selector 联到 **普通图表卡** 的同名字段 zone，**不会** 把 custom chart 内部的 dataView 暴露成 selector 目标。
+`guanvis` 的 `.linkToAll()` 只会把 selector 联到 **普通图表卡** 的同名字段 zone，**不会** 把 custom chart 内部的 dataView 暴露成 selector 目标。
 
 实测现象：
 
@@ -272,7 +272,7 @@ guancli card get <selector_id> --raw \
 绕开 DSL，直接改 `descriptor.json` 里的 `meta.card.settings.asFilter`：
 
 ```text
-1. guanvis-skill pack .                           # 打包
+1. guanvis pack .                           # 打包
 2. unzip <pkg>.zip -d /tmp/pkg                    # 解压
 3. node scripts/patch_selector_linkage.js \      # patch
      --descriptor /tmp/pkg/descriptor.json \
@@ -280,7 +280,7 @@ guancli card get <selector_id> --raw \
      --selector 门店类型:<fdId-门店类型> \
      --targets <html_dataview_id1>,<html_dataview_id2>,...
 4. cd /tmp/pkg && zip -r /tmp/patched.zip .       # 重新打包
-5. guanvis-skill upload /tmp/patched.zip          # 上传
+5. guanvis upload /tmp/patched.zip          # 上传
 ```
 
 ### §7.3 patch 的字段映射
@@ -340,10 +340,10 @@ guancli fetch GET /api/card/<selector_id>/edit
  5. 生成 HTML SDK 自定义模块（charts/html_*.html + .js）
  6. 落 templates/html-dashboard/charts/html_common.js + html_base.css
  7. 生成 page.js（只放 HTML 可见模块 + 原生 selector）
- 8. guanvis-skill preview         # 本地结构校验
- 9. guanvis-skill pack             # 打 tarball
+ 8. guanvis preview         # 本地结构校验
+ 9. guanvis pack             # 打 tarball
 10. patch_selector_linkage.js     # §7 注入 selector 联动
-11. guanvis-skill upload patched.zip
+11. guanvis upload patched.zip
 12. 四层回读验收（见 §11）
 ```
 
@@ -365,7 +365,7 @@ find . -maxdepth 1 -name "*.zip" -delete
 
 ### §8.2 pack 输出名不固定
 
-`guanvis-skill pack` 在某些目录下输出 `._package.zip`（不是预期的 `<dir>_package.zip`）。**不要硬编码包名**：
+`guanvis pack` 在某些目录下输出 `._package.zip`（不是预期的 `<dir>_package.zip`）。**不要硬编码包名**：
 
 ```bash
 zip_path=$(find . -maxdepth 1 -type f -name "*.zip" -print -quit)
@@ -484,13 +484,13 @@ jq -r '.[0]["销售额"]'      # ✅
 
 ## §11 验收清单（四层）
 
-`guanvis-skill upload` succeeded 不等于看板做对了。**API 验收必须是主验收，浏览器截图只作辅助**（Chrome 截图在 iframe / GPU 渲染 / 系统截图权限下会黑屏，不可靠）。
+`guanvis upload` succeeded 不等于看板做对了。**API 验收必须是主验收，浏览器截图只作辅助**（Chrome 截图在 iframe / GPU 渲染 / 系统截图权限下会黑屏，不可靠）。
 
 ### §11.1 第一层：打包验收
 
-- [ ] `guanvis-skill preview` 通过（本地结构校验）
-- [ ] `guanvis-skill pack` 产物可解压、`descriptor.json` 可被 patch 脚本读懂
-- [ ] `guanvis-skill upload patched.zip` 返回 `N succeeded, 0 failed`
+- [ ] `guanvis preview` 通过（本地结构校验）
+- [ ] `guanvis pack` 产物可解压、`descriptor.json` 可被 patch 脚本读懂
+- [ ] `guanvis upload patched.zip` 返回 `N succeeded, 0 failed`
 
 ### §11.2 第二层：Page 卡片清单
 
@@ -540,7 +540,7 @@ guancli card get <selector_id> --raw \
 
 | 错误 / 现象 | 原因 | 修法 |
 |---|---|---|
-| `Card ID must be exactly 24 alphanumeric characters, got 25` | ID 长度不是 24 | `guanvis-skill genid` 或本地稳定生成器，自检 `^[a-z0-9]{24}$` |
+| `Card ID must be exactly 24 alphanumeric characters, got 25` | ID 长度不是 24 | `guanvis genid` 或本地稳定生成器，自检 `^[a-z0-9]{24}$` |
 | `Custom chart ID must be exactly 24 alphanumeric characters` | 同上 | 同上 |
 | `resource ID 'xxx' is already used by ...` | dataView 被多个 custom chart 复用 | 每个 custom chart 独占 dataView，字段相同也要分两张卡 |
 | selector 切换后 HTML 模块不响应 | `linkToAll` 没联到 custom chart 内部 dataView | 跑 §7 的 patch_selector_linkage.js |
@@ -587,7 +587,7 @@ cp "$SKILL_DIR/templates/html-dashboard/scripts/patch_selector_linkage.js" ./my-
 ## §14 与 Part C 其他章节的关系
 
 - **C-1 ~ C-11**（既有内容）：处理"既有页面的 HTML/JS 注入 hack" —— 注入卡、overlay、固定卡片、payload_json、z-index、路由清理。
-- **C-12（本章）**：处理"从零生成 HTML 应用看板" —— 不 hack 既有页，而是用 guanvis-skill 的 DSL 全量生成 page + custom charts + dataViews。
+- **C-12（本章）**：处理"从零生成 HTML 应用看板" —— 不 hack 既有页，而是用 guanvis 的 DSL 全量生成 page + custom charts + dataViews。
 
 两条线工具不同（C-11 是 runtime DOM hack，C-12 是发布期 DSL + descriptor patch），但都共享：
 
@@ -599,4 +599,4 @@ cp "$SKILL_DIR/templates/html-dashboard/scripts/patch_selector_linkage.js" ./my-
 
 ## §15 一句话总结
 
-观远 BI 可以被自动生成成 "HTML 化分析应用"，**最稳架构是：原生 Page + 原生 selector + HTML SDK 可见层 + DATA_GRID dataView 数据层**。`guanvis-skill` 当前 DSL 还不能自动把 selector 联到 custom chart 内部 dataView，必须走资源包级 descriptor patch（§7）。这条路实测跑通且比直接 `/api/card/.../edit` 稳定，已经固化为 V2.1.1 起的高级看板默认策略。
+观远 BI 可以被自动生成成 "HTML 化分析应用"，**最稳架构是：原生 Page + 原生 selector + HTML SDK 可见层 + DATA_GRID dataView 数据层**。`guanvis` 当前 DSL 还不能自动把 selector 联到 custom chart 内部 dataView，必须走资源包级 descriptor patch（§7）。这条路实测跑通且比直接 `/api/card/.../edit` 稳定，已经固化为 V2.1.1 起的高级看板默认策略。

@@ -3,7 +3,7 @@
  * @supermajia/majia-guanyuan installer
  *
  * 把 skill 内容（SKILL.md / scripts/ / references/ 等）复制到目标 agent 工具的
- * skill 目录，并初始化 config.json（从 config.example.json 拷贝）。
+ * skill 目录。V3 起认证走 `guancli auth login`（全家桶共用 profile），不再初始化 config.json。
  *
  * Usage:
  *   npx @supermajia/majia-guanyuan install                  # 自动检测可用工具，全装
@@ -245,16 +245,12 @@ function cmdInstall(args) {
       copied++;
     }
 
-    // Restore preserved user config, otherwise seed from example
+    // V3: auth moved to `guancli auth login` (the official family shares one profile).
+    // config.json is no longer read by this skill; only preserve an existing one for
+    // back-compat — never seed a new credential file.
     if (savedConfig !== null) {
       fs.writeFileSync(existingConfig, savedConfig);
-      log(`  ✓ Preserved your existing config.json`);
-    } else {
-      const example = path.join(t.installPath, 'config.example.json');
-      if (fs.existsSync(example) && !fs.existsSync(existingConfig)) {
-        fs.copyFileSync(example, existingConfig);
-        log(`  ✓ Seeded config.json from config.example.json — edit to fill in BI credentials`);
-      }
+      log(`  ✓ Preserved your existing config.json (legacy; v3 auth uses 'guancli auth login')`);
     }
 
     ok(`  Installed ${copied} entries to ${t.installPath}`);
@@ -264,16 +260,10 @@ function cmdInstall(args) {
   log(`\nDone: ${installed} installed, ${skipped} skipped.`);
 
   if (installed > 0) {
-    log(`\nNext steps:`);
-    for (const key of targets) {
-      const t = TOOLS[key];
-      if (fs.existsSync(t.installPath)) {
-        log(`  vim ${path.join(t.installPath, 'config.json')}   # fill in BI credentials`);
-        break; // just show one example
-      }
-    }
-    log(`  pip install httpx                                    # Part A dependency`);
-    log(`  npm install -g @guandata/guancli && guancli auth login   # Part B/C dependency`);
+    log(`\nNext steps (V3 — the official family is the prerequisite):`);
+    log(`  npm install -g @guandata/guanskill   # 前置：官方观远全家桶 (guancli/guanvis/guanetl/guanwf/guands/guanadmin)`);
+    log(`  guanskill install-skill              # 装齐 7 个官方 skill 到 ~/.agents/skills/`);
+    log(`  guancli auth login                   # 登录 BI（全家桶共用一套 profile）`);
     log(`\nDocs: https://github.com/maojiebc/majia-guanyuan`);
   }
 }
