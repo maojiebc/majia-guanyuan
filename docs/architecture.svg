@@ -32,7 +32,7 @@
   <text x="720" y="50" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">观远 BI · 马甲实战版 · 全链路 Agent Skill</text>
   <g transform="translate(720, 64)">
     <rect x="-86" y="0" width="172" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.0.2  ·  2026-06-05</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.0.3  ·  2026-06-05</text>
   </g>
   <text x="720" y="112" text-anchor="middle" font-size="13.5" fill="#475569">官方全家桶之上的实战增益层　·　标准活路由官方，硬骨头落到本 skill 三支柱</text>
   <text x="720" y="132" text-anchor="middle" font-size="11.5" fill="#94a3b8">工具无关 (Claude Code · OpenClaw · Codex · Hermes/gbrain)　·　前置 npm i -g @guandata/guanskill</text>
@@ -45,25 +45,25 @@
     <g transform="translate(0, 8)">
       <rect width="6" height="40" rx="3" fill="#3b82f6"/>
       <text x="24" y="22" font-size="16" font-weight="700" fill="#0f172a">官方全家桶 · 路由层</text>
-      <text x="24" y="40" font-size="11.5" fill="#64748b">标准活（查数 / 建卡 / ETL / 数据流 / 数据源 / 截图 / 管理）一律向上路由给官方 7 件套</text>
+      <text x="24" y="40" font-size="11.5" fill="#64748b">标准活（查数 / 建卡 / ETL / 数据流 / 数据源 / 截图 / 管理）一律向上路由给官方 5 件套</text>
     </g>
     <g transform="translate(1056, 14)">
       <rect width="258" height="40" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
       <text x="16" y="18" font-size="11" font-weight="700" fill="#2563eb">@guandata/guanskill</text>
-      <text x="16" y="33" font-size="10" fill="#64748b">一键聚合包 · install-skill 装齐 7 命令</text>
+      <text x="16" y="33" font-size="10" fill="#64748b">一键聚合包 · install-skill 装齐 5 命令</text>
     </g>
 
-    <!-- 7 official skill mini cards -->
-    <!-- pitch 178, width 162, starts x=16, top y=64, height 124 -->
+    <!-- 5 official skill mini cards -->
+    <!-- width 162, height 124, top y=64, x = 20 / 302 / 584 / 866 / 1148 -->
 
     <!-- guancli -->
-    <g transform="translate(16, 64)">
+    <g transform="translate(20, 64)">
       <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
       <rect width="162" height="6" rx="3" fill="#3b82f6"/>
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guancli</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#eff6ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.31</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.32</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">查数 · 只读中枢</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">ETL / dsId / page</text>
@@ -72,13 +72,13 @@
     </g>
 
     <!-- guanvis -->
-    <g transform="translate(194, 64)">
+    <g transform="translate(302, 64)">
       <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
       <rect width="162" height="6" rx="3" fill="#8b5cf6"/>
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanvis</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f5f3ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.22</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.23</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">建卡 · 发布 · 截图</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">74 图表 JS DSL</text>
@@ -87,13 +87,13 @@
     </g>
 
     <!-- guanetl -->
-    <g transform="translate(372, 64)">
+    <g transform="translate(584, 64)">
       <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
       <rect width="162" height="6" rx="3" fill="#10b981"/>
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanetl</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#ecfdf5"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.12</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.13</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">ETL 写操作闭环</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">新建 / 改 / lint</text>
@@ -102,7 +102,7 @@
     </g>
 
     <!-- guanwf -->
-    <g transform="translate(550, 64)">
+    <g transform="translate(866, 64)">
       <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
       <rect width="162" height="6" rx="3" fill="#10b981"/>
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanwf</text>
@@ -117,48 +117,18 @@
     </g>
 
     <!-- guands -->
-    <g transform="translate(728, 64)">
+    <g transform="translate(1148, 64)">
       <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
       <rect width="162" height="6" rx="3" fill="#0ea5e9"/>
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guands</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f0f9ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.13</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.14</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">数据源 · 数据集</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">建连 MySQL/PG</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">create / import</text>
       <text x="14" y="108" font-size="10.5" fill="#64748b">replace-data · 调度</text>
-    </g>
-
-    <!-- guanexport -->
-    <g transform="translate(906, 64)">
-      <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
-      <rect width="162" height="6" rx="3" fill="#94a3b8"/>
-      <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanexport</text>
-      <g transform="translate(108, 20)">
-        <rect width="44" height="16" rx="8" fill="#f1f5f9"/>
-        <text x="22" y="12" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b">legacy</text>
-      </g>
-      <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">导出 · 0.1.9</text>
-      <text x="14" y="74" font-size="10.5" fill="#94a3b8">页面 PNG/PDF 已</text>
-      <text x="14" y="91" font-size="10.5" fill="#94a3b8">迁 guanvis screenshot</text>
-      <text x="14" y="108" font-size="10.5" fill="#94a3b8">移动端/卡片待下线</text>
-    </g>
-
-    <!-- guanadmin -->
-    <g transform="translate(1084, 64)">
-      <rect width="162" height="124" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
-      <rect width="162" height="6" rx="3" fill="#f59e0b"/>
-      <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanadmin</text>
-      <g transform="translate(104, 20)">
-        <rect width="48" height="16" rx="8" fill="#fffbeb"/>
-        <text x="24" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#d97706">0.1.6</text>
-      </g>
-      <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">管理员级</text>
-      <text x="14" y="74" font-size="10.5" fill="#64748b">dynamicCode</text>
-      <text x="14" y="91" font-size="10.5" fill="#64748b">adminToken</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">svc query 排查</text>
     </g>
   </g>
 

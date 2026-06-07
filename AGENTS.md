@@ -12,7 +12,7 @@ A Claude Code Skill for **Guandata BI (观远 BI)** — a tool-agnostic agent sk
 **V3.0.0 重定位 — 「马甲实战版」**: after the official Guandata BI skill family went public on 2026-06-03 (`@guandata/guanskill`: guancli / guanvis / guanetl / guanwf / guands / guanadmin + per-skill AI skills), this skill was refactored ground-up from a self-built full-stack + fallback into a **battle-tested gain-layer on top of the official family**. The self-built HTTP client `scripts/guandata.py` (2789 lines) was retired and ~1600 lines of dead code removed. **Standard query / card / ETL / dataset CRUD all route to the official family**; this skill keeps only what the official DSL/commands can't reach.
 
 Current structure — a router layer plus the hard-bone Parts:
-- **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`)
+- **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands`)
 - **Part B** — ETL governance, write, delete (incl. SmartETL full-chain rewrite methodology and ExecPlan workflow)
 - **Part C** — Custom chart HTML/CSS/JS injection & debugging on existing pages
 - **Part C-12** — HTML application-style dashboard generation (descriptor patch linking selector → custom-chart dataView)
@@ -44,7 +44,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
 ## Hard rules (do not violate)
 
 - **Authentication is via `guancli auth login`** — the official family shares one profile; this skill no longer reads `config.json`. Do not commit any `config.json` (still in `.gitignore` defensively). `config.example.json` is kept as a legacy schema reference only.
-- **Do not re-route standard work to self-built code** — standard query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanadmin`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
+- **Do not re-route standard work to self-built code** — standard query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
 - **Do not edit contributor originals in `references/`** — `etl-rewrite-original.md` + `custom-chart-playbook.md` (CTO Zhang Jin), `execplan-spec.md` + `agents-rule.md` (OpenAI Codex) are verbatim. Cite, don't edit. (The 马甲-distilled references and `restaurant-bi-formulas/` are maintained docs and may be updated.)
 - **Do not strip version frontmatter** in `SKILL.md`. Bump `metadata.version` and update the version log section per the changelog convention when making changes.
 - **Do not add tool-specific code paths** (e.g., `if claude_code: ...`) inside scripts or SKILL.md. The skill is tool-agnostic on purpose.

@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.0.3] — 2026-06-05
+
+### Changed
+
+- **官方全家桶 7 → 5**：观远 2026-06-04 又发一轮，`guanexport` + `guanadmin` **退出全家桶**（从 `guanskill` 0.1.3 聚合包移除、npm 也下架）。官方现 5 件 = guancli / guanvis / guanetl / guanwf / guands。SKILL.md 路由表、frontmatter description / install bins、架构图（7→5 mini-card）全部对齐。
+- **版本对齐**：guancli 1.0.31→**1.0.32**、guanvis 0.1.22→**0.1.23**、guanetl 0.1.12→**0.1.13**、guands 0.1.13→**0.1.14**、guanskill 0.1.2→0.1.3（guanwf 0.1.4 不变）。
+- **新能力记入路由**：guancli `metric` **从只读转可写**（create/edit/delete 指标）；guanvis **指标卡片构建**（`metric init`）+ `publish --allow-overwrite` 覆盖前自动建迁移备份；guands `dataset alias` 改字段展示名。
+
+### Notes
+
+- **guanetl `edit` round-trip bug 在 0.1.13 复测仍复现**（6 节点 ETL → 空 etl.go）——0.1.13 只动 lint/create/save，未碰 edit/import 逆向链路。提交观远的报告已更新。
+- 无功能 / 无 Part 结构改动；本地全家桶同步升级到 0.1.3（含卸载 guanexport/guanadmin + 清孤儿 skill 目录）。
+- 用户首屏版本记录保留 V3.0.3 / V3.0.2 / V3.0.1。
+
 ## [3.0.2] — 2026-06-05
 
 ### Added
