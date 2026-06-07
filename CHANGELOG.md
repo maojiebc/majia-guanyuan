@@ -5,6 +5,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.0.4] — 2026-06-05
+
+### Added
+
+- **B-0.5「guanetl `edit` 失效时改现有 ETL 的实测绕过」**：workshop513 一次性 ETL 全链路实测（create→复现空 etl.go→重建→save→回查→delete，净零改动）。确认空 `etl.go` bug 之外的三道连带墙——① 手写重建 etl.go 撞 0.1.13 新增的「输出数据集绑定风险」guard（DSL `BasicOutputDataset*` 表达不出服务端输出 `dsId`）② `save` 合并对身份字段 base 优先（改 ETL 名/输入节点名/输出节点名 3/3 被覆盖）③ 每次 save 输出 `dsId` churn。给出实战路径：纯改名→`guands rename/alias`、改逻辑→不可变重建、高级逃生→手工 `_exported.json`（保留 `dataSource.dsId`）。
+
+### Changed / Fixed
+
+- 修正 Part B 旧 callout 的"`save` 清空线上 ETL 风险"措辞：0.1.13 的输出绑定 guard 实测会**拦下**危险保存（0.1.12 无 guard 才有清空风险）。
+- 记录 BI API 为 **cookie/session 认证**（`Authorization: Bearer` / `X-AUTH-TOKEN` 直连 401，别拿 config token curl `direct-save`）。
+- 记录 `guanetl delete --cascade` 删除顺序坑（数据集先删→6001；应先删 ETL）+ churn 绑定的 `NOT_FOUND` 幽灵现象。
+- 给观远官方的 bug 报告追加「深度复测（2026-06-05）」段。
+
+### Notes
+
+- 无功能 / 无 Part 结构改动；架构图仅 bump 版本标。用户首屏版本记录保留 V3.0.4 / V3.0.3 / V3.0.2。
+
 ## [3.0.3] — 2026-06-05
 
 ### Changed

@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表。Claude Code/OpenClaw/Codex/Hermes 通用。
 license: MIT
 metadata:
-  version: "3.0.3"
+  version: "3.0.4"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -27,7 +27,7 @@ metadata:
           - guands
 ---
 
-# 观远 BI · 马甲实战版（V3.0.3）
+# 观远 BI · 马甲实战版（V3.0.4）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -48,7 +48,7 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.0.3（2026-06-05）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.0.4（2026-06-05）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
@@ -105,7 +105,24 @@ metadata:
 >
 > ⚠️ 官方全家桶已把 BI 写操作拆成兄弟 skill 并**全部公网化**（2026-06-03，`npm i -g @guandata/guanskill`）：标准 ETL 写入有 `guanetl`、工作流数据流有 `guanwf`、数据源/数据集有 `guands`。**但 Part B 这套基于 `guancli fetch` + payload 的实战手册仍是底层事实源**——直接命中 API 路径 / payload 字段 / 报错码 / 治理判断的部分官方命令封装不到。遇到标准化 ETL 写入可路由到 `guanetl`，但**整库治理扫描、direct-save、payload_json、SmartETL 全链路重写、10 类报错速查继续走本 skill**。
 >
-> 🧪 **实测边界（2026-06-04 · workshop513 · BI 8.2.1-hf6 · guanetl 0.1.12 + 0.1.13 复测）**：`guanetl edit <id>` 的 base→etl.go 逆向**在此实例完全失效**——能正确拉到服务端定义（`_base_etl.json` 节点齐全），但生成的 `etl/etl.go` 永远是空 `return []Node{}`，`-v` 无任何报错。****0.1.13 复测仍在**；5/5 个 ETL 复现（本 skill `payload_json` direct-save 建的 ×2、BI UI 建的 ×2、**guanetl 自己 `create+save` 出来的 ×1**——与创建方式、节点数 4~17 全无关）。guanetl 的**新建链路 OK**（`create/export/lint/save` 全过），坏的只有 `edit`。**结论 + 风险**：现状下**改写任何已存在的 ETL 都走 Part B `guancli fetch` + 原始 payload**，别用 `guanetl edit`——它静默给空 `etl.go`，紧接着 `save` 有**清空线上 ETL** 的风险。这是 Part B 不被 guanetl 取代的硬实证（最小复现已写给观远官方）。
+> 🧪 **实测边界（2026-06-04 · workshop513 · BI 8.2.1-hf6 · guanetl 0.1.12 + 0.1.13 复测）**：`guanetl edit <id>` 的 base→etl.go 逆向**在此实例完全失效**——能正确拉到服务端定义（`_base_etl.json` 节点齐全），但生成的 `etl/etl.go` 永远是空 `return []Node{}`，`-v` 无任何报错。****0.1.13 复测仍在**；5/5 个 ETL 复现（本 skill `payload_json` direct-save 建的 ×2、BI UI 建的 ×2、**guanetl 自己 `create+save` 出来的 ×1**——与创建方式、节点数 4~17 全无关）。guanetl 的**新建链路 OK**（`create/export/lint/save` 全过），坏的只有 `edit`。**结论 + 风险**：现状下**改写任何已存在的 ETL 都走 Part B `guancli fetch` + 原始 payload**，别用 `guanetl edit`——它静默给空 `etl.go`（0.1.13 新增的输出绑定 guard 实测会**拦下**随后的危险保存、不致清空；0.1.12 无 guard 才有清空风险）。**改现有 ETL 的完整实测绕过见 ⤵ B-0.5**。这是 Part B 不被 guanetl 取代的硬实证（最小复现已写给观远官方）。
+
+## B-0.5 guanetl `edit` 失效时，怎么改现有 ETL（2026-06-05 · workshop513 · 0.1.13 实测绕过）
+
+`guanetl edit` 给空 `etl.go`（见上）后，改现有 ETL 没有干净的官方路径。一次性 ETL 实测出**三道墙** + 实战绕过：
+
+**三道墙**（guanetl 0.1.13）：
+1. `edit` 的 base→`etl.go` 逆向出空——但 `_base_etl.json` 里**完整定义都在**（actions / inputs / outputs / `dataSource` 全有），数据没丢，可据此重建。
+2. 手写 `etl.go` 重建 → `export`/`lint` 都过，但 `save` 撞 0.1.13 新增的**「输出数据集绑定风险」guard**：DSL 的 `BasicOutputDataset*` 表达不出服务端已绑定的输出 `dsId`，guard 直接拦（**附带好处：空 `etl.go` 的危险保存也被它挡住，不会清空**）。
+3. 即便手工构造 `_exported.json`（从 fresh `_base` 拷 actions、保留 output `dataSource.dsId`）骗过 guard 让 `save` 成功，**`save` 的合并对「身份字段」base 优先**：实测改 ETL 名 / 输入节点名 / 输出节点名 **3/3 全被服务端 base 覆盖**，改不动；每次 `save` 还把输出绑定换一个新 `dsId`（churn）。
+
+**→ 现状下改现有 ETL 的实战路径**：
+- **纯改名 / 字段展示名** → 别碰 ETL 图，直接 `guands dataset rename` / `guands dataset alias`。
+- **改逻辑 / 改结构（加节点、改 SQL）** → **不可变重建**（最稳）：读 `_base_etl.json` 拿旧定义 → `guanetl create` 写一份**新 outputDsName** 的新 ETL → `export/lint/save/verify` → 旧 ETL 退役。比原地编辑可靠。
+- **高级逃生**（仅在没法重建时）：手工构造 `_exported.json` = fresh `_base` 的 actions + 保留 output `dataSource.dsId` + 你的**逻辑**改动，再 `guanetl save`——能过 guard、能落逻辑改动，但**落不了改名**、且 dsId churn。
+- **认证别绕**：BI API 是 **cookie/session 认证**（实测 `Authorization: Bearer` / `X-AUTH-TOKEN` 直接 401）——别拿 config 里的 token `curl /api/etl/direct-save`，写操作一律走 `guanetl save` / `guands`（它们持有正确会话）。
+
+**清理坑**：`guanetl delete --cascade` 用**数据集先删**的顺序 → 6001（ETL 还引用它）。正确**先删 ETL**：`guanetl delete <id> --yes`，再删孤儿输出集。churn 出的中间绑定删 ETL 后多为 `NOT_FOUND` 幽灵（`ds get`=1002 但 `ds delete`=6001，不可见、无害）。
 
 ## B-〇. 推荐工作流（先治理再重建）
 
@@ -913,11 +930,11 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V3.0.3** (2026-06-05) — **官方全家桶 7→5 + 06-04 版本对齐**。观远 2026-06-04 又发一轮：**`guanexport` + `guanadmin` 退出全家桶**（从 `guanskill` 聚合包移除、npm 下架）→ 官方现 **5 件**（guancli/guanvis/guanetl/guanwf/guands）；版本 guancli 1.0.31→**1.0.32**、guanvis 0.1.22→**0.1.23**、guanetl 0.1.12→**0.1.13**、guands 0.1.13→**0.1.14**。新能力：**guancli `metric` 从只读转可写**（建/改/删指标）、**guanvis 指标卡片构建（metric init）+ publish 覆盖前自动备份**、guands `dataset alias` 改字段展示名。路由表 + 架构图 7→5 对齐、版本号刷新。**guanetl `edit` bug 在 0.1.13 复测仍复现**（已更新提交观远的报告）。无 Part 结构改动。
+**最新：V3.0.4** (2026-06-05) — **新增 B-0.5：guanetl `edit` 失效时改现有 ETL 的实测绕过**。workshop513 一次性 ETL 全链路实测（建→复现空 etl.go→重建→save→回查→删，净零），确认空 `etl.go` bug 之外还有三道连带墙：① 重建 etl.go 撞 0.1.13 新增的输出绑定 guard（DSL 表达不出输出 dsId）② `save` 合并对身份字段 base 优先（改名 3/3 被覆盖）③ 输出 dsId churn。实战路径：纯改名走 `guands rename/alias`、改逻辑走**不可变重建**、高级逃生用手工 `_exported.json`；并记 BI API 是 cookie 认证（token 直 curl 401）+ `delete --cascade` 删除顺序坑。修正旧 callout 的"清空风险"措辞（0.1.13 guard 会拦下）。给观远的报告已加深度复测段。
+
+**V3.0.3** (2026-06-05) — **官方全家桶 7→5 + 06-04 版本对齐**。观远 2026-06-04 又发一轮：**`guanexport` + `guanadmin` 退出全家桶**（从 `guanskill` 聚合包移除、npm 下架）→ 官方现 **5 件**（guancli/guanvis/guanetl/guanwf/guands）；版本 guancli 1.0.31→**1.0.32**、guanvis 0.1.22→**0.1.23**、guanetl 0.1.12→**0.1.13**、guands 0.1.13→**0.1.14**。新能力：**guancli `metric` 从只读转可写**（建/改/删指标）、**guanvis 指标卡片构建（metric init）+ publish 覆盖前自动备份**、guands `dataset alias` 改字段展示名。路由表 + 架构图 7→5 对齐、版本号刷新。**guanetl `edit` bug 在 0.1.13 复测仍复现**（已更新提交观远的报告）。无 Part 结构改动。
 
 **V3.0.2** (2026-06-05) — **workshop513 实盘实测沉淀（无功能改动）**。在真实 BI 8.2.1-hf6 上把官方全家桶 7 个 skill 读写全跑了一遍，**验证 v3 路由全部正确**（查数→guancli、建卡/发布/截图→guanvis、数据集写→guands、ETL 新建→guanetl 均实测通过），并沉淀 2 条只有真跑才知道的硬边界：① **Part B**：`guanetl edit` 逆向在此实例 **5/5 全失败**（含 guanetl 自己建的，生成空 etl.go 且静默、紧接 `save` 有清空线上 ETL 风险）→ 改现有 ETL 继续走 Part B `guancli fetch`；② **Part D**：删 guanvis-published 页面唯一可行 `DELETE /api/page/<id>?force=true`（卡片内嵌 `page.cards`、`/api/card` 删不动报 1002、guanvis 拒覆盖空页），删 ETL `DELETE /api/etl/<id>` 连带删输出集（先 ETL 后 ds）。guanetl edit bug 已附最小复现提交观远官方。
-
-**V3.0.1** (2026-06-04) — **registry 渲染补丁（无功能改动）**。README 架构图从相对路径 `./docs/architecture.svg` 改成**绝对 raw URL 指向新增的 `docs/architecture.png`**——相对路径只在 GitHub 仓库页渲染，ClawHub / npm 包页拿不到图（首图空白）；换绝对 PNG 后三处都显示。顺带清掉 references 目录树里的 `（V2.1.x）` 历史版本标注、ClawHub 重发把 14 个 tag 的版本钉刷齐。
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
