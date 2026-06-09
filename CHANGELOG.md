@@ -11,7 +11,7 @@ the project's specific patch / minor / major rules.
 
 - **官方全家桶 06-09 版本对齐**：guancli 1.0.32→**1.0.33**（`ds search --id` 精确解析修复）、guanvis 0.1.23→**0.1.24**（**新增 AreaTitle 分区标题 + CardGroup 卡片组布局组件**、`gen-layout-id` 支持 area title、增强布局 DSL/打包/校验）、guanetl 0.1.13→**0.1.14**（**移除 delete 命令** + 修复 save 导出空 `dataSource` 覆盖服务端绑定的 bug + `run --wait` 状态区分 + 修复 export/merge 过程中部分节点字段丢失）。
 - 路由总表版本号 + 能力描述刷新：guanvis 行增加 AreaTitle/CardGroup；guanetl 行移除 `delete`、增加 save 修复说明。
-- B-0.5 第二道墙（输出绑定 guard 误触发）标注 0.1.14 可能已缓解，待复测确认。
+- B-0.5 两道墙（edit 空 etl.go + save 输出绑定 guard 误触发）经 workshop513 复测**确认 0.1.14 已修复**，B-0.5 降级为 fallback 参考。
 - 清理坑段落适配 guanetl `delete` 命令移除——删 ETL 改走 BI UI 或直接 API。
 - majia-guanyuan 版本列 3.0.3→3.0.5 对齐。
 - Part D 的 guanvis 版本引用 0.1.23→0.1.24。

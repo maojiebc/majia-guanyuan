@@ -52,7 +52,7 @@ metadata:
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> 🆕 **V3.0.5 更新**（2026-06-09）：官方全家桶 06-09 版本对齐：guancli 1.0.32→**1.0.33**、guanvis 0.1.23→**0.1.24**、guanetl 0.1.13→**0.1.14**。guanvis 新增 **AreaTitle + CardGroup 布局组件**；guanetl **移除 delete 命令**（高风险操作不再暴露）+ 修复 save 绑定输出数据集 dataSource 导出空覆盖的 bug；guancli `ds search --id` 精确解析修复。guanetl 0.1.14 的 save 修复**可能缓解 B-0.5 第二道墙**（输出绑定 guard 误触发），待复测确认。
+> 🆕 **V3.0.5 更新**（2026-06-09）：官方全家桶 06-09 版本对齐：guancli 1.0.32→**1.0.33**、guanvis 0.1.23→**0.1.24**、guanetl 0.1.13→**0.1.14**。guanvis 新增 **AreaTitle + CardGroup 布局组件**；guanetl **移除 delete 命令**（高风险操作不再暴露）+ 修复 save 绑定输出数据集 dataSource 导出空覆盖的 bug；guancli `ds search --id` 精确解析修复。guanetl 0.1.14 **已修复 B-0.5 两道墙**（edit 空 etl.go + save 输出绑定 guard 误触发，2026-06-09 workshop513 复测确认）。
 >
 > 🆕 **V3.0.0 重定位**（2026-06-04）：观远官方全家桶（guancli / guanvis / guanetl / guanwf / guands / guanexport / guanadmin）2026-06-03 全部公网化后，本 skill 从"自造全栈 + fallback"**彻底重构为「官方全家桶之上的实战增益层」**——退役 2789 行自造 HTTP 客户端 `guandata.py`、删 ~1600 行死代码、砍掉所有镜像官方命令的章节。**标准查数 / 建卡 / ETL / 数据集 CRUD 一律路由官方**；本 skill 只留官方 DSL/命令够不着的硬骨头：Part B 治理判断 + 报错手册、Part C/C-12 自定义图表注入 + descriptor patch、Part D v7 状态机绕过、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮公式库。详见下「路由层」+ [CHANGELOG.md](CHANGELOG.md)。
 
@@ -107,24 +107,24 @@ metadata:
 >
 > ⚠️ 官方全家桶已把 BI 写操作拆成兄弟 skill 并**全部公网化**（2026-06-03，`npm i -g @guandata/guanskill`）：标准 ETL 写入有 `guanetl`、工作流数据流有 `guanwf`、数据源/数据集有 `guands`。**但 Part B 这套基于 `guancli fetch` + payload 的实战手册仍是底层事实源**——直接命中 API 路径 / payload 字段 / 报错码 / 治理判断的部分官方命令封装不到。遇到标准化 ETL 写入可路由到 `guanetl`，但**整库治理扫描、direct-save、payload_json、SmartETL 全链路重写、10 类报错速查继续走本 skill**。
 >
-> 🧪 **实测边界（2026-06-04 · workshop513 · BI 8.2.1-hf6 · guanetl 0.1.12 + 0.1.13 复测 · 0.1.14 待复测）**：`guanetl edit <id>` 的 base→etl.go 逆向**在此实例完全失效**——能正确拉到服务端定义（`_base_etl.json` 节点齐全），但生成的 `etl/etl.go` 永远是空 `return []Node{}`，`-v` 无任何报错。****0.1.13 复测仍在**；5/5 个 ETL 复现（本 skill `payload_json` direct-save 建的 ×2、BI UI 建的 ×2、**guanetl 自己 `create+save` 出来的 ×1**——与创建方式、节点数 4~17 全无关）。guanetl 的**新建链路 OK**（`create/export/lint/save` 全过），坏的只有 `edit`。**结论 + 风险**：现状下**改写任何已存在的 ETL 都走 Part B `guancli fetch` + 原始 payload**，别用 `guanetl edit`——它静默给空 `etl.go`（0.1.13 新增的输出绑定 guard 实测会**拦下**随后的危险保存、不致清空；0.1.12 无 guard 才有清空风险）。**改现有 ETL 的完整实测绕过见 ⤵ B-0.5**。这是 Part B 不被 guanetl 取代的硬实证（最小复现已写给观远官方）。
+> 🧪 **实测边界（2026-06-04 · workshop513 · BI 8.2.1-hf6）**：guanetl `edit` 的 base→etl.go 逆向在 **0.1.12 / 0.1.13 完全失效**（空 `return []Node{}`，5/5 ETL 全复现、`-v` 无报错）；`save` 的输出绑定 guard 也误触发。**0.1.14 两个 bug 均已修复**（2026-06-09 workshop513 实测：`ads_会员经营任务池` 6 节点 `edit→export→lint→save` 全链路通过）。改现有 ETL 现在可以走 `guanetl edit` 正常路径了。**B-0.5 绕过方案仍保留作 fallback 参考**（万一其他 BI 版本 / 节点类型仍触发）。
 >
-> ⚡ **0.1.14 更新**（2026-06-09）：guanetl 0.1.14 修复了「save 导出空 `dataSource` 覆盖服务端绑定并触发保存保护」的 bug——**可能缓解 B-0.5 第二道墙**（DSL 表达不出输出 dsId 时 guard 误触发的场景）。但 `edit` 空 `etl.go` 核心 bug 未在 changelog 中提及，**待复测确认**。另：**0.1.14 移除了 `delete` 命令**，删 ETL 改走 BI UI 或直接 `DELETE /api/etl/<id>` API。
+> ⚡ **0.1.14 修复确认**（2026-06-09 复测）：① `edit` 空 `etl.go`（Wall 1）→ ✅ 已修，6 节点完整逆向为 `BasicInputDataset×4 + BasicSqlScript + BasicOutputDatasetInDir`；② `save` 输出绑定 guard 误触发（Wall 2）→ ✅ 已修，save 直接成功不再拦截。另：**0.1.14 移除了 `delete` 命令**，删 ETL 改走 BI UI 或直接 `DELETE /api/etl/<id>` API。
 
-## B-0.5 guanetl `edit` 失效时，怎么改现有 ETL（2026-06-05 · workshop513 · 0.1.13 实测绕过 · 0.1.14 待复测）
+## B-0.5 guanetl `edit` 失效时的绕过方案（0.1.12–0.1.13 历史；0.1.14 已修复，保留作 fallback）
 
-`guanetl edit` 给空 `etl.go`（见上）后，改现有 ETL 没有干净的官方路径。一次性 ETL 实测出**三道墙** + 实战绕过：
+> ✅ **0.1.14 修复确认**（2026-06-09 · workshop513 复测）：`edit` 空 etl.go + `save` 输出绑定 guard 误触发两个 bug 均已修复，`edit→export→lint→save` 全链路跑通。**正常情况下直接用 `guanetl edit` 即可**。以下绕过方案保留为 fallback——万一特定 BI 版本 / 节点类型仍触发时可用。
 
-**三道墙**（guanetl 0.1.13；⚡ 第 2 道墙 0.1.14 可能已缓解，待复测）：
-1. `edit` 的 base→`etl.go` 逆向出空——但 `_base_etl.json` 里**完整定义都在**（actions / inputs / outputs / `dataSource` 全有），数据没丢，可据此重建。
-2. 手写 `etl.go` 重建 → `export`/`lint` 都过，但 `save` 撞 0.1.13 新增的**「输出数据集绑定风险」guard**：DSL 的 `BasicOutputDataset*` 表达不出服务端已绑定的输出 `dsId`，guard 直接拦（**附带好处：空 `etl.go` 的危险保存也被它挡住，不会清空**）。⚡ **0.1.14 修复了 save 导出空 `dataSource` 覆盖服务端绑定的 bug**——此墙可能不再复现，待实测确认。
-3. 即便手工构造 `_exported.json`（从 fresh `_base` 拷 actions、保留 output `dataSource.dsId`）骗过 guard 让 `save` 成功，**`save` 的合并对「身份字段」base 优先**：实测改 ETL 名 / 输入节点名 / 输出节点名 **3/3 全被服务端 base 覆盖**，改不动；每次 `save` 还把输出绑定换一个新 `dsId`（churn）。
+**原三道墙**（guanetl 0.1.12–0.1.13，0.1.14 已全部修复）：
+1. ~~`edit` 的 base→`etl.go` 逆向出空~~ → **0.1.14 已修**
+2. ~~`save` 撞输出绑定 guard 误触发~~ → **0.1.14 已修**
+3. `save` 的合并对「身份字段」base 优先（改 ETL 名 / 节点名被覆盖）+ 输出 dsId churn → **未验证是否修复**，改名仍建议走 `guands dataset rename` / `alias`
 
-**→ 现状下改现有 ETL 的实战路径**：
+**→ Fallback 路径**（仅在 `guanetl edit` 仍有问题时使用）：
 - **纯改名 / 字段展示名** → 别碰 ETL 图，直接 `guands dataset rename` / `guands dataset alias`。
-- **改逻辑 / 改结构（加节点、改 SQL）** → **不可变重建**（最稳）：读 `_base_etl.json` 拿旧定义 → `guanetl create` 写一份**新 outputDsName** 的新 ETL → `export/lint/save/verify` → 旧 ETL 退役。比原地编辑可靠。
-- **高级逃生**（仅在没法重建时）：手工构造 `_exported.json` = fresh `_base` 的 actions + 保留 output `dataSource.dsId` + 你的**逻辑**改动，再 `guanetl save`——能过 guard、能落逻辑改动，但**落不了改名**、且 dsId churn。
-- **认证别绕**：BI API 是 **cookie/session 认证**（实测 `Authorization: Bearer` / `X-AUTH-TOKEN` 直接 401）——别拿 config 里的 token `curl /api/etl/direct-save`，写操作一律走 `guanetl save` / `guands`（它们持有正确会话）。
+- **改逻辑 / 改结构（加节点、改 SQL）** → **不可变重建**（最稳）：读 `_base_etl.json` 拿旧定义 → `guanetl create` 写一份**新 outputDsName** 的新 ETL → `export/lint/save/verify` → 旧 ETL 退役。
+- **高级逃生**（仅在没法重建时）：手工构造 `_exported.json` = fresh `_base` 的 actions + 保留 output `dataSource.dsId` + 你的**逻辑**改动，再 `guanetl save`。
+- **认证别绕**：BI API 是 **cookie/session 认证**——写操作一律走 `guanetl save` / `guands`（它们持有正确会话）。
 
 **清理坑**：~~`guanetl delete --cascade`~~（**0.1.14 已移除 delete 命令**）。删 ETL 改走 BI UI 或直接 `DELETE /api/etl/<id>`；顺序仍是**先删 ETL 再删孤儿输出集**（反过来 → 6001 ETL 还引用它）。churn 出的中间绑定删 ETL 后多为 `NOT_FOUND` 幽灵（`ds get`=1002 但 `ds delete`=6001，不可见、无害）。
 
@@ -934,7 +934,7 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V3.0.5** (2026-06-09) — **官方全家桶 06-09 版本对齐**。guancli 1.0.32→**1.0.33**（`ds search --id` 精确解析修复）、guanvis 0.1.23→**0.1.24**（**新增 AreaTitle 分区标题 + CardGroup 卡片组布局组件**）、guanetl 0.1.13→**0.1.14**（**移除 delete 命令** + 修复 save 导出空 `dataSource` 覆盖服务端绑定 bug + `run --wait` 状态区分）。路由表版本号 + 能力描述刷新；B-0.5 第二道墙（输出绑定 guard 误触发）标注 0.1.14 可能已缓解、待复测；清理坑段落适配 delete 移除。majia-guanyuan 版本列 3.0.3→3.0.5 对齐。
+**最新：V3.0.5** (2026-06-09) — **官方全家桶 06-09 版本对齐**。guancli 1.0.32→**1.0.33**（`ds search --id` 精确解析修复）、guanvis 0.1.23→**0.1.24**（**新增 AreaTitle 分区标题 + CardGroup 卡片组布局组件**）、guanetl 0.1.13→**0.1.14**（**移除 delete 命令** + 修复 save 导出空 `dataSource` 覆盖服务端绑定 bug + `run --wait` 状态区分）。路由表版本号 + 能力描述刷新；B-0.5 两道墙（edit 空 etl.go + save 输出绑定 guard 误触发）经 workshop513 复测**确认已修复**，B-0.5 降级为 fallback 参考；清理坑段落适配 delete 移除。majia-guanyuan 版本列 3.0.3→3.0.5 对齐。
 
 **V3.0.4** (2026-06-05) — **新增 B-0.5：guanetl `edit` 失效时改现有 ETL 的实测绕过**。workshop513 一次性 ETL 全链路实测（建→复现空 etl.go→重建→save→回查→删，净零），确认空 `etl.go` bug 之外还有三道连带墙：① 重建 etl.go 撞 0.1.13 新增的输出绑定 guard（DSL 表达不出输出 dsId）② `save` 合并对身份字段 base 优先（改名 3/3 被覆盖）③ 输出 dsId churn。实战路径：纯改名走 `guands rename/alias`、改逻辑走**不可变重建**、高级逃生用手工 `_exported.json`；并记 BI API 是 cookie 认证（token 直 curl 401）+ `delete --cascade` 删除顺序坑。修正旧 callout 的"清空风险"措辞（0.1.13 guard 会拦下）。给观远的报告已加深度复测段。
 
