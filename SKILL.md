@@ -90,6 +90,95 @@ metadata:
 
 **降歧义**：5 个官方 skill + 本 skill 同时启用时，只读场景（查 dsId/ETL）可能在 `guancli` 与本 skill 间双触发。本 skill **不与官方抢只读**——遇到纯查询/取数，直接路由 `guancli`，别自己拼 API。
 
+## 🔄 官方全家桶更新 SOP（高频操作）
+
+观远官方迭代节奏快（平均每周 1–2 次），本 skill 需要跟着对齐。以下是完整更新链路——从检查到落地，一条龙。
+
+### Step 0. 检查是否有新版本
+
+```bash
+# 看本机当前全家桶版本
+guanskill version
+
+# 看 npm 上最新聚合包版本
+npm view @guandata/guanskill version
+
+# 逐个看子包最新版本（聚合包可能滞后）
+npm view @guandata/guancli version
+npm view @guandata/guanvis version
+npm view @guandata/guanetl version
+npm view @guandata/guands version
+npm view @guandata/guanwf version
+```
+
+如果 npm 版本 > 本机版本 → 继续 Step 1。否则无需更新。
+
+### Step 1. 升级 CLI（npm 聚合包）
+
+```bash
+# 本机 CLI 装在 /opt/homebrew（Homebrew node 全局目录），不是 ~/.local/bin
+# ⚠️ 必须加 --force，否则 EEXIST 报错（bin symlink 冲突）
+npm --prefix /opt/homebrew i -g @guandata/guanskill@latest --force
+
+# 验证新版本
+guanskill version
+```
+
+> **安装路径坑**：`which guancli` → `/opt/homebrew/bin/guancli` → symlink 到 `../lib/node_modules/@guandata/guanskill/bin/run.js`。直接 `npm i -g` 装到 `~/.local/bin/` 不会更新 `/opt/homebrew/bin/` 的那份——**必须 `--prefix /opt/homebrew`**。
+
+### Step 2. 升级 AI Skill（SKILL.md + references）
+
+```bash
+# install-skill 把每个子包的 SKILL.md + references/ 装到 ~/.agents/skills/<name>/
+guanskill install-skill
+```
+
+落点：`~/.agents/skills/{guancli,guanvis,guanetl,guands,guanwf}/`。这些是 agent 路由用的 skill 定义，和 CLI 二进制分开更新。
+
+### Step 3. 读 Changelog，摘要变更
+
+```bash
+# 各子包 CHANGELOG.md 在 npm 包目录下
+GUANSKILL_DIR=/opt/homebrew/lib/node_modules/@guandata/guanskill/node_modules/@guandata
+for pkg in guancli guanvis guanetl guands guanwf; do
+  echo "=== $pkg ===" && head -30 "$GUANSKILL_DIR/$pkg/CHANGELOG.md" 2>/dev/null && echo
+done
+```
+
+重点关注：新增/移除命令、DSL 新组件、bug 修复（尤其影响 B-0.5 / Part C / Part D 的）、breaking change。
+
+### Step 4. 迭代 majia-guanyuan
+
+按 changelog 摘要，更新以下位置（有改动的才改）：
+
+| 位置 | 改什么 |
+|------|--------|
+| **路由总表**（本文件 `官方全家桶 ↔ 本 skill 分工总表`） | 版本号 + 能力描述 |
+| **V3.x.x 更新 callout**（本文件顶部 `> 🆕`） | 新版本摘要 |
+| **Part B 实测边界 callout** | 如果 guanetl 有 bug 修复 |
+| **Part D guanvis 版本引用** | 如果 guanvis 版本变了 |
+| **manifest.json / package.json** | `version` + `description` 里的版本号 |
+| **README.md / README.en.md** | 版本徽章 + 版本记录段（≤3 条） |
+| **CHANGELOG.md** | 新增 `[x.y.z] — YYYY-MM-DD` 条目 |
+
+版本号规则：官方对齐 = **patch**；影响 skill 自身逻辑（如 B-0.5 降级）= **minor**。
+
+### Step 5. 同步 + 发布
+
+```bash
+# 同步到已安装 skill 目录
+cp SKILL.md CHANGELOG.md ~/.agents/skills/majia-guanyuan/
+
+# commit + push（或走 /majia-ota-skill 完整发布链）
+```
+
+### 快速一键检查（日常用）
+
+```bash
+# 一行看完「本机 vs npm 最新」差异
+echo "LOCAL:" && guanskill version && echo "---" && echo "NPM latest:" && npm view @guandata/guanskill version
+```
+
 ## 通用错误码处理
 
 | 状态码 | 处理 |
