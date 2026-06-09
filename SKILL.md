@@ -938,10 +938,7 @@ new GDPlugin().init(renderChart);
 
 **V3.0.4** (2026-06-05) — **新增 B-0.5：guanetl `edit` 失效时改现有 ETL 的实测绕过**。workshop513 一次性 ETL 全链路实测（建→复现空 etl.go→重建→save→回查→删，净零），确认空 `etl.go` bug 之外还有三道连带墙：① 重建 etl.go 撞 0.1.13 新增的输出绑定 guard（DSL 表达不出输出 dsId）② `save` 合并对身份字段 base 优先（改名 3/3 被覆盖）③ 输出 dsId churn。实战路径：纯改名走 `guands rename/alias`、改逻辑走**不可变重建**、高级逃生用手工 `_exported.json`；并记 BI API 是 cookie 认证（token 直 curl 401）+ `delete --cascade` 删除顺序坑。修正旧 callout 的"清空风险"措辞（0.1.13 guard 会拦下）。给观远的报告已加深度复测段。
 
-**V3.0.3** (2026-06-05) — **官方全家桶 7→5 + 06-04 版本对齐**。观远 2026-06-04 又发一轮：**`guanexport` + `guanadmin` 退出全家桶**（从 `guanskill` 聚合包移除、npm 下架）→ 官方现 **5 件**（guancli/guanvis/guanetl/guanwf/guands）；版本 guancli 1.0.31→**1.0.32**、guanvis 0.1.22→**0.1.23**、guanetl 0.1.12→**0.1.13**、guands 0.1.13→**0.1.14**。新能力：**guancli `metric` 从只读转可写**（建/改/删指标）、**guanvis 指标卡片构建（metric init）+ publish 覆盖前自动备份**、guands `dataset alias` 改字段展示名。路由表 + 架构图 7→5 对齐、版本号刷新。**guanetl `edit` bug 在 0.1.13 复测仍复现**（已更新提交观远的报告）。无 Part 结构改动。
-
-**V3.0.2** (2026-06-05) — **workshop513 实盘实测沉淀（无功能改动）**。在真实 BI 8.2.1-hf6 上把官方全家桶 7 个 skill 读写全跑了一遍，**验证 v3 路由全部正确**（查数→guancli、建卡/发布/截图→guanvis、数据集写→guands、ETL 新建→guanetl 均实测通过），并沉淀 2 条只有真跑才知道的硬边界：① **Part B**：`guanetl edit` 逆向在此实例 **5/5 全失败**（含 guanetl 自己建的，生成空 etl.go 且静默、紧接 `save` 有清空线上 ETL 风险）→ 改现有 ETL 继续走 Part B `guancli fetch`；② **Part D**：删 guanvis-published 页面唯一可行 `DELETE /api/page/<id>?force=true`（卡片内嵌 `page.cards`、`/api/card` 删不动报 1002、guanvis 拒覆盖空页），删 ETL `DELETE /api/etl/<id>` 连带删输出集（先 ETL 后 ds）。guanetl edit bug 已附最小复现提交观远官方。
-
+**V3.0.3** (2026-06-05) — **官方全家桶 7→5 + 06-04 版本对齐**。观远 2026-06-04 又发一轮：**`guanexport` + `guanadmin` 退出全家桶**（从 `guanskill` 聚合包移除、npm 下架）→ 官方现 **5 件**（guancli/guanvis/guanetl/guanwf/guands）；版本 guancli 1.0.31→**1.0.32**、guanvis 0.1.22→**0.1.23**、guanetl 0.1.12→**0.1.13**、guands 0.1.13→**0.1.14**。新能力：**guancli `metric` 从只读转可写**（建/改/删指标）、**guanvis 指标卡片构建（metric init）+ publish 覆盖前自动备份**、guands `dataset alias` 改字段展示名。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 
