@@ -1,6 +1,6 @@
 # majia-guanyuan
 
-> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It packages data querying, card creation, ETL governance/write workflows, SmartETL full-chain rewrites, and custom chart debugging into reusable AI agent instructions and scripts.
+> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It is a battle-tested augmentation layer on top of Guandata's official CLI family (guancli / guanvis / guanetl / guanwf / guands), covering what the official DSL cannot reach: ETL governance judgment, BI engine error playbooks, custom chart injection, HTML application dashboards with visual design baselines, v7 draft-release state-machine bypasses, SuperApp reverse-engineering, AI-native ADS methodology, and a restaurant BI formula library.
 
 ## Primary Links
 
@@ -13,16 +13,20 @@
 
 ## Skill Contents
 
-- `SKILL.md`: routing layer and core operating rules for agents.
-- `scripts/guandata.py`: local Guandata BI API client for Part A data query/card workflows.
-- `references/part-a-commands.md`: Part A command reference.
-- `references/part-a-cards.md`: card creation parameters and examples.
-- `references/guancli-commands.md`: guancli command reference.
+- `SKILL.md`: routing layer and core operating rules for agents (standard query/card/ETL work routes to the official CLI family; this skill keeps the hard parts).
 - `references/part-b-payload.md`: ETL payload schema and write workflow.
-- `references/part-b-errors.md`: ETL error diagnosis playbook.
+- `references/part-b-errors.md`: ETL error diagnosis playbook (10 engine error categories).
 - `references/part-b-sdk.md`: v2 to v3 batch migration SDK notes.
-- `references/part-b17-fullchain-rewrite.md`: SmartETL full-chain rewrite methodology.
+- `references/part-b17-fullchain-rewrite.md`: SmartETL full-chain rewrite methodology + ExecPlan workflow.
 - `references/part-c-payload-json.md`: custom chart `payload_json` troubleshooting.
+- `references/part-c-html-dashboard.md`: C-12 HTML application dashboard methodology (dataView contract, selector descriptor patch, five-layer acceptance).
+- `references/part-c-design-baseline.md`: visual design baseline for HTML dashboards (data-judgment-first layout, KPI/number conventions, chart authenticity, visual token caps, anti-AI-look red lines, `guanvis screenshot` visual acceptance; absorbed from xiaomingtx666/design-taste-skills, MIT).
+- `references/v7-page-card-publish-pipeline.md`: Part D v7 draft-release state machine, SmartETL node silent traps, mobile phoneLayout ZIP inject.
+- `references/part-e-superapp-pipeline.md`: Part E SuperApp open-app reverse-engineering pipeline (form schema creation, LLM bridge response parsing).
+- `references/ai-native-ads-design.md`: AI-native ADS data architecture methodology (governance vs. rebuild).
+- `references/restaurant-bi-formulas/`: restaurant chain BI formula library (60+ SQL patterns, RFM, repurchase, DWD wide-table paradigms).
+- `templates/html-dashboard/`: GDHTML shared runtime + base CSS (calibrated to the design baseline) + starter modules + selector linkage patch script.
+- `scripts/inject_phone_layout.py`: mobile phoneLayout ZIP injection for v7 pages.
 
 ## Author
 

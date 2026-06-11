@@ -1,4 +1,7 @@
 /* GDHTML 共享样式 — 所有 HTML 应用看板模块共用 */
+/* token 约束见 references/part-c-design-baseline.md §5：
+   圆角 ≤8px(pill 例外) · 无重阴影 · 间距刻度 8/12/16/20/24/32 · KPI 主值 28-32px
+   数字一律 tabular-nums · 表格行高 36-44px · 状态色/数据色/强调色三层分离 */
 
 .gd-card {
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -44,10 +47,11 @@
 }
 
 .gd-kpi-value {
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 600;
   color: #111827;
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 
 .gd-kpi-delta {
@@ -77,7 +81,7 @@
 .gd-list li:last-child { border-bottom: none; }
 
 .gd-list-label { color: #374151; }
-.gd-list-value { color: #111827; font-weight: 500; }
+.gd-list-value { color: #111827; font-weight: 500; font-variant-numeric: tabular-nums; }
 .gd-list-bar   { margin-left: 12px; }
 
 /* 表格 */
@@ -88,7 +92,7 @@
 }
 
 .gd-table th, .gd-table td {
-  padding: 6px 10px;
+  padding: 9px 10px; /* 行高 ~38px，底线 36-44px */
   text-align: left;
   border-bottom: 1px solid #f3f4f6;
 }
@@ -115,7 +119,7 @@
 .gd-tag.good { background: #dcfce7; color: #166534; }
 .gd-tag.bad  { background: #fee2e2; color: #991b1b; }
 
-/* 空数据 */
+/* 状态族 — 文案必须带业务上下文（design-baseline §6），不只写"暂无数据" */
 .gd-empty {
   padding: 24px;
   text-align: center;
@@ -123,6 +127,11 @@
   font-size: 13px;
   background: #f9fafb;
   border-radius: 4px;
+}
+
+.gd-empty.gd-error {
+  color: #991b1b;
+  background: #fef2f2;
 }
 
 /* 网格布局 */

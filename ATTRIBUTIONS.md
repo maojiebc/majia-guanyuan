@@ -29,6 +29,13 @@ This skill is built on top of multiple predecessors and contributions from the G
 - **Description**: 观远 BI 7.0+ 适配版，针对 7.0+ 的 draft-release 机制做了自动处理。本项目 V0.x 直接前身。
 - **Contribution / 贡献**: Part A 全部内容（26 种图表类型、自定义公式字段、缓存机制、`--task` 隔离、release-page 自动化），以及 V1.0 重命名前的所有历史。
 
+### 4. xiaomingtx666/design-taste-skills
+
+- **URL**: https://github.com/xiaomingtx666/design-taste-skills
+- **License**: MIT
+- **Description**: 面向 AI coding 的设计底线框架（design-taste 通用美学底座 + design-ppt / design-pdf / design-html 三个场景 skill），核心方法论是"决策交给模型，底线交给 skill"——风格自定，质量红线必守。
+- **Contribution to this project / 对本项目的贡献（V3.1.0）**: [`references/part-c-design-baseline.md`](./references/part-c-design-baseline.md) 的方法论母体。吸收 design-taste 通用底座（视觉层级 / 7±2 / 亲密对齐对比重复 / 信息密度 / 数据可信 / 反 AI 味红线 / 工艺底线）+ design-html A 路径数据应用底线（首屏数据判断 / KPI 规则 / 图表真实性 / 数值口径 / 状态六态 / token 硬上限 / 渲染验收），按观远 BI 的三个 HTML 场景（C-12 卡片模块 / Part D customChart / Part E SuperApp）重新定制。design-ppt / design-pdf / design-html B 路径（营销页）未吸收——本 skill 不做这些载体。
+
 ---
 
 ## 🎓 Experience Contributors / 经验贡献者

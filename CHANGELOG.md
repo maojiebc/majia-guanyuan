@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.1.0] — 2026-06-11
+
+### Added
+
+- **`references/part-c-design-baseline.md`（HTML 看板视觉设计底线）**：吸收 [xiaomingtx666/design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论（design-taste 通用底座 + design-html A 路径数据应用），按观远三个 HTML 场景定制——C-12 卡片 iframe 模块 / Part D v7 customChart / Part E SuperApp。10 节：模块第一视觉位=数据判断 / KPI 与数值口径（3-4 个 + 28-32px + 单位/时间范围/对比基准）/ 图表真实性硬底线（禁 CSS 高度条假图表，SVG 自绘必须数据驱动 + 基线/刻度/单位）/ 表格底线（行高 36-44px + tabular-nums）/ 视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / 间距刻度 / 三层色彩 token）/ 状态文案带业务上下文（safeCols/mountEmpty 升级）/ 信息密度与垂直节奏 / 反 AI 味红线表（命中即重做）/ `guanvis screenshot` 视觉验收 / 与上游和 Part D/E 的关系。核心心法与本 skill 路由哲学同构：**决策交给模型，底线交给文档**。
+- **C-12 §11.5 第五层视觉验收**：四层管道验收（打包/卡片清单/custom chart 内容/出数联动）之后新增视觉质量层——`guanvis screenshot` 服务端截图（绕开 Chrome 黑屏问题）+ 速记清单（数据判断第一视觉位 / KPI 口径 / 图表真实性 / 反 AI 味 / 工艺四查）。
+- C-12 常见错误表新增一行：「看板能跑但很丑 / AI 味重」→ 按 design-baseline §8 红线逐条对照重做。
+
+### Changed
+
+- **模板 `html_base.css` 按设计底线校准**：`.gd-kpi-value` 22px→**28px**（KPI 主值 28-32px 底线）+ `tabular-nums`；`.gd-list-value` 加 `tabular-nums`；表格 padding 6px→9px（行高 ~38px，落入 36-44px 区间）；`.gd-empty` 扩展 `.gd-error` 状态样式族；头部注释标注 token 约束来源。
+- SKILL.md：frontmatter description 加触发词（看板太丑 / AI 味 / 设计底线）；C-12 入口段加 🎨 视觉设计底线引用；References 目录表加新行；路由表 majia-guanyuan 行能力列加「视觉设计底线（反 AI 味红线 + 五层验收）」。
+- ATTRIBUTIONS.md 新增原始来源第 4 条：xiaomingtx666/design-taste-skills（MIT）。
+
+### Notes
+
+- 与 Part E §10 SuperApp 官方设计纪律（`npm run design:lint`）**同源互补**：token 上限完全一致（单数字 ≤40px / 圆角 ≤8px / 阴影 ≤8px / 三层 token / tabular-nums / 禁紫蓝渐变）；lint 机械自检打底，design-baseline 补 lint 查不出的口径缺失、文案空洞、反 AI 味。
+- 上游四件套只吸收两件：design-ppt / design-pdf / design-html B 路径（营销页）不吸收——majia-guanyuan 不做这些载体。
+- 用户首屏版本记录保留 V3.1.0 / V3.0.5 / V3.0.4（V3.0.3 归档至本文件）。
+
 ## [3.0.5] — 2026-06-09
 
 ### Changed

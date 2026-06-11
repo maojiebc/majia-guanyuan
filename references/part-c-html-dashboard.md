@@ -5,6 +5,8 @@
 > **版本**：随 majia-guanyuan **V2.1.1** (2026-05-14) 首次落地。
 >
 > **何时回到这里**：用户说"生成看板""做一份分析页""自动生成"，并且 **任一**触发词命中"更高级 / 更复杂 / 更好 / 应用 / 自定义模块 / 不要限制在标准看板 / 最完美版本 / HTML 看板"——立刻把路线切到本章，不要按 Part A 的标准 KPI/折线/柱状图套路交付。
+>
+> **视觉质量层（V3.1.0 新增）**：本章解决"管道通"（dataView 出数、selector 联动、发布成功）；HTML 模块**长什么样**——信息层级、KPI 口径、反 AI 味、工艺底线——见 [part-c-design-baseline.md](part-c-design-baseline.md)。两份配合用：本章管发布链路，那份管视觉红线，§11.5 视觉验收是两者的交汇点。
 
 ---
 
@@ -344,7 +346,7 @@ guancli fetch GET /api/card/<selector_id>/edit
  9. guanvis pack             # 打 tarball
 10. patch_selector_linkage.js     # §7 注入 selector 联动
 11. guanvis upload patched.zip
-12. 四层回读验收（见 §11）
+12. 五层回读验收（四层管道 + 视觉验收，见 §11）
 ```
 
 ### §8.1 zsh 兼容性
@@ -482,9 +484,9 @@ jq -r '.[0]["销售额"]'      # ✅
 
 ---
 
-## §11 验收清单（四层）
+## §11 验收清单（四层管道验收 + 第五层视觉验收）
 
-`guanvis upload` succeeded 不等于看板做对了。**API 验收必须是主验收，浏览器截图只作辅助**（Chrome 截图在 iframe / GPU 渲染 / 系统截图权限下会黑屏，不可靠）。
+`guanvis upload` succeeded 不等于看板做对了。**API 验收必须是主验收，浏览器截图只作辅助**（Chrome 截图在 iframe / GPU 渲染 / 系统截图权限下会黑屏，不可靠；视觉验收用 `guanvis screenshot` 服务端截图，见 §11.5）。
 
 ### §11.1 第一层：打包验收
 
@@ -534,6 +536,24 @@ guancli card get <selector_id> --raw \
 - [ ] selector `targetCdIds` 长度从 11 扩到 22（含 HTML dataView）
 - [ ] selector `columnMappings[0].targetFields` 包含正确的 `fdId`
 
+### §11.5 第五层：视觉质量验收（V3.1.0 新增）
+
+四层全过 = 管道通；第五层回答"看板能不能看"。用 `guanvis screenshot` 出服务端 PNG（不走 Chrome，无黑屏问题）：
+
+```bash
+guanvis screenshot <pgId> -o /tmp/page-visual-check.png
+```
+
+按 [part-c-design-baseline.md §9](part-c-design-baseline.md) 的完整清单逐项检查，速记版：
+
+- [ ] 每个 HTML 模块第一视觉位是数据判断（不是标题 / 装饰 / 欢迎语）
+- [ ] KPI ≤ 4 个一行、主值 28–32px、带单位和对比基准
+- [ ] 图表有基线 / 刻度 / 单位，无 CSS 假图表，饼图类别 ≤ 5
+- [ ] 无紫蓝渐变 / 玻璃拟态 / 卡片墙 / emoji 图标 / 营销 CTA
+- [ ] 工艺四查：无挤压、无重叠、无错位、无无效留白
+
+修复顺序：挤压 / 重叠 → 对齐 → 留白节奏。修完重截重查。
+
 ---
 
 ## §12 常见错误表
@@ -551,8 +571,9 @@ guancli card get <selector_id> --raw \
 | `jq: syntax error, unexpected INVALID_CHARACTER` | 中文字段用点语法 | 改用 `["字段名"]` 语法（§10.4）|
 | `zsh: no matches found: ./*.zip` | zsh 裸 glob | `find . -name "*.zip" -delete` 或 `noglob`（§8.1） |
 | `Package saved to ._package.zip` | pack 输出名不固定 | 用 `find ... -print -quit` 动态发现（§8.2） |
-| Chrome 截图黑屏 | 截图链路不可靠 | 以 API 回读 + dataView 出数为主验收（§11） |
+| Chrome 截图黑屏 | 截图链路不可靠 | 以 API 回读 + dataView 出数为主验收（§11）；视觉验收走 `guanvis screenshot`（§11.5） |
 | HTML 模块加载但页面空 | `data[0]` 不存在 | 用 `GDHTML.safeCols(data, N)` 而非直接索引 |
+| 看板"能跑但很丑 / AI 味重" | 只过了管道验收，没过视觉底线 | 按 [part-c-design-baseline.md](part-c-design-baseline.md) §8 反 AI 味红线逐条对照重做 |
 
 ---
 

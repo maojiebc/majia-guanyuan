@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.0.5-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -29,7 +29,7 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.0.5 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.0 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
@@ -310,6 +310,7 @@ majia-guanyuan/
     ├── part-b17-fullchain-rewrite.md # Full B-17 full-chain rewrite methodology + ExecPlan workflow
     ├── part-c-payload-json.md        # C-3 payload_json troubleshooting deep-dive
     ├── part-c-html-dashboard.md      # C-12 HTML application dashboard methodology
+    ├── part-c-design-baseline.md     # Visual design baseline for HTML dashboards (V3.1.0, absorbed from design-taste-skills)
     ├── v7-page-card-publish-pipeline.md  # Part D v7 draft-release state machine + node silent traps + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp reverse-engineering pipeline
     ├── ai-native-ads-design.md       # AI-native ADS design methodology (philosophy-layer doc)
@@ -378,11 +379,11 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.0.5** (2026-06-09) — **official family 06-09 version alignment**. guancli 1.0.32→**1.0.33** (`ds search --id` fix), guanvis 0.1.23→**0.1.24** (new AreaTitle + CardGroup layout components), guanetl 0.1.13→**0.1.14** (removed `delete` command + fixed save exporting empty `dataSource` overwriting server binding). Routing table + B-0.5 + cleanup section updated.
+**Latest: V3.1.0** (2026-06-11) — **visual design baseline for HTML dashboards**. Absorbed the "executable design baseline" methodology from [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills) (MIT) into the new `references/part-c-design-baseline.md`: first visual slot = data judgment, KPI 3-4 per row at 28-32px with units/comparison basis, chart-authenticity hard floor (no CSS-faked charts), visual token hard caps (radius ≤8px / shadow ≤8px / tabular-nums), anti-AI-look red lines (purple-blue gradients / glassmorphism / card walls — hit = redo). C-12 acceptance grows from four to **five layers** (§11.5 visual check via `guanvis screenshot`); template `html_base.css` recalibrated to the baseline. Covers C-12 / Part D customChart / Part E SuperApp.
+
+**V3.0.5** (2026-06-09) — **official family 06-09 version alignment**. guancli 1.0.32→**1.0.33** (`ds search --id` fix), guanvis 0.1.23→**0.1.24** (new AreaTitle + CardGroup layout components), guanetl 0.1.13→**0.1.14** (removed `delete` command + fixed save exporting empty `dataSource` overwriting server binding). Routing table + B-0.5 + cleanup section updated.
 
 **V3.0.4** (2026-06-05) — **added B-0.5: tested workaround for editing existing ETLs when guanetl `edit` is broken**. Full round-trip test on a throwaway ETL in workshop513 (create→reproduce empty etl.go→reconstruct→save→re-fetch→delete, net-zero) found three walls beyond the empty-etl.go bug: ① reconstructed etl.go hits 0.1.13 new output-binding guard (DSL can't express the output dsId) ② `save` merge is base-authoritative for identity fields (3/3 renames overwritten) ③ output dsId churn. Documented practical paths: renames via `guands rename/alias`, logic/structure via **immutable rebuild**, advanced escape via hand-built `_exported.json`; plus BI API is cookie-auth (bearer→401) and the `delete --cascade` ordering bug. Corrected the old "wipe risk" wording (0.1.13 guard blocks it). Guandata report got a deep-retest section.
-
-**V3.0.3** (2026-06-05) — **official family 7→5 + 06-04 version alignment**. Guandata shipped another round on 2026-06-04: **`guanexport` + `guanadmin` left the family** (removed from the `guanskill` aggregator, unpublished from npm) → **5 official skills** now (guancli/guanvis/guanetl/guanwf/guands); versions guancli 1.0.31→**1.0.32**, guanvis 0.1.22→**0.1.23**, guanetl 0.1.12→**0.1.13**, guands 0.1.13→**0.1.14**. New caps: **guancli `metric` is now writable** (create/edit/delete metrics), **guanvis metric-card build (`metric init`) + auto-backup before publish overwrite**, guands `dataset alias` to rename field display names.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 
