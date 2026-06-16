@@ -5,6 +5,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.1.1] — 2026-06-17
+
+### Changed
+
+- **官方全家桶基线对齐到 `@guandata/guanskill@0.1.6`**（2026-06-15 发布）。本 skill 路由总表、Part B 实测边界、manifest/README/package 里的官方版本 pin 全部刷新：
+  - **`guancli` 1.0.33 → 1.0.34**：新增 `metric by-dataset`，按数据集 ID 反查直接原子指标并沿指标血缘展开下游复合/衍生指标。
+  - **`guanvis` 0.1.24 → 0.1.26**：资源包打包增加配置一致性校验（提前发现重复/冲突资源，降低上传失败和覆盖风险）+ 修复自定义排序 payload 归一化；0.1.25 补资源 ID 命名字母开头指引。
+  - **`guanetl` 0.1.14 → 0.1.15**：`save` 增强输出数据集保护、保留级联相关配置，并对追加写入场景的行数据结构提前校验。
+  - **`guanwf` 0.1.4 → 0.1.5**：工作流数据流支持 `workflow.go` DSL 模式，统一创建/编辑/导出/预览/保存/运行流程；**新增 Python 节点 DSL 支持和本地校验**；保存采用三方合并以减少覆盖线上已有数据流配置的风险。
+  - **`guands` 0.1.14 → 0.1.15**：**新增 `dataset update-fields`**，批量更新字段展示名和注释（命令行参数或 JSON 文件，支持 `--dry-run` 预览）；`dataset import` 增加 `--header-row`/`--encoding`/`--delimiter`；`refresh` 增加 `--overwrite` 全量覆盖模式；修复 `replace-data` 处理 UTF-8 BOM 表头时的 schema 校验误判。
+- **路由总表能力描述升级**：`guanwf` 行从「工作流数据流 Dataflow」升级为「工作流（数据流 + Python 节点多节点 DAG）」；`guands` 行补 `dataset update-fields`；`guancli` 行补 `metric by-dataset`；`guanvis` / `guanetl` 行补 0.1.26 / 0.1.15 能力。Part B 的 ⚡ 实测边界 callout 追加 0.1.15 `save` 输出保护增强 note（历史 0.1.12–0.1.14 编年史保留不动）。
+- **顶部 🆕 callout + 📋 版本记录**：新增 V3.1.1 条目；按发布纪律将 SKILL.md / README 的版本记录段收敛到最新 3 条（V3.0.4 归档至本 CHANGELOG）。
+- manifest.json / package.json / README.md / README.en.md 版本号 3.1.0 → 3.1.1、Skill Version 徽章、架构图 alt 文案版本号同步。
+- **「官方全家桶更新 SOP」Step 1 通用化**：升级命令从写死 `npm --prefix /opt/homebrew ... --force` 改为 prefix 无关的 `npm i -g @guandata/guanskill@latest`（先 `npm prefix -g` 确认目标）；「安装路径坑」改写为通用「双装滞后」排查（`which -a guancli` 看多份 + `npm uninstall -g @guandata/guanskill --prefix <多余prefix>` 收敛）——对所有从 ClawHub 安装的用户都正确，不再绑定单台机器的路径。
+
+### Notes
+
+- 本次为**官方对齐 patch**（无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。
+
 ## [3.1.0] — 2026-06-11
 
 ### Added
