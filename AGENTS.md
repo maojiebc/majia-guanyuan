@@ -9,7 +9,7 @@ This file is read by:
 
 A Claude Code Skill for **Guandata BI (观远 BI)** — a tool-agnostic agent skill packaged so it works with **Claude Code**, **OpenClaw**, **Hermes/gbrain**, **Codex**, and any other agent that recognizes `SKILL.md` frontmatter.
 
-**V3.0.0 重定位 — 「马甲实战版」**: after the official Guandata BI skill family went public on 2026-06-03 (`@guandata/guanskill`: guancli / guanvis / guanetl / guanwf / guands / guanadmin + per-skill AI skills), this skill was refactored ground-up from a self-built full-stack + fallback into a **battle-tested gain-layer on top of the official family**. The self-built HTTP client `scripts/guandata.py` (2789 lines) was retired and ~1600 lines of dead code removed. **Standard query / card / ETL / dataset CRUD all route to the official family**; this skill keeps only what the official DSL/commands can't reach.
+**V3.0.0 重定位 — 「马甲实战版」**: after the official Guandata BI skill family went public on 2026-06-03 (`@guandata/guanskill`: guancli / guanvis / guanetl / guanwf / guands + per-skill AI skills; guanadmin / guanexport left the public family on 2026-06-04, current family = 5), this skill was refactored ground-up from a self-built full-stack + fallback into a **battle-tested gain-layer on top of the official family**. The self-built HTTP client `scripts/guandata.py` (2789 lines) was retired and ~1600 lines of dead code removed. **Standard query / card / ETL / dataset CRUD all route to the official family**; this skill keeps only what the official DSL/commands can't reach.
 
 Current structure — a router layer plus the hard-bone Parts:
 - **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands`)
@@ -25,7 +25,7 @@ Current structure — a router layer plus the hard-bone Parts:
 
 Before performing any work in this repo, always:
 
-1. Read `SKILL.md` (the main doc, ~940 lines). The `## 🧭 Part 选择` table at the top tells you which Part (router layer / B / C / C-12 / D / E / ADS / restaurant formulas) covers the user's request.
+1. Read `SKILL.md` (the main doc, ~1060 lines). The `## 🧭 Part 选择` table at the top tells you which Part (router layer / B / C / C-12 / D / E / ADS / restaurant formulas) covers the user's request.
 2. Read only the relevant Part section in detail. Don't load the whole SKILL.md unnecessarily — each Part points to its own `references/` playbook for the full tables.
 3. Authentication is via `guancli auth login` (the whole official family shares one profile). This skill no longer reads `config.json` — credentials live in the guancli profile, not in this repo.
 
@@ -39,7 +39,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.0.0"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.2"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 

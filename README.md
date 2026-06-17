@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.1-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -29,7 +29,7 @@
 - **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.1 · 马甲实战版 架构图：官方全家桶路由层（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源，2026-06-03 全部公网化）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论 + 餐饮 BI 公式实战库）" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.2 · 马甲实战版 架构图：官方全家桶路由层（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源，2026-06-03 全部公网化）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论 + 餐饮 BI 公式实战库）" width="100%"/>
 </p>
 
 | 层 | 你想做 | 走 |
@@ -50,7 +50,7 @@
 
 - ✅ 标准查数 / 同环比 / Top N / 归因 / ChatBI 问数 → `guancli`
 - ✅ 74 种图表 JS DSL 建卡 + Page 装配 + 服务端截图出 PNG → `guanvis`
-- ✅ 单个 ETL 新建/改/lint/preview/save/run/schedule/delete → `guanetl`
+- ✅ 单个 ETL 新建/改/lint/preview/save/run/schedule → `guanetl`
 - ✅ 工作流数据流 Dataflow（DB 直连回写、增量输出）→ `guanwf`
 - ✅ 数据源 + 数据集 CRUD（建连接、create-db/import/replace-data）→ `guands`
 - ⚠️ 管理员级操作（dynamicCode / svc SQL）：`guanadmin` **2026-06-04 已退出全家桶**（需另装 standalone 或走 BI UI）
@@ -219,7 +219,7 @@ guancli auth login
 |---|---|---|
 | `guancli` | 只读分析中枢 + 表单 CRUD | 查 ETL/dsId/page/card/血缘、`ds execute-sql`、`metric query` 同环比/Top N、归因、ChatBI 问数、取数导出 |
 | `guanvis` | 标准建卡 + Page 装配 + 服务端截图 | 74 种图表 JS DSL、selector 联动、custom chart、`guanvis pack/publish/upload`、`guanvis screenshot` 出 PNG |
-| `guanetl` | ETL 写操作闭环 | 单个 ETL 新建/改/lint/preview/save/run/schedule/delete |
+| `guanetl` | ETL 写操作闭环 | 单个 ETL 新建/改/lint/preview/save/run/schedule |
 | `guanwf` | 工作流数据流 Dataflow | 工作流引擎里建/编/存/跑数据流（DB 直连回写、增量输出） |
 | `guands` | 数据源 + 数据集 CRUD | 建连接、`dataset create-db/create-query/import/replace-data`、批量移删、增量更新 |
 | ~~`guanadmin`~~ | 已退出全家桶（2026-06-04） | 管理员操作不再在公开全家桶，需另装 standalone |
@@ -377,12 +377,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.1** (2026-06-17) — **官方全家桶 06-15 版本对齐**。guanskill 0.1.5→**0.1.6**：guancli→**1.0.34**（`metric by-dataset` 按数据集 ID 反查原子指标 + 沿血缘展开下游）、guanvis→**0.1.26**（资源包打包一致性校验 + 自定义排序修复）、guanetl→**0.1.15**（`save` 输出保护增强 + 追加写入校验）、guanwf→**0.1.5**（**`workflow.go` DSL + Python 节点 + 本地校验 + 保存三方合并**）、guands→**0.1.15**（**`dataset update-fields` 批量改字段展示名 + import 编码/分隔符参数 + refresh `--overwrite`**）。路由表 + manifest 基线 pin 同步。
+**最新：V3.1.2** (2026-06-17) — **专业评审团驱动的质量迭代**（8 视角审 + 对抗校验 + 红队）。① **删除顺序矛盾实测定案**：workshop513 真实独立 ETL 净零回归确认 ds-first 正确（先删输出集再删 ETL、不报 6001）、etl-first 撞 `2002`；修正 B-0.5 与 Part D 两处把方向写反/错记 6001 的旧文。② **`page?force=true` 级联删页纳入 B-7.0 安全闸**（本地有 guanvis 源可重建才免对账）。③ 卫生：README 双语移除已下架 `guanetl delete`、AGENTS.md/marketplace.json 元数据 drift 修、References 行数回填、description 瘦身、餐饮锚点死链修、config 死字段注释。护城河零删减。
 
-**V3.1.0** (2026-06-11) — **HTML 看板视觉设计底线落地**。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论，新建 `references/part-c-design-baseline.md`：模块第一视觉位=数据判断、KPI 3-4 个 + 主值 28-32px + 单位/对比基准、图表真实性硬底线（禁 CSS 假图表）、视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / tabular-nums）、反 AI 味红线表（禁紫蓝渐变/玻璃拟态/卡片墙，命中即重做）。C-12 验收四层→**五层**（§11.5 `guanvis screenshot` 视觉验收）；模板 `html_base.css` 按底线校准。覆盖 C-12 / Part D customChart / Part E SuperApp 三场景。
+**V3.1.1** (2026-06-17) — **官方全家桶 06-15 版本对齐**。guanskill 0.1.5→**0.1.6**：guancli→**1.0.34**（`metric by-dataset` 按数据集 ID 反查原子指标 + 沿血缘展开下游）、guanvis→**0.1.26**（资源包打包一致性校验 + 自定义排序修复）、guanetl→**0.1.15**（`save` 输出保护增强 + 追加写入校验）、guanwf→**0.1.5**（**`workflow.go` DSL + Python 节点 + 本地校验 + 保存三方合并**）、guands→**0.1.15**（**`dataset update-fields` 批量改字段展示名 + import 编码/分隔符参数 + refresh `--overwrite`**）。路由表 + manifest 基线 pin 同步。
 
-**V3.0.5** (2026-06-09) — **官方全家桶 06-09 版本对齐**。guancli 1.0.32→**1.0.33**、guanvis 0.1.23→**0.1.24**（新增 AreaTitle + CardGroup 布局组件）、guanetl 0.1.13→**0.1.14**（移除 delete 命令 + 修复 save 绑定输出 bug）。路由表 + B-0.5 + 清理坑段落同步更新。
-完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
+**V3.1.0** (2026-06-11) — **HTML 看板视觉设计底线落地**。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论，新建 `references/part-c-design-baseline.md`：模块第一视觉位=数据判断、KPI 3-4 个 + 主值 28-32px + 单位/对比基准、图表真实性硬底线（禁 CSS 假图表）、视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / tabular-nums）、反 AI 味红线表（禁紫蓝渐变/玻璃拟态/卡片墙，命中即重做）。C-12 验收四层→**五层**（§11.5 `guanvis screenshot` 视觉验收）；模板 `html_base.css` 按底线校准。覆盖 C-12 / Part D customChart / Part E SuperApp 三场景。完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 
 ## 🤝 贡献
 

@@ -5,6 +5,33 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.1.2] — 2026-06-17
+
+> 本版由一次 8 视角专业 skill 评审团（每条发现经对抗式校验 + 红队综合）驱动。纯 correctness + safety + hygiene patch，护城河内容零删减。
+
+### Fixed
+
+- **🔴 删除顺序矛盾实测定案（P0 correctness）**：评审团发现 `SKILL.md` 对「ETL + 其输出数据集」的删除顺序自相矛盾——B-0.5 清理坑（line 219）与 Part D 删除段写「先删 ETL、反过来撞 6001」，而 B-7.1 / B-〇 step 10 / B-1 API 全图写「先删 ds、反过来撞 2002」。**2026-06-17 在 workshop513 真实实例做净零回归实测**（建两个一次性独立 DATAFLOW ETL、各测一个方向、测完全删）：
+  - `etl-first`（输出集还在就 `DELETE /api/etl`）→ **`2002 输出数据集已存在` 失败**；
+  - `ds-first`（先 `DELETE /api/data-source/<输出dsId>`，ETL 还在）→ **`DataSource deleted` 成功、不报 6001**；再 `DELETE /api/etl` → 成功。
+  - 裁决：**B-7.1 / line 233 / 255-256 正确（ds-first），line 219 与 Part D 删除段记反了**。已统一到 ds-first，并在 B-7.1 加实测复核锚点；澄清 `6001 依赖于该数据集` 只属删*输入*数据集或 churn `NOT_FOUND` 幽灵场景，不属正常输出集清理。删掉了草案误提的「按错误码自动判别顺序」兜底规则（红队证伪：套到 line 219 会反向推翻已实测的 ds-first）。
+- **`guanetl delete` 命令引用清理**：README.md / README.en.md 路由表把 0.1.14 已移除的 `guanetl delete` 从命令串删除（本轮实跑 `guanetl --help` 确认 delete 不在命令列；README 自身 V3.0.5 changelog 已写「移除 delete」，路由表与之自相矛盾）。
+- **References 目录行数回填**：`## 📚 References 目录` 表里 8 条偏差 >20% 的 `~N` 行数估值回填（part-c-html-dashboard ~390→~620、part-e ~620→~760、ai-native ~340→~260、restaurant 02 ~350→~700 / 03→~240 / 04→~410 / 05→~160 / 06→~350、restaurant README ~90→~70），保留 `~` 约等号语义。
+- **餐饮库锚点死链**：`restaurant-bi-formulas/README.md` 链向 `01-date-and-time.md#时间宏`，但该标题含全角括号 + emoji、auto-slug 不会是 `时间宏` → 加 `<a id="时间宏"></a>` 显式锚点（renderer 无关）。
+
+### Changed
+
+- **`page?force=true` 级联删页纳入 B-7.0 删除安全闸（P0 safety）**：Part D 删除段把「`DELETE /api/page/<pgId>?force=true` 唯一可行」补成条件句——级联删整页内嵌卡片且不可逆，须用户逐项确认；**仅当本地保有该 page 的 guanvis 源（`page.js` / card 定义）可 republish 重建时确认即可、无需对账；BI UI 手搭、本地无源的发布页按不可逆 DELETE 走 B-7.0 完整对账**。B-13 红线（line 667）DELETE 括号补上 `/api/page/<id>?force=true`。
+- **跨工具 / 橱窗元数据 drift 修正**：`AGENTS.md` 三处（frontmatter 示例 `metadata.version` 3.0.0→3.1.2、`~940 lines`→`~1060 lines`、家族列表给 `guanadmin`/`guanexport` 加「2026-06-04 退出、当前 5 件」括注，不删历史叙述）；`.claude-plugin/marketplace.json` 橱窗描述去掉已退役 Part A、补 Part D/E/ADS，`version` 1.6.0→3.1.2。
+- **`description` 瘦身**：删末尾「Claude Code/OpenClaw/Codex/Hermes 通用。」（已在 manifest.compatibility 四端声明），脱离 974/1024 上限区。红队判定「治理 vs 重搭」是 AI-native ADS 差异化指纹，保留不删。
+- `config.example.json` 加 `_note` 说明它对 v3 已是死字段（认证走 `guancli auth login`），但**保留字段不删**——`bin/install.js` uninstall 逻辑用它比对用户是否改过 config.json、改过则删前自动备份。
+- 版本号 3.1.1 → 3.1.2（SKILL.md / manifest.json / package.json / README 徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.0.0 callout / V3.0.5 记录归档至本 CHANGELOG）。
+
+### Notes
+
+- 评审团 8 视角评分（0-10）：domain-correctness 7 · safety 7 · information-architecture 7.5 · positioning 7.5 · ai-consumability 7.5 · spec 7.5 · triggering 6 · token-economy 6。40 条原始发现经对抗校验保留 23 条。
+- **未纳入本版**（拆下个 release，须先 P0 实测定案后再做）：Part B/C 结构性瘦身（去冗余为主、外迁克制）——B-7.1 删除顺序 bash 是 P0 与瘦身的共同对象，不能并行。红队否决项：description 触发句负信号化（伤公式库召回）、CHANGELOG 早期版本归档（provenance 证据）、判断表维度名下沉（差异化资产）等。
+
 ## [3.1.1] — 2026-06-17
 
 ### Changed

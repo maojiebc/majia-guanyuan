@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView + 视觉设计底线/反 AI 味红线/guanvis screenshot 视觉验收）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/看板太丑/AI 味/设计底线/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表。Claude Code/OpenClaw/Codex/Hermes 通用。
+description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView + 视觉设计底线/反 AI 味红线/guanvis screenshot 视觉验收）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/看板太丑/AI 味/设计底线/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表。
 license: MIT
 metadata:
-  version: "3.1.1"
+  version: "3.1.2"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -27,7 +27,7 @@ metadata:
           - guands
 ---
 
-# 观远 BI · 马甲实战版（V3.1.1）
+# 观远 BI · 马甲实战版（V3.1.2）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -48,16 +48,15 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.1.1（2026-06-17）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.1.2（2026-06-17）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
+>
+> 🆕 **V3.1.2 更新**（2026-06-17）：**专业 skill 评审团驱动的质量迭代**（8 视角审 + 对抗校验 + 红队）——① **删除顺序矛盾实测定案**：workshop513 真实独立 ETL 净零回归确认 **ds-first 正确**（先删输出数据集再删 ETL，两步皆成功不报 6001）、etl-first 撞 `2002 输出数据集已存在`；据此修正 B-0.5 line 219 + Part D 删除段两处把方向写反/错记 6001 的旧文，统一到 B-7.1。② **`page?force=true` 级联删页纳入 B-7.0 安全闸**（条件句：本地有 guanvis 源可重建才免对账）+ 红线括号补全。③ 事实性卫生：README 双语移除已下架 `guanetl delete`、AGENTS.md/marketplace.json 元数据 drift 修正、References 行数回填、description 瘦身、餐饮锚点死链修、config 死字段注释。纯 correctness+safety+hygiene，护城河零删减。
 >
 > 🆕 **V3.1.1 更新**（2026-06-17）：**官方全家桶 06-15 版本对齐**——`guanskill` 0.1.5→0.1.6，子包全部对齐最新：`guancli` 1.0.33→1.0.34（`metric by-dataset` 按数据集 ID 反查原子指标 + 沿血缘展开下游复合/衍生）、`guanvis` 0.1.24→0.1.26（资源包打包一致性校验 + 自定义排序 payload 修复）、`guanetl` 0.1.14→0.1.15（`save` 输出数据集保护增强 + 追加写入行结构校验）、**`guanwf` 0.1.4→0.1.5（`workflow.go` DSL 统一 + 新增 Python 节点 DSL/本地校验 + 保存三方合并）**、**`guands` 0.1.14→0.1.15（新增 `dataset update-fields` 批量改字段展示名/注释 + `import` 增编码/分隔符参数 + `refresh --overwrite`）**。路由总表版本号 + 能力描述刷新（guanwf 升级为「数据流 + Python 节点多节点 DAG」、guands 补 `dataset update-fields`）；Part B 实测边界补 0.1.15 note；manifest/README/package 基线 pin 同步。
 >
 > 🆕 **V3.1.0 更新**（2026-06-11）：**HTML 看板视觉设计底线落地**——吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论，新建 [references/part-c-design-baseline.md](references/part-c-design-baseline.md)：模块第一视觉位=数据判断、KPI 3-4 个 + 28-32px + 单位/时间范围/对比基准、图表真实性硬底线（禁 CSS 假图表）、视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / tabular-nums）、反 AI 味红线表（禁紫蓝渐变/玻璃拟态/卡片墙/emoji 图标/营销 CTA）、状态文案带业务上下文。C-12 验收清单从四层扩到**五层**（§11.5 视觉验收走 `guanvis screenshot` 服务端截图）；模板 `html_base.css` 按底线校准（KPI 28px + tabular-nums + 表格行高 38px + 状态样式族）。覆盖 C-12 / Part D customChart / Part E SuperApp 三场景。
->
-> 🆕 **V3.0.0 重定位**（2026-06-04）：观远官方全家桶（guancli / guanvis / guanetl / guanwf / guands / guanexport / guanadmin）2026-06-03 全部公网化后，本 skill 从"自造全栈 + fallback"**彻底重构为「官方全家桶之上的实战增益层」**——退役 2789 行自造 HTTP 客户端 `guandata.py`、删 ~1600 行死代码、砍掉所有镜像官方命令的章节。**标准查数 / 建卡 / ETL / 数据集 CRUD 一律路由官方**；本 skill 只留官方 DSL/命令够不着的硬骨头：Part B 治理判断 + 报错手册、Part C/C-12 自定义图表注入 + descriptor patch、Part D v7 状态机绕过、Part E SuperApp 反向工程、AI-native ADS 方法论、餐饮公式库。详见下「路由层」+ [CHANGELOG.md](CHANGELOG.md)。
-
 ---
 
 # 🧭 路由层：标准活交给官方全家桶
@@ -84,7 +83,7 @@ metadata:
 | **`guands`** | 0.1.15 | 数据源 + 数据集 CRUD | 建数据连接（MySQL/PG/Oracle）、`dataset create-db/create-query/import/replace-data`、批量移删、增量更新、定时调度、计算字段、`dataset alias` 改字段展示名、**`dataset update-fields` 批量改字段展示名/注释（0.1.15 新，命令行或 JSON + `--dry-run`）+ import 增 `--header-row`/`--encoding`/`--delimiter` + refresh `--overwrite` 全量覆盖** |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
-| **`majia-guanyuan`**（本 skill） | **3.1.1** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
+| **`majia-guanyuan`**（本 skill） | **3.1.2** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
 **一句话路由**：标准查数 → `guancli`；标准建卡/发布/截图 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`。**任何一个遇到官方 DSL/命令够不着的字段、报错、状态机、反向工程、业务口径**——回到本 skill 对应 Part。
 
@@ -216,7 +215,7 @@ echo "LOCAL:" && guanskill version && echo "---" && echo "NPM latest:" && npm vi
 - **高级逃生**（仅在没法重建时）：手工构造 `_exported.json` = fresh `_base` 的 actions + 保留 output `dataSource.dsId` + 你的**逻辑**改动，再 `guanetl save`。
 - **认证别绕**：BI API 是 **cookie/session 认证**——写操作一律走 `guanetl save` / `guands`（它们持有正确会话）。
 
-**清理坑**：~~`guanetl delete --cascade`~~（**0.1.14 已移除 delete 命令**）。删 ETL 改走 BI UI 或直接 `DELETE /api/etl/<id>`；顺序仍是**先删 ETL 再删孤儿输出集**（反过来 → 6001 ETL 还引用它）。churn 出的中间绑定删 ETL 后多为 `NOT_FOUND` 幽灵（`ds get`=1002 但 `ds delete`=6001，不可见、无害）。
+**清理坑**：~~`guanetl delete --cascade`~~（0.1.14 起无 delete 命令）。删 ETL + 孤儿输出集走 `DELETE` API，**顺序必须先删输出数据集、再删 ETL（与 B-7.1 一致）**；反过来先删 ETL → `2002 输出数据集已存在` 失败。**2026-06-17 · workshop513 实测定案**（独立 DATAFLOW ETL，净零回归）：`DELETE /api/data-source/<输出dsId>`（ETL 还在）→ `DataSource deleted` 成功、**不报 6001**；再 `DELETE /api/etl/<id>` → 成功。churn 出的中间绑定是另一回事——删 ETL 后多为 `NOT_FOUND` 幽灵（`ds get`=1002 但 `ds delete`=6001，不可见、无害）。
 
 ## B-〇. 推荐工作流（先治理再重建）
 
@@ -523,6 +522,8 @@ guancli etl get <DFID> --raw \
 
 ### B-7.1 关键约束：先 ds 后 etl
 
+> ✅ **2026-06-17 · workshop513 实测复核（净零回归）**：独立 DATAFLOW ETL 两个方向各测一次——etl-first 撞 `2002 输出数据集已存在` 失败；ds-first（先 `DELETE /api/data-source/<输出dsId>`，后 `DELETE /api/etl/<id>`）两步皆 `ok`、**不报 6001**。本约束适用所有「ETL + 其输出数据集」清理。`6001 依赖于该数据集` **不**出现在这里，它只属于删*输入*数据集（ETL 仍读它）或 churn `NOT_FOUND` 幽灵场景（见 B-0.5 清理坑）。
+
 ```bash
 guancli fetch DELETE /api/etl/<etl_id>
 # => {"error":{"status":2002,"message":"输出数据集已存在"}}  ← 失败！
@@ -662,7 +663,7 @@ checkStatus(v3Name)                    // guancli etl search → parse Status
 - ❌ 不要假设 INPUT_DATASET 字段名干净 —— 先看 `relativeFieldAlias` 和实际预览。
 - ❌ 不要 execute 完就走人 —— `status:FINISHED` 是任务触发结果，不是 ETL 执行结果。要 `GET /api/task/<id>` 拿 `result.error`。
 - ❌ 不要假设节点 ID 重排不影响 SQL —— 删除 INPUT_DATASET 后 input 位置式索引会变。
-- ❌ **未经用户逐项明确确认，绝不执行任何 DELETE 操作**（含 `/api/data-source/` 和 `/api/etl/`）—— Agent 默认行为是把待删清单产出给用户审阅，由用户明确指令才执行。详见 **B-7.0 删除前的硬性安全闸**。模糊回复（"嗯"、"可以"、"清理一下"）不算确认。
+- ❌ **未经用户逐项明确确认，绝不执行任何 DELETE 操作**（含 `/api/data-source/`、`/api/etl/` 和 `/api/page/<id>?force=true` 级联删页）—— Agent 默认行为是把待删清单产出给用户审阅，由用户明确指令才执行。详见 **B-7.0 删除前的硬性安全闸**。模糊回复（"嗯"、"可以"、"清理一下"）不算确认。
 - ❌ 不要为了"清理"删旧 ETL —— 并行做新链路、对账确认后再处理旧表。新旧并行是默认终态，不是过渡态。
 - ❌ 不要直接 `DELETE /api/etl/<id>` —— 必须先 `DELETE /api/data-source/<dsId>` 再删 ETL。
 - ❌ 不要试 `DELETE /api/dataset/`、`/datasource/`、`/ds/` —— 正确是 `/api/data-source/`（带连字符）。
@@ -968,7 +969,7 @@ new GDPlugin().init(renderChart);
 >
 > **架构**：v7 BI 的草稿/发布分离机制使**手撸 `/api/page` + `/api/card` 全链路废弃**；银弹是官方 `guanvis`（原 `guanvis-skill`，全家桶成员，现公网 `@guandata/guanvis@0.1.26`），`guanskill install-skill && guanvis publish .` 30 秒一键发布整个 page + custom chart + dataView，跳过所有草稿/发布的状态机。配套硬规则：CSV 散客 `会员ID` 是 `""` 不是 NULL（三态判断必须 `IS NOT NULL AND <> ''`）；STRING 字段才能 `<> ''`，日期/数字 Spark 严格类型不行；Spark CTE 别名必须英文；ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId` 否则 1012；数据集上传 / 建集走官方 `guands`（`create-db` / `import` / `replace-data`，不必再 BI UI 手动）；大表 pandas 用 `to_csv` 而非 `to_excel`（50 倍速差）。
 >
-> 🗑️ **删除 guanvis-published 页面 / ETL（2026-06-05 · workshop513 实测）**：`guanvis publish` 出的页面，卡片**内嵌在 `page.cards` + `meta.layout`、不是独立 `/api/card` 资源**——所以 `DELETE /api/card/<cdId>` 报 `1002 找不到`、`DELETE /api/page/<id>` 报 `1004 无法删除包含卡片的页面`、guanvis 也不让覆盖成空页（validation 拒 `No layout items`）。**唯一可行**：`guancli fetch DELETE "/api/page/<pgId>?force=true"` → `Page deleted`（级联删卡）。删 ETL 同理——`DELETE /api/etl/<id>` 会**连带删掉其输出数据集**（顺序：先 ETL 后 ds；别用 `guanetl delete --cascade`，它先删 ds 会撞 `6001 依赖于该数据集`）。
+> 🗑️ **删除 guanvis-published 页面 / ETL（2026-06-05 · workshop513 实测）**：`guanvis publish` 出的页面，卡片**内嵌在 `page.cards` + `meta.layout`、不是独立 `/api/card` 资源**——所以 `DELETE /api/card/<cdId>` 报 `1002 找不到`、`DELETE /api/page/<id>` 报 `1004 无法删除包含卡片的页面`、guanvis 也不让覆盖成空页（validation 拒 `No layout items`）。**唯一可行**：`guancli fetch DELETE "/api/page/<pgId>?force=true"` → `Page deleted`（级联删卡）。⚠️ **`force=true` 级联删整页内嵌卡片且不可逆，属 B-7.0 安全闸覆盖的 DELETE**：执行前用户须逐项确认页 ID + 页名（模糊回复不算确认）。**仅当本地保有该 page 的 guanvis 源（`page.js` / card 定义）可 `guanvis publish` 重建时，确认即可、无需对账；若是 BI UI 手搭、本地无源的发布页，按不可逆 DELETE 对待、走 B-7.0 完整对账。** 删 ETL + 输出集 → **先删输出数据集、再删 ETL**（与 B-7.1 一致；2026-06-17 实测：反过来先删 ETL 撞 `2002 输出数据集已存在`，ds-first 不报 6001）；`guanetl delete --cascade` 0.1.14 起已无此命令。
 >
 > **不能跳的硬约束**（2026-05-20/21 v7 demo 实战 · 90 天 / 1200 门店 / 80K 会员 / 20 表 / 17 ETL / 6 HTML 看板）：
 > 1. **直接手撸 page+card API 全废**：draft cdId ≠ published cdId 不会自动映射回 published page，光走 `POST /api/page` 拼不出来；走 `guanvis publish` 才能跨过状态机。
@@ -991,23 +992,23 @@ new GDPlugin().init(renderChart);
 | [part-b-sdk.md](references/part-b-sdk.md) | 30+ 表批量改造、写 `transformV2ToV3` 时 | ~60 |
 | [part-b17-fullchain-rewrite.md](references/part-b17-fullchain-rewrite.md) | 全链路 SmartETL 重写、副本页验收、ExecPlan 管理时 | ~290 |
 | [part-c-payload-json.md](references/part-c-payload-json.md) | runtime 拿不到 payload_json / JSON.parse 失败时 | ~60 |
-| [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~390 |
+| [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~620 |
 | [part-c-design-baseline.md](references/part-c-design-baseline.md) | 生成/修改任何 HTML 看板的视觉层时；用户说"做好看点 / 太丑 / AI 味重"时；C-12 §11.5 视觉验收时。模块首屏=数据判断 / KPI 与数值口径 / 图表真实性 / token 硬上限 / 反 AI 味红线 / `guanvis screenshot` 验收清单。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT），覆盖 C-12 / Part D / Part E（V3.1.0 新建） | ~150 |
 | [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / SmartETL `COUNT_DISTINCT`/`JOIN_DATA` 多键/`FULL_OUTER` 节点化坑（V2.1.8）/ HTML customChart `renderChart` 不调 + `autoBootstrap` + chip toolbar 兜底（V2.1.9）/ 移动端 phoneLayout v7 草稿 save API 死路 + ZIP inject 唯一可行路径 + CSS @media 模板（V2.1.10） | ~1120 |
-| [part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md) | SuperApp 开放应用开发流水线 / `guancli app create/publish` 不读 `.env` 必须显式传 `--app-id` / 脚手架 bi-services 速查 / 数据集异步预览 3 步链路 / **`/survey-engine/api/form/add` 建表反向工程**（脚手架没暴露） / **BI LLM 中转 NOT_JSON_RES/ILLEGAL_JSON_RES 三路径解析模板**（含从 error_message 抠 LLM 响应）/ 客户端模拟流式 + prompt 模板 / 原生 fetch + credentials: 'include' 绕过脚手架 `get` unwrap / `<base href>` + Router basename / 设计纪律 + 反模式表 + 决策树（V2.1.12 新建） | ~620 |
-| [ai-native-ads-design.md](references/ai-native-ads-design.md) | **majia-guanyuan 哲学层文档**——客户问"想给现有 BI 接 AI"时判断"治理 vs 重搭" / 7 条 AI-native ADS 字段约束（中文枚举 / 推荐预算 / 复合拼好 / TIMESTAMP / 强约束取值 / 数值算好 / 权限冗余） / ODS+DWD 不动 ADS 重建 / 预算分配 30%+30%+40% / 与 Part D/E + 餐饮 BI 公式库的关系 / 反模式 8 条（V2.1.13 新建） | ~340 |
+| [part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md) | SuperApp 开放应用开发流水线 / `guancli app create/publish` 不读 `.env` 必须显式传 `--app-id` / 脚手架 bi-services 速查 / 数据集异步预览 3 步链路 / **`/survey-engine/api/form/add` 建表反向工程**（脚手架没暴露） / **BI LLM 中转 NOT_JSON_RES/ILLEGAL_JSON_RES 三路径解析模板**（含从 error_message 抠 LLM 响应）/ 客户端模拟流式 + prompt 模板 / 原生 fetch + credentials: 'include' 绕过脚手架 `get` unwrap / `<base href>` + Router basename / 设计纪律 + 反模式表 + 决策树（V2.1.12 新建） | ~760 |
+| [ai-native-ads-design.md](references/ai-native-ads-design.md) | **majia-guanyuan 哲学层文档**——客户问"想给现有 BI 接 AI"时判断"治理 vs 重搭" / 7 条 AI-native ADS 字段约束（中文枚举 / 推荐预算 / 复合拼好 / TIMESTAMP / 强约束取值 / 数值算好 / 权限冗余） / ODS+DWD 不动 ADS 重建 / 预算分配 30%+30%+40% / 与 Part D/E + 餐饮 BI 公式库的关系 / 反模式 8 条（V2.1.13 新建） | ~260 |
 
 **餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL）：**
 
 | 文件 | 何时读 | 行数 |
 |---|---|---|
-| [restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md) | 进入业务公式库的总入口 / 字段词典 / 5 条最常踩坑 | ~90 |
+| [restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md) | 进入业务公式库的总入口 / 字段词典 / 5 条最常踩坑 | ~70 |
 | [restaurant-bi-formulas/01-date-and-time.md](references/restaurant-bi-formulas/01-date-and-time.md) | 写时间范围（T-1 / 本月 / 上月 / 近 N 天 / 时间宏 / 用餐时段 / 跨月对齐） | ~180 |
-| [restaurant-bi-formulas/02-customer-and-membership.md](references/restaurant-bi-formulas/02-customer-and-membership.md) | 新老客 / 会员属性 / 消费频次（3 口径）/ 复购（跨天 vs 非跨天）/ 留存流失 / RFM / 注册前后行为 / 90 天复购分桶 | ~350 |
-| [restaurant-bi-formulas/03-revenue-kpi.md](references/restaurant-bi-formulas/03-revenue-kpi.md) | AC / ADS / ADT / AUD / Comp / TC_CRM% / NS_CRM% / 营收占比 / 客单分桶 / 累计消费 | ~180 |
-| [restaurant-bi-formulas/04-channel-and-store.md](references/restaurant-bi-formulas/04-channel-and-store.md) | 业务渠道（堂食/外卖）/ 订单子渠道大 case / 时效类型 / 搭配类型 / StoreDate / 成长类型 / 注册门店优先级回填 | ~210 |
-| [restaurant-bi-formulas/05-coupon-and-discount.md](references/restaurant-bi-formulas/05-coupon-and-discount.md) | 核销率 / 折扣率 / 折扣分桶 / 券类型分流 / 注册第一张券 / 30 日优惠订单比例 | ~110 |
-| [restaurant-bi-formulas/06-sql-utils.md](references/restaurant-bi-formulas/06-sql-utils.md) | 字符串拆解 / `explode+split` / `collect_set+concat_ws` / 开窗排名（ROW_NUMBER/RANK/DENSE_RANK）/ 累计窗口 / 多表 LEFT JOIN | ~210 |
+| [restaurant-bi-formulas/02-customer-and-membership.md](references/restaurant-bi-formulas/02-customer-and-membership.md) | 新老客 / 会员属性 / 消费频次（3 口径）/ 复购（跨天 vs 非跨天）/ 留存流失 / RFM / 注册前后行为 / 90 天复购分桶 | ~700 |
+| [restaurant-bi-formulas/03-revenue-kpi.md](references/restaurant-bi-formulas/03-revenue-kpi.md) | AC / ADS / ADT / AUD / Comp / TC_CRM% / NS_CRM% / 营收占比 / 客单分桶 / 累计消费 | ~240 |
+| [restaurant-bi-formulas/04-channel-and-store.md](references/restaurant-bi-formulas/04-channel-and-store.md) | 业务渠道（堂食/外卖）/ 订单子渠道大 case / 时效类型 / 搭配类型 / StoreDate / 成长类型 / 注册门店优先级回填 | ~410 |
+| [restaurant-bi-formulas/05-coupon-and-discount.md](references/restaurant-bi-formulas/05-coupon-and-discount.md) | 核销率 / 折扣率 / 折扣分桶 / 券类型分流 / 注册第一张券 / 30 日优惠订单比例 | ~160 |
+| [restaurant-bi-formulas/06-sql-utils.md](references/restaurant-bi-formulas/06-sql-utils.md) | 字符串拆解 / `explode+split` / `collect_set+concat_ws` / 开窗排名（ROW_NUMBER/RANK/DENSE_RANK）/ 累计窗口 / 多表 LEFT JOIN | ~350 |
 | [restaurant-bi-formulas/07-data-quality-traps.md](references/restaurant-bi-formulas/07-data-quality-traps.md) | `NULL vs 0` / 三态判断 / 口径歧义 / 重复字段名 / A↔B↔通用字段对照表 / 日期边界 | ~250 |
 | [restaurant-bi-formulas/08-etl-engineering-patterns.md](references/restaurant-bi-formulas/08-etl-engineering-patterns.md) | **ETL 工程范式**：10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 哲学 / 财务双源对账 / POS 系统归一化 / 会员生命周期多输出 / Cohort 日期×门店网格（蒸馏自 39 个 V1 生产 ETL）| ~280 |
 | [restaurant-bi-formulas/09-etl-catalog.md](references/restaurant-bi-formulas/09-etl-catalog.md) | **39 个 V1 生产 ETL 索引清单**：按 11 业务域分类（基础维表 / DWD / 会员档案 / 顾客行为 / 财务营收 / 营销目标 / 私域社群 / 活动券 / 评价管理 / 业务标签 / 数据质量）+ 每 ETL 的节点/输入/输出/SQL 速查 + 复用决策表 | ~190 |
@@ -1027,12 +1028,11 @@ new GDPlugin().init(renderChart);
 
 ## 📋 版本记录
 
-**最新：V3.1.1** (2026-06-17) — **官方全家桶 06-15 版本对齐**。guanskill 0.1.5→**0.1.6**：guancli 1.0.33→**1.0.34**（`metric by-dataset` 按数据集 ID 反查直接原子指标并沿指标血缘展开下游复合/衍生指标）、guanvis 0.1.24→**0.1.26**（资源包打包配置一致性校验提前发现重复/冲突资源 + 自定义排序 payload 归一化修复；0.1.25 补资源 ID 字母开头指引）、guanetl 0.1.14→**0.1.15**（`save` 输出数据集保护增强、保留级联配置 + 追加写入场景行结构提前校验）、guanwf 0.1.4→**0.1.5**（**`workflow.go` DSL 模式统一 + 新增 Python 节点 DSL 与本地校验 + 保存采用三方合并降低覆盖线上数据流风险**）、guands 0.1.14→**0.1.15**（**新增 `dataset update-fields` 批量更新字段展示名/注释（命令行或 JSON，含 `--dry-run`）+ `import` 增 `--header-row`/`--encoding`/`--delimiter` + `refresh --overwrite` 全量覆盖**）。路由总表版本号 + 能力描述刷新（guanwf 升级为「数据流 + Python 节点多节点 DAG」、guands 补 update-fields）；Part B 实测边界补 0.1.15 note；manifest/README/package 基线 pin 同步；majia-guanyuan 版本列 3.1.0→3.1.1 对齐。
+**最新：V3.1.2** (2026-06-17) — **专业 skill 评审团驱动的质量迭代**（8 视角审 + 每条发现对抗式校验 + 红队综合）。**① 删除顺序矛盾实测定案**：workshop513 真实独立 DATAFLOW ETL 净零回归——ds-first（先删输出数据集再删 ETL）两步皆成功、不报 6001；etl-first 撞 `2002 输出数据集已存在`。据此修正 B-0.5 line 219 与 Part D 删除段两处把顺序写反、误记 6001 的旧文，统一到 B-7.1 并加实测锚点。**② `page?force=true` 级联删页纳入 B-7.0 安全闸**（条件句：本地保有 guanvis 源可 republish 才免对账，无源手搭页按不可逆 DELETE 走完整对账）+ 红线括号补 `/api/page?force=true`。**③ 事实性卫生**：README 双语移除已下架的 `guanetl delete`、AGENTS.md 三处 drift（version/行数/guanadmin 退役括注）、marketplace.json 橱窗去 Part A 补 D/E/ADS、References 目录回填 8 条偏差>20% 行数、description 瘦身脱离 1024 上限、餐饮库 `#时间宏` 锚点死链修复、config.example.json 死字段加注释。纯 correctness+safety+hygiene patch，护城河零删减。
 
-**V3.1.0** (2026-06-11) — **HTML 看板视觉设计底线落地**。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论，新建 [references/part-c-design-baseline.md](references/part-c-design-baseline.md)（~150 行，覆盖 C-12 / Part D customChart / Part E SuperApp 三场景）：模块第一视觉位=数据判断、KPI 3-4 个 + 主值 28-32px + 单位/时间范围/对比基准、图表真实性硬底线（禁 CSS 高度条假图表）、视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / 间距刻度 / tabular-nums）、状态文案带业务上下文、反 AI 味红线表（禁紫蓝渐变/玻璃拟态/卡片墙/emoji 图标/营销 CTA，命中即重做）。C-12 验收从四层扩到**五层**（§11.5 视觉验收走 `guanvis screenshot` 服务端截图，绕开 Chrome 黑屏）；模板 `html_base.css` 按底线校准（KPI 28px + tabular-nums + 表格行高 ~38px + `.gd-error` 状态样式族）。与 Part E §10 官方 design:lint 同源互补——lint 机械自检打底，本底线补口径/文案/反 AI 味人工查。
+**V3.1.1** (2026-06-17) — **官方全家桶 06-15 版本对齐**。guanskill 0.1.5→**0.1.6**：guancli 1.0.33→**1.0.34**（`metric by-dataset` 按数据集 ID 反查直接原子指标并沿指标血缘展开下游复合/衍生指标）、guanvis 0.1.24→**0.1.26**（资源包打包配置一致性校验提前发现重复/冲突资源 + 自定义排序 payload 归一化修复；0.1.25 补资源 ID 字母开头指引）、guanetl 0.1.14→**0.1.15**（`save` 输出数据集保护增强、保留级联配置 + 追加写入场景行结构提前校验）、guanwf 0.1.4→**0.1.5**（**`workflow.go` DSL 模式统一 + 新增 Python 节点 DSL 与本地校验 + 保存采用三方合并降低覆盖线上数据流风险**）、guands 0.1.14→**0.1.15**（**新增 `dataset update-fields` 批量更新字段展示名/注释（命令行或 JSON，含 `--dry-run`）+ `import` 增 `--header-row`/`--encoding`/`--delimiter` + `refresh --overwrite` 全量覆盖**）。路由总表版本号 + 能力描述刷新（guanwf 升级为「数据流 + Python 节点多节点 DAG」、guands 补 update-fields）；Part B 实测边界补 0.1.15 note；manifest/README/package 基线 pin 同步；majia-guanyuan 版本列 3.1.0→3.1.1 对齐。
 
-**V3.0.5** (2026-06-09) — **官方全家桶 06-09 版本对齐**。guancli 1.0.32→**1.0.33**（`ds search --id` 精确解析修复）、guanvis 0.1.23→**0.1.24**（**新增 AreaTitle 分区标题 + CardGroup 卡片组布局组件**）、guanetl 0.1.13→**0.1.14**（**移除 delete 命令** + 修复 save 导出空 `dataSource` 覆盖服务端绑定 bug + `run --wait` 状态区分）。路由表版本号 + 能力描述刷新；B-0.5 两道墙（edit 空 etl.go + save 输出绑定 guard 误触发）经 workshop513 复测**确认已修复**，B-0.5 降级为 fallback 参考；清理坑段落适配 delete 移除。majia-guanyuan 版本列 3.0.3→3.0.5 对齐。
-完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
+**V3.1.0** (2026-06-11) — **HTML 看板视觉设计底线落地**。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT）的「可执行设计底线」方法论，新建 [references/part-c-design-baseline.md](references/part-c-design-baseline.md)（~150 行，覆盖 C-12 / Part D customChart / Part E SuperApp 三场景）：模块第一视觉位=数据判断、KPI 3-4 个 + 主值 28-32px + 单位/时间范围/对比基准、图表真实性硬底线（禁 CSS 高度条假图表）、视觉 token 硬上限（圆角 ≤8px / 阴影 ≤8px / 间距刻度 / tabular-nums）、状态文案带业务上下文、反 AI 味红线表（禁紫蓝渐变/玻璃拟态/卡片墙/emoji 图标/营销 CTA，命中即重做）。C-12 验收从四层扩到**五层**（§11.5 视觉验收走 `guanvis screenshot` 服务端截图，绕开 Chrome 黑屏）；模板 `html_base.css` 按底线校准（KPI 28px + tabular-nums + 表格行高 ~38px + `.gd-error` 状态样式族）。与 Part E §10 官方 design:lint 同源互补——lint 机械自检打底，本底线补口径/文案/反 AI 味人工查。完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 
 ## 👤 作者 / 联系
 

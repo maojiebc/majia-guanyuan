@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.1-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -29,7 +29,7 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.1 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.2 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
@@ -50,7 +50,7 @@ Two layers:
 
 - ✅ Standard query / YoY-MoM / Top N / attribution / ChatBI → `guancli`
 - ✅ 74 chart-type JS DSL card-build + Page assembly + server-side screenshot → `guanvis`
-- ✅ Single-ETL create/edit/lint/preview/save/run/schedule/delete → `guanetl`
+- ✅ Single-ETL create/edit/lint/preview/save/run/schedule → `guanetl`
 - ✅ Workflow Dataflow (DB direct write-back, incremental output) → `guanwf`
 - ✅ Data source + dataset CRUD (create connection, create-db/import/replace-data) → `guands`
 - ⚠️ Admin-level operations: `guanadmin` **left the family 2026-06-04** (install standalone or use the BI UI)
@@ -220,7 +220,7 @@ guancli auth login
 |---|---|---|
 | `guancli` | Read-only analysis hub + form CRUD | Query ETL/dsId/page/card/lineage, `ds execute-sql`, `metric query` YoY-MoM/Top N, attribution, ChatBI, data export |
 | `guanvis` | Standard card-build + Page assembly + server-side screenshot | 74 chart-type JS DSL, selector linkage, custom chart, `guanvis pack/publish/upload`, `guanvis screenshot` → PNG |
-| `guanetl` | ETL write-op loop | Single-ETL create/edit/lint/preview/save/run/schedule/delete |
+| `guanetl` | ETL write-op loop | Single-ETL create/edit/lint/preview/save/run/schedule |
 | `guanwf` | Workflow Dataflow | Build/edit/save/run dataflows in the workflow engine (DB direct write-back, incremental output) |
 | `guands` | Data source + dataset CRUD | Create connections, `dataset create-db/create-query/import/replace-data`, bulk move/delete, incremental update |
 | ~~`guanadmin`~~ | Left the family (2026-06-04) | admin ops no longer in the public family — install standalone |
@@ -379,12 +379,11 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.1** (2026-06-17) — **official family 06-15 version alignment**. guanskill 0.1.5→**0.1.6**: guancli→**1.0.34** (`metric by-dataset` reverse-looks-up atomic metrics by dataset ID + expands downstream composite/derived along lineage), guanvis→**0.1.26** (resource-pack packaging consistency check + custom-sort fix), guanetl→**0.1.15** (`save` output protection hardened + append-write pre-check), guanwf→**0.1.5** (**`workflow.go` DSL + Python node + local validation + three-way merge on save**), guands→**0.1.15** (**`dataset update-fields` batch-renames field display names + import encoding/delimiter flags + refresh `--overwrite`**). Routing table + manifest baseline pins synced.
+**Latest: V3.1.2** (2026-06-17) — **review-panel-driven quality iteration** (8 lenses + adversarial verification + red-team). ① **ETL delete-order contradiction settled empirically**: net-zero regression on a real standalone DATAFLOW ETL (workshop513) confirms ds-first is correct (delete output dataset first, then ETL — no 6001); etl-first hits `2002 output dataset still exists`. Fixed two places (B-0.5 line 219 + Part D delete section) that had the order reversed / mis-attributed 6001, unified to B-7.1. ② **`page?force=true` cascade-delete folded into the B-7.0 safety gate** (skip reconciliation only if a local guanvis source can republish it). ③ Hygiene: removed the retired `guanetl delete` from both READMEs, fixed AGENTS.md / marketplace.json metadata drift, back-filled References line counts, trimmed the description off the 1024 ceiling, fixed the `#时间宏` anchor, annotated the config.example.json dead field. Moat untouched.
 
-**V3.1.0** (2026-06-11) — **visual design baseline for HTML dashboards**. Absorbed the "executable design baseline" methodology from [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills) (MIT) into the new `references/part-c-design-baseline.md`: first visual slot = data judgment, KPI 3-4 per row at 28-32px with units/comparison basis, chart-authenticity hard floor (no CSS-faked charts), visual token hard caps (radius ≤8px / shadow ≤8px / tabular-nums), anti-AI-look red lines (purple-blue gradients / glassmorphism / card walls — hit = redo). C-12 acceptance grows from four to **five layers** (§11.5 visual check via `guanvis screenshot`); template `html_base.css` recalibrated to the baseline. Covers C-12 / Part D customChart / Part E SuperApp.
+**V3.1.1** (2026-06-17) — **official family 06-15 version alignment**. guanskill 0.1.5→**0.1.6**: guancli→**1.0.34** (`metric by-dataset` reverse-looks-up atomic metrics by dataset ID + expands downstream composite/derived along lineage), guanvis→**0.1.26** (resource-pack packaging consistency check + custom-sort fix), guanetl→**0.1.15** (`save` output protection hardened + append-write pre-check), guanwf→**0.1.5** (**`workflow.go` DSL + Python node + local validation + three-way merge on save**), guands→**0.1.15** (**`dataset update-fields` batch-renames field display names + import encoding/delimiter flags + refresh `--overwrite`**). Routing table + manifest baseline pins synced.
 
-**V3.0.5** (2026-06-09) — **official family 06-09 version alignment**. guancli 1.0.32→**1.0.33** (`ds search --id` fix), guanvis 0.1.23→**0.1.24** (new AreaTitle + CardGroup layout components), guanetl 0.1.13→**0.1.14** (removed `delete` command + fixed save exporting empty `dataSource` overwriting server binding). Routing table + B-0.5 + cleanup section updated.
-Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
+**V3.1.0** (2026-06-11) — **visual design baseline for HTML dashboards**. Absorbed the "executable design baseline" methodology from [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills) (MIT) into the new `references/part-c-design-baseline.md`: first visual slot = data judgment, KPI 3-4 per row at 28-32px with units/comparison basis, chart-authenticity hard floor (no CSS-faked charts), visual token hard caps (radius ≤8px / shadow ≤8px / tabular-nums), anti-AI-look red lines (purple-blue gradients / glassmorphism / card walls — hit = redo). C-12 acceptance grows from four to **five layers** (§11.5 visual check via `guanvis screenshot`); template `html_base.css` recalibrated to the baseline. Covers C-12 / Part D customChart / Part E SuperApp.Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 
 ## 🤝 Contributing
 

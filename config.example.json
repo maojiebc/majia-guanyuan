@@ -1,4 +1,5 @@
 {
+  "_note": "仅作历史凭据 schema 参考 —— v3 起本 skill 不再读取本文件，认证统一走 `guancli auth login`（官方全家桶共用一套 profile）。保留它是因为 bin/install.js 的 uninstall 逻辑用它比对用户是否改过 config.json、改过则删前自动备份；请勿删字段。",
   "version": "6",
   "base_url": "https://your-bi-instance.example.com/",
   "domain": "guanbi",
