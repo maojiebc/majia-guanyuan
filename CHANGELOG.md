@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [Unreleased]
+
+> 已在 `main`、未单独发版——随下次发版（如下次官方基线 sync）一并出；为这点改动单发不可撤回的 ClawHub 版不划算。
+
+### Changed
+
+- **rank9 保守去冗余**（专业评审团 23-agent 对抗校验后定案：Part B/C 已是良构，仅 2 处零风险同行去重安全可做、外迁候选全部 defer）：B-0.5 修复确认横幅（line 205）压成一行指针、去掉第三次复述；B-11 `transformV2ToV3` 陷阱清单（line 633）压成「头号坑 `sql`≠`sqlScript` 内联 + 完整 4 条见 part-b-sdk.md」，并修正旧文「7 步关键陷阱」却只列 4 条的口径不符。护城河（B-1 API 全图 / B-2.4-2.6 判断表维度名 / B-7.0+7.1 删除安全闸 / B-9 报错速查 / B-13 红线 / B-4 sqlScript 安全网 / B-0.5 逃生配方 / 各小节内联 ⚠️）一字未动。
+
 ## [3.1.2] — 2026-06-17
 
 > 本版由一次 8 视角专业 skill 评审团（每条发现经对抗式校验 + 红队综合）驱动。纯 correctness + safety + hygiene patch，护城河内容零删减。

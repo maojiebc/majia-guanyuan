@@ -202,7 +202,7 @@ echo "LOCAL:" && guanskill version && echo "---" && echo "NPM latest:" && npm vi
 
 ## B-0.5 guanetl `edit` 失效时的绕过方案（0.1.12–0.1.13 历史；0.1.14 已修复，保留作 fallback）
 
-> ✅ **0.1.14 修复确认**（2026-06-09 · workshop513 复测）：`edit` 空 etl.go + `save` 输出绑定 guard 误触发两个 bug 均已修复，`edit→export→lint→save` 全链路跑通。**正常情况下直接用 `guanetl edit` 即可**。以下绕过方案保留为 fallback——万一特定 BI 版本 / 节点类型仍触发时可用。
+> 0.1.14 已修复 `edit` 空 etl.go + `save` 输出绑定 guard 两 bug（确认详见上方 Part B 实测边界段），正常直接用 `guanetl edit`；以下绕过方案保留为 fallback——特定 BI 版本 / 节点类型仍触发时用。
 
 **原三道墙**（guanetl 0.1.12–0.1.13，0.1.14 已全部修复）：
 1. ~~`edit` 的 base→`etl.go` 逆向出空~~ → **0.1.14 已修**
@@ -630,7 +630,7 @@ pushAndExecute(v3Name, payloadPath)   // direct-save → execute
 checkStatus(v3Name)                    // guancli etl search → parse Status
 ```
 
-`transformV2ToV3` 内部 7 步关键陷阱：**SQL 字段名是 `sql` 不是 `sqlScript`**（最大坑） · 重排节点 ID 时 sources 数组要同步 · 删除 INPUT 后 input 索引重排 · meta 字段要同步更新。
+`transformV2ToV3` 有 4 个关键陷阱，头号坑是 **SQL 字段名是 `sql` 不是 `sqlScript`**（写错不报错、SQL 静默不生效）；完整 4 条清单见下方 reference。
 
 📖 **[references/part-b-sdk.md](references/part-b-sdk.md)** — 完整 7 步实现 + 时间窗口缩减实战（v2 近 3 月 → v3 昨日窗口的 regex 替换样板）。
 
