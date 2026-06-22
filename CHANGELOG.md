@@ -7,11 +7,25 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
-> 已在 `main`、未单独发版——随下次发版（如下次官方基线 sync）一并出；为这点改动单发不可撤回的 ClawHub 版不划算。
+## [3.1.3] — 2026-06-22
+
+> 官方全家桶 06-17 批次对齐 patch，并把上一版后挂在 `main`、未单发的 rank9 保守去冗余一并出版。纯基线对齐 + 无风险去冗余，护城河零删减。触发来源：`guanyuan-weekly-version-watch` 每周一巡检（2026-06-22 命中 06-17 批次 drift）。
 
 ### Changed
 
-- **rank9 保守去冗余**（专业评审团 23-agent 对抗校验后定案：Part B/C 已是良构，仅 2 处零风险同行去重安全可做、外迁候选全部 defer）：B-0.5 修复确认横幅（line 205）压成一行指针、去掉第三次复述；B-11 `transformV2ToV3` 陷阱清单（line 633）压成「头号坑 `sql`≠`sqlScript` 内联 + 完整 4 条见 part-b-sdk.md」，并修正旧文「7 步关键陷阱」却只列 4 条的口径不符。护城河（B-1 API 全图 / B-2.4-2.6 判断表维度名 / B-7.0+7.1 删除安全闸 / B-9 报错速查 / B-13 红线 / B-4 sqlScript 安全网 / B-0.5 逃生配方 / 各小节内联 ⚠️）一字未动。
+- **官方全家桶 06-17 版本对齐**（`@guandata/guanskill@0.1.7`，2026-06-17 发布）。本 skill 路由总表、Part B 实测边界、manifest/README/package 里的官方版本 pin 全部刷新：
+  - **`guancli` 1.0.34 → 1.0.35**：`login status` 改用服务端 profile 校验登录状态，减少本地缓存状态误判；数据集字段输出新增 raw name 与 alias/displayName 疑似误用提示，便于 ETL 和指标配置前排查字段引用；`metric by-dataset` 增强数据集下游指标查询。
+  - **`guanvis` 0.1.26 → 0.1.27**：`publish` / `upload` 发布前不再对 Card 做额外导入探测，减少无权限或跨环境场景下的误拦截；覆盖保护说明同步明确 Page 级覆盖检查与资源包上传边界。
+  - **`guanetl` 0.1.15 → 0.1.16**：新增 `save --dry-run` 保存影响预览基础能力；`run` 执行前提示上游数据集失败状态，降低基于异常上游继续执行的风险；`schedule` 修复上游触发调度的默认输入处理；`export` / `save` 增强输入字段类型校验，`preview` 提示 LEFT JOIN 桥接列全空样本。
+  - **`guands` 0.1.15 → 0.1.16**：`dataset list` 统一使用目录搜索接口，提升目录筛选和列表结果的一致性。
+  - **`guanwf` 0.1.5 无变化**（本轮 06-17 批次未发新版）。
+- **路由总表能力描述升级**：`guancli` 行补 `login status` 服务端校验 + 字段 raw name/alias 误用提示；`guanvis` 行补 0.1.27 发布探测放宽；`guanetl` 行补 `save --dry-run` + `run` 上游失败态 + `preview` LEFT JOIN 全空告警；`guands` 行补 `dataset list` 目录搜索。Part B 的 🧪 实测边界 callout 追加 0.1.16 note（历史 0.1.12–0.1.15 编年史保留不动）。
+- **rank9 保守去冗余**（上一版后挂 `main` 未单发，随本版一并出；专业评审团 23-agent 对抗校验后定案：Part B/C 已是良构，仅 2 处零风险同行去重安全可做、外迁候选全部 defer）：B-0.5 修复确认横幅压成一行指针、去掉第三次复述；B-11 `transformV2ToV3` 陷阱清单压成「头号坑 `sql`≠`sqlScript` 内联 + 完整 4 条见 part-b-sdk.md」，并修正旧文「7 步关键陷阱」却只列 4 条的口径不符。护城河（B-1 API 全图 / B-2.4-2.6 判断表维度名 / B-7.0+7.1 删除安全闸 / B-9 报错速查 / B-13 红线 / B-4 sqlScript 安全网 / B-0.5 逃生配方 / 各小节内联 ⚠️）一字未动。
+- 版本号 3.1.2 → 3.1.3（SKILL.md / manifest.json / package.json / README 徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.0 归档至本 CHANGELOG）。
+
+### Notes
+
+- 本次为**官方对齐 patch**（无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。
 
 ## [3.1.2] — 2026-06-17
 

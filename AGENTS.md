@@ -39,7 +39,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.2"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.3"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
