@@ -7,6 +7,23 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.4] — 2026-06-26
+
+> 官方全家桶 06-24 批次对齐 patch。纯基线对齐，护城河零删减。本机 `npm i -g @guandata/guanskill@latest`（0.1.7→0.1.8）+ `guanskill install-skill` 已落地，官方 5 个 skill 定义同步刷新。
+
+### Changed
+
+- **官方全家桶 06-24 版本对齐**（`@guandata/guanskill@0.1.8`，2026-06-24 发布）。本 skill 路由总表、manifest/README/package 里的官方版本 pin 全部刷新：
+  - **`guancli` 1.0.35 → 1.0.36**：`metric` 新增指标主题与指标目录创建能力，便于直接准备指标管理结构；补充 SuperApp 创建指导（`guancli app create`），帮助按应用/页面场景组织 BI 配置；页面资源搜索与结果展示增强，按名称或 ID 查找页面更稳定、更易读。
+  - **`guanvis` 0.1.27 → 0.1.28**：修复自定义图表重复生成数据视图卡片的问题，减少资源包中的冗余或冲突配置（触及 Part B-17 / Part C 自定义图表注入区，但属官方侧 bugfix，本 skill 打法不变）。
+  - **`guanetl` 0.1.16 → 0.1.17 / `guands` 0.1.16 → 0.1.17 / `guanwf` 0.1.5 → 0.1.6**：三者本轮均仅 `install-skill` 适配 WorkBuddy 配置目录，CLI 行为无变化。
+- **路由总表能力描述升级**：`guancli` 行补指标主题/指标目录创建 + SuperApp 创建指导（`app create`）+ 页面搜索/展示增强（1.0.36）；`guanvis` 行补自定义图表重复数据视图卡片修复（0.1.28）。Part B 的 🧪 实测边界 callout 追加 0.1.17 note（仅 WorkBuddy 安装兼容、ETL 行为无变化；历史 0.1.12–0.1.16 编年史保留不动）。
+- 版本号 3.1.3 → 3.1.4（SKILL.md / manifest.json / package.json / README 徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.1 归档至本 CHANGELOG）。
+
+### Notes
+
+- 本次为**官方对齐 patch**（无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。
+
 ## [3.1.3] — 2026-06-22
 
 > 官方全家桶 06-17 批次对齐 patch，并把上一版后挂在 `main`、未单发的 rank9 保守去冗余一并出版。纯基线对齐 + 无风险去冗余，护城河零删减。触发来源：`guanyuan-weekly-version-watch` 每周一巡检（2026-06-22 命中 06-17 批次 drift）。
