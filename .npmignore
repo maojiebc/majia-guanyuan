@@ -40,3 +40,8 @@ npm-debug.log*
 
 # This pkg's own dev test outputs
 test-install-output/
+
+# GitHub-only — NEVER ship to npm/ClawHub (4.2 MB simulated workshop513 snapshot).
+# Already excluded by the package.json `files` whitelist; this is the blacklist
+# backstop in case a packer ignores `files` and walks the tree instead.
+examples/
