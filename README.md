@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.4-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.5-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -29,7 +29,7 @@
 - **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.4 · 马甲实战版 架构图：官方全家桶路由层（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源，2026-06-03 全部公网化）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论 + 餐饮 BI 公式实战库）" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.5 · 马甲实战版 架构图：官方全家桶路由层（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源，2026-06-03 全部公网化）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论 + 餐饮 BI 公式实战库）" width="100%"/>
 </p>
 
 | 层 | 你想做 | 走 |
@@ -377,11 +377,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.4** (2026-06-26) — **官方全家桶 06-24 版本对齐**。guanskill 0.1.7→**0.1.8**：guancli→**1.0.36**（`metric` 加指标主题/指标目录创建 + 补 SuperApp 创建指导 `app create` + 页面搜索/展示增强）、guanvis→**0.1.28**（**修复自定义图表重复生成数据视图卡片**、减少资源包冗余/冲突配置）、guanetl→**0.1.17** / guands→**0.1.17** / guanwf→**0.1.6**（均仅 `install-skill` 适配 WorkBuddy、CLI 行为无变化）。路由表 + manifest 基线 pin 同步。护城河零删减。
+**最新：V3.1.5** (2026-07-01) — **官方全家桶 07-01 版本对齐**。guanskill 0.1.8→**0.1.10**：guancli→**1.0.38**（**新增 Personal Access Token (PAT) 登录**，自动化/CI/无浏览器环境认证）、guanvis→**0.1.29**（**筛选器级联联动** + 画布可放筛选器 + **自定义图表 dataView 作联动来源/页面筛选器过滤自定义图表** + 表格卡只配维度 + 比较卡本期对比期）、guanetl→**0.1.18**（建 ETL 目录类型诊断更清晰）、guands→**0.1.18**（`dataset import` 按列指定类型 + `replace-data` 加编码/分隔符）；guanwf **0.1.6** 不变。路由表 + Part C-12（guanvis 0.1.29 官方 selector 联动 note）+ manifest 基线 pin 同步。护城河零删减。
+
+**V3.1.4** (2026-06-26) — **官方全家桶 06-24 版本对齐**。guanskill 0.1.7→**0.1.8**：guancli→**1.0.36**（`metric` 加指标主题/指标目录创建 + 补 SuperApp 创建指导 `app create` + 页面搜索/展示增强）、guanvis→**0.1.28**（**修复自定义图表重复生成数据视图卡片**、减少资源包冗余/冲突配置）、guanetl→**0.1.17** / guands→**0.1.17** / guanwf→**0.1.6**（均仅 `install-skill` 适配 WorkBuddy、CLI 行为无变化）。路由表 + manifest 基线 pin 同步。护城河零删减。
 
 **V3.1.3** (2026-06-22) — **官方全家桶 06-17 版本对齐**。guanskill 0.1.6→**0.1.7**：guancli→**1.0.35**（`login status` 服务端校验登录态 + 字段输出加 raw name/alias 误用提示）、guanvis→**0.1.27**（`publish`/`upload` 发布前不再额外导入探测、减少跨环境误拦截）、guanetl→**0.1.16**（**`save --dry-run` 保存影响预览** + `run` 上游失败态提示 + `preview` LEFT JOIN 全空样本告警）、guands→**0.1.16**（`dataset list` 统一目录搜索）；guanwf **0.1.5** 不变。路由表 + manifest 基线 pin 同步，并滚入 rank9 保守去冗余（B-0.5/B-11 同行压指针，护城河零删减）。
-
-**V3.1.2** (2026-06-17) — **专业评审团驱动的质量迭代**（8 视角审 + 对抗校验 + 红队）。① **删除顺序矛盾实测定案**：workshop513 真实独立 ETL 净零回归确认 ds-first 正确（先删输出集再删 ETL、不报 6001）、etl-first 撞 `2002`；修正 B-0.5 与 Part D 两处把方向写反/错记 6001 的旧文。② **`page?force=true` 级联删页纳入 B-7.0 安全闸**（本地有 guanvis 源可重建才免对账）。③ 卫生：README 双语移除已下架 `guanetl delete`、AGENTS.md/marketplace.json 元数据 drift 修、References 行数回填、description 瘦身、餐饮锚点死链修、config 死字段注释。护城河零删减。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 

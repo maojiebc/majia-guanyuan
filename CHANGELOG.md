@@ -7,6 +7,26 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.5] — 2026-07-01
+
+> 官方全家桶 07-01 批次对齐 patch。纯基线对齐，护城河零删减。本机 `npm i -g @guandata/guanskill@latest`（0.1.8→0.1.10）+ `guanskill install-skill` 已落地，官方 5 个 skill 定义同步刷新。
+
+### Changed
+
+- **官方全家桶 07-01 版本对齐**（`@guandata/guanskill@0.1.10`，2026-07-01 发布）。本 skill 路由总表、manifest/README/package/marketplace 里的官方版本 pin 全部刷新：
+  - **`guancli` 1.0.36 → 1.0.38**：新增 **Personal Access Token (PAT) 登录方式**，支持在自动化、CI 或无浏览器环境中用 PAT 完成认证；`auth` 相关命令增强 PAT profile 的状态展示和修改保护（避免把 PAT 配置误当普通登录处理）；API 调用按当前认证上下文选身份，提升 PAT 场景下 ChatBI/指标/资源接口稳定性。（1.0.37 与 1.0.38 同内容，官方连发两版。）
+  - **`guanvis` 0.1.28 → 0.1.29**：**筛选器级联联动**（上游筛选约束下游筛选项）；画布布局可放置筛选器；**自定义图表的数据视图可作点击联动来源、页面筛选器可过滤自定义图表**；表格卡片支持只配维度字段，`init` 支持多数据集页面数据集别名；比较卡支持本期/对比期输出，发布覆盖保护可识别并修复异常线上资源、必要时跳过覆盖备份。
+  - **`guanetl` 0.1.17 → 0.1.18**：创建 ETL 时目录类型诊断更清晰，识别误用工作流/经典数据流目录并提示使用智能 ETL 目录；更新智能 ETL / 数据集输出目录 / 工作流目录边界说明。
+  - **`guands` 0.1.17 → 0.1.18**：`dataset import` 支持按列指定字段类型；`dataset replace-data` 增加 `--encoding` 和 `--delimiter`；导入参数校验忽略未导入列的类型提示。
+  - **`guanwf` 0.1.6 无变化**（本轮 07-01 批次未发新版）。
+- **路由总表能力描述升级**：`guancli` 行补 PAT 登录方式 + auth PAT profile 保护（1.0.38）；`guanvis` 行补筛选器级联联动 + 画布放筛选器 + 自定义图表 dataView 作联动来源/页面筛选器可过滤自定义图表 + 表格卡只配维度 + 比较卡本期对比期（0.1.29）；`guanetl` 行补 0.1.18 目录类型诊断；`guands` 行补 0.1.18 import 按列指定类型 + replace-data 编码/分隔符。Part B 的 🧪 实测边界 callout 追加 0.1.18 note。
+- **Part C-12 selector 联动注记**：`guanvis` 0.1.29 官方新增「页面筛选器过滤自定义图表 + custom chart dataView 作点击联动来源」——在模板包 `patch_selector_linkage.js` 处加注：新页可先试官方 selector 联动，覆盖到位则该兜底脚本可省；旧版/未覆盖场景仍保留脚本（官方能力未净零实测，暂并存，不删护城河）。
+- 版本号 3.1.4 → 3.1.5（SKILL.md / manifest.json / package.json / marketplace.json / AGENTS.md / README 徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.2 归档至本 CHANGELOG）。
+
+### Notes
+
+- 本次为**官方对齐 patch**（无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。guanvis 0.1.29 的 selector↔custom chart 官方联动虽与 Part C-12 兜底脚本重叠，但未做净零实测确认其完全覆盖，故仅加并存注记、不删模板脚本。
+
 ## [3.1.4] — 2026-06-26
 
 > 官方全家桶 06-24 批次对齐 patch。纯基线对齐，护城河零删减。本机 `npm i -g @guandata/guanskill@latest`（0.1.7→0.1.8）+ `guanskill install-skill` 已落地，官方 5 个 skill 定义同步刷新。
