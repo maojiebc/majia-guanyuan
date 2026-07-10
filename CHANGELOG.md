@@ -7,6 +7,33 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.6] — 2026-07-10
+
+> 官方全家桶 07-08/07-10 批次对齐 patch —— **家族 5→6 员，`guanmetric` 指标写操作组件首次入桶**。本机 `npm i -g @guandata/guanskill@latest`（0.1.10→0.1.12）+ `guanskill install-skill` 已落地，官方 6 个 skill 定义同步刷新。护城河零删减。
+
+### Added
+
+- **`guanmetric` 0.1.1 首次入桶（2026-07-08 发布 0.1.0、07-10 发布 0.1.1）**：指标写操作独立 CLI，承接指标创建/编辑/删除（`create --file`/`edit <metric_id> --file`/`delete`，均支持 `--dry-run`）、指标主题/指标目录创建（`project-create`/`dir-create`）、公共维度管理（`public-dim create`）；**指标 Excel 标准化** `template normalize` 把客户指标清单整理为标准模板 + 校验报告（0.1.1 增强：按原子/复合/多类衍生指标拆分标准模板 + 汇总 sheet 总览待建指标/行状态/问题说明 + 批量创建前校验与下一步提示）。**指标查询/数据读取仍由 `guancli` 处理（指标读写分家）**。
+- 路由总表新增 `guanmetric` 行；一句话路由补「指标建/改/删 + 指标主题/目录 + 公共维度 → `guanmetric`」；README 前置依赖表 + ✨ 效果清单同步补 guanmetric；SKILL.md frontmatter `openclaw.install.bins` + 官方全家桶更新 SOP（Step 0 版本检查 / Step 2 落点 / Step 3 changelog 循环）补 guanmetric。
+
+### Changed
+
+- **官方全家桶 07-08 批次对齐**（`@guandata/guanskill@0.1.11→0.1.12`）。路由总表、manifest/README/package/marketplace 版本 pin 全部刷新：
+  - **`guancli` 1.0.38 → 1.0.39**：`etl get` 可读输出新增**有效调度状态**（综合 `config.enableSchedule`、`triggerType`、CRON 和上游级联开关判断真实自动触发状态，避免 `schedule --disable` 后底层触发字段残留造成误判）；工作流资源查询能力增强（工作流目录、节点和执行相关信息，便于排查数据流编排）；**指标创建/编辑等写操作迁移到独立 `guanmetric` 组件，指标能力收敛为只读**（角色列从「指标 CRUD」改「指标查询（只读）」）。
+  - **`guanvis` 0.1.29 → 0.1.30**：**支持 checkout 线上页面到本地工程**，增强已有仪表板的编辑、差异查看和回写流程；动态维度、动态指标和拆分图表构建能力；筛选器分组和开关类检查；`pack`/`preview`/`lint` 诊断增强（提前发现资源 ID、布局、联动和覆盖相关问题）。
+  - **`guanetl` 0.1.18 → 0.1.19**：新增 **`move`** 命令（移动智能 ETL 到指定目录，接口异常时读回确认结果）；`run` 新增 **`--run-upstream`** 与配套 `--dry-run`（递归解析上游链路、按拓扑顺序执行并等待每个节点完成）；`run --wait` 遇同一 ETL 已在运行的 40001 响应改为查找并等待现有任务（减少级联触发后重复 run 的误判失败）；`export` 静态检查新增 JOIN 键类型不一致 warning（STRING/LONG 隐式 coercion 风险）。
+  - **`guands` 0.1.18 → 0.1.19**：数据集支持**追加数据和按条件/全量清理数据**（维护 CSV/Excel 导入类数据集）；**schema 同步、自动同步结构开关和字段更新预校验**（源表结构变化后省手工）；批量新增计算字段 + 分组字段/展示名/字段来源识别增强；从填报表单创建数据集；数据集行列权限配置查看；目录校验、依赖提示、任务历史和抽数结果诊断增强。
+  - **`guanwf` 0.1.6 → 0.1.7**：工作流离线开发能力增强（文件夹、实例、权限、告警和调度命令）；新增**依赖分析、执行计划和依赖校验**（把一批作业编排为统一调度主工作流）；数据流保存和合并补子工作流、事件调度和恢复场景。
+- **路由总表结构性收敛**：`guancli`/`guanvis`/`guanetl`/`guands` 行的历史版本注记（1.0.32–1.0.36 / 0.1.24–0.1.28 / 0.1.14–0.1.18 / 0.1.15–0.1.18）压缩合并进正文能力描述，只保留最近批次的加粗注记，防路由表长成版本墙；`guanwf` 的 🆕 徽标让位给新成员 `guanmetric`。
+- **Part B 实测边界 callout 追加 0.1.19 note**（move / run --run-upstream / 40001 等待 / JOIN 键类型 warning）；Part B 实证基线声明刷新至 `guancli@1.0.39`；Part D guanvis 公网版本引用刷新至 0.1.30。
+- **架构图重画 6 件套**（`docs/architecture.svg` + PNG 重渲）：官方家族块 5 卡扩 6 卡（新增 guanmetric 带 NEW 徽章），各卡版本号刷新到 07-08/07-10 批次（此前架构图版本号停在 v3.1.0 时代的 1.0.32/0.1.23/0.1.13/0.1.4/0.1.14，guanetl 卡还残留已移除的 `delete` 命令——一并修正）；README 架构图 alt 同步 v3.1.6 + 6 件套口径。
+- 版本号 3.1.5 → 3.1.6（SKILL.md / manifest.json / package.json / marketplace.json / AGENTS.md（current family = 6）/ README 徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.3 归档至本 CHANGELOG）。
+
+### Notes
+
+- 本次为**官方对齐 patch**（无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。guanmetric 入桶属官方家族结构变化，本 skill 的响应是路由层扩条目 + 文档口径刷新，自身能力边界不变，故仍按 patch 处理。
+- guancli 指标写操作迁出后，历史版本注记里「metric create/edit/delete（1.0.32 起从只读转可写）」的表述已随收敛移除——当前口径以 1.0.39 的读写分家为准，避免误导用户在 guancli 里找指标写命令。
+
 ## [3.1.5] — 2026-07-01
 
 > 官方全家桶 07-01 批次对齐 patch。纯基线对齐，护城河零删减。本机 `npm i -g @guandata/guanskill@latest`（0.1.8→0.1.10）+ `guanskill install-skill` 已落地，官方 5 个 skill 定义同步刷新。

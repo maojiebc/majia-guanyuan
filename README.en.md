@@ -1,10 +1,10 @@
 # majia-guanyuan · Guandata BI Battle-Tested Layer · Majia Battle-Tested Edition
 
-> **A battle-tested layer on top of the official family** — after Guandata's official BI family (`guancli` query / `guanvis` card-build & publish & screenshot / `guanetl` ETL / `guanwf` dataflow / `guands` data sources) all went public on 2026-06-03, this skill **stops reinventing the wheel**: standard query / card-build / ETL / dataset CRUD all **route to the official family**, and this skill only tackles the hard bones the official DSL/commands can't reach — ETL governance judgment + engine error manual, custom chart injection + descriptor patch, v7 state-machine bypass, SuperApp reverse-engineering, AI-native ADS methodology, restaurant formula library.
+> **A battle-tested layer on top of the official family** — after Guandata's official BI family (`guancli` query / `guanvis` card-build & publish & screenshot / `guanetl` ETL / `guanwf` dataflow / `guands` data sources / `guanmetric` metric writes) went public (first five on 2026-06-03, `guanmetric` joined 2026-07-08 making it six), this skill **stops reinventing the wheel**: standard query / card-build / ETL / dataset CRUD all **route to the official family**, and this skill only tackles the hard bones the official DSL/commands can't reach — ETL governance judgment + engine error manual, custom chart injection + descriptor patch, v7 state-machine bypass, SuperApp reverse-engineering, AI-native ADS methodology, restaurant formula library.
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.5-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.6-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,16 +25,16 @@
 **V3.0.0 repositioning**: Guandata has shipped "query / card-build / ETL / dataflow / data sources / screenshot / admin" as a public family (`npm i -g @guandata/guanskill`). This skill has been **fully refactored from an early "DIY full-stack + fallback" into "a battle-tested layer on top of the official family"** — retiring the 2789-line DIY HTTP client `guandata.py`, deleting ~1600 lines of dead code, and cutting every section that mirrored official commands.
 
 Two layers:
-- **🧭 Routing layer**: standard query / card-build / ETL / dataset CRUD all **route to the official family** (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands`); this skill no longer reinvents these wheels.
+- **🧭 Routing layer**: standard query / card-build / ETL / dataset CRUD all **route to the official family** (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`); this skill no longer reinvents these wheels.
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.5 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources, all went public 2026-06-03) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.6 · Majia Battle-Tested Edition architecture: official family routing layer (guancli query / guanvis card-build & publish & screenshot / guanetl ETL / guanwf dataflow / guands data sources / guanmetric metric writes, six components as of 2026-07-08) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
 |---|---|---|
-| 🧭 **Routing layer** | Query data, build cards, reports, standard ETL / dataset CRUD | The official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands`) |
+| 🧭 **Routing layer** | Query data, build cards, reports, standard ETL / dataset CRUD | The official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`) |
 | 🅱️ **Part B** | Whole-warehouse ETL governance + engine error manual + dual-source field audit | "Scan ETLs and tell me what to delete" / "Why does direct-save fail?" / "Is this field cut safe?" |
 | 🅱️ **B-17** | Full-chain rewrite methodology | "Rewrite this SmartETL chain as pure SQL" / "Replica page verification / card-level comparison" |
 | 🆎 **Part C / C-12** | Custom chart injection debugging + HTML application dashboard | "payload_json parsing fails" / "fixed card misaligned" / "more advanced / application dashboard" |
@@ -52,9 +52,10 @@ Two layers:
 - ✅ 74 chart-type JS DSL card-build + Page assembly + server-side screenshot → `guanvis`
 - ✅ Single-ETL create/edit/lint/preview/save/run/schedule → `guanetl`
 - ✅ Workflow Dataflow (DB direct write-back, incremental output) → `guanwf`
-- ✅ Data source + dataset CRUD (create connection, create-db/import/replace-data) → `guands`
+- ✅ Data source + dataset CRUD (create connection, create-db/import/replace-data, append/clean, schema sync) → `guands`
+- ✅ Metric create/edit/delete + metric projects/dirs + public dimensions + metric Excel standardization → `guanmetric` 🆕 (joined 2026-07-08 as the 6th member)
 - ⚠️ Admin-level operations: `guanadmin` **left the family 2026-06-04** (install standalone or use the BI UI)
-- One-line routing: **standard query → `guancli`; standard card-build/publish/screenshot → `guanvis`; standard ETL → `guanetl`; dataflow → `guanwf`; data source/dataset → `guands`.** Hit a field/error/state-machine/reverse-engineering/business-semantics the official can't reach → back to the right Part in this skill.
+- One-line routing: **standard query → `guancli`; standard card-build/publish/screenshot → `guanvis`; standard ETL → `guanetl`; dataflow → `guanwf`; data source/dataset → `guands`; metric create/edit/delete + public dimensions → `guanmetric`.** Hit a field/error/state-machine/reverse-engineering/business-semantics the official can't reach → back to the right Part in this skill.
 
 ### Part B — ETL Governance & Write
 
@@ -208,7 +209,7 @@ gbrain skillpack install majia-guanyuan
 All standard work routes to the official family, so **install the official aggregator and log in once first**:
 
 ```bash
-# 1. Install the whole official family in one shot (guancli / guanvis / guanetl / guanwf / guands + their AI skills)
+# 1. Install the whole official family in one shot (guancli / guanvis / guanetl / guanwf / guands / guanmetric + their AI skills)
 npm i -g @guandata/guanskill
 guanskill install-skill
 
@@ -222,7 +223,8 @@ guancli auth login
 | `guanvis` | Standard card-build + Page assembly + server-side screenshot | 74 chart-type JS DSL, selector linkage, custom chart, `guanvis pack/publish/upload`, `guanvis screenshot` → PNG |
 | `guanetl` | ETL write-op loop | Single-ETL create/edit/lint/preview/save/run/schedule |
 | `guanwf` | Workflow Dataflow | Build/edit/save/run dataflows in the workflow engine (DB direct write-back, incremental output) |
-| `guands` | Data source + dataset CRUD | Create connections, `dataset create-db/create-query/import/replace-data`, bulk move/delete, incremental update |
+| `guands` | Data source + dataset CRUD | Create connections, `dataset create-db/create-query/import/replace-data`, bulk move/delete, incremental update, append/clean data, schema sync |
+| `guanmetric` 🆕 | Metric write ops (joined 2026-07-08) | Metric `create`/`edit`/`delete` (all with `--dry-run`), metric projects/dirs, public dimensions, `template normalize` for metric Excel standardization; metric queries stay in `guancli` |
 | ~~`guanadmin`~~ | Left the family (2026-06-04) | admin ops no longer in the public family — install standalone |
 
 > ⚠️ **Auth no longer uses `config.json`**: V3.0.0 retired the DIY client `guandata.py`; credentials are managed entirely by `guancli auth login`, and this skill no longer reads/writes `config.json`.
@@ -379,11 +381,12 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.5** (2026-07-01) — **official family 07-01 version alignment**. guanskill 0.1.8→**0.1.10**: guancli→**1.0.38** (**new Personal Access Token (PAT) login** for automation/CI/headless auth), guanvis→**0.1.29** (**selector cascade linkage** + selectors placeable on canvas + **custom-chart dataView as click-linkage source / page selectors can filter custom charts** + table-card dimension-only + compare-card current/comparison period), guanetl→**0.1.18** (clearer ETL directory-type diagnostics), guands→**0.1.18** (`dataset import` per-column type + `replace-data` encoding/delimiter); guanwf **0.1.6** unchanged. Routing table + Part C-12 (guanvis 0.1.29 official selector-linkage note) + manifest baseline pins synced. Moat untouched.
+**Latest: V3.1.6** (2026-07-10) — **official family 07-08/07-10 version alignment · family grows 5→6**. guanskill 0.1.10→**0.1.12**: **guanmetric 0.1.1 joins the family** (metric create/edit/delete + metric projects/dirs + public dimensions split out of guancli; `template normalize` standardizes customer metric Excel sheets), guancli→**1.0.39** (`etl get` shows **effective schedule state**, avoiding stale-trigger misreads after `schedule --disable` + workflow resource queries + metric capability narrowed to read-only), guanvis→**0.1.30** (**checkout live pages into a local project** for edit/diff/write-back + dynamic dimensions/metrics/split charts + pack/preview/lint diagnostics), guanetl→**0.1.19** (**new `move`** + **`run --run-upstream` topological upstream-chain execution** + 40001 wait-for-running + JOIN key-type warning), guands→**0.1.19** (dataset **append/clean data** + **schema sync** + batch calculated fields + form-to-dataset), guanwf→**0.1.7** (offline dev + **dependency analysis/execution plan** for unified-schedule orchestration). Routing table gains a guanmetric row + architecture diagram redrawn for six + manifest baseline pins synced. Moat untouched.
+
+**V3.1.5** (2026-07-01) — **official family 07-01 version alignment**. guanskill 0.1.8→**0.1.10**: guancli→**1.0.38** (**new Personal Access Token (PAT) login** for automation/CI/headless auth), guanvis→**0.1.29** (**selector cascade linkage** + selectors placeable on canvas + **custom-chart dataView as click-linkage source / page selectors can filter custom charts** + table-card dimension-only + compare-card current/comparison period), guanetl→**0.1.18** (clearer ETL directory-type diagnostics), guands→**0.1.18** (`dataset import` per-column type + `replace-data` encoding/delimiter); guanwf **0.1.6** unchanged. Routing table + Part C-12 (guanvis 0.1.29 official selector-linkage note) + manifest baseline pins synced. Moat untouched.
 
 **V3.1.4** (2026-06-26) — **official family 06-24 version alignment**. guanskill 0.1.7→**0.1.8**: guancli→**1.0.36** (`metric` adds metric-theme/metric-catalog creation + SuperApp creation guidance `app create` + page search/display enhancements), guanvis→**0.1.28** (**fixes custom-chart duplicate data-view card generation** — fewer redundant/conflicting configs in the resource pack), guanetl→**0.1.17** / guands→**0.1.17** / guanwf→**0.1.6** (all just `install-skill` WorkBuddy-dir compat — no CLI behavior change). Routing table + manifest baseline pins synced. Moat untouched.
 
-**V3.1.3** (2026-06-22) — **official family 06-17 version alignment**. guanskill 0.1.6→**0.1.7**: guancli→**1.0.35** (`login status` validates login via server-side profile + dataset field output flags raw-name/alias misuse), guanvis→**0.1.27** (`publish`/`upload` skip the extra pre-publish Card import probe — fewer cross-env false blocks), guanetl→**0.1.16** (**`save --dry-run` save-impact preview** + `run` warns on failed upstream datasets + `preview` flags all-null LEFT JOIN bridge columns), guands→**0.1.16** (`dataset list` unified directory search); guanwf **0.1.5** unchanged. Routing table + manifest baseline pins synced; also rolls in the rank9 conservative de-dup (B-0.5/B-11 inline pointer compaction, moat untouched).
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 
