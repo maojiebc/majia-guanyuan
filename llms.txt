@@ -24,7 +24,7 @@
 - `references/v7-page-card-publish-pipeline.md`: Part D v7 draft-release state machine, SmartETL node silent traps, mobile phoneLayout ZIP inject.
 - `references/part-e-superapp-pipeline.md`: Part E SuperApp open-app reverse-engineering pipeline (form schema creation, LLM bridge response parsing).
 - `references/ai-native-ads-design.md`: AI-native ADS data architecture methodology (governance vs. rebuild).
-- `references/restaurant-bi-formulas/`: restaurant chain BI formula library (60+ SQL patterns, RFM, repurchase, DWD wide-table paradigms).
+- Restaurant chain BI formula library (60+ SQL patterns, RFM, repurchase, DWD wide-table paradigms): moved to https://github.com/maojiebc/majia-huiyuan (公式库/); `references/restaurant-bi-formulas/` here is a pointer only.
 - `templates/html-dashboard/`: GDHTML shared runtime + base CSS (calibrated to the design baseline) + starter modules + selector linkage patch script.
 - `scripts/inject_phone_layout.py`: mobile phoneLayout ZIP injection for v7 pages.
 

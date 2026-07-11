@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.6-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.7-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -40,7 +40,7 @@
 | 🆎 **Part C / C-12** | 自定义图表注入排障 + HTML 应用化看板 | "payload_json 解析失败" / "固定卡片错位" / "更高级/应用化看板" |
 | 🇩 **Part D** | v7 草稿-发布状态机绕过 + phoneLayout | "v7 page+card 被 60004 卡住" / "移动端 phoneLayout 怎么注入" |
 | 🇪 **Part E** | SuperApp 开放应用反向工程 | "form 建表脚手架没暴露" / "LLM 中转 ILLEGAL_JSON_RES" |
-| 🧠 **方法论 / 公式库** | AI-native ADS 判断 + 餐饮 BI 公式 | "想给现有 BI 接 AI，该治理还是该重搭" / "复购率/RFM/客单价怎么算" |
+| 🧠 **方法论 / 公式库** | AI-native ADS 判断 + 餐饮 BI 公式（公式库已迁至 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)） | "想给现有 BI 接 AI，该治理还是该重搭" / "复购率/RFM/客单价怎么算" |
 
 ---
 
@@ -314,7 +314,7 @@ majia-guanyuan/
     ├── v7-page-card-publish-pipeline.md  # Part D v7 草稿/发布状态机 + 节点化静默坑 + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp 反向工程流水线
     ├── ai-native-ads-design.md       # AI-native ADS 设计方法论（哲学层文档）
-    ├── restaurant-bi-formulas/       # 餐饮 BI 公式实战库（README + 9 篇分册）
+    ├── restaurant-bi-formulas/       # ➡️ 指针：公式库已迁至独立仓库 majia-huiyuan（公式库/）
     ├── custom-chart-playbook.md      # CTO 张进自定义图表完整排障手册原文（V1.1）
     ├── etl-rewrite-original.md       # CTO 张进 SmartETL 改写经验原文（V1.1）
     ├── execplan-spec.md              # OpenAI Codex ExecPlan 规范（V1.2）
@@ -379,11 +379,12 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.6** (2026-07-10) — **官方全家桶 07-08/07-10 版本对齐 · 家族 5→6 员**。guanskill 0.1.10→**0.1.12**：**guanmetric 0.1.1 首次入桶**（指标建/改/删 + 指标主题/目录 + 公共维度从 guancli 迁出独立，`template normalize` 指标 Excel 标准化）、guancli→**1.0.39**（`etl get` 输出**有效调度状态**、避免 `schedule --disable` 后残留误判 + 工作流资源查询增强 + 指标能力收敛只读）、guanvis→**0.1.30**（**checkout 线上页面到本地工程**编辑/差异/回写 + 动态维度/动态指标/拆分图表 + pack/preview/lint 诊断增强）、guanetl→**0.1.19**（**新增 `move`** + **`run --run-upstream` 上游链路拓扑执行** + 40001 等现有任务 + JOIN 键类型 warning）、guands→**0.1.19**（数据集**追加/清理** + **schema 同步** + 批量计算字段 + 填报表单建数据集）、guanwf→**0.1.7**（离线开发 + **依赖分析/执行计划**编排统一调度）。路由表新增 guanmetric 行 + 架构图重画 6 件套 + manifest 基线 pin 同步。护城河零删减。
+**最新：V3.1.7** (2026-07-12) — **餐饮 BI 公式实战库迁出，与模拟数据中台合并为独立仓库 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)**。公式库（README + 9 分册，60+ SQL / RFM / DWD 宽表范式 / 39 生产 ETL 索引）与咖啡连锁模拟中台（54 数据集 / 25 ETL / 12 看板，原 examples/workshop513）合并为「开源会员运营家底」项目持续迭代，新仓自带 AI Agent 友好层（llms.txt / AGENTS.md）。本仓库 references/restaurant-bi-formulas/ 与 examples/ 均留指针，SKILL.md 公式库路由与明细表改指新家。分工定案：**工具与踩坑手册在 guanyuan，数据与公式在 huiyuan**。公式库内容零修改整体迁移，护城河零删减。
+
+**V3.1.6** (2026-07-10) — **官方全家桶 07-08/07-10 版本对齐 · 家族 5→6 员**。guanskill 0.1.10→**0.1.12**：**guanmetric 0.1.1 首次入桶**（指标建/改/删 + 指标主题/目录 + 公共维度从 guancli 迁出独立，`template normalize` 指标 Excel 标准化）、guancli→**1.0.39**（`etl get` 输出**有效调度状态**、避免 `schedule --disable` 后残留误判 + 工作流资源查询增强 + 指标能力收敛只读）、guanvis→**0.1.30**（**checkout 线上页面到本地工程**编辑/差异/回写 + 动态维度/动态指标/拆分图表 + pack/preview/lint 诊断增强）、guanetl→**0.1.19**（**新增 `move`** + **`run --run-upstream` 上游链路拓扑执行** + 40001 等现有任务 + JOIN 键类型 warning）、guands→**0.1.19**（数据集**追加/清理** + **schema 同步** + 批量计算字段 + 填报表单建数据集）、guanwf→**0.1.7**（离线开发 + **依赖分析/执行计划**编排统一调度）。路由表新增 guanmetric 行 + 架构图重画 6 件套 + manifest 基线 pin 同步。护城河零删减。
 
 **V3.1.5** (2026-07-01) — **官方全家桶 07-01 版本对齐**。guanskill 0.1.8→**0.1.10**：guancli→**1.0.38**（**新增 Personal Access Token (PAT) 登录**，自动化/CI/无浏览器环境认证）、guanvis→**0.1.29**（**筛选器级联联动** + 画布可放筛选器 + **自定义图表 dataView 作联动来源/页面筛选器过滤自定义图表** + 表格卡只配维度 + 比较卡本期对比期）、guanetl→**0.1.18**（建 ETL 目录类型诊断更清晰）、guands→**0.1.18**（`dataset import` 按列指定类型 + `replace-data` 加编码/分隔符）；guanwf **0.1.6** 不变。路由表 + Part C-12（guanvis 0.1.29 官方 selector 联动 note）+ manifest 基线 pin 同步。护城河零删减。
 
-**V3.1.4** (2026-06-26) — **官方全家桶 06-24 版本对齐**。guanskill 0.1.7→**0.1.8**：guancli→**1.0.36**（`metric` 加指标主题/指标目录创建 + 补 SuperApp 创建指导 `app create` + 页面搜索/展示增强）、guanvis→**0.1.28**（**修复自定义图表重复生成数据视图卡片**、减少资源包冗余/冲突配置）、guanetl→**0.1.17** / guands→**0.1.17** / guanwf→**0.1.6**（均仅 `install-skill` 适配 WorkBuddy、CLI 行为无变化）。路由表 + manifest 基线 pin 同步。护城河零删减。
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。

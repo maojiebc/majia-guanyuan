@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源 / guanmetric 指标写）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView + 视觉设计底线/反 AI 味红线/guanvis screenshot 视觉验收）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/看板太丑/AI 味/设计底线/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表。
 license: MIT
 metadata:
-  version: "3.1.6"
+  version: "3.1.7"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -45,7 +45,7 @@ metadata:
 | **v7 BI 实例**上端到端搭多个 HTML 应用看板 / 手撸 `POST /api/page+/api/card` 被 `60004 此操作只能在草稿页面执行` 卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报 `PARSE_SYNTAX_ERROR` / ETL update 报 `1012 输出数据集目录中存在同名文件` | **Part D：V7 Page/Card 发布流水线 + 三态硬规则**（V2.1.6 新增，拆到 [references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)） |
 | **SuperApp / 超级应用 / 开放应用**开发流水线 / `guancli app create/publish` / `--app-id` 不传变成每次新建 / 数据集异步预览 3 步 / **`form_xxx` 建表反向工程**（脚手架没暴露建表 API，实测 `POST /survey-engine/api/form/add`）/ **BI 中转 LLM 报 NOT_JSON_RES / ILLEGAL_JSON_RES**（响应被塞在 error_message）/ `/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞 / 同源 fetch credentials 不带 cookie / 客户端模拟流式打字效果 / 任务池工作台「看 + 想 + 选 + 做 + 留痕」闭环 | **Part E：SuperApp 开放应用开发流水线**（V2.1.12 新增，拆到 [references/part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md)） |
 | **客户说"想给现有 BI 接 AI / 上 LLM"** / "我们 ETL 治理做了一年还没出活" / **判断 是该治理还是该重搭** / 客户预算分配讨论 / 评估底表 schema 是否 AI-friendly / 提案"AI-native 数据底座" | **AI-native ADS 设计方法论**（V2.1.13 新增，**majia-guanyuan 的哲学层文档**——不是操作手册而是范式判断，拆到 [references/ai-native-ads-design.md](references/ai-native-ads-design.md)） |
-| 写餐饮业务公式（AC / ADS / 复购率 / 新老客 / 用餐时段 / 留存流失 / RFM / Comp 老店）/ 查字段口径 / 排数据质量坑 / **ETL 工程范式（DWD 宽表 / 双源对账 / 评价 pipeline）** | **餐饮 BI 公式实战库**（[references/restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md)，V2.1.5 蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL，全脱敏） |
+| 写餐饮业务公式（AC / ADS / 复购率 / 新老客 / 用餐时段 / 留存流失 / RFM / Comp 老店）/ 查字段口径 / 排数据质量坑 / **ETL 工程范式（DWD 宽表 / 双源对账 / 评价 pipeline）** | **餐饮 BI 公式实战库**（[majia-huiyuan/公式库](https://github.com/maojiebc/majia-huiyuan/tree/main/公式库)，V2.1.5 蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL，全脱敏；**2026-07-12 迁至独立仓库 majia-huiyuan**，本仓库 references/restaurant-bi-formulas/ 仅留指针） |
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
@@ -1002,22 +1002,22 @@ new GDPlugin().init(renderChart);
 | [part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md) | SuperApp 开放应用开发流水线 / `guancli app create/publish` 不读 `.env` 必须显式传 `--app-id` / 脚手架 bi-services 速查 / 数据集异步预览 3 步链路 / **`/survey-engine/api/form/add` 建表反向工程**（脚手架没暴露） / **BI LLM 中转 NOT_JSON_RES/ILLEGAL_JSON_RES 三路径解析模板**（含从 error_message 抠 LLM 响应）/ 客户端模拟流式 + prompt 模板 / 原生 fetch + credentials: 'include' 绕过脚手架 `get` unwrap / `<base href>` + Router basename / 设计纪律 + 反模式表 + 决策树（V2.1.12 新建） | ~760 |
 | [ai-native-ads-design.md](references/ai-native-ads-design.md) | **majia-guanyuan 哲学层文档**——客户问"想给现有 BI 接 AI"时判断"治理 vs 重搭" / 7 条 AI-native ADS 字段约束（中文枚举 / 推荐预算 / 复合拼好 / TIMESTAMP / 强约束取值 / 数值算好 / 权限冗余） / ODS+DWD 不动 ADS 重建 / 预算分配 30%+30%+40% / 与 Part D/E + 餐饮 BI 公式库的关系 / 反模式 8 条（V2.1.13 新建） | ~260 |
 
-**餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL）：**
+**餐饮 BI 公式实战库（V2.1.5 新建，去敏蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL；➡️ 2026-07-12 已迁至独立仓库 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)，下表链接直达新家，本仓库 references/restaurant-bi-formulas/ 仅留指针）：**
 
 | 文件 | 何时读 | 行数 |
 |---|---|---|
-| [restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md) | 进入业务公式库的总入口 / 字段词典 / 5 条最常踩坑 | ~70 |
-| [restaurant-bi-formulas/01-date-and-time.md](references/restaurant-bi-formulas/01-date-and-time.md) | 写时间范围（T-1 / 本月 / 上月 / 近 N 天 / 时间宏 / 用餐时段 / 跨月对齐） | ~180 |
-| [restaurant-bi-formulas/02-customer-and-membership.md](references/restaurant-bi-formulas/02-customer-and-membership.md) | 新老客 / 会员属性 / 消费频次（3 口径）/ 复购（跨天 vs 非跨天）/ 留存流失 / RFM / 注册前后行为 / 90 天复购分桶 | ~700 |
-| [restaurant-bi-formulas/03-revenue-kpi.md](references/restaurant-bi-formulas/03-revenue-kpi.md) | AC / ADS / ADT / AUD / Comp / TC_CRM% / NS_CRM% / 营收占比 / 客单分桶 / 累计消费 | ~240 |
-| [restaurant-bi-formulas/04-channel-and-store.md](references/restaurant-bi-formulas/04-channel-and-store.md) | 业务渠道（堂食/外卖）/ 订单子渠道大 case / 时效类型 / 搭配类型 / StoreDate / 成长类型 / 注册门店优先级回填 | ~410 |
-| [restaurant-bi-formulas/05-coupon-and-discount.md](references/restaurant-bi-formulas/05-coupon-and-discount.md) | 核销率 / 折扣率 / 折扣分桶 / 券类型分流 / 注册第一张券 / 30 日优惠订单比例 | ~160 |
-| [restaurant-bi-formulas/06-sql-utils.md](references/restaurant-bi-formulas/06-sql-utils.md) | 字符串拆解 / `explode+split` / `collect_set+concat_ws` / 开窗排名（ROW_NUMBER/RANK/DENSE_RANK）/ 累计窗口 / 多表 LEFT JOIN | ~350 |
-| [restaurant-bi-formulas/07-data-quality-traps.md](references/restaurant-bi-formulas/07-data-quality-traps.md) | `NULL vs 0` / 三态判断 / 口径歧义 / 重复字段名 / A↔B↔通用字段对照表 / 日期边界 | ~250 |
-| [restaurant-bi-formulas/08-etl-engineering-patterns.md](references/restaurant-bi-formulas/08-etl-engineering-patterns.md) | **ETL 工程范式**：10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 哲学 / 财务双源对账 / POS 系统归一化 / 会员生命周期多输出 / Cohort 日期×门店网格（蒸馏自 39 个 V1 生产 ETL）| ~280 |
-| [restaurant-bi-formulas/09-etl-catalog.md](references/restaurant-bi-formulas/09-etl-catalog.md) | **39 个 V1 生产 ETL 索引清单**：按 11 业务域分类（基础维表 / DWD / 会员档案 / 顾客行为 / 财务营收 / 营销目标 / 私域社群 / 活动券 / 评价管理 / 业务标签 / 数据质量）+ 每 ETL 的节点/输入/输出/SQL 速查 + 复用决策表 | ~190 |
+| [restaurant-bi-formulas/README.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/README.md) | 进入业务公式库的总入口 / 字段词典 / 5 条最常踩坑 | ~70 |
+| [restaurant-bi-formulas/01-date-and-time.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/01-date-and-time.md) | 写时间范围（T-1 / 本月 / 上月 / 近 N 天 / 时间宏 / 用餐时段 / 跨月对齐） | ~180 |
+| [restaurant-bi-formulas/02-customer-and-membership.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/02-customer-and-membership.md) | 新老客 / 会员属性 / 消费频次（3 口径）/ 复购（跨天 vs 非跨天）/ 留存流失 / RFM / 注册前后行为 / 90 天复购分桶 | ~700 |
+| [restaurant-bi-formulas/03-revenue-kpi.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/03-revenue-kpi.md) | AC / ADS / ADT / AUD / Comp / TC_CRM% / NS_CRM% / 营收占比 / 客单分桶 / 累计消费 | ~240 |
+| [restaurant-bi-formulas/04-channel-and-store.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/04-channel-and-store.md) | 业务渠道（堂食/外卖）/ 订单子渠道大 case / 时效类型 / 搭配类型 / StoreDate / 成长类型 / 注册门店优先级回填 | ~410 |
+| [restaurant-bi-formulas/05-coupon-and-discount.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/05-coupon-and-discount.md) | 核销率 / 折扣率 / 折扣分桶 / 券类型分流 / 注册第一张券 / 30 日优惠订单比例 | ~160 |
+| [restaurant-bi-formulas/06-sql-utils.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/06-sql-utils.md) | 字符串拆解 / `explode+split` / `collect_set+concat_ws` / 开窗排名（ROW_NUMBER/RANK/DENSE_RANK）/ 累计窗口 / 多表 LEFT JOIN | ~350 |
+| [restaurant-bi-formulas/07-data-quality-traps.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/07-data-quality-traps.md) | `NULL vs 0` / 三态判断 / 口径歧义 / 重复字段名 / A↔B↔通用字段对照表 / 日期边界 | ~250 |
+| [restaurant-bi-formulas/08-etl-engineering-patterns.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/08-etl-engineering-patterns.md) | **ETL 工程范式**：10-CTE DWD 宽表底座 / 轻节点重 SQL vs 重节点轻 SQL 哲学 / 财务双源对账 / POS 系统归一化 / 会员生命周期多输出 / Cohort 日期×门店网格（蒸馏自 39 个 V1 生产 ETL）| ~280 |
+| [restaurant-bi-formulas/09-etl-catalog.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/09-etl-catalog.md) | **39 个 V1 生产 ETL 索引清单**：按 11 业务域分类（基础维表 / DWD / 会员档案 / 顾客行为 / 财务营收 / 营销目标 / 私域社群 / 活动券 / 评价管理 / 业务标签 / 数据质量）+ 每 ETL 的节点/输入/输出/SQL 速查 + 复用决策表 | ~190 |
 
-> 触发场景："如何算复购率 / 客单价 / 同店增长" / "怎么判新老客" / "用餐时段怎么分桶" / "为什么会员数对不上" / **"我要写 DWD 宽表 / 评价 pipeline / 财务对账"** — 直接进 [restaurant-bi-formulas/README.md](references/restaurant-bi-formulas/README.md) 路由表。和 Part B/C 正交（按业务领域分，非按平台操作分）。
+> 触发场景："如何算复购率 / 客单价 / 同店增长" / "怎么判新老客" / "用餐时段怎么分桶" / "为什么会员数对不上" / **"我要写 DWD 宽表 / 评价 pipeline / 财务对账"** — 直接进 [restaurant-bi-formulas/README.md](https://github.com/maojiebc/majia-huiyuan/blob/main/公式库/README.md) 路由表。和 Part B/C 正交（按业务领域分，非按平台操作分）。
 
 **贡献者原文（不修改，照引）：**
 

@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.6-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.7-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -316,7 +316,7 @@ majia-guanyuan/
     ├── v7-page-card-publish-pipeline.md  # Part D v7 draft-release state machine + node silent traps + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp reverse-engineering pipeline
     ├── ai-native-ads-design.md       # AI-native ADS design methodology (philosophy-layer doc)
-    ├── restaurant-bi-formulas/       # Restaurant BI formula library (README + 9 chapters)
+    ├── restaurant-bi-formulas/       # ➡️ POINTER: formula library moved to standalone repo majia-huiyuan (公式库/)
     ├── custom-chart-playbook.md      # CTO Zhang Jin's full custom chart playbook (V1.1)
     ├── etl-rewrite-original.md       # CTO Zhang Jin's SmartETL rewrite experience (V1.1)
     ├── execplan-spec.md              # OpenAI Codex ExecPlan specification (V1.2)
@@ -381,11 +381,12 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.6** (2026-07-10) — **official family 07-08/07-10 version alignment · family grows 5→6**. guanskill 0.1.10→**0.1.12**: **guanmetric 0.1.1 joins the family** (metric create/edit/delete + metric projects/dirs + public dimensions split out of guancli; `template normalize` standardizes customer metric Excel sheets), guancli→**1.0.39** (`etl get` shows **effective schedule state**, avoiding stale-trigger misreads after `schedule --disable` + workflow resource queries + metric capability narrowed to read-only), guanvis→**0.1.30** (**checkout live pages into a local project** for edit/diff/write-back + dynamic dimensions/metrics/split charts + pack/preview/lint diagnostics), guanetl→**0.1.19** (**new `move`** + **`run --run-upstream` topological upstream-chain execution** + 40001 wait-for-running + JOIN key-type warning), guands→**0.1.19** (dataset **append/clean data** + **schema sync** + batch calculated fields + form-to-dataset), guanwf→**0.1.7** (offline dev + **dependency analysis/execution plan** for unified-schedule orchestration). Routing table gains a guanmetric row + architecture diagram redrawn for six + manifest baseline pins synced. Moat untouched.
+**Latest: V3.1.7** (2026-07-12) — **restaurant BI formula playbook moved out to the standalone repo [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)**, merged with the coffee-chain simulated data platform (54 datasets / 25 ETLs / 12 dashboards, formerly examples/workshop513) into one "open-sourced membership-ops playbook" project with an AI-agent-friendly layer (llms.txt / AGENTS.md). Pointer READMEs remain at references/restaurant-bi-formulas/ and examples/; all SKILL.md formula routes now point to the new repo. Division of labor: **tools & pitfall handbooks in guanyuan, data & formulas in huiyuan**. Playbook migrated verbatim — moat untouched.
+
+**V3.1.6** (2026-07-10) — **official family 07-08/07-10 version alignment · family grows 5→6**. guanskill 0.1.10→**0.1.12**: **guanmetric 0.1.1 joins the family** (metric create/edit/delete + metric projects/dirs + public dimensions split out of guancli; `template normalize` standardizes customer metric Excel sheets), guancli→**1.0.39** (`etl get` shows **effective schedule state**, avoiding stale-trigger misreads after `schedule --disable` + workflow resource queries + metric capability narrowed to read-only), guanvis→**0.1.30** (**checkout live pages into a local project** for edit/diff/write-back + dynamic dimensions/metrics/split charts + pack/preview/lint diagnostics), guanetl→**0.1.19** (**new `move`** + **`run --run-upstream` topological upstream-chain execution** + 40001 wait-for-running + JOIN key-type warning), guands→**0.1.19** (dataset **append/clean data** + **schema sync** + batch calculated fields + form-to-dataset), guanwf→**0.1.7** (offline dev + **dependency analysis/execution plan** for unified-schedule orchestration). Routing table gains a guanmetric row + architecture diagram redrawn for six + manifest baseline pins synced. Moat untouched.
 
 **V3.1.5** (2026-07-01) — **official family 07-01 version alignment**. guanskill 0.1.8→**0.1.10**: guancli→**1.0.38** (**new Personal Access Token (PAT) login** for automation/CI/headless auth), guanvis→**0.1.29** (**selector cascade linkage** + selectors placeable on canvas + **custom-chart dataView as click-linkage source / page selectors can filter custom charts** + table-card dimension-only + compare-card current/comparison period), guanetl→**0.1.18** (clearer ETL directory-type diagnostics), guands→**0.1.18** (`dataset import` per-column type + `replace-data` encoding/delimiter); guanwf **0.1.6** unchanged. Routing table + Part C-12 (guanvis 0.1.29 official selector-linkage note) + manifest baseline pins synced. Moat untouched.
 
-**V3.1.4** (2026-06-26) — **official family 06-24 version alignment**. guanskill 0.1.7→**0.1.8**: guancli→**1.0.36** (`metric` adds metric-theme/metric-catalog creation + SuperApp creation guidance `app create` + page search/display enhancements), guanvis→**0.1.28** (**fixes custom-chart duplicate data-view card generation** — fewer redundant/conflicting configs in the resource pack), guanetl→**0.1.17** / guands→**0.1.17** / guanwf→**0.1.6** (all just `install-skill` WorkBuddy-dir compat — no CLI behavior change). Routing table + manifest baseline pins synced. Moat untouched.
 
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).

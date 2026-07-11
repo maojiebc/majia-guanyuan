@@ -7,6 +7,17 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.7] — 2026-07-12
+
+> **餐饮 BI 公式实战库迁出至独立仓库 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)** —— 与咖啡连锁模拟数据中台（54 数据集 / 25 ETL / 12 看板，原 examples/workshop513，07-12 早间已先行迁出）合并为「开源会员运营家底」项目，持续迭代，新仓自带 AI Agent 友好层（llms.txt / AGENTS.md）。
+
+### Changed
+- `references/restaurant-bi-formulas/`（README + 9 分册）内容整体迁移至 majia-huiyuan `公式库/`，原路径仅留指针 README；公式库内容零修改。
+- SKILL.md：公式库路由行（L48）与明细表（10 行链接）全部改指新仓；frontmatter version 3.1.7。
+- README / README.en / AGENTS.md / llms.txt / manifest.json / package.json：公式库描述与目录树同步改为指针口径；版本徽章与版本记录段轮换。
+- `references/ai-native-ads-design.md`：对公式库的 3 处引用改为跨仓链接。
+- 分工定案：**工具与踩坑手册在 majia-guanyuan，数据与公式在 majia-huiyuan**。
+
 ## [3.1.6] — 2026-07-10
 
 > 官方全家桶 07-08/07-10 批次对齐 patch —— **家族 5→6 员，`guanmetric` 指标写操作组件首次入桶**。本机 `npm i -g @guandata/guanskill@latest`（0.1.10→0.1.12）+ `guanskill install-skill` 已落地，官方 6 个 skill 定义同步刷新。护城河零删减。

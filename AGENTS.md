@@ -45,7 +45,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
 
 - **Authentication is via `guancli auth login`** — the official family shares one profile; this skill no longer reads `config.json`. Do not commit any `config.json` (still in `.gitignore` defensively). `config.example.json` is kept as a legacy schema reference only.
 - **Do not re-route standard work to self-built code** — standard query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
-- **Do not edit contributor originals in `references/`** — `etl-rewrite-original.md` + `custom-chart-playbook.md` (CTO Zhang Jin), `execplan-spec.md` + `agents-rule.md` (OpenAI Codex) are verbatim. Cite, don't edit. (The 马甲-distilled references and `restaurant-bi-formulas/` are maintained docs and may be updated.)
+- **Do not edit contributor originals in `references/`** — `etl-rewrite-original.md` + `custom-chart-playbook.md` (CTO Zhang Jin), `execplan-spec.md` + `agents-rule.md` (OpenAI Codex) are verbatim. Cite, don't edit. (The 马甲-distilled references are maintained docs and may be updated. `restaurant-bi-formulas/` moved to the standalone repo majia-huiyuan on 2026-07-12 — only a pointer README remains here.)
 - **Do not strip version frontmatter** in `SKILL.md`. Bump `metadata.version` and update the version log section per the changelog convention when making changes.
 - **Do not add tool-specific code paths** (e.g., `if claude_code: ...`) inside scripts or SKILL.md. The skill is tool-agnostic on purpose.
 
@@ -71,7 +71,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
     templates/            ← html-dashboard template pack (Part C-12).
     docs/                 ← Supplementary docs.
-    references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ dir):
+    references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ pointer):
       part-b-errors.md           ← Part B 10-category error fixes detailed.
       part-b-payload.md          ← ETL payload schema deep-dive.
       part-b-sdk.md              ← v2→v3 bulk refactoring SDK.
@@ -81,7 +81,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       v7-page-card-publish-pipeline.md  ← Part D v7 publish pipeline (16 sections).
       part-e-superapp-pipeline.md  ← Part E SuperApp open-app development pipeline.
       ai-native-ads-design.md    ← AI-native ADS design methodology (philosophy layer).
-      restaurant-bi-formulas/    ← Restaurant-chain BI formula playbook (dir: README + 9 topic files).
+      restaurant-bi-formulas/    ← POINTER ONLY — playbook moved to github.com/maojiebc/majia-huiyuan (公式库/).
       execplan-spec.md           ← OpenAI Codex ExecPlan full spec (contributor original).
       agents-rule.md             ← OpenAI Codex minimal scheduling rule (contributor original).
       etl-rewrite-original.md    ← CTO Zhang Jin SmartETL rewrite (contributor original).
