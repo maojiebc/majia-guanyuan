@@ -32,7 +32,7 @@
   <text x="720" y="50" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">观远 BI · 马甲实战版 · 全链路 Agent Skill</text>
   <g transform="translate(720, 64)">
     <rect x="-86" y="0" width="172" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.1.6  ·  2026-07-10</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.1.8  ·  2026-07-24</text>
   </g>
   <text x="720" y="112" text-anchor="middle" font-size="13.5" fill="#475569">官方全家桶之上的实战增益层　·　标准活路由官方，硬骨头落到本 skill 三支柱</text>
   <text x="720" y="132" text-anchor="middle" font-size="11.5" fill="#94a3b8">工具无关 (Claude Code · OpenClaw · Codex · Hermes/gbrain)　·　前置 npm i -g @guandata/guanskill</text>
@@ -63,7 +63,7 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guancli</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#eff6ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.39</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.43</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">查数 · 只读中枢</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">ETL / dsId / page</text>
@@ -78,7 +78,7 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanvis</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f5f3ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.30</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.33</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">建卡 · 发布 · 截图</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">74 图表 JS DSL</text>
@@ -93,7 +93,7 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanetl</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#ecfdf5"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.19</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.21</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">ETL 写操作闭环</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">新建 / 改 / lint / preview</text>
@@ -108,12 +108,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanwf</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#ecfdf5"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.7</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.822</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">工作流 · 编排调度</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">workflow.go DSL</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">Python 节点 DAG</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">依赖分析 · 执行计划</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">实例诊断 · --confirm 门禁</text>
     </g>
 
     <!-- guands -->
@@ -123,7 +123,7 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guands</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f0f9ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.19</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.23</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">数据源 · 数据集</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">建连 MySQL/PG</text>
@@ -138,7 +138,7 @@
       <text x="14" y="32" font-size="12.5" font-weight="700" fill="#0f172a">guanmetric</text>
       <g transform="translate(102, 20)">
         <rect width="46" height="16" rx="8" fill="#fdf2f8"/>
-        <text x="23" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#be185d">0.1.1</text>
+        <text x="23" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#be185d">0.1.3</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">指标写操作</text>
       <g transform="translate(76, 43)">
@@ -175,7 +175,7 @@
     <text x="20" y="11" font-size="15" font-weight="700" fill="#0f172a">majia-guanyuan 实战增益层</text>
     <g transform="translate(248, -4)">
       <rect width="64" height="18" rx="9" fill="#0f172a"/>
-      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.1.6</text>
+      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.1.8</text>
     </g>
     <text x="332" y="11" font-size="11.5" fill="#64748b">官方 DSL / 命令覆盖不到的硬骨头 · 三大支柱</text>
   </g>
@@ -251,41 +251,41 @@
     </g>
   </g>
 
-  <!-- Pillar 3: 业务层 -->
+  <!-- Pillar 3: 业务层（v3.1.7 起整体迁至 majia-huiyuan，本卡为指针） -->
   <g transform="translate(955, 452)">
     <rect width="430" height="372" rx="14" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
     <rect width="430" height="8" rx="3" fill="#f59e0b"/>
     <text x="24" y="44" font-size="11" fill="#f59e0b" font-weight="700" letter-spacing="1.5">支柱 ③ · 业务层</text>
     <text x="24" y="76" font-size="21" font-weight="700" fill="#0f172a">餐饮连锁 BI 公式库</text>
-    <text x="24" y="99" font-size="12" fill="#64748b">蒸馏自两段餐饮 BI 履职 · 全脱敏</text>
+    <text x="24" y="99" font-size="12" fill="#64748b">蒸馏自两段餐饮 BI 履职 · 全脱敏 · 已分仓独立迭代</text>
     <line x1="24" y1="118" x2="406" y2="118" stroke="#f1f5f9"/>
 
-    <!-- 60+ SQL -->
+    <!-- 指针 -->
     <g transform="translate(24, 132)">
-      <rect width="382" height="50" rx="8" fill="#f8fafc"/>
-      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">60+ 业务 SQL 公式</text>
-      <text x="14" y="40" font-size="10.5" fill="#64748b">复购率 / RFM / AC / ADS / Comp 老店 / 新老客 / 用餐时段</text>
+      <rect width="382" height="50" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#b45309">→ 已迁至姊妹库 majia-huiyuan</text>
+      <text x="14" y="40" font-size="10.5" fill="#a16207">github.com/maojiebc/majia-huiyuan · 本仓留指针 README</text>
     </g>
-    <!-- DWD 范式 -->
+    <!-- 公式库 -->
     <g transform="translate(24, 190)">
       <rect width="382" height="50" rx="8" fill="#f8fafc"/>
-      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">DWD 宽表工程范式</text>
-      <text x="14" y="40" font-size="10.5" fill="#64748b">10-CTE 宽表底座 / 财务双源对账 / 评价 pipeline</text>
+      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">公式库 9 分册 · 60+ 业务 SQL</text>
+      <text x="14" y="40" font-size="10.5" fill="#64748b">复购率 / RFM / DWD 宽表范式 / 39 生产 ETL 索引 / 字段词典</text>
     </g>
-    <!-- 39 ETL catalog -->
+    <!-- 模拟中台 -->
     <g transform="translate(24, 248)">
       <rect width="382" height="50" rx="8" fill="#f8fafc"/>
-      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">39 个生产 ETL 索引</text>
-      <text x="14" y="40" font-size="10.5" fill="#64748b">11 业务域分类 + 节点/输入/输出/SQL 速查 + 复用决策表</text>
+      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">咖啡连锁模拟数据中台</text>
+      <text x="14" y="40" font-size="10.5" fill="#64748b">54 数据集 / 25 ETL / 12 看板 · 原 examples/workshop513</text>
     </g>
-    <!-- field dict -->
+    <!-- 分仓原则 -->
     <g transform="translate(24, 306)">
-      <rect width="382" height="50" rx="8" fill="#fffbeb"/>
-      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#b45309">字段词典 + 5 条最常踩坑</text>
-      <text x="14" y="40" font-size="10.5" fill="#a16207">和路由层/各 Part 正交 · 按业务领域分而非平台操作分</text>
+      <rect width="382" height="50" rx="8" fill="#f8fafc"/>
+      <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">分仓原则</text>
+      <text x="14" y="40" font-size="10.5" fill="#64748b">工具与踩坑手册在 guanyuan · 数据与公式在 huiyuan</text>
     </g>
   </g>
 
   <!-- Footer install commands -->
-  <text x="720" y="900" text-anchor="middle" font-size="11" fill="#94a3b8">install: gh skill install maojiebc/majia-guanyuan · npx skills add maojiebc/majia-guanyuan · /plugin marketplace add maojiebc/majia-guanyuan · npm i @supermajia/majia-guanyuan</text>
+  <text x="720" y="900" text-anchor="middle" font-size="11" fill="#94a3b8">install: gh skill install maojiebc/majia-guanyuan · npx skills add maojiebc/majia-guanyuan · /plugin marketplace add maojiebc/majia-guanyuan</text>
 </svg>

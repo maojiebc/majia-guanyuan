@@ -7,6 +7,38 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.8] — 2026-07-24
+
+> 官方全家桶 **07-15 + 07-24 两批次一次性对齐** patch（两批合并记一版）—— **`guanwf` 带破坏性变更（写操作 `--confirm` 门禁，0.1.820 引入）** 随批延续至 **0.1.822**；07-24 批 `guanetl`（→0.1.21）与 `guanmetric`（→0.1.3）也首次跟进（07-15 本批未动）。本机 `npm i -g @guandata/guanskill@latest`（0.1.12→**0.1.17**）+ `guanskill install-skill` 已落地，官方 skill 定义（含统一入口 `guandata-cli-suite`）同步刷新。护城河零删减。
+
+### Added
+
+- **路由层新增官方 `guandata-cli-suite` 并存注记**：`guanskill` 0.1.14 起官方自带「统一入口」skill（六行意图路由表 + 安装引导 + `guancli auth status` 认证检查），与本 skill 🧭 路由层的**分派职能重叠**。判定为并存不冲突、护城河不受影响——官方那份只答「用哪个组件」，本表额外承载**版本 pin + 能力清单 + 实测边界**（`guanetl` 0.1.14 起无 `delete`、`guanwf` 0.1.820 写操作要 `--confirm`、`guanvis` 0.1.29 官方联动与 C-12 兜底脚本的并存关系、`guands` 0.1.21 Excel 多 Sheet 必须显式 `--sheet` 等，官方 suite 一条不带），Part B–E 更是整个不覆盖。处理方式沿用 v3.1.5 对 guanvis 0.1.29 联动重叠的先例（并存注记 + 未实测确认覆盖不删护城河）。
+
+### Changed
+
+- **官方全家桶 07-15 + 07-24 两批次对齐**（`@guandata/guanskill@0.1.12→0.1.17`）。路由总表、manifest/README/package/marketplace 版本 pin 全部刷新（每组件展示自 v3.1.6 基线以来的净变更，跨 07-15 中间批 + 07-24 最新批）：
+  - **`guanwf` 0.1.7 → 0.1.822**（跨 07-15 的 0.1.820 + 07-24 的 0.1.822；**版本号直跳非笔误**——官方换构建号方案，npm registry 实证；semver 上 82x > 7，`@latest` 解析正常。**8.2.0 兼容线，破坏性变更由 0.1.820 引入**）：① **所有写操作新增 mutation 安全门**——`save`/`save-draft`/`run`/`schedule set｜enable｜disable` 必须先 `--dry-run` 看计划、再 `--confirm`（兼容 `--yes`）才真执行，**既有自动化脚本需同步更新**；② 工作流参数 DSL（`Workflow.Params` → `processDefinitionJson.globalParams`，`ParamRef`/`DynamicParamRef`/`DataDrivenParamRef`）+ 运行时 `--param` 覆盖 + 参数三方合并；定时/事件调度支持可重复 `--param key=value`，更新单参数时保留其他显式值与默认值；③ 结构化 TaskNode DSL（DATASET/SHELL/HTTP/SQL/PARAMETER_ASSIGNMENT/SWITCH/LOOP）+ 未知字段无损 passthrough（`task.json`）；`create --type` 增 HTTP/SQL；`node add` 节点脚手架（只生成节点目录 + 可粘贴片段，不改 `workflow.go` AST）；④ 实例诊断 `instance list/tasks/logs/latest` + 完整日志分页 + 失败子工作流递归日志 + `instance resume-failed`；⑤ **失败恢复语义修正**——恢复节点的全部 DAG 后继都会重跑（含先前已 SUCCESS 的后继，对范围内已成功 PROCESS 后继显式 `REPEAT_RUNNING`），旧文「已成功节点不重跑」不准确；恢复种子状态 = FAILURE/STOP/KILL/NEED_FAULT_TOLERANCE；⑥ **按 8.2.0 后端能力收口**：SHELL/LOOP 在创建/导出/保存前明确拒绝；`DatasetNode` 只刷新已有数据集（空 `datasetId` 误接受已修，创建/写入目标集需用 DATAFLOW/DB_DATAFLOW）且刷不了 `DATA_SET_OFFLINE_DEV`（改用 `SubWorkflowNode`）；`ParameterAssignmentNode` 的 DATASET 来源不能选直连集（60006，改 `DataSourceType: "DATABASE"` + 数据账户）；⑦ **凭据安全强化**：`task.json` 统一当前用户受限权限、精确合并基线 `_parent_merge_snapshot.json` 自动进工作区 `.gitignore`、HTTP URL 查询凭据不落普通权限源码、日志键值凭据脱敏；⑧ 修 8.2.0 DB Dataflow 预览误用 v1 接口致任务长期 PROCESSING（改走 Core v2 提交 + 通用任务轮询/取消）。新增官方 reference `guanwf/references/TASK_NODE_CONTRACTS.md`（节点字段合约）。**⑨ 0.1.822（07-24）**：工作流依赖与血缘分析效率优化（复杂编排的依赖/血缘检查等待更少）+ 完善已有工作流的原地编辑保护（避免影响原有调度、权限与引用）。
+  - **`guands` 0.1.19 → 0.1.23**（0.1.21 同日两连发 + 07-24 的 0.1.23）：**`account rename` 数据连接账号安全原地改名**——保留 acId、凭证、权限和已有数据集引用，更新后自动回读确认，底层不支持或回读不一致直接报错，**禁止删除后重建**；**`dataset primary-key set/clear` 独立主键设置/清空能力**（从 `update-setting --primary-keys` 迁出；修改后等待数据重写任务完成并回读验证）；**`dataset refresh` 识别并跟随已有更新任务**避免重复提交，等待/覆盖刷新/任务失败后的最终状态判断更准确（互斥操作只阻塞而不被当成已有更新成功，`--overwrite` 不合并未知模式任务）；**`dataset import` 默认等待任务到终态并返回真实结果** + 提前识别扩展名与内容不一致的文件（伪装成 `.csv` 的 Excel/ZIP/OLE），减少异步失败与乱码数据集；**Excel 导入/追加/替换支持明确选择 Sheet**——单 Sheet 自动选、多 Sheet 必须 `--sheet` 指定一个，避免隐式合并造成数据错误；资源 ID 校验与创建结果解析增强，写操作输出契约更清晰。**0.1.23（07-24）**：**数据连接配置支持安全原地更新**（可先预览并校验变更再落地，延续 `account rename` 的原地治理思路）+ **填报表单支持导出、编辑和重命名**（更新时保留已有字段与数据）+ **填报表单目录管理**（创建目录 + 在目录间移动表单）。
+  - **`guancli` 1.0.39 → 1.0.43**（1.0.40 + 07-24 的 1.0.43）：**`card preview` 保留多级表头层级并生成稳定唯一列名**——结构化输出（JSON/CSV/Excel）列名改用 `父级 > 子级 > 叶子` 完整路径（标题自带 `>` 编码为 `\>`，完整路径仍重名则追加 ` [2]` 稳定后缀），`--columns`/`--sort-*` 优先接受大小写精确的完整路径、末级标题唯一时兼容旧写法，同环比/日期层级等复杂交叉表的导出/选列/排序更准确；**卡片自带筛选字段元数据时不再强制读取数据集字段**，权限受限场景也能正确应用筛选并完成预览；**`form update` 载荷必须携带全部业务主键字段**（内置 `c_uid` 除外），CLI 只做字段名映射与请求透传、不读当前行也不补齐主键。**1.0.43（07-24）**：**Token 登录引导与状态校验更准确**（配置或凭证异常更容易发现）+ **多资源读取效率优化**（Agent 分析页面、数据集与指标时响应更快）。
+  - **`guanvis` 0.1.30 → 0.1.33**（0.1.31 + 07-24 的 0.1.33）：新增 **`page.setFilterPanelLayout()` 仪表板筛选栏布局配置**（网格/流式排列、间距、内边距、标签位置、操作区位置；只管纯布局字段，颜色/字体/背景/控件视觉仍归主题，术语「快捷筛选区」→「筛选栏」）；**增强已有仪表板 checkout 后的编辑与回写**——`updateMetric`/`patchMetric` 在保留线上未修改配置的基础上稳定回写（对比 `setRows/setMetrics` 整 zone 重建不继承格式且报 warning）；**覆盖页面前的备份不再额外包含上游数据集和数据账号**，减少普通用户因上游资源权限不足而无法更新页面的情况（备份含 Page 及其组成资源，「备份未成功即中止覆盖」闸门仍在）；新增字段显示名 `alias` 与 Card 标题相互独立的说明（`f("营收", { alias })` / `calcField(name, formula, { alias })`，`SINGLE_VALUE`/`KPI_CARD`/`KPI_TREND`/仪表盘进度类尤其明显）。**0.1.33（07-24）**：**指标图表支持主次指标组与数字分组**（指标展示层次更清晰）+ **发布前预检无效资源、未挂载卡片与生成错误**（页面发布更稳）+ **复杂页面编辑与大型资源导入效率进一步提升**。
+  - **`guanetl` 0.1.19 → 0.1.21**（07-15 本批未动，07-24 首次跟进）：**JOIN 字段类型检查覆盖预览、保存和运行全过程**（不再只在 `export` 阶段静态检查，数据关联类型风险更早发现）+ **复杂 ETL 的字段识别与多级上游诊断更准确、批量检查速度更快**。
+  - **`guanmetric` 0.1.1 → 0.1.3**（07-15 本批未动，07-24 首次跟进）：**完善已有指标的原地编辑保护** + **优化 Agent 批量准备与校验指标配置的效率**。
+- **Part B 实证基线声明刷新至 `guancli@1.0.43`**；Part D guanvis 公网版本引用刷新至 0.1.33。
+- **架构图刷新**（`docs/architecture.svg` + PNG 重渲）：6 卡版本号刷到 07-24 批次（**1.0.43 / 0.1.33 / 0.1.21 / 0.1.822 / 0.1.23 / 0.1.3**，即 guancli / guanvis / guanetl / guanwf / guands / guanmetric）；标题版本 v3.1.6→v3.1.8、日期改 2026-07-24、「本 skill」徽章 3.1.6→3.1.8；guanwf 卡能力行保留 0.1.820 头条「实例诊断 · --confirm 门禁」，让破坏性变更在首图仍可见。
+- 版本号 3.1.7 → 3.1.8（SKILL.md frontmatter + 版本行 + 自身行 / manifest.json / package.json / marketplace.json / AGENTS.md / README 双语徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.5 / V3.1.4 归档至本 CHANGELOG）。
+
+### Fixed
+
+- **补回 v3.1.7 漏刷的 5 处「肉眼可见面」**：v3.1.7 只 bump 了机器可读 pin（frontmatter / manifest / package）+ README 徽章，遗漏 ① **SKILL.md H1 标题仍「马甲实战版（V3.1.6）」**（该后缀是 v3.1.6 引入的，v3.1.7 未跟——文件第一行、最显眼）② SKILL.md 顶部版本行仍 V3.1.6 ③ SKILL.md 路由表「本 skill」自身行仍 3.1.6 ④ `.claude-plugin/marketplace.json` 仍 3.1.6 ⑤ AGENTS.md `metadata.version` 仍 3.1.6；另有架构图（标题 + 「本 skill」徽章）与 README 双语 alt 仍 v3.1.6 且仍宣传已迁出的餐饮公式库。正是 ota-skill HARD GATE 点名的那类最易漏面（机器读的 pin 有工具兜、人眼看的面全靠自觉），本版一并收齐。
+- **架构图「支柱 ③ · 业务层」改为指针卡**：该支柱四个子块（60+ SQL / DWD 宽表范式 / 39 生产 ETL 索引 / 字段词典）在 v3.1.7 已整体迁至 majia-huiyuan，但图未跟改、首图一直在宣传不在本仓的内容。改为「→ 已迁至姊妹库 majia-huiyuan」指针 + 公式库 9 分册概览 + 咖啡连锁模拟中台（54 数据集 / 25 ETL / 12 看板）+ 分仓原则（工具与踩坑手册在 guanyuan，数据与公式在 huiyuan），版面不变、口径属实、顺带给姊妹库引流。
+- **架构图 footer 移除 `npm i @supermajia/majia-guanyuan`**：该包在 npm 停在 **2.1.4**（2026-05-15，早于 v3.0.0 重构、仍带已退役的 `guandata.py`），照着装会拿到落后两个大版本的 skill。footer 现只留 `gh skill install` / `npx skills add` / `/plugin marketplace add` 三条真实可用路径，与「npm 不进默认 Release Chain」的既定决策一致。
+
+### Notes
+
+- 本次为**官方对齐 patch**（07-15 + 07-24 两批合并记一版，无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。`guanwf` 的 `--confirm` 破坏性变更属**官方 CLI 行为**变化，本 skill 的响应是路由表标注 + 版本记录提示，自身能力边界不变，故仍按 patch 处理；本 skill 未在任何示例中出现无 `--confirm` 的 guanwf 写命令（工作流整体路由给官方），无需改写示例。
+- **本机安装拓扑清理**：发现顶层残留一份独立安装的 `@guandata/guancli@1.0.39`，与伞包 `guanskill` 自带的 1.0.40 抢同一个 `guancli` bin。当时伞包侥幸赢得 bin（`guancli version` = 1.0.40），但这是「本地副本常滞后」同源陷阱的新变体——不同于 SOP 已记录的「双 prefix」型，这是**同 prefix 下子包与伞包并存**型，`npm i -g @guandata/guancli` 会让它翻身盖住伞包。已 `npm uninstall -g @guandata/guancli` 清除（注意：卸载会连带删掉共享的 `guancli` bin symlink，需重跑 `npm i -g @guandata/guanskill@latest` 修复），现全局树只剩伞包一个顶层条目，六个 bin 全部解析到伞包内嵌版。07-24 批 `0.1.16→0.1.17` 复测本机全局树仍只有伞包一个顶层条目、无独立子包残留，本次升级干净无冲突（`guancli version` = 1.0.43）。
+
 ## [3.1.7] — 2026-07-12
 
 > **餐饮 BI 公式实战库迁出至独立仓库 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)** —— 与咖啡连锁模拟数据中台（54 数据集 / 25 ETL / 12 看板，原 examples/workshop513，07-12 早间已先行迁出）合并为「开源会员运营家底」项目，持续迭代，新仓自带 AI Agent 友好层（llms.txt / AGENTS.md）。
