@@ -1,0 +1,10 @@
+# 本 skill 用户向文案里已经默认读者懂的词。克制：只放 Part C 技术契约
+# 与贡献者原文文件名 / 公式库一等公民术语。不要把新的产品黑话塞进来。
+#
+# runtime = 观远自定义图表回调入参（renderChart 真实签名），不是「后台自动跑的那套」
+runtime
+# playbook = 贡献者原文文件名（custom-chart-playbook.md）+ AGENTS.md 指向手册
+playbook
+Playbook
+# RFM = 餐饮公式库一等公民（多久没来 / 来得勤不勤 / 花得多不多）
+RFM

@@ -1,6 +1,6 @@
 # majia-guanyuan
 
-> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It is a battle-tested augmentation layer on top of Guandata's official CLI family (guancli / guanvis / guanetl / guanwf / guands), covering what the official DSL cannot reach: ETL governance judgment, BI engine error playbooks, custom chart injection, HTML application dashboards with visual design baselines, v7 draft-release state-machine bypasses, SuperApp reverse-engineering, AI-native ADS methodology, and a restaurant BI formula library.
+> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It is a battle-tested augmentation layer on top of Guandata's official CLI family (guancli / guanvis / guanetl / guanwf / guands / guanmetric), covering what the official DSL cannot reach: ETL governance judgment, BI engine error playbooks, custom chart injection, HTML application dashboards with visual design baselines, v7 draft-release state-machine bypasses, SuperApp reverse-engineering, AI-native ADS methodology, and a restaurant BI formula library.
 
 ## Primary Links
 
