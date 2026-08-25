@@ -7,6 +7,28 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.10] — 2026-08-25
+
+> 官方全家桶对齐 patch：`guanskill` 0.1.26→**0.1.29**，核心是 `guancli` **1.0.53** 的企业 OIDC、安全凭据、SuperApp 整包下载与多行 SQL 输入，以及 `guanvis` **0.1.41** 的页面/目录原地管理。无本 skill 自身护城河逻辑变更，既有写入与删除安全闸保持不变。
+
+### Changed
+
+- 官方六组件 pin 刷新：`guancli` **1.0.53** / `guanvis` **0.1.41** / `guanetl` **0.1.29** / `guanwf` **0.1.828** / `guands` **0.1.28** / `guanmetric` **0.1.10**。
+  - **`guancli` 1.0.51 → 1.0.53**：资源全局搜索与 URL 获取；指标详情、表单筛选与字段歧义修复；企业 OIDC 与安全凭据管理；SuperApp 列表/整包下载；`ds execute-sql` 支持从文件或标准输入读取多行 SQL；下载改为原子写入并保留完整服务端错误；自动关联卡片继承筛选条件。
+  - **`guanvis` 0.1.38 → 0.1.41**：附加卡片计算字段序列化修复；自定义图表最小 SDK 与视觉验收说明；页面目录及页面本身支持创建、改名、移动、删除；`publish` 可指定目标目录并拒绝残留生成器占位符；修复卡片/筛选器自有计算字段绑定误判；自动关联卡片继承筛选；支持企业 OIDC。
+  - **`guanetl` 0.1.27 → 0.1.29**：改进 Skill 自动安装反馈、确认交互和 Windows 兼容性；ETL 调度保存适配会拦截原生 PUT 的客户网络代理；支持企业 OIDC 认证上下文。
+  - **`guanwf` 0.1.826 → 0.1.828**：Skill 自动安装反馈与跨平台兼容；企业 OIDC 认证上下文。`--confirm` 写入门禁不变。
+  - **`guands` 0.1.26 → 0.1.28**：派生字段场景 CSV 追加/替换 Schema 修复；新增 `calc-field apply` 以期望态协调新增、更新和保留计算字段；完善数据集目录创建/改名/删除；受限代理下保留后端错误；部分或全部建集失败返回非零。
+  - **`guanmetric` 0.1.8 → 0.1.10**：Skill 自动安装与跨平台兼容；企业 OIDC 认证上下文。
+- 路由表、Part B 当前兼容基线、Part D `guanvis` 公网版本引用、README 双语版本记录、manifest/package/marketplace、AGENTS 与架构图统一刷新到本版。
+- 架构图六组件卡刷新为 **1.0.53 / 0.1.41 / 0.1.29 / 0.1.828 / 0.1.28 / 0.1.10**；标题、本 skill 徽章和日期刷新为 **v3.1.10 / 2026-08-25**。
+- 本机全局树已验证只有 `@guandata/guanskill@0.1.29` 一个顶层条目，六个 bin 逐个回读均与上述版本一致；`guanskill install-skill` 已刷新官方 AI skills。PromptScript 不支持全局安装的提示为官方 installer 已知兼容性噪声，不影响已成功安装的 Codex/Claude/CodeBuddy/WorkBuddy 等目标。
+
+### Notes
+
+- 本次仍是“官方对齐 = patch”。页面/目录删除能力属于官方 `guanvis` / `guands` 新命令，不改变本 skill 的删除授权：任何不可逆删除仍须明确目标、确认影响并回读结果。
+- npm 不属于本次公开分发范围；公开代码真源仍是 GitHub，SkillHub 与 ClawHub沿历史 `guanyuan-majia` 条目独立同步。
+
 ## [3.1.9] — 2026-08-19
 
 > 官方全家桶 **07-24 以来 9 个聚合包版本一次性对齐** patch —— `guanskill` 0.1.17→**0.1.26**。本机 CLI 已是 latest；本次补齐 skill 路由表 / 架构图 / 官方 AI skill（`guanskill install-skill`）。无本 skill 自身护城河逻辑变更。`guanwf` `--confirm` 门禁沿用 0.1.820，本批无新破坏性变更。护城河零删减。
