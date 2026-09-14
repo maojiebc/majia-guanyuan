@@ -72,7 +72,7 @@ function packViews(named) {
     named.hours, named.status, named.friends, named.groups,
     named.frienddaily, named.groupdaily, named.coupons,
     named.membase, named.member, named.member7, named.member30, named.memberMonth,
-    named.dormant, named.context, named.rfm, named.peer,
+    named.dormant, named.context, named.peer,
   ];
 }
 
@@ -339,8 +339,9 @@ const viewsA = buildStore(STORE_A, specA);
 const viewsB = buildStore(STORE_B, specB);
 const mapA = detectV(viewsA);
 const mapB = detectV(viewsB);
-const missing = Object.entries(mapA).filter(([, i]) => i < 0);
+const missing = Object.entries(mapA).filter(([k, i]) => k !== 'rfm' && i < 0);
 if (missing.length) throw new Error(`detectV 漏视图: ${missing.map(([k]) => k).join(',')}`);
+if (mapA.rfm !== -1) throw new Error('V1 不取 RFM，detectV.rfm 必须是 -1');
 if (JSON.stringify(mapA) !== JSON.stringify(mapB)) throw new Error('两店视图顺序不一致');
 const yA = sumFinDay(viewsA, ANCHOR);
 const a7 = avg7(viewsA);

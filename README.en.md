@@ -309,7 +309,7 @@ majia-guanyuan/
 ├── templates/
 │   └── html-dashboard/               # Part C-12 HTML application dashboard template pack (GDHTML runtime + starter modules + selector linkage patch)
 ├── examples/
-│   └── store-mobile-scorecard/       # Desensitized offline mobile scorecard (V3.1.12)
+│   └── store-mobile-scorecard/       # Desensitized offline mobile scorecard (V1)
 └── references/                       # Deep reference docs
     ├── part-b-errors.md              # Part B 10-category error detailed fixes
     ├── part-b-payload.md             # ETL payload schema deep-dive

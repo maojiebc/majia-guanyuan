@@ -306,7 +306,7 @@ majia-guanyuan/
 ├── templates/
 │   └── html-dashboard/               # Part C-12 HTML 应用化看板模板包（GDHTML runtime + 起手模块 + selector 联动 patch）
 ├── examples/
-│   └── store-mobile-scorecard/       # 门店手机成绩单脱敏离线 HTML（V3.1.12）
+│   └── store-mobile-scorecard/       # 门店手机成绩单脱敏离线 HTML（V1 版）
 └── references/                       # 深度参考资料
     ├── part-b-errors.md              # Part B 10 类报错详方案
     ├── part-b-payload.md             # ETL payload schema 详解
@@ -314,7 +314,7 @@ majia-guanyuan/
     ├── part-b17-fullchain-rewrite.md # B-17 全链路重写方法论全章节 + ExecPlan 工作法
     ├── part-c-payload-json.md        # C-3 payload_json 排障详解
     ├── part-c-html-dashboard.md      # C-12 HTML 应用化看板生成方法论
-    ├── part-c-store-mobile-scorecard.md # 门店手机成绩单经验（产品规则 / 20 视图 / 换店 / 对比脱敏）
+    ├── part-c-store-mobile-scorecard.md # 门店手机成绩单经验（产品规则 / 19 视图 / 换店 / 对比脱敏）
     ├── part-c-design-baseline.md     # HTML 看板视觉设计底线（V3.1.0，吸收 design-taste-skills）
     ├── v7-page-card-publish-pipeline.md  # Part D v7 草稿/发布状态机 + 节点化静默坑 + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp 反向工程流水线

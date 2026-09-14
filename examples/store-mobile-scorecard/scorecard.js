@@ -135,7 +135,14 @@
       return '<div class="barrow"><div class="barline"><span class="barlabel">' + (opts.rank ? '<span class="rk">' + (i + 1) + '</span>' : '') + esc(r.name) + '</span><span class="barval">' + esc(r.display != null ? r.display : fmt(r.value)) + (r.share != null ? '<small>' + pct(r.share, 0) + '</small>' : '') + (r.delta || '') + '</span></div><div class="track"><i style="width:' + w + '%"></i></div></div>';
     }).join('') + '</div>';
   }
-  function table(headers, rs) { return '<table><thead><tr>' + headers.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' + rs.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>'; }
+  function table(headers, rs, opts) {
+    opts = opts || {};
+    return '<table' + (opts.cls ? ' class="' + esc(opts.cls) + '"' : '') + '><thead><tr>' + headers.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' + rs.map(function (r) {
+      var cls = '', cells = r;
+      if (r && !Array.isArray(r) && r.cells) { cls = r.cls ? ' class="' + esc(r.cls) + '"' : ''; cells = r.cells; }
+      return '<tr' + cls + '>' + cells.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>';
+    }).join('') + '</tbody></table>';
+  }
 
   /* ---------- 首屏：成绩单 ---------- */
   function cmpValue(p, a) { return p.avgCompare ? divide(a.rev, a.days) : a.rev; }
@@ -227,9 +234,9 @@
       var rank = 1 + members.filter(function (x) { return x.avg > me.avg; }).length, med = median(members.map(function (x) { return x.avg; })), top = Math.max(me.avg, med), pctl = rank / n;
       var tier = pctl <= 0.1 ? '前 10%' : pctl <= 0.25 ? '前 25%' : pctl <= 0.5 ? '前 50%' : pctl <= 0.75 ? '后 50%' : '后 25%';
       return '<button class="peer" data-action="peer" data-value="' + g.key + '"><div class="peerhead"><span class="peername">' + esc(g.label) + '<small>近 7 天日均营业额</small></span><span class="peerrank"><b>第 ' + fmt(rank) + '</b><small>' + tier + '</small></span></div>' +
-        '<div class="cmpbars"><div class="cmprow"><span>你</span><div class="track me"><i style="width:' + (me.avg / top * 100).toFixed(1) + '%"></i></div><b>¥' + fmt(me.avg) + '</b></div><div class="cmprow"><span>中位</span><div class="track"><i style="width:' + (med / top * 100).toFixed(1) + '%"></i></div><b>¥' + fmt(med) + '</b></div></div></button>';
+        '<div class="cmpbars"><div class="cmprow"><span>本店</span><div class="track me"><i style="width:' + (me.avg / top * 100).toFixed(1) + '%"></i></div><b>¥' + fmt(me.avg) + '</b></div><div class="cmprow"><span>中位</span><div class="track"><i style="width:' + (med / top * 100).toFixed(1) + '%"></i></div><b>¥' + fmt(med) + '</b></div></div></button>';
     }).join('') + '</div>' + (truncated ? '<p class="note">对比名单达到取数上限，名次可能不完整。</p>' : '');
-    return section('peer', '跟其他门店比', '近 7 天日均营业额 · 只显示你的名次和中位数', body);
+    return section('peer', '跟其他门店比', '近 7 天日均营业额 · 只显示本店的名次和中位数', body);
   }
 
   /* ---------- 生意从哪来：渠道 / 时段 ---------- */
@@ -252,6 +259,7 @@
   }
 
   /* ---------- 顾客 ---------- */
+  function isMember(r) { var v = String(r['是否会员'] || ''); return v === '会员' || v === '是'; }
   function periodMembers() {
     if (S.period === '昨天') {
       return sum((D[V.member] || []).filter(function (r) { return date(r['订单日期']) === ANCHOR; }), '消费会员数');
@@ -264,7 +272,7 @@
     var inP = function (rg) { return no.filter(function (r) { return inRange(date(r['订单日期']), rg); }); };
     var pick = function (rg) {
       var rs = inP(rg), t = sum(rs, '顾客人次'), nw = sum(rs.filter(function (r) { return r['顾客属性'] === '新客'; }), '顾客人次');
-      var memOrd = sum(rs.filter(function (r) { return r['是否会员'] === '会员'; }), '订单数');
+      var memOrd = sum(rs.filter(isMember), '订单数');
       return { total: t, nw: nw, old: t - nw, share: divide(nw, t), memShare: divide(memOrd, sum(rs, '订单数')) };
     };
     var cur = pick(p.cur), cmp = pick(p.cmp);
@@ -283,12 +291,15 @@
       kpis + '<h3>新老客</h3><p class="sub">按下单当天的身份；人次是每日人数累加</p>' + bars(mix, { max: 2 }) +
       '<h3>现在还在的顾客 <span class="badge">当前快照</span></h3><p class="sub">按最后一单在本店，不随上面的周期变</p>' + bars(status, { max: 6 }));
   }
-  function pickMember(rs, name) { return rs.filter(function (r) { return r['是否会员'] === name; })[0] || {}; }
+  function pickMember(rs, names) {
+    var set = Array.isArray(names) ? names : [names];
+    return rs.filter(function (r) { return set.indexOf(String(r['是否会员'] || '')) !== -1; })[0] || {};
+  }
   function memberFreq(r) { return num(r['消费频次']) != null ? num(r['消费频次']) : divide(r['订单数'], r['消费人数']); }
   function memberVs() {
     var rs = D[V.membase] || [];
     if (!rs.length) return '';
-    var mem = pickMember(rs, '会员'), non = pickMember(rs, '非会员');
+    var mem = pickMember(rs, ['会员', '是']), non = pickMember(rs, ['非会员', '否']);
     var fM = memberFreq(mem), fN = memberFreq(non);
     var revM = num(mem['营收贡献']), revN = num(non['营收贡献']);
     var nM = num(mem['消费人数']), nN = num(non['消费人数']);
@@ -330,7 +341,7 @@
       '<div class="kpi"><span>券核销<small>' + esc(p.short) + '</small></span><b>' + fmt(cpN) + '<small>张</small></b>' + delta(cpN, cpP, p.cmpLabel, { small: true }) + '</div></div>';
     var health = '<div class="health"><div><span>好友流失率</span><b>' + pct(fri['流失率'], 0) + '</b></div><div><span>退群率</span><b>' + pct(grp['退群率'], 0) + '</b></div></div>';
     var note = '<p class="note">本期入群 ' + fmt(gAdd) + ' 人次（每日累加）。好友和群是两套名单，不能相除当转化。</p>';
-    return section('private', '私域', '存量和本期新增分开看', kpis + health + note);
+    return section('private', '私域', '福利官好友、熟客群 · 存量和本期新增分开看', kpis + health + note);
   }
   function coupons() {
     var p = P(), cp = D[V.coupons] || [];
@@ -354,8 +365,8 @@
       '<p><b>营业额、订单数、客单价</b>：来自 DWS 财务订单表，含堂食和外卖各渠道。客单价 = 营业额 ÷ 订单数。日均按有营业的天数算，不把停业日当 0。</p>' +
       '<p><b>对比</b>：昨天对比"上周同一天"和"前一天"；近 7 天对比前 7 天；近 30 天对比前 30 天；本月对比上月 1 日到同一天（上月天数不够时改比日均）。涨跌 0.5% 以内显示为持平。</p>' +
       '<p><b>跟其他门店比</b>：按分公司、地理城市、门店类型看近 7 天日均营业额的名次和中位数。不展示对比组有多少家门店，也不展示其他门店名称。</p>' +
-      '<p><b>顾客与会员</b>：消费会员按所选周期内会员卡号去重，不是每日人数的日均或加总。会员订单占比和新老客来自同一张新老客表，人次是每日累加。"现在还在的顾客"是最后一单在本店的当前快照。</p>' +
-      '<p><b>会员 vs 非会员</b>：固定看近 30 天，不跟顶部周期走。来自单独的顾客标识聚合表：消费频次 = 该组去重订单 ÷ 该组去重人数；客单价 = 该组营业额 ÷ 该组去重订单；人均贡献 = 该组营业额 ÷ 该组去重人数。组内营业额是可识别顾客里该组的金额，不是增量。没有这张表就不画。</p>' +
+      '<p><b>顾客与会员</b>：消费会员按所选周期内会员卡号去重，不是每日人数的日均或加总。会员订单占比和新老客来自同一张新老客表，人次是每日累加。"现在还在的顾客"是最后一单在本店的当前快照。不取 RFM。</p>' +
+      '<p><b>会员 vs 非会员</b>：固定看近 30 天，不跟顶部周期走。来自顾客标识聚合表：消费频次 = 该组去重订单 ÷ 该组去重人数；客单价 = 该组营业额 ÷ 该组去重订单；人均贡献 = 该组营业额 ÷ 该组去重人数。组内营业额是可识别顾客里该组的金额，不是增量。已排除未知标识和会员饮品赠品。</p>' +
       '<p><b>私域</b>：在联好友、在群人数、流失率、退群率是当前存量。新加好友、入群、券核销按事件日期跟周期走，合计是人次。好友和群不能相除算转化。</p>' +
       '<p><b>券</b>：按核销张数看所选周期里用得最多的券类型，跟顶部周期走。</p>' +
       '<p><b>饭点</b>：按下单整点分桶。早餐 6–10 点，午餐 10–14 点，下午茶 14–17 点，晚餐 17–21 点，宵夜 21 点到次日 6 点。条按近 7 天订单数从高到低排，最忙的在最上面。</p>' +
@@ -373,8 +384,11 @@
     document.body.appendChild(ov); ov.querySelector('button').focus();
   }
   function dailySheet() {
-    var p = P(), cur = agg(p.cur), rs = cur.daily.slice().reverse().map(function (e) { var same = FIN.get(addDays(e.date, -7)); return [md(e.date) + ' ' + wd(e.date), fmt(e.rev), fmt(e.orders), fmt(divide(e.rev, e.orders), 1), same ? (e.rev / same.rev - 1 >= 0 ? '+' : '−') + pct(Math.abs(e.rev / same.rev - 1), 0) : '—']; });
-    modal(p.title + ' 每日明细', table(['日期', '营业额/元', '订单', '客单', '比上周'], rs));
+    var p = P(), cur = agg(p.cur), rs = cur.daily.slice().reverse().map(function (e) {
+      var same = FIN.get(addDays(e.date, -7)), day = pd(e.date).getDay();
+      return { cls: (day === 0 || day === 6) ? 'wkend' : '', cells: [md(e.date) + '\n' + wd(e.date), fmt(e.rev), fmt(e.orders), fmt(divide(e.rev, e.orders), 1), same ? (e.rev / same.rev - 1 >= 0 ? '+' : '−') + pct(Math.abs(e.rev / same.rev - 1), 0) : '—'] };
+    });
+    modal(p.title + ' 每日明细', table(['日期', '营业额/元', '订单', '客单', '比上周'], rs, { cls: 'daily' }));
   }
   function waySheet(w) {
     var p = P(), cur = agg(p.cur), cmp = agg(p.cmp);
@@ -393,7 +407,7 @@
     var acMe = divide(me.rev, me.orders), acMed = median(members.map(function (x) { return divide(x.rev, x.orders); }).filter(function (x) { return x != null; }));
     var ordMed = median(members.map(function (x) { return x.orders / x.days; }));
     modal('跟' + labels[key] + '比', '<p>近 7 天（' + md(addDays(ANCHOR, -6)) + ' – ' + md(ANCHOR) + '）日均营业额排第 ' + fmt(rank) + '。</p>' +
-      table(['', '你', '中位', '前 25%'], [['日均营业额', '¥' + fmt(me.avg), '¥' + fmt(quantile(avgs, 0.5)), '¥' + fmt(quantile(avgs, 0.75))], ['日均订单', fmt(me.orders / me.days, 0), fmt(ordMed, 0), '—'], ['客单价', '¥' + fmt(acMe, 1), '¥' + fmt(acMed, 1), '—']]) +
+      table(['', '本店', '中位', '前 25%'], [['日均营业额', '¥' + fmt(me.avg), '¥' + fmt(quantile(avgs, 0.5)), '¥' + fmt(quantile(avgs, 0.75))], ['日均订单', fmt(me.orders / me.days, 0), fmt(ordMed, 0), '—'], ['客单价', '¥' + fmt(acMe, 1), '¥' + fmt(acMed, 1), '—']]) +
       '<p class="note">"前 25%"是同组里排在前四分之一位置的日均营业额。不显示其他门店名称，也不显示这组有多少家店。</p>');
   }
   /* ---------- 渲染 ---------- */

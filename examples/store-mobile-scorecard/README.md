@@ -2,7 +2,9 @@
 
 给加盟店老板看的手机成绩单样本。和桌面看板不是同一张页，也不是把桌面缩小。
 
-经验总结（产品规则、20 视图契约、换店滤空、列名识别、对比不写家数、发布链路）：
+**V1 版**（2026-09-14 封存）：单卡内滚动，19 个 DATA_GRID，不取 RFM，外卖色 `#FFD100`。不要为了切店先出营业额拆成两张卡。
+
+经验总结（产品规则、19 视图契约、换店滤空、列名识别、对比不写家数、发布链路）：
 
 [`references/part-c-store-mobile-scorecard.md`](../../references/part-c-store-mobile-scorecard.md)
 
@@ -26,7 +28,7 @@ open examples/store-mobile-scorecard/store-mobile-scorecard.html
 node examples/store-mobile-scorecard/build.mjs
 ```
 
-生成器会自检：财务等原视图 + 近 30 天会员对照表都能按列名识别；昨天合计 ≠ 近 7 天日均；两店数字不同；会员频次高于非会员且两店不同；对比组够 3 家（只用于算名次，页面不展示家数）。
+生成器会自检：除 RFM 外的视图都能按列名识别（`detectV.rfm === -1`）；昨天合计 ≠ 近 7 天日均；两店数字不同；会员频次高于非会员且两店不同；对比组够 3 家（只用于算名次，页面不展示家数）。
 
 ## 点击清单
 
@@ -46,4 +48,4 @@ node examples/store-mobile-scorecard/build.mjs
 
 ## 不要用它做什么
 
-不要把这个 HTML 当成 guanvis 工程去 `pack` / `upload`。上线仍是：原生 Page + 门店筛选器 + HTML 父卡 + 20 个 DATA_GRID + 必要时补 `phoneLayout`。
+不要把这个 HTML 当成 guanvis 工程去 `pack` / `upload`。上线仍是：原生 Page + 门店筛选器 + HTML 父卡 + 19 个 DATA_GRID + 必要时补 `phoneLayout`。

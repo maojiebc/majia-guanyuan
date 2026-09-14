@@ -2,7 +2,9 @@
 
 > **何时读**：用户要「加盟店老板每天打开的手机看板」「门店成绩单」「不要把桌面看板缩小」「换店后财务空白」「自定义图表有数但 HTML 顾客/私域/商品是空的」「跟其他门店比不要暴露对比组家数」，或要把已跑通的移动看板沉淀成可离线点的样本。
 >
-> **版本**：随 majia-guanyuan **V3.1.12**（2026-09-14）落地。基线 `guanvis 0.1.47`。升级 CLI 后，文中「当前需要补丁」的步骤要重新判断，不要当永久真理。
+> **版本**：成绩单 **V1 版**（2026-09-14 封存）。随 majia-guanyuan 文档落地。基线 `guanvis 0.1.47`。升级 CLI 后，文中「当前需要补丁」的步骤要重新判断，不要当永久真理。
+>
+> **V1 锁死**：一张 HTML 卡往下滚；19 个 DATA_GRID；不注册、不渲染 RFM；外卖色 `#FFD100`；不要为了切店先出营业额拆成两张卡。
 >
 > **配套离线样本**：[`examples/store-mobile-scorecard/store-mobile-scorecard.html`](../examples/store-mobile-scorecard/store-mobile-scorecard.html) —— 双击即可，无观远、无登录、每个点击交互都有虚构数据。
 >
@@ -12,7 +14,7 @@
 
 ## §1 一句话定位
 
-**门店手机成绩单 = 原生 Page + 原生门店筛选器 + 一张 HTML SDK 父卡 + 20 个 DATA_GRID 视图。**
+**门店手机成绩单 = 原生 Page + 原生门店筛选器 + 一张 HTML SDK 父卡 + 19 个 DATA_GRID 视图。**
 
 - 观远负责权限、刷新、聚合、换店联动。
 - HTML 负责手机叙事：首屏数字、涨跌、走势、对比、下钻弹层。
@@ -63,11 +65,11 @@
 ```text
 Page
 ├─ 原生门店筛选器（唯一门店范围）
-│    linkTo(0..14, 16..19)  → 编译到卡片 ID
-│    不要 link 第 15 个对比视图（对比要看全量有营业门店）
+│    linkTo(0..13, 15..18)  → 编译到卡片 ID
+│    不要 link 第 14 个对比视图（对比要看全量有营业门店）
 └─ HTML SDK 父卡
      ├─ 可见层：charts/*.html/css/js
-     └─ 20 个 DATA_GRID children（GDPlugin data[]）
+     └─ 19 个 DATA_GRID children（GDPlugin data[]）
 ```
 
 ### 3.1 两套顺序不要混用
@@ -79,7 +81,7 @@ Page
 
 实测（2026-09-14，`guanvis 0.1.47`）：运行时常见顺序是
 
-`fin, newold, soup, products, hours, status, friends, groups, frienddaily, groupdaily, coupons, membase, member, member7, member30, memberMonth, dormant, context, rfm, peer`
+`fin, newold, soup, products, hours, status, friends, groups, frienddaily, groupdaily, coupons, membase, member, member7, member30, memberMonth, dormant, context, peer`
 
 写入顺序则是财务 → 时段 → 新老客 → 会员 → 商品 → 汤底 → …。按 `data[2]` 当「新老客」会把汤底读成顾客，板块变空；CLI `card preview` 仍可能显示「卡里有数」。这是 **HTML 读错视图**，不是数据集没数。
 
@@ -105,10 +107,10 @@ Page
 | coupons | `核销券数` | 核销，随周期 |
 | dormant | `复购状态` | 预留快照（页面可以先不渲染） |
 | context | `开业日期` | 取门店名；没有则回退财务行的 `门店名称` |
-| rfm | `顾客类型` | 顾客分层快照 |
+| rfm | `顾客类型` | V1 不取。`detectV` 可留签名，运行时必须是 `-1` |
 | peer | `营业天数` | 近 7 天日均对比 |
 
-离线样本把 20 个视图按上面的运行时顺序打乱排放，就是为了逼 `detectV` 出场。不要改回「按下标写死」来图省事。
+离线样本把 19 个视图按上面的运行时顺序打乱排放，就是为了逼 `detectV` 出场。不要改回「按下标写死」来图省事。
 
 ### 3.2 窗口怎么切
 
@@ -119,7 +121,7 @@ Page
 | 财务 / 新老客 / 消费会员 / 私域逐日 | 昨天往回 69 天（共 70 天） | 覆盖本月、上月同期、近 30 天 vs 前 30 天、近 8 周 |
 | 用餐时段 | 昨天往回 15 天（共 16 天） | 近 7 天 vs 前 7 天，再留 2 天防「昨天还没同步」 |
 | 热销 / 汤底 / 对比 | 昨天往回 6 天（共 7 天） | 备货和对比看最近一周就够 |
-| 顾客状态 / RFM / 好友存量 / 在群 / 门店信息 | 快照，不跟周期切 | 文案要写清「当前」，避免老板以为随周期变 |
+| 顾客状态 / 好友存量 / 在群 / 门店信息 | 快照，不跟周期切 | 文案要写清「当前」，避免老板以为随周期变。不取 RFM |
 
 对比用「上周同一天 / 前一天 / 前 7 天 / 前 30 天 / 上月 1 日到同一天」。上月天数不够时，本月对比改日均。涨跌 0.5% 以内当持平。
 
@@ -239,7 +241,7 @@ pack 后的 zip 若没有 `phoneLayout`，手机页只露出成绩单上半截�
 
 **管道**
 
-- [ ] 20 个视图都能被列名识别（没有 `-1`）
+- [ ] 19 个视图都能被列名识别；`detectV.rfm` 必须是 `-1`
 - [ ] 换店后面包屑店名、财务、顾客、私域、商品一起变，不会只变店名
 - [ ] 对比视图不受门店筛选，名次在换店后仍能算
 - [ ] 卡片 payload 里没有写死的店名
@@ -290,9 +292,9 @@ pack 后的 zip 若没有 `phoneLayout`，手机页只露出成绩单上半截�
 node examples/store-mobile-scorecard/build.mjs
 ```
 
-生成器会自检：20 个视图都能被列名识别；昨天合计和近 7 天日均不是同一个数；会员频次高于非会员且两店不同；对比组 ≥ 3 家（只用于算名次，页面不展示家数）。
+生成器会自检：除 RFM 外都能被列名识别；昨天合计和近 7 天日均不是同一个数；会员频次高于非会员且两店不同；对比组 ≥ 3 家（只用于算名次，页面不展示家数）。
 
-生产发布 **不要** 拿这个 HTML 当 guanvis 工程去 upload。它没有 DATA_GRID、没有筛选器、没有权限。要上线，仍走 §4：原生 Page + 父卡 + 20 视图 + phoneLayout。
+生产发布 **不要** 拿这个 HTML 当 guanvis 工程去 upload。它没有 DATA_GRID、没有筛选器、没有权限。要上线，仍走 §4：原生 Page + 父卡 + 19 视图 + phoneLayout。
 
 ---
 
@@ -303,7 +305,7 @@ node examples/store-mobile-scorecard/build.mjs
 | [C-12 HTML 应用化看板](part-c-html-dashboard.md) | 从零做「分析应用」：多模块、descriptor patch、`linkToAll` 盲区 | 加盟店老板的单卡成绩单形态 |
 | [设计底线](part-c-design-baseline.md) | 首屏是判断、KPI 数量、禁假图表、反 AI 味 | 本页的视图契约和换店坑 |
 | [Part D phoneLayout](v7-page-card-publish-pipeline.md) | ZIP 注入手机布局的通用方法 | 成绩单该 h=38 还是该几个视图 |
-| **本章** | 门店手机成绩单的产品规则、20 视图契约、列名识别、换店/对比/口径坑、脱敏离线样本 | 桌面 30+ 卡原版、单店固定页 |
+| **本章** | 门店手机成绩单的产品规则、19 视图契约、列名识别、换店/对比/口径坑、脱敏离线样本 | 桌面 30+ 卡原版、单店固定页 |
 
 新做一张「老板每天打开的门店手机页」：先读本章，模板视觉不够再回设计底线，发布卡在草稿/phoneLayout 再回 Part D。不要先按 C-12 的六模块驾驶舱去堆。
 
@@ -312,7 +314,7 @@ node examples/store-mobile-scorecard/build.mjs
 ## §9 给下一次的最短工作记忆
 
 1. 先锁产品：数字和波动；门店只靠筛选器；周期在 HTML；对比不写家数。
-2. 父卡 + 20 个 DATA_GRID；HTML 按列名认视图；筛选器按 `views.push` 下标 `linkTo`，对比视图不联动。
+2. 父卡 + 19 个 DATA_GRID；HTML 按列名认视图；筛选器按 `views.push` 下标 `linkTo`，对比视图不联动。不取 RFM，不要拆成两张卡。
 3. `pack` 之后查 `phoneLayout`，没有就只补 `page.meta`。
 4. 验收必须换店 + 手机态 + 列名映射，不能只看默认店桌面预览。
 5. 公开任何东西之前走 §6 脱敏表。

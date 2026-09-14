@@ -83,7 +83,7 @@ metadata:
 | **`guanmetric`** | 0.1.15 | 指标定义与管理 | 指标建/改/删、主题/目录、公共维度、指标树、查询加速、业务字典、Excel 模板及 `--check-only` 预检；批量上下线用 `batch online/offline`，先 dry-run、按依赖顺序逐项处理。失败不回滚已成功项，blocked 先核对影响再确认；上线请求获接受后仍须回读审批/发布状态。复合指标只引用原子或复合指标；指标查数仍走 guancli。 |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
-| **`majia-guanyuan`**（本 skill） | **3.1.12** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（20 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
+| **`majia-guanyuan`**（本 skill） | **3.1.12** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（19 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
 **一句话路由**：标准查数 / 洞察 / Dashboard Agent → `guancli`；标准建卡/发布/截图 / `live` 实时工程 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`；指标建/改/删 + 指标主题/目录 + 公共维度 + **指标树 / 查询加速** → `guanmetric`。**任何一个遇到官方 DSL/命令够不着的字段、报错、状态机、反向工程、业务口径**——回到本 skill 对应 Part。
 
@@ -960,7 +960,7 @@ new GDPlugin().init(renderChart);
 
 🧰 **模板包**：[`templates/html-dashboard/`](templates/html-dashboard/) — `charts/html_common.js` (GDHTML runtime) + `html_base.css`（V3.1.0 按设计底线校准）+ 2 个起手模块（executive / trend）+ `scripts/patch_selector_linkage.js`（CLI 参数化，弥补 `linkToAll` 联不到 custom chart dataView 的盲区）。🆕 **guanvis 0.1.29 起官方新增「页面筛选器过滤自定义图表 + custom chart dataView 作点击联动来源」**——新页可先试官方 selector 联动，覆盖到位则此脚本可省；旧版/未覆盖场景仍用兜底（官方能力未净零实测，暂并存）。
 
-📱 **门店手机成绩单（V3.1.12）**：加盟店老板每天打开的单卡成绩单，不要按本章六模块驾驶舱去堆，也不要把桌面看板缩小。产品规则、20 视图契约、换店滤空、列名识别、对比不写家数见 [references/part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md)；可离线点的脱敏 HTML 在 [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)。
+📱 **门店手机成绩单（V1 版）**：加盟店老板每天打开的单卡成绩单，不要按本章六模块驾驶舱去堆，也不要把桌面看板缩小。产品规则、19 视图契约、换店滤空、列名识别、对比不写家数、不取 RFM 见 [references/part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md)；可离线点的脱敏 HTML 在 [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)。
 
 ---
 

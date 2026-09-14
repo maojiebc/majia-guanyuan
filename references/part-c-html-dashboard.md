@@ -620,7 +620,7 @@ cp "$SKILL_DIR/templates/html-dashboard/scripts/patch_selector_linkage.js" ./my-
 
 ## §14.1 门店手机成绩单（不要走六模块驾驶舱）
 
-加盟店老板每天打开的「门店手机成绩单」不是本章的六模块分析应用。它是 **一张 HTML 父卡 + 20 个 DATA_GRID + 原生门店筛选器**：周期在 HTML 里算，对比不写家数，视图按列名识别。完整规则和可离线点的脱敏样本见 [part-c-store-mobile-scorecard.md](part-c-store-mobile-scorecard.md) 与 [`examples/store-mobile-scorecard/`](../examples/store-mobile-scorecard/)。
+加盟店老板每天打开的「门店手机成绩单」不是本章的六模块分析应用。它是 **一张 HTML 父卡 + 19 个 DATA_GRID + 原生门店筛选器**：周期在 HTML 里算，对比不写家数，视图按列名识别，不取 RFM。完整规则和可离线点的脱敏样本见 [part-c-store-mobile-scorecard.md](part-c-store-mobile-scorecard.md) 与 [`examples/store-mobile-scorecard/`](../examples/store-mobile-scorecard/)。
 
 ---
 
