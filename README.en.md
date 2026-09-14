@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.12-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.2.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -17,6 +17,8 @@
 [![BI](https://img.shields.io/badge/Guandata-BI_6.x_/_7.x-purple)](https://www.guandata.com/)
 
 **[中文 README](README.md)** · English ↓
+
+**Latest mobile example:** [V2 offline demo and source](examples/store-mobile-scorecard-v2/README.md) · [ETL and metric definitions](references/part-c-store-mobile-scorecard-v2.md).
 
 ---
 
@@ -32,7 +34,7 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.11 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.58 query / guanvis 0.1.47 card-build & publish & screenshot & live / guanetl 0.1.34 ETL / guanwf 0.1.833 dataflow / guands 0.1.32 data sources / guanmetric 0.1.15 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.2.0 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.58 query / guanvis 0.1.47 card-build & publish & screenshot & live / guanetl 0.1.34 ETL / guanwf 0.1.833 dataflow / guands 0.1.32 data sources / guanmetric 0.1.15 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
@@ -388,12 +390,11 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.12** (2026-09-14) — franchise-owner mobile scorecard playbook plus a desensitized offline HTML sample. Official CLI pins remain at V3.1.11 (guanskill 0.1.35). See [part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md) and [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/).
+**Latest: V3.2.0** (2026-09-15) — Mobile scorecard V2: dedicated ETL, revenue-ranked store filters, consistent typography, frozen detail tables, deterministic alerts and coupon conversion details. [Offline V2 example](examples/store-mobile-scorecard-v2/README.md), [implementation guide](references/part-c-store-mobile-scorecard-v2.md), and [coupon linkage diagnosis](references/coupon-order-link-diagnosis.md). All displayed data is synthetic; official CLI pins are unchanged.
 
-**V3.1.10** (2026-08-25) — official family aligned to `guanskill` **0.1.29** (guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**). Highlights: enterprise OIDC and safer credentials, SuperApp bundle download, multiline SQL from file/stdin; in-place page/directory management and target-directory publish; declarative `calc-field apply`. Existing write and delete safety gates remain unchanged.
+**V3.1.12** (2026-09-14) — Mobile scorecard V1 guide and offline example, retained as an archive.
 
-**V3.1.9** (2026-08-19) — official family alignment since 07-24, nine umbrella releases folded into one patch (guanskill 0.1.17→0.1.26); headlines: `guancli insight`, `guanvis live`, `guanmetric metric-tree` + `accelerate`.
-
+**V3.1.11** (2026-09-14) — Official CLI and Skills alignment, batch querying and release safeguards.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 

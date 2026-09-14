@@ -1,0 +1,263 @@
+{
+  "dialect": "Spark SQL",
+  "description": "参考计算顺序；按 inputs 将上游映射为每个 SQL 的 input1、input2 等。资源 ID、权限及调度由使用者通过官方 guanetl 配置。",
+  "source_aliases": [
+    "store_master",
+    "orders",
+    "contacts",
+    "customer_status_source",
+    "coupon_redemptions",
+    "finance_source",
+    "identified_orders",
+    "dormant_source",
+    "order_products",
+    "groups_source"
+  ],
+  "steps": [
+    {
+      "name": "active_stores",
+      "sql": "active_stores.sql",
+      "inputs": {
+        "input1": "finance_source",
+        "input2": "identified_orders",
+        "input3": "orders"
+      },
+      "output": false
+    },
+    {
+      "name": "store_ordering",
+      "sql": "store_ordering.sql",
+      "inputs": {
+        "input1": "identified_orders",
+        "input2": "finance_source"
+      },
+      "output": false
+    },
+    {
+      "name": "finance_daily",
+      "sql": "finance_daily.sql",
+      "inputs": {
+        "input1": "finance_source",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "identified_daily",
+      "sql": "identified_daily.sql",
+      "inputs": {
+        "input1": "identified_orders",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "soup_7d",
+      "sql": "soup_7d.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "products_7d",
+      "sql": "products_7d.sql",
+      "inputs": {
+        "input1": "order_products",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "hours_daily",
+      "sql": "hours_daily.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "customer_status",
+      "sql": "customer_status.sql",
+      "inputs": {
+        "input1": "customer_status_source",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "contact_stock",
+      "sql": "contact_stock.sql",
+      "inputs": {
+        "input1": "contacts",
+        "input2": "store_master",
+        "input3": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "group_stock",
+      "sql": "group_stock.sql",
+      "inputs": {
+        "input1": "groups_source",
+        "input2": "store_master",
+        "input3": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "contact_daily",
+      "sql": "contact_daily.sql",
+      "inputs": {
+        "input1": "contacts",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "group_daily",
+      "sql": "group_daily.sql",
+      "inputs": {
+        "input1": "groups_source",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "coupon_conversion",
+      "sql": "coupon_conversion.sql",
+      "inputs": {
+        "input1": "coupon_redemptions",
+        "input2": "active_stores",
+        "input3": "orders"
+      },
+      "output": true
+    },
+    {
+      "name": "member_daily",
+      "sql": "member_daily.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "dormant_customers",
+      "sql": "dormant_customers.sql",
+      "inputs": {
+        "input1": "dormant_source",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "revenue_peers",
+      "sql": "revenue_peers.sql",
+      "inputs": {
+        "input1": "finance_source",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "member_comparison",
+      "sql": "member_comparison.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "member_7d",
+      "sql": "member_7d.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master",
+        "input3": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "member_30d",
+      "sql": "member_30d.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master",
+        "input3": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "member_month",
+      "sql": "member_month.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master",
+        "input3": "active_stores"
+      },
+      "output": true
+    },
+    {
+      "name": "member_peer_eligibility",
+      "sql": "member_peer_eligibility.sql",
+      "inputs": {
+        "input1": "identified_orders",
+        "input2": "finance_source",
+        "input3": "store_master",
+        "input4": "active_stores"
+      },
+      "output": false
+    },
+    {
+      "name": "soup_coverage",
+      "sql": "soup_coverage.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "active_stores"
+      },
+      "output": false
+    },
+    {
+      "name": "member_peer_ranking",
+      "sql": "member_peer_ranking.sql",
+      "inputs": {
+        "input1": "member_peer_eligibility"
+      },
+      "output": false
+    },
+    {
+      "name": "member_anomaly_orders",
+      "sql": "member_anomaly_orders.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "member_comparison"
+      },
+      "output": false
+    },
+    {
+      "name": "member_anomaly_evidence",
+      "sql": "member_anomaly_evidence.sql",
+      "inputs": {
+        "input1": "member_anomaly_orders"
+      },
+      "output": false
+    },
+    {
+      "name": "store_context",
+      "sql": "store_context.sql",
+      "inputs": {
+        "input1": "store_master",
+        "input2": "active_stores",
+        "input3": "store_ordering",
+        "input4": "member_peer_ranking",
+        "input5": "member_anomaly_evidence",
+        "input6": "soup_coverage"
+      },
+      "output": true
+    }
+  ]
+}

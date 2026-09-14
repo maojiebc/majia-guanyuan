@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.12-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.2.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -20,6 +20,8 @@
 **本次兼容更新**：官方 CLI 与官方 Skill 需要分别核验；本机命令已更新，文档仍可能落后。标准表单建改用 `guands form`，旧脚手架绕行仅留作兼容参考。批量取数、JSON 输出和写入状态的变化见 [兼容说明](references/official-cli-compatibility.md)。
 
 
+**手机案例最新版：** [V2 离线演示与源码](examples/store-mobile-scorecard-v2/README.md) · [ETL 与数据口径](references/part-c-store-mobile-scorecard-v2.md)。
+
 ---
 
 ## 概述
@@ -31,7 +33,7 @@
 - **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.11 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.58 查数 / guanvis 0.1.47 建卡发布截图 live / guanetl 0.1.34 ETL / guanwf 0.1.833 数据流 / guands 0.1.32 数据源 / guanmetric 0.1.15 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 历史兼容 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.2.0 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.58 查数 / guanvis 0.1.47 建卡发布截图 live / guanetl 0.1.34 ETL / guanwf 0.1.833 数据流 / guands 0.1.32 数据源 / guanmetric 0.1.15 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 历史兼容 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
 </p>
 
 | 层 | 你想做 | 走 |
@@ -385,13 +387,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.12** (2026-09-14) — 门店手机成绩单经验 + 脱敏离线 HTML 样本。官方全家桶版本仍按 V3.1.11（guanskill 0.1.35）。见 [part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md) 与 [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)。
+**最新：V3.2.0** (2026-09-15) — 手机成绩单 V2：专供 ETL、按近7天营业额选店、统一手机排版、冻结明细、确定性异常提示与券转化。新增 [可离线操作的V2案例](examples/store-mobile-scorecard-v2/README.md)、[计算与交互说明](references/part-c-store-mobile-scorecard-v2.md) 和 [券关联排查](references/coupon-order-link-diagnosis.md)。所有展示数据为合成样本，官方 CLI 版本不变。
 
-**V3.1.10** (2026-08-25) — 官方全家桶对齐到 `guanskill` **0.1.29**（guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**）。重点：企业 OIDC 与安全凭据、SuperApp 整包下载、文件/标准输入多行 SQL；页面与目录原地管理、发布目标目录；`calc-field apply` 计算字段期望态协调。既有写入与删除安全闸保持不变。
+**V3.1.12** (2026-09-14) — 手机成绩单 V1 经验与脱敏离线样本；原目录继续保留。
 
-**V3.1.9** (2026-08-19) — 官方全家桶 07-24 以来 9 个聚合包一次性对齐（guanskill 0.1.17→0.1.26）；头条：`guancli insight` / `guanvis live` / `guanmetric metric-tree` + `accelerate`。
-
-
+**V3.1.11** (2026-09-14) — 官方全家桶与对应 Skills 对齐，完善批量查询、发布及数据治理边界。
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。
 

@@ -40,7 +40,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.12"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.2.0"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
@@ -71,6 +71,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
     scripts/
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
     templates/            ← html-dashboard template pack (Part C-12).
+    examples/store-mobile-scorecard-v2/ ← Current synthetic mobile demo and dedicated SQL reference.
     examples/store-mobile-scorecard/ ← Offline desensitized mobile scorecard sample (V1).
     docs/                 ← Supplementary docs.
     references/official-cli-compatibility.md ← Current official versions and migration boundaries.

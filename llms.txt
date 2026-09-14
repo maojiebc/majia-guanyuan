@@ -21,7 +21,7 @@
 - `references/part-b17-fullchain-rewrite.md`: SmartETL full-chain rewrite methodology + ExecPlan workflow.
 - `references/part-c-payload-json.md`: custom chart `payload_json` troubleshooting.
 - `references/part-c-html-dashboard.md`: C-12 HTML application dashboard methodology (dataView contract, selector descriptor patch, five-layer acceptance).
-- `references/part-c-store-mobile-scorecard.md`: franchise-owner mobile scorecard (20 DATA_GRID views, column-name detectV, store-filter AND trap, no peer-group store counts). Offline desensitized HTML: `examples/store-mobile-scorecard/`.
+- `references/part-c-store-mobile-scorecard.md`: franchise-owner mobile scorecard (19 DATA_GRID views, column-name detectV, store-filter AND trap, no peer-group store counts). Offline desensitized HTML: `examples/store-mobile-scorecard/`.
 - `references/part-c-design-baseline.md`: visual design baseline for HTML dashboards (data-judgment-first layout, KPI/number conventions, chart authenticity, visual token caps, anti-AI-look red lines, `guanvis screenshot` visual acceptance; absorbed from xiaomingtx666/design-taste-skills, MIT).
 - `references/v7-page-card-publish-pipeline.md`: Part D v7 draft-release state machine, SmartETL node silent traps, mobile phoneLayout ZIP inject.
 - `references/part-e-superapp-pipeline.md`: Part E SuperApp open-app reverse-engineering pipeline (form schema creation, LLM bridge response parsing).
@@ -38,3 +38,6 @@
 - X: https://x.com/maojiebc
 - Xiaohongshu: https://xhslink.com/m/4fQMJeHHWKC
 - WeChat Official Account: 超级马甲
+
+- `references/part-c-store-mobile-scorecard-v2.md`: current mobile scorecard, dedicated SQL, revenue-ranked filters, deterministic anomaly warnings and coupon conversion. Runnable synthetic example: `examples/store-mobile-scorecard-v2/`.
+- `references/coupon-order-link-diagnosis.md`: trace missing coupon-order links; nearby transactions are candidates, never automatic revenue attribution.
