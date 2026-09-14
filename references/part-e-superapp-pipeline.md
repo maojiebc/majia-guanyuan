@@ -6,6 +6,8 @@
 
 ---
 
+> **2026-09-14 兼容说明**：常规表单结构创建、导出、原地更新、改名和换目录优先用官方 `guands form`；表单数据行仍用 `guancli form`。§6 保留历史脚手架 API 实证，不再作为默认建表入口。当前版本与状态边界见 [官方兼容说明](official-cli-compatibility.md)。
+
 ## §1 SuperApp 是什么 · 资源定位
 
 | 维度 | 内容 |
@@ -56,10 +58,10 @@ guancli app create --name superapp-demo --path ~/superapp-demo
 
 create 完成后自动跑 `git init` + `npm install` + 拉起 `npm run dev`（在 `--path` 检测可用端口）。
 
-### §3.2 publish — CLI 不读 .env，必须显式传 --app-id
+### §3.2 publish — 更新已知应用显式传 --app-id
 
 ```bash
-# ❌ 默认行为：每次都新建一个 appId（操作类型 create）
+# 新建路径：未传 appId；遇同名默认报错，不能据此认定已经更新
 guancli app publish --path ~/superapp-demo/superapp-demo
 
 # ✅ 真正的 update：必须显式传 --app-id
@@ -67,11 +69,13 @@ guancli app publish --path ~/superapp-demo/superapp-demo \
   --app-id ve2f78b92e329450e95549ff
 ```
 
-**关键坑（亲测踩到）**：`.env` 里的 `VITE_APP_ID` 字段**只对模板自带的 `/publish` 在线 UI 生效**，**CLI 不读这个变量**。第一次发布不传 `--app-id` 就走 create 新建；想 update 已有 app 必须从命令行显式传。
+**关键坑（亲测踩到）**：`.env` 里的 `VITE_APP_ID` 字段**只对模板自带的 `/publish` 在线 UI 生效**，**CLI 不读这个变量**。更新已知应用应先 `app list` 定位，显式传 `--app-id`；当前版本另有 `--update-if-exists` 支持同名更新，但须先确认目标，不能把同名等同于同一资源。
 
 后果：如果忘了，平台上会留多条 SuperApp 记录，要去 BI 网页里手动清。
 
-publish 内部链路：vite build → 自动 ZIP `dist.<version>.zip` → POST `/api/open-apps/upload` → POST `/api/open-apps/create` 或 `/update`。
+当前 `app publish --skip-build` 可发布已存在且验证过的 `dist`；不能用它跳过本地构建验收。覆盖线上 `settings.json` 由 `--overwrite-settings` 控制，未指定时交互确认，非交互默认保留线上配置。
+
+publish 默认内部链路：vite build → 自动 ZIP `dist.<version>.zip` → POST `/api/open-apps/upload` → POST `/api/open-apps/create` 或 `/update`。
 
 ### §3.3 包大小参考
 
@@ -148,7 +152,9 @@ export async function fetchTaskPoolRows(dsId: string, limit = 200) {
 
 ---
 
-## §6 BI 表单建表的反向工程（脚手架完全没暴露！）
+## §6 BI 表单建表的历史反向工程（官方 form 命令优先）
+
+常规需求先读 `guands` Skill：`form create form.js --dry-run` 预览，创建成功后 `-f json` 可获取结构化 fmId；已有表单 `form export` 后用 `form update` 原地编辑。关联 GUAN_FORM 数据集字段变化时，另走 `dataset sync-schema plan/apply` 并回读。只有目标环境的具体兼容问题已复现，才评估以下历史 API；权限或功能未开通不能靠换接口绕过。
 
 ### §6.1 现象
 
@@ -652,7 +658,7 @@ ls -la <dir>/dist.<version>.zip
 
 ### §13.3 删除已发布的 SuperApp
 
-`guancli app` 子命令**只有 create + publish**，没有 delete / list。删除需去 BI 网页的「超级应用」管理界面手动操作。
+`guancli app` 当前提供 **create / list / download / publish**，没有 delete。删除需去 BI 网页的「超级应用」管理界面手动操作。
 
 ---
 
@@ -711,7 +717,7 @@ ls -la <dir>/dist.<version>.zip
 | 把 LLM 调用走 `stream: true` | BI 中转 JSON 校验失败 | stream=false + 客户端模拟流式 |
 | `listAvailableLLMServices()` | 走 unwrap 拿不到裸数组 | 原生 fetch + credentials: 'include' |
 | publish 不传 `--app-id` 期望 update | CLI 不读 `.env`，每次新建 | 显式传 `--app-id` |
-| 在 SuperApp 里硬撸建表 SQL | 没建表 API 等于 0 | 反向工程 `/survey-engine/api/form/add` |
+| 在 SuperApp 里硬撸建表 SQL | 忽略了官方表单结构能力 | 先用 `guands form create`；§6 仅用于已复现的兼容问题 |
 | 把执行历史存 localStorage | 换浏览器就丢 | 写回 form 真持久化 |
 
 ---
@@ -748,7 +754,7 @@ ls -la <dir>/dist.<version>.zip
 | `guancli app create` 报"目录不存在" | §3.1 |
 | `guancli app publish` 没走 update 而是新建一个 | §3.2 |
 | 数据集异步预览 columns 用 fdId/title 拿不到值 | §5 |
-| 想在 SuperApp 里 add form 数据但没建表 API | §6 |
+| 常规表单建改 / 旧脚手架兼容问题 | guands form / §6 历史参考 |
 | 建表后 add 数据成功但 remove 报 NPE | §6.5 |
 | `listAvailableLLMServices()` 返回空但 curl 正常 | §7.1 / §8 |
 | `/api/llm/chat/completions` 报 NOT_JSON_RES 或 ILLEGAL_JSON_RES | §7.2 / §7.3 |

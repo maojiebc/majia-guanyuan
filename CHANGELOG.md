@@ -7,6 +7,28 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.11] — 2026-09-14
+
+> 官方对齐 patch：guanskill 0.1.29 → 0.1.35。修正指标结果消费、批量状态及已失效命令，保留历史实证与实际验证边界。
+
+### Changed
+
+- 六组件对齐：guancli 1.0.58 / guanvis 0.1.47 / guanetl 0.1.34 / guanwf 0.1.833 / guands 0.1.32 / guanmetric 0.1.15。
+- guancli：指标 batch-query、本地 analyze、统一指标 JSON、默认数值格式、页面运行态筛选，以及 SuperApp skip-build/线上 settings 保护；明确查询批次退出 0 仍可能部分失败。
+- guanvis：高级筛选器、卡片池、跨视图交叉表 filterBy 校验、表格字号/网格线、原生平台安装包与覆盖发布草稿重置；保留备份和浏览/编辑两态验收。
+- guanetl / guands：移除全局 task，按资源 ID 跟踪；新资源先核对落位。补充 ETL 空目录删除、历史节点 ID 导出、类型化 DSL、数据追加/替换的 --yes，以及 GUAN_FORM 结构原地同步。
+- guanwf：Python 运行环境/内存预检、输出绑定和首次 CREATE_NEW 后的发布保存要求；验证只在已有草稿执行，写入确认、并发保护和逐项输出验收保留。
+- guanmetric：批量上下线及逐项失败/blocked/审批状态、业务字典、模板 check-only、复合指标上游类型保护。
+- 路由表改为当前能力与关键边界，逐版历史保留 CHANGELOG；新增官方兼容说明。Part E 普通表单建改转官方 guands，纠正 app 缺少 list 的旧描述；Part D 补草稿重置适用边界。
+- 更新 SOP 同时核对 CLI 与已安装 Skill 内容，修复“CLI 已最新便跳过文档”的缺口；本机七个官方 Skill 重新安装并与随包内容核对。
+- README 双语、版本元数据、入口说明和架构图刷新，最近记录仅保留三版。
+
+### Verification
+
+- npm latest、聚合包精确依赖、本机命令版本与随包文档分别核对；关键命令帮助及本地合成数据验证，详见 references/official-cli-compatibility.md。
+- 本次没有重跑线上 BI 业务或写入生产资源；历史案例不升级为新版实证。安装名称、商店历史 slug 与脚本接口不变。
+- GitHub 为代码发布真源；ClawHub / SkillHub 沿用 guanyuan-majia，npm 未请求。
+
 ## [3.1.10] — 2026-08-25
 
 > 官方全家桶对齐 patch：`guanskill` 0.1.26→**0.1.29**，核心是 `guancli` **1.0.53** 的企业 OIDC、安全凭据、SuperApp 整包下载与多行 SQL 输入，以及 `guanvis` **0.1.41** 的页面/目录原地管理。无本 skill 自身护城河逻辑变更，既有写入与删除安全闸保持不变。

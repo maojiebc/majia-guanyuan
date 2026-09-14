@@ -25,7 +25,7 @@ Current structure — a router layer plus the hard-bone Parts:
 
 Before performing any work in this repo, always:
 
-1. Read `SKILL.md` (the main doc, ~1060 lines). The `## 🧭 Part 选择` table at the top tells you which Part (router layer / B / C / C-12 / D / E / ADS / restaurant formulas) covers the user's request.
+1. Read `SKILL.md` (the main doc, router and relevant Part sections). The `## 🧭 Part 选择` table at the top tells you which Part (router layer / B / C / C-12 / D / E / ADS / restaurant formulas) covers the user's request.
 2. Read only the relevant Part section in detail. Don't load the whole SKILL.md unnecessarily — each Part points to its own `references/` playbook for the full tables.
 3. Authentication is via `guancli auth login` (the whole official family shares one profile). This skill no longer reads `config.json` — credentials live in the guancli profile, not in this repo.
 
@@ -39,7 +39,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.10"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.11"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
@@ -71,6 +71,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
     templates/            ← html-dashboard template pack (Part C-12).
     docs/                 ← Supplementary docs.
+    references/official-cli-compatibility.md ← Current official versions and migration boundaries.
     references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ pointer):
       part-b-errors.md           ← Part B 10-category error fixes detailed.
       part-b-payload.md          ← ETL payload schema deep-dive.

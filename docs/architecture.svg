@@ -32,7 +32,7 @@
   <text x="720" y="50" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">观远 BI · 马甲实战版 · 全链路 Agent Skill</text>
   <g transform="translate(720, 64)">
     <rect x="-86" y="0" width="172" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.1.10  ·  2026-08-25</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.1.11  ·  2026-09-14</text>
   </g>
   <text x="720" y="112" text-anchor="middle" font-size="13.5" fill="#475569">官方全家桶之上的实战增益层　·　标准活路由官方，硬骨头落到本 skill 三支柱</text>
   <text x="720" y="132" text-anchor="middle" font-size="11.5" fill="#94a3b8">工具无关 (Claude Code · OpenClaw · Codex · Hermes/gbrain)　·　前置 npm i -g @guandata/guanskill</text>
@@ -63,12 +63,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guancli</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#eff6ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.53</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2563eb">1.0.58</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">查数 · 只读中枢</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">ETL / dsId / page</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">血缘 · execute-sql</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">OIDC · SuperApp 下载</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">指标批量查询 · 本地分析</text>
     </g>
 
     <!-- guanvis -->
@@ -78,12 +78,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanvis</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f5f3ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.41</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7c3aed">0.1.47</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">建卡 · 发布 · 截图</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">74 图表 JS DSL</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">pack / publish / 截图</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">页面/目录原地管理</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">高级筛选 · 草稿重置</text>
     </g>
 
     <!-- guanetl -->
@@ -93,12 +93,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanetl</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#ecfdf5"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.29</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.34</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">ETL 写操作闭环</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">新建 / 改 / lint / preview</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">save / run / schedule</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">move · run 上游链路</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">目标落位 · 按 ETL 跟踪</text>
     </g>
 
     <!-- guanwf -->
@@ -108,12 +108,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guanwf</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#ecfdf5"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.828</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#059669">0.1.833</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">工作流 · 编排调度</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">workflow.go DSL</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">Python 节点 DAG</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">实例诊断 · --confirm 门禁</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">输出绑定 · --confirm</text>
     </g>
 
     <!-- guands -->
@@ -123,12 +123,12 @@
       <text x="14" y="32" font-size="13.5" font-weight="700" fill="#0f172a">guands</text>
       <g transform="translate(96, 20)">
         <rect width="52" height="16" rx="8" fill="#f0f9ff"/>
-        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.28</text>
+        <text x="26" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">0.1.32</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">数据源 · 数据集</text>
       <text x="14" y="74" font-size="10.5" fill="#64748b">建连 MySQL/PG</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">create / import / 追加</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">calc-field apply</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">表单结构 · 原地同步</text>
     </g>
 
     <!-- guanmetric (NEW · 2026-07-08 入桶) -->
@@ -138,7 +138,7 @@
       <text x="14" y="32" font-size="12.5" font-weight="700" fill="#0f172a">guanmetric</text>
       <g transform="translate(102, 20)">
         <rect width="46" height="16" rx="8" fill="#fdf2f8"/>
-        <text x="23" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#be185d">0.1.10</text>
+        <text x="23" y="12" text-anchor="middle" font-size="9.5" font-weight="700" fill="#be185d">0.1.15</text>
       </g>
       <text x="14" y="54" font-size="11" font-weight="600" fill="#334155">指标写操作</text>
       <g transform="translate(76, 43)">
@@ -147,7 +147,7 @@
       </g>
       <text x="14" y="74" font-size="10.5" fill="#64748b">create / edit / delete</text>
       <text x="14" y="91" font-size="10.5" fill="#64748b">指标主题 · 公共维度</text>
-      <text x="14" y="108" font-size="10.5" fill="#64748b">指标树 · 查询加速</text>
+      <text x="14" y="108" font-size="10.5" fill="#64748b">批量上下线 · 业务字典</text>
     </g>
   </g>
 
@@ -175,7 +175,7 @@
     <text x="20" y="11" font-size="15" font-weight="700" fill="#0f172a">majia-guanyuan 实战增益层</text>
     <g transform="translate(248, -4)">
       <rect width="64" height="18" rx="9" fill="#0f172a"/>
-      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.1.10</text>
+      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.1.11</text>
     </g>
     <text x="332" y="11" font-size="11.5" fill="#64748b">官方 DSL / 命令覆盖不到的硬骨头 · 三大支柱</text>
   </g>
@@ -211,7 +211,7 @@
     <g transform="translate(24, 306)">
       <rect width="382" height="50" rx="8" fill="#f8fafc"/>
       <text x="14" y="22" font-size="12.5" font-weight="700" fill="#334155">Part E · SuperApp 反向工程</text>
-      <text x="14" y="40" font-size="10.5" fill="#64748b">form 建表 /survey-engine · LLM 中转三路径 · fetch 绕 unwrap</text>
+      <text x="14" y="40" font-size="10.5" fill="#64748b">form 历史兼容 /survey-engine · LLM 中转三路径 · fetch 绕 unwrap</text>
     </g>
   </g>
 

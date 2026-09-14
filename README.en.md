@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.10-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.11-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -20,6 +20,9 @@
 
 ---
 
+
+**Compatibility update:** verify CLI binaries and installed official Skills separately. Use `guands form` for standard form structure changes; old scaffold API examples are compatibility references. See [current compatibility notes](references/official-cli-compatibility.md) for metric output and write-state changes.
+
 ## Overview
 
 **V3.0.0 repositioning**: Guandata has shipped "query / card-build / ETL / dataflow / data sources / screenshot / admin" as a public family (`npm i -g @guandata/guanskill`). This skill has been **fully refactored from an early "DIY full-stack + fallback" into "a battle-tested layer on top of the official family"** — retiring the 2789-line DIY HTTP client `guandata.py`, deleting ~1600 lines of dead code, and cutting every section that mirrored official commands.
@@ -29,7 +32,7 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.10 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.53 query / guanvis 0.1.41 card-build & publish & screenshot & live / guanetl 0.1.29 ETL / guanwf 0.1.828 dataflow / guands 0.1.28 data sources / guanmetric 0.1.10 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + form schema creation + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.11 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.58 query / guanvis 0.1.47 card-build & publish & screenshot & live / guanetl 0.1.34 ETL / guanwf 0.1.833 dataflow / guands 0.1.32 data sources / guanmetric 0.1.15 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
@@ -339,7 +342,7 @@ majia-guanyuan/
 | "Custom chart script not running / payload_json error" / "Fixed card misaligned / overlay leaks across routes" | **C** |
 | "More advanced / application dashboard / selector won't link to custom chart dataView" | **C-12** |
 | "v7 page+card stuck on 60004 draft page" / "How to inject mobile phoneLayout" | **D** |
-| "form schema-creation API not exposed by scaffold" / "LLM bridge throws ILLEGAL_JSON_RES" | **E** |
+| "use guands form for structure; E covers legacy scaffold compatibility" / "LLM bridge throws ILLEGAL_JSON_RES" | **E** |
 | "Connect AI to existing BI — govern or rebuild?" / "How to design AI-native ADS" | **Methodology** |
 | "How to compute repurchase / avg ticket / RFM / comp-store growth" | **Restaurant formulas** |
 
@@ -381,11 +384,12 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.10** (2026-08-25) — official family aligned to `guanskill` **0.1.29** (guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**). Highlights: enterprise OIDC and safer credentials, SuperApp bundle download, multiline SQL from file/stdin; in-place page/directory management and target-directory publish; declarative `calc-field apply`. Existing write and delete safety gates remain unchanged.
+**Latest: V3.1.11** (2026-09-14) — aligned to guanskill 0.1.35. Route independent basic metric queries to one batch, request raw values for calculations, and inspect per-item failures and publication approval. Adapt draft reset, explicit resource placement and append/replace confirmation. Prefer official form commands; retain old workarounds only for reproduced compatibility issues. See [compatibility notes](references/official-cli-compatibility.md).
+
+**V3.1.10** (2026-08-25) — official family aligned to `guanskill` **0.1.29** (guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**). Highlights: enterprise OIDC and safer credentials, SuperApp bundle download, multiline SQL from file/stdin; in-place page/directory management and target-directory publish; declarative `calc-field apply`. Existing write and delete safety gates remain unchanged.
 
 **V3.1.9** (2026-08-19) — official family alignment since 07-24, nine umbrella releases folded into one patch (guanskill 0.1.17→0.1.26); headlines: `guancli insight`, `guanvis live`, `guanmetric metric-tree` + `accelerate`.
 
-**V3.1.8** (2026-07-24) — official family 07-15 + 07-24 two-batch alignment (guanskill 0.1.12→0.1.17). `guanwf` writes now sit behind a `--confirm` gate (breaking, introduced at 0.1.820) + coexistence note for the official `guandata-cli-suite` dispatcher.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 

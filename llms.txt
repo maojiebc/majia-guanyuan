@@ -14,6 +14,7 @@
 ## Skill Contents
 
 - `SKILL.md`: routing layer and core operating rules for agents (standard query/card/ETL work routes to the official CLI family; this skill keeps the hard parts).
+- `references/official-cli-compatibility.md`: verified official versions, metric JSON/raw values, batch status, placement and legacy fallback boundaries.
 - `references/part-b-payload.md`: ETL payload schema and write workflow.
 - `references/part-b-errors.md`: ETL error diagnosis playbook (10 engine error categories).
 - `references/part-b-sdk.md`: v2 to v3 batch migration SDK notes.

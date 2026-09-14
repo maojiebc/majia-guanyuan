@@ -5,8 +5,8 @@
     "email": "m9224@163.com"
   },
   "metadata": {
-    "description": "majia-guanyuan · 观远 BI / Guandata 官方全家桶之上的实战增益层 Agent Skill — 标准查数/建卡/ETL/数据集 CRUD 路由官方，本 skill 专攻 ETL 整库治理 + 引擎报错手册 + 自定义图表注入 + HTML 应用化看板 + v7 发布流水线 + SuperApp 反向工程 + AI-native ADS + 餐饮公式库，工具无关（Claude Code / OpenClaw / Codex / Hermes 通用）",
-    "version": "3.1.10",
+    "description": "观远 BI · 马甲实战版：标准查询、指标批量取数、ETL、数据集、表单和看板操作使用官方六组件；补充整库治理、业务口径、引擎报错、自定义图表、v7 发布与 SuperApp 兼容经验。官方基线 guanskill 0.1.35；各组件版本和迁移边界见 references/official-cli-compatibility.md。",
+    "version": "3.1.11",
     "homepage": "https://github.com/maojiebc/majia-guanyuan",
     "repository": "https://github.com/maojiebc/majia-guanyuan"
   },

@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.10-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.11-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -17,6 +17,8 @@
 [![BI](https://img.shields.io/badge/Guandata-BI_6.x_/_7.x-purple)](https://www.guandata.com/)
 
 **[English README](README.en.md)** · 中文文档 ↓
+**本次兼容更新**：官方 CLI 与官方 Skill 需要分别核验；本机命令已更新，文档仍可能落后。标准表单建改用 `guands form`，旧脚手架绕行仅留作兼容参考。批量取数、JSON 输出和写入状态的变化见 [兼容说明](references/official-cli-compatibility.md)。
+
 
 ---
 
@@ -29,7 +31,7 @@
 - **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.10 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.53 查数 / guanvis 0.1.41 建卡发布截图 live / guanetl 0.1.29 ETL / guanwf 0.1.828 数据流 / guands 0.1.28 数据源 / guanmetric 0.1.10 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 建表 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.1.11 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.58 查数 / guanvis 0.1.47 建卡发布截图 live / guanetl 0.1.34 ETL / guanwf 0.1.833 数据流 / guands 0.1.32 数据源 / guanmetric 0.1.15 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 历史兼容 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
 </p>
 
 | 层 | 你想做 | 走 |
@@ -39,7 +41,7 @@
 | 🅱️ **B-17** | 全链路重写方法论 | "把这条 SmartETL 链整个改成 SQL 版" / "副本页验收 / 卡片级对比" |
 | 🆎 **Part C / C-12** | 自定义图表注入排障 + HTML 应用化看板 | "payload_json 解析失败" / "固定卡片错位" / "更高级/应用化看板" |
 | 🇩 **Part D** | v7 草稿-发布状态机绕过 + phoneLayout | "v7 page+card 被 60004 卡住" / "移动端 phoneLayout 怎么注入" |
-| 🇪 **Part E** | SuperApp 开放应用反向工程 | "form 建表脚手架没暴露" / "LLM 中转 ILLEGAL_JSON_RES" |
+| 🇪 **Part E** | SuperApp 开放应用反向工程 | "表单结构先走 guands form；旧脚手架兼容问题再查 E" / "LLM 中转 ILLEGAL_JSON_RES" |
 | 🧠 **方法论 / 公式库** | AI-native ADS 判断 + 餐饮 BI 公式（公式库已迁至 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)） | "想给现有 BI 接 AI，该治理还是该重搭" / "复购率/RFM/客单价怎么算" |
 
 ---
@@ -337,7 +339,7 @@ majia-guanyuan/
 | "自定义图表脚本不执行 / payload_json 报错" / "固定卡片错位 / overlay 切页残留" | **C** |
 | "更高级 / 应用化看板 / selector 联不到 custom chart dataView" | **C-12** |
 | "v7 page+card 被 60004 草稿页面卡住" / "移动端 phoneLayout 怎么注入" | **D** |
-| "form 建表脚手架没暴露 API" / "LLM 中转报 ILLEGAL_JSON_RES" | **E** |
+| "常规表单建改用 guands form；历史兼容 / LLM 中转报错" | **E** |
 | "想给现有 BI 接 AI，该治理还是该重搭" / "AI-native ADS 怎么设计" | **方法论** |
 | "复购率 / 客单价 / RFM / 同店增长怎么算" | **餐饮公式库** |
 
@@ -379,11 +381,12 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.10** (2026-08-25) — 官方全家桶对齐到 `guanskill` **0.1.29**（guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**）。重点：企业 OIDC 与安全凭据、SuperApp 整包下载、文件/标准输入多行 SQL；页面与目录原地管理、发布目标目录；`calc-field apply` 计算字段期望态协调。既有写入与删除安全闸保持不变。
+**最新：V3.1.11** (2026-09-14) — 对齐官方 guanskill 0.1.35。多个基础指标一次查询，计算显式取原始数值；逐项识别批量失败和上线审批；适配页面草稿重置、资源目录及追加确认。表单结构优先用官方命令，历史绕行按复现条件启用。核验说明见 [官方 CLI 兼容说明](references/official-cli-compatibility.md)。
+
+**V3.1.10** (2026-08-25) — 官方全家桶对齐到 `guanskill` **0.1.29**（guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**）。重点：企业 OIDC 与安全凭据、SuperApp 整包下载、文件/标准输入多行 SQL；页面与目录原地管理、发布目标目录；`calc-field apply` 计算字段期望态协调。既有写入与删除安全闸保持不变。
 
 **V3.1.9** (2026-08-19) — 官方全家桶 07-24 以来 9 个聚合包一次性对齐（guanskill 0.1.17→0.1.26）；头条：`guancli insight` / `guanvis live` / `guanmetric metric-tree` + `accelerate`。
 
-**V3.1.8** (2026-07-24) — 官方全家桶 07-15 + 07-24 两批次对齐（guanskill 0.1.12→0.1.17）。`guanwf` 写操作加 `--confirm` 门禁（破坏性，0.1.820 引入）+ 官方 `guandata-cli-suite` 统一入口并存注记。
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。

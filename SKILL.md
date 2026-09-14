@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）实战增益层 Agent Skill —— 架在官方全家桶（guancli 查数 / guanvis 建卡发布截图 / guanetl ETL / guanwf 数据流 / guands 数据源 / guanmetric 指标写）之上，专攻官方 DSL/命令覆盖不到的硬骨头：Part B ETL 整库治理判断 + 10 类 BI 引擎报错手册 + SmartETL 全链路重写/ExecPlan、Part C 既有页自定义图表 HTML/CSS/JS 注入排障 + 固定卡/overlay、Part C-12 HTML 应用化看板（descriptor patch 把 selector 联到 custom chart 内部 dataView + 视觉设计底线/反 AI 味红线/guanvis screenshot 视觉验收）、Part D v7 草稿-发布状态机绕过 + SmartETL 节点化静默坑 + 移动端 phoneLayout ZIP inject、Part E SuperApp 开放应用反向工程（form 建表 /survey-engine/api/form/add + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + 原生 fetch credentials 绕 unwrap）、AI-native ADS 数据架构方法论（治理 vs 重搭 / 7 字段约束 / 30+30+40 预算）、餐饮连锁 BI 公式实战库（60+ SQL/复购/RFM/AC/Comp/DWD 宽表范式/39 ETL 索引）。标准查数/建卡/ETL/数据集 CRUD 一律路由给官方全家桶，本 skill 专攻业务实战与引擎级踩坑。触发：营业额/门店/会员/订单/复购率/客单价/RFM/ETL 治理/payload_json/自定义图表/HTML 看板/应用化/看板太丑/AI 味/设计底线/观远/Guandata/v7 BI/60004 草稿/Spark 中文别名/customChart/phoneLayout/SuperApp/open-apps/form 建表/ILLEGAL_JSON_RES/AI-native ADS/数据架构重搭/DWD 宽表/洞察/Dashboard Agent/guanvis live/指标树/查询加速。
+description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、v7 发布兼容、移动端 phoneLayout、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
 license: MIT
 metadata:
-  version: "3.1.10"
+  version: "3.1.11"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanmetric
 ---
 
-# 观远 BI · 马甲实战版（V3.1.10）
+# 观远 BI · 马甲实战版（V3.1.11）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -43,17 +43,17 @@ metadata:
 | 自定义图表 HTML/CSS/JS 注入、固定卡片/overlay、payload_json 取数、路由清理 | **Part C：自定义图表开发与排障** |
 | 从零生成 HTML 化经营分析应用（用户说"更高级 / 应用化 / 自定义模块 / 最完美 / 不限标准看板"）| **Part C-12：HTML 应用化看板生成**（拆到 [references/part-c-html-dashboard.md](references/part-c-html-dashboard.md)） |
 | **v7 BI 实例**上端到端搭多个 HTML 应用看板 / 手撸 `POST /api/page+/api/card` 被 `60004 此操作只能在草稿页面执行` 卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报 `PARSE_SYNTAX_ERROR` / ETL update 报 `1012 输出数据集目录中存在同名文件` | **Part D：V7 Page/Card 发布流水线 + 三态硬规则**（V2.1.6 新增，拆到 [references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)） |
-| **SuperApp / 超级应用 / 开放应用**开发流水线 / `guancli app create/publish` / `--app-id` 不传变成每次新建 / 数据集异步预览 3 步 / **`form_xxx` 建表反向工程**（脚手架没暴露建表 API，实测 `POST /survey-engine/api/form/add`）/ **BI 中转 LLM 报 NOT_JSON_RES / ILLEGAL_JSON_RES**（响应被塞在 error_message）/ `/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞 / 同源 fetch credentials 不带 cookie / 客户端模拟流式打字效果 / 任务池工作台「看 + 想 + 选 + 做 + 留痕」闭环 | **Part E：SuperApp 开放应用开发流水线**（V2.1.12 新增，拆到 [references/part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md)） |
+| **SuperApp / 超级应用 / 开放应用**开发流水线 / `guancli app create/publish` / `--app-id` 不传变成每次新建 / 数据集异步预览 3 步 / 表单结构先走 `guands form`；旧脚手架建表兼容问题按 §6/ **BI 中转 LLM 报 NOT_JSON_RES / ILLEGAL_JSON_RES**（响应被塞在 error_message）/ `/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞 / 同源 fetch credentials 不带 cookie / 客户端模拟流式打字效果 / 任务池工作台「看 + 想 + 选 + 做 + 留痕」闭环 | **Part E：SuperApp 开放应用开发流水线**（V2.1.12 新增，拆到 [references/part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md)） |
 | **客户说"想给现有 BI 接 AI / 上 LLM"** / "我们 ETL 治理做了一年还没出活" / **判断 是该治理还是该重搭** / 客户预算分配讨论 / 评估底表 schema 是否 AI-friendly / 提案"AI-native 数据底座" | **AI-native ADS 设计方法论**（V2.1.13 新增，**majia-guanyuan 的哲学层文档**——不是操作手册而是范式判断，拆到 [references/ai-native-ads-design.md](references/ai-native-ads-design.md)） |
 | 写餐饮业务公式（AC / ADS / 复购率 / 新老客 / 用餐时段 / 留存流失 / RFM / Comp 老店）/ 查字段口径 / 排数据质量坑 / **ETL 工程范式（DWD 宽表 / 双源对账 / 评价 pipeline）** | **餐饮 BI 公式实战库**（[majia-huiyuan/公式库](https://github.com/maojiebc/majia-huiyuan/tree/main/公式库)，V2.1.5 蒸馏自两段餐饮连锁 BI 履职 + 39 个生产 ETL，全脱敏；**2026-07-12 迁至独立仓库 majia-huiyuan**，本仓库 references/restaurant-bi-formulas/ 仅留指针） |
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.1.10（2026-08-25）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.1.11（2026-09-14）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> 🆕 **V3.1.10**（2026-08-25）：官方全家桶对齐到 `guanskill` **0.1.29**（guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**）。头条新能力：`guancli` 企业 OIDC + SuperApp 整包下载 + 多行 SQL 文件/标准输入；`guanvis` 页面与目录原地管理 + 发布目标目录；`guands calc-field apply` 计算字段期望态协调。`guanwf --confirm` 与本 skill 删除安全闸不变。逐条变更见 [CHANGELOG.md](CHANGELOG.md)。
+> 🆕 **V3.1.11**（2026-09-14）：对齐官方 `guanskill 0.1.35`。新增指标批量查询与本地分析路由，适配指标 JSON/原始数值、批量上下线、页面草稿重置及资源落位规则；表单结构走官方 `guands`。关键迁移见 [官方更新兼容说明](references/official-cli-compatibility.md)，完整历史见 [CHANGELOG.md](CHANGELOG.md)。
 
 ---
 
@@ -74,21 +74,23 @@ metadata:
 
 | skill | 版本 | 角色 | 什么需求路由给它 |
 |---|---|---|---|
-| **`guancli`** | 1.0.53 | 只读分析中枢 + 表单 CRUD + 指标查询（只读）+ 洞察/Dashboard Agent | 查 ETL / dsId / page / card / 血缘 / 节点 SQL、`ds execute-sql` 跨集 SQL、`ds search --id` 精确解析、`metric query` 同比/累计/Top N、`metric_attribution` 归因、`metric by-dataset` 按数据集 ID 反查原子指标沿血缘展开下游复合/衍生、`task` 排查、ChatBI 问数、`card preview` 取数导出、form 数据 CRUD、`login status` 服务端 profile 校验 + 数据集字段 raw name/alias 误用提示、SuperApp 创建指导（`guancli app create`）+ 页面资源搜索/展示增强；PAT 登录（自动化/CI/无浏览器环境）+ auth PAT profile 状态展示/修改保护（1.0.38）；`etl get` 输出有效调度状态（避免 `schedule --disable` 后底层字段残留误判）+ 工作流资源查询增强 + 指标写操作迁出至 `guanmetric`、指标能力收敛只读（1.0.39）；**1.0.40 新：`card preview` 支持多级表头——结构化输出（JSON/CSV/Excel）列名改用 `父级 > 子级 > 叶子` 完整路径（标题自带的 `>` 编码成 `\>` 与层级分隔符区分，完整路径仍重名则追加 ` [2]` 稳定后缀保证键唯一），`--columns`/`--sort-*` 优先吃大小写精确的完整路径、末级标题唯一时仍兼容旧写法 → 同环比/日期层级这类复杂交叉表的导出/选列/排序不再因只留末级标题而重名或丢义 + 权限受限时也能用卡片自带字段信息完成筛选预览 + `form update` 载荷必须带表单配置的全部业务主键字段（内置 `c_uid` 除外），CLI 只做字段名映射与请求透传、不读当前行也不补齐主键 → 改数据前先 `form query` 取未编辑主键的当前值** · **1.0.43 新（07-24）**：Token 登录引导与状态校验更准确（配置/凭证异常更早暴露）+ 多资源读取提速（Agent 分析页面/数据集/指标响应更快） · **1.0.51 新（07-25～08-13）**：指标搜索多关键词（名称/业务口径/业务属性，回显命中位置与优先级）+ `auth status` 遵循根级 `--profile`/`GUANCLI_PROFILE` + 卡片预览应用页面默认筛选（多页面映射须确认）+ 可用卡片内重命名表头筛选 + **`insight page/card` 仪表板智能洞察** + **`insight agent` Dashboard Agent 问答**（与 ChatBI 主题洞察相互独立）+ **指标查询加速回显**（>1000 行默认落文件）+ 按 Domain/URL 定位 Profile + 子表追加突破 10000 行 · **1.0.52–1.0.53 新（08-20～08-25）**：资源全局搜索与 URL 获取 + 指标详情与表单筛选修复 + 企业 OIDC 登录与安全凭据管理 + SuperApp 列表/整包下载 + `ds execute-sql` 支持文件或标准输入多行 SQL + 下载原子写入/超时/服务端错误保真 + 自动关联卡片继承筛选条件 |
-| **`guanvis`** | 0.1.41 | 标准建卡 + Page 装配 + 服务端截图 + live 实时工程 | 74 种图表 JS DSL、双 Y 轴、同环比/累计/排名/占比、selector 联动、tab/栅格、AreaTitle 分区标题 + CardGroup 卡片组、custom chart(ECHARTS_LITE/SDK)、`guanvis pack/publish/upload`、`guanvis screenshot` 出 PNG、指标卡片构建（metric init）、`publish --allow-overwrite` 覆盖前自动建迁移备份 + 资源包打包一致性校验、修复自定义图表重复生成数据视图卡片（0.1.28）；筛选器级联联动 + 画布布局可放筛选器 + 自定义图表 dataView 作点击联动来源/页面筛选器可过滤自定义图表 + 表格卡只配维度 + 比较卡本期对比期（0.1.29）；checkout 线上页面到本地工程（编辑/差异查看/回写）+ 动态维度/动态指标/拆分图表 + `pack`/`preview`/`lint` 诊断增强（0.1.30）；**0.1.31 新：`page.setFilterPanelLayout({ type, spacing, padding, labelPosition, actionOrder })` 配筛选栏布局（只管纯布局字段，颜色/字体/背景/控件视觉仍归主题管；术语「快捷筛选区」→「筛选栏」）+ 回写增强——`updateMetric`/`patchMetric` 改已有字段时**保留未设置字段的线上配置**（对比 `setRows/setMetrics` 是整 zone 重建、不继承被替换字段格式且验证时报 warning），发布前用 `guanvis diff <dir>` 或 `preview` 输出里的 `changeSummary` 看 base JSON→最终 payload 的路径级影响面 + 字段显示名 `alias` 与 Card 标题相互独立（`f("营收", { alias: "本月营收" })` / `calcField("整体毛利率_kpi", formula, { alias: "整体毛利率" })`——图例/轴标题/表头/Tooltip/指标标签都吃显示名，`SINGLE_VALUE`/`KPI_CARD`/`KPI_TREND`/仪表盘进度类尤其明显）+ `--allow-overwrite` 的覆盖前备份**不再沿血缘额外导出上游数据集/数据账户** → 普通用户不再因缺上游资源所有者权限而备份失败（备份含 Page 及其组成资源；「备份未成功即中止覆盖」的闸门仍在）** · **0.1.33 新（07-24）**：指标图表支持主次指标组 + 数字分组（指标展示层次更清晰）+ 发布前预检无效资源/未挂载卡片/生成错误（页面发布更稳）+ 复杂页面编辑与大型资源导入进一步提速 · **0.1.38 新（07-25～08-13）**：`preview` 默认精简摘要（完整结果落工程目录，脚本用 `--full`）+ 发布后返回页面访问地址 + 图表/页面视觉 DSL 大幅扩展（背景图本地上传、筛选栏/卡片组/Tab/表格主题/柱宽圆角等）+ 发布前 **`fdId` 线上活性校验** + **新增 `live` 系列**（桌面端 对话式构建：`live project validate/publish` 走完整 DSL；仅 KPI/基础柱折/明细表才用 `live page/card` 低延迟路径，**不得用 P0 命令模拟自定义图表**）+ 指标图/进度图/迷你图/地图等专项属性 + 系统图标查询引用 · **0.1.39–0.1.41 新（08-20～08-25）**：附加卡片计算字段序列化修复 + 自定义图表最小 SDK 与视觉验收指引 + **页面目录和页面本身的创建/改名/移动/删除** + `publish` 指定目标目录并拒绝生成器占位符 + 卡片/筛选器自有计算字段绑定修复 + 自动关联卡片继承筛选 + 企业 OIDC |
-| **`guanetl`** | 0.1.29 | ETL 写操作闭环 | 单个 ETL 新建/改/`lint`/preview/`save`/`run`/`schedule`/`mkdir-pair`（源文件 `etl/etl.go`+SQL 驱动，黑盒 direct-save）；0.1.14 移除 `delete` 命令（高风险操作不再暴露，删 ETL 走 BI UI 或 API）+ 修 save 空 `dataSource` 覆盖 bug；save 输出数据集保护（保留级联配置）+ `save --dry-run` 影响预览 + `run` 前提示上游失败态 + `preview` LEFT JOIN 桥接列全空告警（0.1.15–0.1.16）；建 ETL 目录类型诊断（0.1.18）；**0.1.19 新增 `move` 移 ETL 到指定目录（接口异常时读回确认）+ `run --run-upstream` 递归解析上游链路按拓扑顺序执行（配 `--dry-run`）+ `run --wait` 遇 40001 已在运行改等现有任务完成（减少级联触发后重复 run 误判失败）+ `export` 静态检查 JOIN 键类型不一致 warning（STRING/LONG 隐式 coercion 风险）** · **0.1.21 新（07-24）**：JOIN 字段类型检查从 `export` 扩展到 preview/save/run 全过程（数据关联风险更早发现）+ 复杂 ETL 字段识别与多级上游诊断更准、批量检查提速 · **0.1.27 新（07-25～08-10）**：写操作回显实际目标环境 + `task cancel` 变更前提示 + 多节点并行 preview + 运行中任务可直接跟踪（无需管理员全局任务权限）+ 执行后核验新增输出字段已物化可查 + **输出落位闭环 / JOIN 未知类型拦截** + `save` 影响报告字段级变更明细 + 首次运行后临时输出集完成生成再做字段检查 · **0.1.28–0.1.29 新（08-20～08-25）**：Skill 自动安装反馈/跨平台兼容 + ETL 调度保存适配客户网络代理 + 企业 OIDC 认证上下文 |
-| **`guanwf`** | **0.1.828** ⚠️ | 工作流（数据流 + Python 节点多节点 DAG + 编排调度）| 工作流引擎里建/编/存/跑工作流，`workflow.go` DSL 统一数据流创建/编辑/导出/预览/保存/运行；Python 节点 DSL + 本地校验 + 保存三方合并降覆盖风险（0.1.5）；离线开发增强 + 依赖分析/执行计划/依赖校验把一批作业编排为统一调度主工作流（0.1.7）；`guanwf edit <父工作流ID>` → 改 `etl/` → export → save；只读查仍用 `guancli workflow`。**0.1.820 = 8.2.0 兼容线（版本号从 0.1.7 直跳 0.1.820 不是笔误——官方换了构建号方案，npm registry 实证；semver 上 820 > 7，`@latest` 解析正常），含破坏性变更**：① **写操作全面加 `--confirm` 门禁**——`save`/`save-draft`/`run`/`schedule set｜enable｜disable` 一律先 `--dry-run` 看计划、再加 `--confirm` 才真执行（**兼容 `--yes`**，老自动化脚本可用它过闸），**旧的 `guanwf save --dir X` 直接生效写法全部失效**；② 工作流参数 `Workflow.Params`（`ParamRef`/`DynamicParamRef`/`DataDrivenParamRef`，落 `processDefinitionJson.globalParams`），`run --param k=v`、`schedule set --param`、事件调度 `schedule event get/set/disable --rule <dsId>:<taskName>`（原不在命令范围）；③ 结构化任务节点强类型 DSL（DATASET/HTTP/SQL/PARAMETER_ASSIGNMENT/SWITCH），`node add http｜sql` 只生成节点目录 + 可粘贴 DSL 片段、**不自动改 `workflow.go` AST**，未知字段由 `task.json` 无损保留；`create --type` 增 HTTP/SQL；④ 实例诊断 `instance list｜tasks｜logs｜latest`（`--state FAILURE` / `--node` / `--full` / `--log-type ALL` / `-f json`）+ `instance resume-failed <instanceId> --dom-id`；⑤ **失败恢复语义修正**——恢复节点的**全部 DAG 后继都会重跑（含先前已 SUCCESS 的后继）**，旧文「已成功节点不重跑」不准确；恢复种子状态 = FAILURE/STOP/KILL/NEED_FAULT_TOLERANCE；子工作流引用已切换或 DAG 结构已变则拒绝恢复、改 `run --confirm` 重跑整链；⑥ **8.2.0 硬边界**：SHELL/LOOP 后端未注册 TaskParameters（CLI 在脚手架/导出/保存前直接拒绝，仅保留导入模型）· **`DatasetNode` 只负责刷新已有数据集**（空 `datasetId` 曾被误接受、0.1.820 已修；要创建/写入目标数据集得用 DATAFLOW/DB_DATAFLOW 节点），且刷不了 `DATA_SET_OFFLINE_DEV`（8.2.0 会把 BI 文本响应误当 JSON，要更新离线开发产出改用 `SubWorkflowNode` 调产出工作流）· `ParameterAssignmentNode` 的 `DATASET` 来源不能选数据库直连数据集（BI 返 60006，直连表改用 `DataSourceType: "DATABASE"` + 数据账户）；⑦ **凭据安全强化**：`task.json` 统一当前用户受限权限（0600）、精确合并基线 `_parent_merge_snapshot.json` 自动进工作区 `.gitignore`、HTTP URL 查询凭据不落普通权限源码、日志常见键值凭据脱敏；另修 8.2.0 DB Dataflow 预览误用 v1 接口致任务长期 PROCESSING（改走 Core v2 提交 + 通用任务轮询/取消）。节点字段合约见官方 `guanwf/references/TASK_NODE_CONTRACTS.md`** · **0.1.822 新（07-24）**：工作流依赖与血缘分析提速（复杂编排检查等待更少）+ 完善已有工作流原地编辑保护（不影响原有调度/权限/引用）；`--confirm` 门禁沿用 0.1.820 不变 · **0.1.826 新（07-25～08-07）**：**Python 节点输出可绑定/追加已有数据集**（保持下游引用稳定）+ 输出落位闭环（目录预检 + 目标资源存在性）+ 修复输出绑定字段错位 · **0.1.827–0.1.828 新（08-20～08-25）**：Skill 自动安装反馈/跨平台兼容 + 企业 OIDC 认证上下文；`--confirm` 门禁不变 |
-| **`guands`** | 0.1.28 | 数据源 + 数据集 CRUD | 建数据连接（MySQL/PG/Oracle）、`dataset create-db/create-query/import/replace-data`、批量移删、增量更新、定时调度、计算字段、`dataset alias`/`update-fields` 批量改字段展示名/注释、import 按列指定字段类型 + `--header-row`/`--encoding`/`--delimiter` + refresh `--overwrite` 全量覆盖（0.1.15–0.1.18）；数据集追加/按条件清理 + schema 同步/自动同步开关/字段更新预校验 + 批量计算字段 + 填报表单建集 + 行列权限查看（0.1.19）；**0.1.20–0.1.21 新（同日两连发）：资源 ID 校验 + 创建结果解析增强（写操作输出契约更清晰，Agent 更稳地拿到新建资源 ID 接着干）+ `account rename <acId> --name "新名"` 原地改数据账户名——保留 acId/权限/凭证/数据集引用，底层返回不支持或回读不一致直接报错，**禁止删除后重建** + `dataset primary-key set/clear` 独立子命令（去重主键从 `update-setting --primary-keys` 迁出；改主键触发异步数据重写，默认等任务完成并回读验证）+ `dataset refresh` 提交前检查数据集 `status`——已有更新时普通 refresh 不重复提交、`--wait` 等已有 taskId、互斥操作（清理数据/改主键/schema 变更）只阻塞 refresh 而不被当成已有更新成功、`--overwrite` 不合并到未知模式任务也不拿其他普通任务的成功冒充覆盖成功（任务 FAILED/CANCELED 只代表该 taskId）+ **Excel 多 Sheet 必须 `--sheet <名称>` 显式指定**（`import`/`append-data`/`replace-data` 一律禁止隐式合并 Sheet，单 Sheet 自动选，Sheet 列表来自 BI 上传接口而非本地解析，CSV 不接受 `--sheet`）、`import` 每次只收一个文件且最多建一个数据集、上传前识别伪装成 `.csv` 的 Excel/ZIP/OLE 容器、默认等本次 taskId 到终态（FAILED/CANCELED/超时均非零退出，大文件用 `--timeout` 调）；`--raw` 是后端原始 JSON、不承诺跨子命令统一 schema（程序化解析仍用 `-f json`）** · **0.1.23 新（07-24）**：数据连接配置支持安全原地更新（先预览+校验变更再落地，延续 `account rename` 的原地治理思路）+ 填报表单支持导出/编辑/重命名（更新时保留已有字段与数据）+ 新增填报表单目录管理（建目录 + 表单在目录间移动） · **0.1.26 新（07-25～08-07）**：填报表单 **TABLE 子表及子表字段** + 保真迁移空选项下拉/系统保留名业务字段 + 目录树 keyword+depth + 填报数据集结构同步增强 + 表单原样更新数字格式补入修复 · **0.1.27–0.1.28 新（08-20～08-25）**：派生字段场景 CSV 追加/替换 Schema 修复 + **`calc-field apply` 计算字段期望态协调** + 数据集目录创建/改名/删除 + 受限代理写操作适配 + 批量建集部分失败返回非零 |
-| **`guanmetric`** 🆕 | 0.1.10 | 指标写操作（含指标树 / 查询加速） | 指标创建/编辑/删除（`create --file`/`edit <metric_id> --file`/`delete`，均支持 `--dry-run`）、指标主题/指标目录创建（`project-create`/`dir-create`）、公共维度管理（`public-dim create`）、**指标 Excel 标准化**（`template normalize 客户指标.xlsx` 整成标准模板 + 校验报告；0.1.1 支持按原子/复合/多类衍生拆分 + 汇总 sheet 总览待建指标/行状态/问题说明 + 批量创建前校验与下一步提示）；**指标查询/数据读取仍走 `guancli`（1.0.39 起指标读写分家）** · **0.1.3 新（07-24）**：完善已有指标的原地编辑保护 + 优化 Agent 批量准备/校验指标配置的效率 · **0.1.8 新（07-25～08-13）**：**`metric-tree` 指标树 CRUD**（创建/查看/改名/移动/`update-config`，维度拆解/公式拆解/复合展开，写操作预览计划 + 原地更新）+ **`accelerate` 查询加速管理**（`create`/`edit`/`priority`/`delete`，筛选可用 `--filter-json`/`--filter-file`）；加速命中回显与 `metric accelerate list` 仍走 `guancli` · **0.1.9–0.1.10 新（08-20～08-25）**：Skill 安装/跨平台兼容 + 企业 OIDC 认证上下文 |
+| **`guancli`** | 1.0.58 | 查询分析、表单数据、SuperApp | 查 ETL/数据集/页面/卡片/血缘、SQL、指标查询/归因、ChatBI、仪表板洞察与 Dashboard Agent；独立基础指标用 `metric batch-query`，高级计算用 `metric query`；`analyze normalize/align/calculate/topn` 处理本地结果；Form 数据 CRUD；SuperApp create/list/download/publish。指标计算显式 `--value-format raw`，按 JSON 版本与 inline/file 分支读取，批量逐项检查状态。 |
+| **`guanvis`** | 0.1.47 | 建卡、页面、发布、截图 | 图表 DSL、checkout/diff/preview/pack/publish/screenshot、指标卡、custom chart、筛选器联动及 `live`；页面与目录原地管理、`page save-as` 原生副本；新增高级筛选器、卡片池、交叉表 `filterBy` 逐格校验。新页面先确认目标目录；覆盖前备份，覆盖后重置目标页面草稿。`preview` 默认摘要，完整输出用 `--full`；复杂自定义图表走完整工程，不用 live 基础卡片命令模拟。 |
+| **`guanetl`** | 0.1.34 | ETL 编辑与运行 | create/edit/export/lint/preview/save/run/schedule、move、mkdir-pair；`rmdir` 只删空 ETL 目录，物理删除且需 `--yes`；仍无删除 ETL 命令。新建须明确 ETL 与输出数据集各自目录；按 ETL ID 跟踪执行，已移除全局 `task`。历史节点下划线导出修复，DSL 类型化常量兼容旧字符串；保留输出绑定、字段物化、JOIN 类型及 dry-run 影响检查。 |
+| **`guanwf`** | 0.1.833 | 工作流与数据流 | workflow.go / Python / 多节点 DAG / 参数与调度 / 实例诊断；写操作先 `--dry-run` 再 `--confirm`（兼容 `--yes`）。新增 Python 运行环境 与内存预检、按 task/output slot 绑定输出；首次 CREATE_NEW 输出须绑定并发布保存后再跑。验证只在已有草稿执行，不注册真实输出；保存后回读、运行后逐项验收输出。类型化 DSL 兼容字符串。8.2.0 节点限制与失败恢复范围仍按官方 guanwf Skill 执行。 |
+| **`guands`** | 0.1.32 | 数据源、数据集、表单结构 | connector/account/dataset/dir 管理、导入/追加/替换、刷新调度、主键与计算字段；Form create/export/update/rename/move/folder。`dataset sync-schema` 支持 GUAN_FORM 原地同步并回读字段 ID/类型/状态。新建先确认目录，append-data/replace-data 实写需 `--yes`；按数据集 ID 跟踪，已移除全局 `task`。Excel 多 Sheet 必须显式选择。数据集目录不能移动；目录删除不可恢复。 |
+| **`guanmetric`** | 0.1.15 | 指标定义与管理 | 指标建/改/删、主题/目录、公共维度、指标树、查询加速、业务字典、Excel 模板及 `--check-only` 预检；批量上下线用 `batch online/offline`，先 dry-run、按依赖顺序逐项处理。失败不回滚已成功项，blocked 先核对影响再确认；上线请求获接受后仍须回读审批/发布状态。复合指标只引用原子或复合指标；指标查数仍走 guancli。 |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
-| **`majia-guanyuan`**（本 skill） | **3.1.10** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
+| **`majia-guanyuan`**（本 skill） | **3.1.11** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
 **一句话路由**：标准查数 / 洞察 / Dashboard Agent → `guancli`；标准建卡/发布/截图 / `live` 实时工程 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`；指标建/改/删 + 指标主题/目录 + 公共维度 + **指标树 / 查询加速** → `guanmetric`。**任何一个遇到官方 DSL/命令够不着的字段、报错、状态机、反向工程、业务口径**——回到本 skill 对应 Part。
 
-> 🆕 **官方 `guanskill` 0.1.14 起自带 `guandata-cli-suite` 统一入口 skill**（六行意图路由表 + 安装引导 + `guancli auth status` 认证检查）——**「该用哪个组件」这件纯分派的事，官方现在自己做了**。本表与它并存不冲突，分工是：官方那份只答"用哪个"，本表额外承载**版本 pin + 能力清单 + 实测边界**（`guanetl` 0.1.14 起没有 `delete`、`guanwf` 0.1.820 写操作要 `--confirm`、`guanvis` 0.1.29 官方联动与 C-12 兜底脚本的并存关系、`guands` 0.1.21 Excel 多 Sheet 必须显式 `--sheet`、**`guanvis preview` 0.1.34 起默认摘要（脚本用 `--full`）**、**`guanvis live` 不得用 P0 命令模拟自定义图表**……这些官方 suite 一条都不带）；Part B–E 护城河它更是整个不覆盖。**装了全家桶的人，纯分派直接用官方 suite 就行；遇到官方够不着的字段/报错/状态机/业务口径再回本 skill。**
+官方 `guandata-cli-suite` 负责选择组件，并已包含原地编辑与删除边界。本表补充本次核验版本及关键兼容规则；参数与完整操作流程以已安装的官方 Skill 为准。此前逐版本变化保存在 CHANGELOG，不在路由表重复累积。
 
-**为什么还要本 skill**：官方命令封装在"高层 DSL + 黑盒"那层，遇到 ① 整库治理的判断逻辑（砍哪张表/哪个字段）② BI 引擎运行期/语义报错（`<> NULL` 吞行、CTE 中文别名、UNION 列数）③ v7 草稿-发布状态机绕过 ④ custom chart 内部 dataView 联 selector ⑤ SuperApp 脚手架没暴露的 form 建表 / LLM 中转 bug ⑥ AI-native 的 schema 重搭判断 ⑦ 餐饮业务口径——**官方都够不着，这就是本 skill 的地盘**。
+**当前执行边界**：同轮独立基础指标走批量查询，逐项检查失败；用于计算的单指标结果显式取原始数值。编辑既有资源须保留 ID、权限、调度与数据，不能用删除重建代替。新资源先核对环境与实际目录路径。常规表单结构创建/编辑优先走 `guands form`；历史 API 片段仅在具体兼容问题已复现时使用。完整迁移说明见 [官方 CLI 兼容说明](references/official-cli-compatibility.md)。
+
+**为什么还要本 skill**：整库治理的取舍、业务口径、BI 引擎报错、历史 v7/自定义图表兼容、SuperApp 的 LLM 中转问题与 ADS 架构判断，仍需结合实际业务和目标环境处理。先走官方正常路径，失败后再按本 skill 的适用条件定位；旧记录不代表最新版仍有同一个问题。
 
 **降歧义**：6 个官方 skill + 本 skill 同时启用时，只读场景（查 dsId/ETL）可能在 `guancli` 与本 skill 间双触发。本 skill **不与官方抢只读**——遇到纯查询/取数，直接路由 `guancli`，别自己拼 API。
 
@@ -114,7 +116,7 @@ npm view @guandata/guanwf version
 npm view @guandata/guanmetric version
 ```
 
-如果 npm 版本 > 本机版本 → 继续 Step 1。否则无需更新。
+如果 npm 版本 > 本机版本 → 继续 Step 1。即使 CLI 已是最新，也必须检查 Step 2：二进制更新不代表已安装的 SKILL.md 与 references 同步。另核对六组件 latest 是否与聚合包 dependencies 一致；不要混装未经核对的版本组合。
 
 ### Step 1. 升级 CLI（npm 聚合包）
 
@@ -137,7 +139,7 @@ guanskill version
 guanskill install-skill
 ```
 
-落点：`~/.agents/skills/{guancli,guanvis,guanetl,guands,guanwf,guanmetric}/`。这些是 agent 路由用的 skill 定义，和 CLI 二进制分开更新。
+落点：`~/.agents/skills/{guancli,guanvis,guanetl,guands,guanwf,guanmetric}/`。这些是 agent 路由用的 skill 定义，和 CLI 二进制分开更新。还需检查 `guandata-cli-suite`。完成后逐文件比较 npm 包 `skills/<name>/` 与已安装目录，至少覆盖 SKILL.md 和 references；退出 0 或一条安装提示不能代替内容一致性验证。
 
 ### Step 3. 读 Changelog，摘要变更
 
@@ -170,8 +172,8 @@ done
 ### Step 5. 同步 + 发布
 
 ```bash
-# 同步到已安装 skill 目录
-cp SKILL.md CHANGELOG.md ~/.agents/skills/majia-guanyuan/
+# 同步已发布的整包，包含 references/templates，不能只复制两个 Markdown 文件
+python3 ~/.codex/skills/majia-ota/scripts/sync_local_agents.py /path/to/majia-guanyuan --target all
 
 # commit + push（或走 /majia-ota-skill 完整发布链）
 ```
@@ -196,13 +198,15 @@ echo "LOCAL:" && guanskill version && echo "---" && echo "NPM latest:" && npm vi
 
 # 🅱️ Part B：ETL 治理与写入（V1.0）
 
-> 当前兼容基线为 `@guandata/guancli@1.0.53`。本 Part 的 API 路径、payload 字段、报错信息与治理判断维度来自既往真实跑通请求；本次 1.0.53 对齐完成 CLI/文档验证，不把未重跑的 BI 业务链冒充新版实证。累计覆盖整库治理扫描 + 60+ 张 ETL 创建/重构/修复/删除实战。
+> 当前兼容基线为 `@guandata/guancli@1.0.58`。本 Part 的 API 路径、payload 字段、报错信息与治理判断维度来自既往真实跑通请求；本次 1.0.58 对齐完成 CLI/文档验证，不把未重跑的 BI 业务链冒充新版实证。累计覆盖整库治理扫描 + 60+ 张 ETL 创建/重构/修复/删除实战。
 >
 > ⚠️ 官方全家桶已把 BI 写操作拆成兄弟 skill 并**全部公网化**（2026-06-03，`npm i -g @guandata/guanskill`）：标准 ETL 写入有 `guanetl`、工作流数据流有 `guanwf`、数据源/数据集有 `guands`。**但 Part B 这套基于 `guancli fetch` + payload 的实战手册仍是底层事实源**——直接命中 API 路径 / payload 字段 / 报错码 / 治理判断的部分官方命令封装不到。遇到标准化 ETL 写入可路由到 `guanetl`，但**整库治理扫描、direct-save、payload_json、SmartETL 全链路重写、10 类报错速查继续走本 skill**。
 >
 > 🧪 **实测边界（2026-06-04 · workshop513 · BI 8.2.1-hf6）**：guanetl `edit` 的 base→etl.go 逆向在 **0.1.12 / 0.1.13 完全失效**（空 `return []Node{}`，5/5 ETL 全复现、`-v` 无报错）；`save` 的输出绑定 guard 也误触发。**0.1.14 两个 bug 均已修复**（2026-06-09 workshop513 实测：`ads_会员经营任务池` 6 节点 `edit→export→lint→save` 全链路通过）。改现有 ETL 现在可以走 `guanetl edit` 正常路径了。**B-0.5 绕过方案仍保留作 fallback 参考**（万一其他 BI 版本 / 节点类型仍触发）。
 >
 > ⚡ **0.1.14 修复确认**（2026-06-09 复测）：① `edit` 空 `etl.go`（Wall 1）→ ✅ 已修，6 节点完整逆向为 `BasicInputDataset×4 + BasicSqlScript + BasicOutputDatasetInDir`；② `save` 输出绑定 guard 误触发（Wall 2）→ ✅ 已修，save 直接成功不再拦截。另：**0.1.14 移除了 `delete` 命令**，删 ETL 改走 BI UI 或直接 `DELETE /api/etl/<id>` API。**0.1.15（2026-06-15）进一步增强 `save` 输出数据集保护（保留级联相关配置）+ 对追加写入场景的行数据结构提前校验**——改 ETL 走 `guanetl edit` 正常路径更稳。**0.1.16（2026-06-17）再加 `save --dry-run` 保存影响预览 + `run` 执行前提示上游数据集失败态 + `preview` 提示 LEFT JOIN 桥接列全空样本**，改 ETL 前可先 `--dry-run` 看影响面。**0.1.17（2026-06-24）仅 `install-skill` 适配 WorkBuddy 目录，ETL 行为无变化。** **0.1.18（2026-07-01）建 ETL 时目录类型诊断更清晰（识别误用工作流/经典数据流目录、提示用智能 ETL 目录）。** **0.1.19（2026-07-08）新增 `move`（移 ETL 到指定目录，接口异常时读回确认）+ `run --run-upstream`（递归解析上游链路按拓扑顺序执行，配 `--dry-run`）+ `run --wait` 遇 40001「已在运行」改为查找并等待现有任务（减少级联触发后重复 run 的误判失败）+ `export` 静态检查 JOIN 键类型不一致 warning（STRING/LONG 隐式 coercion 风险）。** **0.1.21（07-24）JOIN 类型检查扩至 preview/save/run。** **0.1.22–0.1.27（07-25～08-10）** 写操作回显实际目标环境 + 多节点并行 preview + 运行中任务可直接跟踪 + 输出落位闭环 / JOIN 未知类型拦截 + `save` 影响报告字段级明细 + 首次运行后临时输出集完成生成再做字段检查。
+
+> **2026-09-14 官方对齐**：`guanetl 0.1.34` 新建须明确两类目录，执行按 ETL ID 跟踪且不再提供全局 `task`；0.1.31 已修复历史节点 ID 下划线导出。上述为官方文档与命令核验，未重跑线上 ETL。详见 [兼容说明](references/official-cli-compatibility.md)。
 
 ## B-0.5 guanetl `edit` 失效时的绕过方案（0.1.12–0.1.13 历史；0.1.14 已修复，保留作 fallback）
 
@@ -968,7 +972,7 @@ new GDPlugin().init(renderChart);
 > - `dim_是否新店 = '1'` 永远空表（CSV 布尔字段实际是 `'TRUE'/'FALSE'` 字符串）
 > - 50 店 / 90 天 / 45 万订单 openpyxl 写 Excel 4-5 分钟
 >
-> **架构**：v7 BI 的草稿/发布分离机制使**手撸 `/api/page` + `/api/card` 全链路废弃**；银弹是官方 `guanvis`（原 `guanvis-skill`，全家桶成员，现公网 `@guandata/guanvis@0.1.41`），`guanskill install-skill && guanvis publish .` 30 秒一键发布整个 page + custom chart + dataView，跳过所有草稿/发布的状态机。桌面端 另有 `guanvis live` 对话式路径（`live project validate/publish` 走完整 DSL；**不得用 P0 命令模拟自定义图表**，C-12 descriptor patch / 60004 / phoneLayout 仍走本 Part）。配套硬规则：CSV 散客 `会员ID` 是 `""` 不是 NULL（三态判断必须 `IS NOT NULL AND <> ''`）；STRING 字段才能 `<> ''`，日期/数字 Spark 严格类型不行；Spark CTE 别名必须英文；ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId` 否则 1012；数据集上传 / 建集走官方 `guands`（`create-db` / `import` / `replace-data`，不必再 BI UI 手动）；大表 pandas 用 `to_csv` 而非 `to_excel`（50 倍速差）。
+> **架构**：v7 BI 的草稿/发布分离机制使**手撸 `/api/page` + `/api/card` 全链路废弃**；优先使用官方 `guanvis`（原 `guanvis-skill`，全家桶成员，现公网 `@guandata/guanvis@0.1.47`），按官方预览、覆盖前备份和发布流程处理 page + custom chart + dataView；0.1.47 覆盖后会重置草稿，发布后分别验收浏览态与编辑态。桌面端 另有 `guanvis live` 对话式路径（`live project validate/publish` 走完整 DSL；**不得用 P0 命令模拟自定义图表**，C-12 descriptor patch / 60004 / phoneLayout 仍走本 Part）。配套硬规则：CSV 散客 `会员ID` 是 `""` 不是 NULL（三态判断必须 `IS NOT NULL AND <> ''`）；STRING 字段才能 `<> ''`，日期/数字 Spark 严格类型不行；Spark CTE 别名必须英文；ETL update 必须带 `OUTPUT_DATASET.dataSource.dsId` 否则 1012；数据集上传 / 建集走官方 `guands`（`create-db` / `import` / `replace-data`，不必再 BI UI 手动）；大表 pandas 用 `to_csv` 而非 `to_excel`（50 倍速差）。
 >
 > 🗑️ **删除 guanvis-published 页面 / ETL（2026-06-05 · workshop513 实测）**：`guanvis publish` 出的页面，卡片**内嵌在 `page.cards` + `meta.layout`、不是独立 `/api/card` 资源**——所以 `DELETE /api/card/<cdId>` 报 `1002 找不到`、`DELETE /api/page/<id>` 报 `1004 无法删除包含卡片的页面`、guanvis 也不让覆盖成空页（validation 拒 `No layout items`）。**唯一可行**：`guancli fetch DELETE "/api/page/<pgId>?force=true"` → `Page deleted`（级联删卡）。⚠️ **`force=true` 级联删整页内嵌卡片且不可逆，属 B-7.0 安全闸覆盖的 DELETE**：执行前用户须逐项确认页 ID + 页名（模糊回复不算确认）。**仅当本地保有该 page 的 guanvis 源（`page.js` / card 定义）可 `guanvis publish` 重建时，确认即可、无需对账；若是 BI UI 手搭、本地无源的发布页，按不可逆 DELETE 对待、走 B-7.0 完整对账。** 删 ETL + 输出集 → **先删输出数据集、再删 ETL**（与 B-7.1 一致；2026-06-17 实测：反过来先删 ETL 撞 `2002 输出数据集已存在`，ds-first 不报 6001）；`guanetl delete --cascade` 0.1.14 起已无此命令。
 >
@@ -1031,9 +1035,9 @@ new GDPlugin().init(renderChart);
 
 > 顶部 🆕 callout 是最新版摘要；完整逐版记录见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。以下只留最近三版一句话索引：
 
+- **V3.1.11**（2026-09-14）对齐 guanskill 0.1.35；指标批量查询/原始数值与 JSON、批量上下线、草稿重置、落位保护、表单官方优先；修复 CLI 已新但 Skill 未同步的检查缺口。
 - **V3.1.10**（2026-08-25）官方全家桶对齐 guanskill 0.1.29：guancli 1.0.53（OIDC / SuperApp 整包下载 / 多行 SQL 输入）、guanvis 0.1.41（页面与目录原地管理）、guands 0.1.28（calc-field apply）。
 - **V3.1.9**（2026-08-19）官方全家桶 07-24 以来 9 个聚合包对齐（guanskill 0.1.17→0.1.26）；头条：`guancli insight` / `guanvis live` / `guanmetric metric-tree`+`accelerate`。
-- **V3.1.8**（2026-07-24）官方全家桶 07-15 + 07-24 两批对齐（guanskill 0.1.12→0.1.17）；`guanwf` 写操作加 `--confirm` 门禁（破坏性）。
 ## 👤 作者 / 联系
 
 **马甲（@maojiebc）** · 超级马甲
