@@ -16,6 +16,7 @@ Current structure — a router layer plus the hard-bone Parts:
 - **Part B** — ETL governance, write, delete (incl. SmartETL full-chain rewrite methodology and ExecPlan workflow)
 - **Part C** — Custom chart HTML/CSS/JS injection & debugging on existing pages
 - **Part C-12** — HTML application-style dashboard generation (descriptor patch linking selector → custom-chart dataView)
+- **Store mobile scorecard** — franchise-owner phone scorecard (20 views, detectV, desensitized offline sample)
 - **Part D** — V7 Page/Card publish pipeline (draft/release state-machine bypass + node-level silent traps + mobile phoneLayout ZIP-inject)
 - **Part E** — SuperApp open-app development pipeline (reverse-engineering)
 - **AI-native ADS design methodology** — philosophy-layer doc (governance vs rebuild judgment)
@@ -39,7 +40,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.11"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.1.12"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
@@ -70,6 +71,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
     scripts/
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
     templates/            ← html-dashboard template pack (Part C-12).
+    examples/store-mobile-scorecard/ ← Offline desensitized mobile scorecard sample (V3.1.12).
     docs/                 ← Supplementary docs.
     references/official-cli-compatibility.md ← Current official versions and migration boundaries.
     references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ pointer):
@@ -79,6 +81,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       part-b17-fullchain-rewrite.md  ← Full B-17 SmartETL full-chain rewrite methodology.
       part-c-payload-json.md     ← C-3 payload_json troubleshooting.
       part-c-html-dashboard.md   ← Part C-12 HTML application-style dashboard methodology.
+      part-c-store-mobile-scorecard.md ← Franchise-owner mobile scorecard playbook (V3.1.12).
       v7-page-card-publish-pipeline.md  ← Part D v7 publish pipeline (16 sections).
       part-e-superapp-pipeline.md  ← Part E SuperApp open-app development pipeline.
       ai-native-ads-design.md    ← AI-native ADS design methodology (philosophy layer).

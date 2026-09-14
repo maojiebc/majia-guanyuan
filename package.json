@@ -1,6 +1,6 @@
 {
   "name": "@supermajia/majia-guanyuan",
-  "version": "3.1.11",
+  "version": "3.1.12",
   "description": "观远 BI · 马甲实战版：标准查询、指标批量取数、ETL、数据集、表单和看板操作使用官方六组件；补充整库治理、业务口径、引擎报错、自定义图表、v7 发布与 SuperApp 兼容经验。官方基线 guanskill 0.1.35；各组件版本和迁移边界见 references/official-cli-compatibility.md。",
   "keywords": [
     "claude-code",
@@ -53,6 +53,7 @@
     "scripts/**/*.py",
     "references/",
     "templates/",
+    "examples/store-mobile-scorecard/",
     "docs/"
   ],
   "engines": {

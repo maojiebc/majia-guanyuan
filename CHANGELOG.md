@@ -7,6 +7,25 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.12] — 2026-09-14
+
+> 内容 patch：把「加盟店老板每天打开的门店手机成绩单」沉淀成可复用经验 + 脱敏离线样本。不改官方全家桶版本 pin。
+
+### Added
+
+- `references/part-c-store-mobile-scorecard.md`：产品规则、20 视图契约、列名识别 vs `linkTo` 下标、换店 AND 滤空、对比块禁止家数、消费会员窗口去重、会员对照与券核销为一级模块、对照卡人均贡献为主（客单价只做右侧备注）、`pack` → `phoneLayout` → 覆盖发布、验收与脱敏表。
+- `examples/store-mobile-scorecard/`：单文件离线 HTML，虚构两店，所有点击交互仍有数；`build.mjs` 按生产运行时顺序打乱视图，逼 `detectV` 按列名工作。
+
+### Changed
+
+- Part 选择 / C-12 / References / README 双语增加本案例入口。
+- `package.json` `files` 纳入该样本；`.npmignore` 不再整目录排除 `examples/`（仍排除旧 workshop513 快照）。
+
+### Verification
+
+- `node examples/store-mobile-scorecard/build.mjs`：20 视图列名识别齐全；昨天合计 ≠ 近 7 天日均；两店数字不同；会员频次高于非会员。
+- 公开文件扫描无真实品牌 / 门店 / 资源 ID / 生产金额。未重新发布任何线上页面。
+
 ## [3.1.11] — 2026-09-14
 
 > 官方对齐 patch：guanskill 0.1.29 → 0.1.35。修正指标结果消费、批量状态及已失效命令，保留历史实证与实际验证边界。

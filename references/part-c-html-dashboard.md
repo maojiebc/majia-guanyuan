@@ -618,6 +618,12 @@ cp "$SKILL_DIR/templates/html-dashboard/scripts/patch_selector_linkage.js" ./my-
 
 ---
 
+## §14.1 门店手机成绩单（不要走六模块驾驶舱）
+
+加盟店老板每天打开的「门店手机成绩单」不是本章的六模块分析应用。它是 **一张 HTML 父卡 + 20 个 DATA_GRID + 原生门店筛选器**：周期在 HTML 里算，对比不写家数，视图按列名识别。完整规则和可离线点的脱敏样本见 [part-c-store-mobile-scorecard.md](part-c-store-mobile-scorecard.md) 与 [`examples/store-mobile-scorecard/`](../examples/store-mobile-scorecard/)。
+
+---
+
 ## §15 一句话总结
 
 观远 BI 可以被自动生成成 "HTML 化分析应用"，**最稳架构是：原生 Page + 原生 selector + HTML SDK 可见层 + DATA_GRID dataView 数据层**。`guanvis` 当前 DSL 还不能自动把 selector 联到 custom chart 内部 dataView，必须走资源包级 descriptor patch（§7）。这条路实测跑通且比直接 `/api/card/.../edit` 稳定，已经固化为 V2.1.1 起的高级看板默认策略。

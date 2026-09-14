@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、v7 发布兼容、移动端 phoneLayout、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
+description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、v7 发布兼容、移动端 phoneLayout、门店手机成绩单、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、门店手机成绩单、换店滤空、phoneLayout、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
 license: MIT
 metadata:
-  version: "3.1.11"
+  version: "3.1.12"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanmetric
 ---
 
-# 观远 BI · 马甲实战版（V3.1.11）
+# 观远 BI · 马甲实战版（V3.1.12）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -42,6 +42,7 @@ metadata:
 | 30+ 张表批量迁移 / 跨多日工程 / 复杂重构需要项目化追踪 | **B-17.11 ExecPlan 工作法**（同上文件 §11） |
 | 自定义图表 HTML/CSS/JS 注入、固定卡片/overlay、payload_json 取数、路由清理 | **Part C：自定义图表开发与排障** |
 | 从零生成 HTML 化经营分析应用（用户说"更高级 / 应用化 / 自定义模块 / 最完美 / 不限标准看板"）| **Part C-12：HTML 应用化看板生成**（拆到 [references/part-c-html-dashboard.md](references/part-c-html-dashboard.md)） |
+| 加盟店老板手机成绩单 / 门店移动看板 / 换店后财务空白 / GDPlugin 视图顺序错位 / 对比组家数泄露 / 要一份可离线点的移动样本 | **Part C 门店手机成绩单**（拆到 [references/part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md)，离线 HTML： [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)） |
 | **v7 BI 实例**上端到端搭多个 HTML 应用看板 / 手撸 `POST /api/page+/api/card` 被 `60004 此操作只能在草稿页面执行` 卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报 `PARSE_SYNTAX_ERROR` / ETL update 报 `1012 输出数据集目录中存在同名文件` | **Part D：V7 Page/Card 发布流水线 + 三态硬规则**（V2.1.6 新增，拆到 [references/v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md)） |
 | **SuperApp / 超级应用 / 开放应用**开发流水线 / `guancli app create/publish` / `--app-id` 不传变成每次新建 / 数据集异步预览 3 步 / 表单结构先走 `guands form`；旧脚手架建表兼容问题按 §6/ **BI 中转 LLM 报 NOT_JSON_RES / ILLEGAL_JSON_RES**（响应被塞在 error_message）/ `/api/llm-config/list` 返回裸数组被脚手架 unwrap 吞 / 同源 fetch credentials 不带 cookie / 客户端模拟流式打字效果 / 任务池工作台「看 + 想 + 选 + 做 + 留痕」闭环 | **Part E：SuperApp 开放应用开发流水线**（V2.1.12 新增，拆到 [references/part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md)） |
 | **客户说"想给现有 BI 接 AI / 上 LLM"** / "我们 ETL 治理做了一年还没出活" / **判断 是该治理还是该重搭** / 客户预算分配讨论 / 评估底表 schema 是否 AI-friendly / 提案"AI-native 数据底座" | **AI-native ADS 设计方法论**（V2.1.13 新增，**majia-guanyuan 的哲学层文档**——不是操作手册而是范式判断，拆到 [references/ai-native-ads-design.md](references/ai-native-ads-design.md)） |
@@ -49,11 +50,11 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.1.11（2026-09-14）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.1.12（2026-09-14）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> 🆕 **V3.1.11**（2026-09-14）：对齐官方 `guanskill 0.1.35`。新增指标批量查询与本地分析路由，适配指标 JSON/原始数值、批量上下线、页面草稿重置及资源落位规则；表单结构走官方 `guands`。关键迁移见 [官方更新兼容说明](references/official-cli-compatibility.md)，完整历史见 [CHANGELOG.md](CHANGELOG.md)。
+> 🆕 **V3.1.12**（2026-09-14）：门店手机成绩单经验 + 脱敏离线 HTML 样本。官方全家桶版本仍按 V3.1.11（guanskill 0.1.35）。完整历史见 [CHANGELOG.md](CHANGELOG.md)。
 
 ---
 
@@ -82,7 +83,7 @@ metadata:
 | **`guanmetric`** | 0.1.15 | 指标定义与管理 | 指标建/改/删、主题/目录、公共维度、指标树、查询加速、业务字典、Excel 模板及 `--check-only` 预检；批量上下线用 `batch online/offline`，先 dry-run、按依赖顺序逐项处理。失败不回滚已成功项，blocked 先核对影响再确认；上线请求获接受后仍须回读审批/发布状态。复合指标只引用原子或复合指标；指标查数仍走 guancli。 |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
-| **`majia-guanyuan`**（本 skill） | **3.1.11** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
+| **`majia-guanyuan`**（本 skill） | **3.1.12** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（20 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
 **一句话路由**：标准查数 / 洞察 / Dashboard Agent → `guancli`；标准建卡/发布/截图 / `live` 实时工程 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`；指标建/改/删 + 指标主题/目录 + 公共维度 + **指标树 / 查询加速** → `guanmetric`。**任何一个遇到官方 DSL/命令够不着的字段、报错、状态机、反向工程、业务口径**——回到本 skill 对应 Part。
 
@@ -959,6 +960,8 @@ new GDPlugin().init(renderChart);
 
 🧰 **模板包**：[`templates/html-dashboard/`](templates/html-dashboard/) — `charts/html_common.js` (GDHTML runtime) + `html_base.css`（V3.1.0 按设计底线校准）+ 2 个起手模块（executive / trend）+ `scripts/patch_selector_linkage.js`（CLI 参数化，弥补 `linkToAll` 联不到 custom chart dataView 的盲区）。🆕 **guanvis 0.1.29 起官方新增「页面筛选器过滤自定义图表 + custom chart dataView 作点击联动来源」**——新页可先试官方 selector 联动，覆盖到位则此脚本可省；旧版/未覆盖场景仍用兜底（官方能力未净零实测，暂并存）。
 
+📱 **门店手机成绩单（V3.1.12）**：加盟店老板每天打开的单卡成绩单，不要按本章六模块驾驶舱去堆，也不要把桌面看板缩小。产品规则、20 视图契约、换店滤空、列名识别、对比不写家数见 [references/part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md)；可离线点的脱敏 HTML 在 [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)。
+
 ---
 
 # 🆎 Part D：V7 Page/Card 发布流水线 + 三态硬规则（V2.1.6 新增）
@@ -998,6 +1001,7 @@ new GDPlugin().init(renderChart);
 | [part-b17-fullchain-rewrite.md](references/part-b17-fullchain-rewrite.md) | 全链路 SmartETL 重写、副本页验收、ExecPlan 管理时 | ~290 |
 | [part-c-payload-json.md](references/part-c-payload-json.md) | runtime 拿不到 payload_json / JSON.parse 失败时 | ~60 |
 | [part-c-html-dashboard.md](references/part-c-html-dashboard.md) | 用户说"更高级 / 应用化 / 不限标准看板"，从零生成 HTML 化分析应用时（V2.1.1 新建） | ~620 |
+| [part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md) | 加盟店老板手机成绩单 / 换店滤空 / GDPlugin 视图顺序错位 / 对比组家数泄露 / 要离线可点的移动样本时（V3.1.12） | ~280 |
 | [part-c-design-baseline.md](references/part-c-design-baseline.md) | 生成/修改任何 HTML 看板的视觉层时；用户说"做好看点 / 太丑 / AI 味重"时；C-12 §11.5 视觉验收时。模块首屏=数据判断 / KPI 与数值口径 / 图表真实性 / token 硬上限 / 反 AI 味红线 / `guanvis screenshot` 验收清单。吸收 [design-taste-skills](https://github.com/xiaomingtx666/design-taste-skills)（MIT），覆盖 C-12 / Part D / Part E（V3.1.0 新建） | ~150 |
 | [v7-page-card-publish-pipeline.md](references/v7-page-card-publish-pipeline.md) | V7 BI 实例端到端搭多个 HTML 看板 / 手撸 page+card API 被 `60004` 草稿页面错误卡住 / CSV 散客 `会员ID IS NOT NULL` 算出 100% 假指标 / Spark `WITH 中文别名` 报错 / ETL update `1012 同名文件` / SmartETL `COUNT_DISTINCT`/`JOIN_DATA` 多键/`FULL_OUTER` 节点化坑（V2.1.8）/ HTML customChart `renderChart` 不调 + `autoBootstrap` + chip toolbar 兜底（V2.1.9）/ 移动端 phoneLayout v7 草稿 save API 死路 + ZIP inject 唯一可行路径 + CSS @media 模板（V2.1.10） | ~1120 |
 | [part-e-superapp-pipeline.md](references/part-e-superapp-pipeline.md) | SuperApp 开放应用开发流水线 / `guancli app create/publish` 不读 `.env` 必须显式传 `--app-id` / 脚手架 bi-services 速查 / 数据集异步预览 3 步链路 / **`/survey-engine/api/form/add` 建表反向工程**（脚手架没暴露） / **BI LLM 中转 NOT_JSON_RES/ILLEGAL_JSON_RES 三路径解析模板**（含从 error_message 抠 LLM 响应）/ 客户端模拟流式 + prompt 模板 / 原生 fetch + credentials: 'include' 绕过脚手架 `get` unwrap / `<base href>` + Router basename / 设计纪律 + 反模式表 + 决策树（V2.1.12 新建） | ~760 |
@@ -1035,9 +1039,9 @@ new GDPlugin().init(renderChart);
 
 > 顶部 🆕 callout 是最新版摘要；完整逐版记录见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。以下只留最近三版一句话索引：
 
+- **V3.1.12**（2026-09-14）门店手机成绩单经验 + 脱敏离线 HTML 样本；官方全家桶版本仍按 3.1.11。
 - **V3.1.11**（2026-09-14）对齐 guanskill 0.1.35；指标批量查询/原始数值与 JSON、批量上下线、草稿重置、落位保护、表单官方优先；修复 CLI 已新但 Skill 未同步的检查缺口。
 - **V3.1.10**（2026-08-25）官方全家桶对齐 guanskill 0.1.29：guancli 1.0.53（OIDC / SuperApp 整包下载 / 多行 SQL 输入）、guanvis 0.1.41（页面与目录原地管理）、guands 0.1.28（calc-field apply）。
-- **V3.1.9**（2026-08-19）官方全家桶 07-24 以来 9 个聚合包对齐（guanskill 0.1.17→0.1.26）；头条：`guancli insight` / `guanvis live` / `guanmetric metric-tree`+`accelerate`。
 ## 👤 作者 / 联系
 
 **马甲（@maojiebc）** · 超级马甲

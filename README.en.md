@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.11-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.12-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -40,7 +40,7 @@ Two layers:
 | 🧭 **Routing layer** | Query data, build cards, reports, standard ETL / dataset CRUD | The official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`) |
 | 🅱️ **Part B** | Whole-warehouse ETL governance + engine error manual + dual-source field audit | "Scan ETLs and tell me what to delete" / "Why does direct-save fail?" / "Is this field cut safe?" |
 | 🅱️ **B-17** | Full-chain rewrite methodology | "Rewrite this SmartETL chain as pure SQL" / "Replica page verification / card-level comparison" |
-| 🆎 **Part C / C-12** | Custom chart injection debugging + HTML application dashboard | "payload_json parsing fails" / "fixed card misaligned" / "more advanced / application dashboard" |
+| 🆎 **Part C / C-12** | Custom chart injection debugging + HTML application dashboard + store mobile scorecard | "payload_json parsing fails" / "fixed card misaligned" / "more advanced / application dashboard" / "franchise-owner phone scorecard" |
 | 🇩 **Part D** | v7 draft-release state-machine bypass + phoneLayout | "v7 page+card stuck on 60004" / "how to inject mobile phoneLayout" |
 | 🇪 **Part E** | SuperApp open-app reverse-engineering | "form schema-creation not exposed by scaffold" / "LLM bridge ILLEGAL_JSON_RES" |
 | 🧠 **Methodology / formulas** | AI-native ADS judgment + restaurant BI formulas | "Connect AI to existing BI — govern or rebuild?" / "How to compute repurchase / RFM / avg ticket?" |
@@ -308,13 +308,16 @@ majia-guanyuan/
 │   └── inject_phone_layout.py        # Part D mobile phoneLayout ZIP inject tool
 ├── templates/
 │   └── html-dashboard/               # Part C-12 HTML application dashboard template pack (GDHTML runtime + starter modules + selector linkage patch)
-└── references/                       # Deep reference docs (13 files after V3.0.0)
+├── examples/
+│   └── store-mobile-scorecard/       # Desensitized offline mobile scorecard (V3.1.12)
+└── references/                       # Deep reference docs
     ├── part-b-errors.md              # Part B 10-category error detailed fixes
     ├── part-b-payload.md             # ETL payload schema deep-dive
     ├── part-b-sdk.md                 # v2→v3 bulk refactoring SDK
     ├── part-b17-fullchain-rewrite.md # Full B-17 full-chain rewrite methodology + ExecPlan workflow
     ├── part-c-payload-json.md        # C-3 payload_json troubleshooting deep-dive
     ├── part-c-html-dashboard.md      # C-12 HTML application dashboard methodology
+    ├── part-c-store-mobile-scorecard.md # Franchise-owner mobile scorecard playbook
     ├── part-c-design-baseline.md     # Visual design baseline for HTML dashboards (V3.1.0, absorbed from design-taste-skills)
     ├── v7-page-card-publish-pipeline.md  # Part D v7 draft-release state machine + node silent traps + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp reverse-engineering pipeline
@@ -341,6 +344,7 @@ majia-guanyuan/
 | "30+ table multi-day project — give me an ExecPlan skeleton" | **B-17.11** |
 | "Custom chart script not running / payload_json error" / "Fixed card misaligned / overlay leaks across routes" | **C** |
 | "More advanced / application dashboard / selector won't link to custom chart dataView" | **C-12** |
+| "Franchise-owner phone scorecard / empty finance after store switch / don't show peer store counts" | **Store mobile scorecard** |
 | "v7 page+card stuck on 60004 draft page" / "How to inject mobile phoneLayout" | **D** |
 | "use guands form for structure; E covers legacy scaffold compatibility" / "LLM bridge throws ILLEGAL_JSON_RES" | **E** |
 | "Connect AI to existing BI — govern or rebuild?" / "How to design AI-native ADS" | **Methodology** |
@@ -384,7 +388,7 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.1.11** (2026-09-14) — aligned to guanskill 0.1.35. Route independent basic metric queries to one batch, request raw values for calculations, and inspect per-item failures and publication approval. Adapt draft reset, explicit resource placement and append/replace confirmation. Prefer official form commands; retain old workarounds only for reproduced compatibility issues. See [compatibility notes](references/official-cli-compatibility.md).
+**Latest: V3.1.12** (2026-09-14) — franchise-owner mobile scorecard playbook plus a desensitized offline HTML sample. Official CLI pins remain at V3.1.11 (guanskill 0.1.35). See [part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md) and [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/).
 
 **V3.1.10** (2026-08-25) — official family aligned to `guanskill` **0.1.29** (guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**). Highlights: enterprise OIDC and safer credentials, SuperApp bundle download, multiline SQL from file/stdin; in-place page/directory management and target-directory publish; declarative `calc-field apply`. Existing write and delete safety gates remain unchanged.
 

@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.1.11-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.1.12-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -39,7 +39,7 @@
 | 🧭 **路由层** | 查数据、建卡、出报表、标准 ETL / 数据集 CRUD | 交给官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`） |
 | 🅱️ **Part B** | ETL 整库治理判断 + 引擎报错手册 + 双源字段审计 | "扫一遍 ETL 看哪些可以删" / "direct-save 报错怎么修" / "字段裁剪安不安全" |
 | 🅱️ **B-17** | 全链路重写方法论 | "把这条 SmartETL 链整个改成 SQL 版" / "副本页验收 / 卡片级对比" |
-| 🆎 **Part C / C-12** | 自定义图表注入排障 + HTML 应用化看板 | "payload_json 解析失败" / "固定卡片错位" / "更高级/应用化看板" |
+| 🆎 **Part C / C-12** | 自定义图表注入排障 + HTML 应用化看板 + 门店手机成绩单 | "payload_json 解析失败" / "固定卡片错位" / "更高级/应用化看板" / "加盟店老板手机成绩单" |
 | 🇩 **Part D** | v7 草稿-发布状态机绕过 + phoneLayout | "v7 page+card 被 60004 卡住" / "移动端 phoneLayout 怎么注入" |
 | 🇪 **Part E** | SuperApp 开放应用反向工程 | "表单结构先走 guands form；旧脚手架兼容问题再查 E" / "LLM 中转 ILLEGAL_JSON_RES" |
 | 🧠 **方法论 / 公式库** | AI-native ADS 判断 + 餐饮 BI 公式（公式库已迁至 [majia-huiyuan](https://github.com/maojiebc/majia-huiyuan)） | "想给现有 BI 接 AI，该治理还是该重搭" / "复购率/RFM/客单价怎么算" |
@@ -305,13 +305,16 @@ majia-guanyuan/
 │   └── inject_phone_layout.py        # Part D 移动端 phoneLayout ZIP inject 工具
 ├── templates/
 │   └── html-dashboard/               # Part C-12 HTML 应用化看板模板包（GDHTML runtime + 起手模块 + selector 联动 patch）
-└── references/                       # 深度参考资料（V3.0.0 后 13 份）
+├── examples/
+│   └── store-mobile-scorecard/       # 门店手机成绩单脱敏离线 HTML（V3.1.12）
+└── references/                       # 深度参考资料
     ├── part-b-errors.md              # Part B 10 类报错详方案
     ├── part-b-payload.md             # ETL payload schema 详解
     ├── part-b-sdk.md                 # v2→v3 批量改造 SDK
     ├── part-b17-fullchain-rewrite.md # B-17 全链路重写方法论全章节 + ExecPlan 工作法
     ├── part-c-payload-json.md        # C-3 payload_json 排障详解
     ├── part-c-html-dashboard.md      # C-12 HTML 应用化看板生成方法论
+    ├── part-c-store-mobile-scorecard.md # 门店手机成绩单经验（产品规则 / 20 视图 / 换店 / 对比脱敏）
     ├── part-c-design-baseline.md     # HTML 看板视觉设计底线（V3.1.0，吸收 design-taste-skills）
     ├── v7-page-card-publish-pipeline.md  # Part D v7 草稿/发布状态机 + 节点化静默坑 + phoneLayout
     ├── part-e-superapp-pipeline.md   # Part E SuperApp 反向工程流水线
@@ -338,6 +341,7 @@ majia-guanyuan/
 | "30+ 表跨多日工程怎么管 / 给我 ExecPlan 骨架" | **B-17.11** |
 | "自定义图表脚本不执行 / payload_json 报错" / "固定卡片错位 / overlay 切页残留" | **C** |
 | "更高级 / 应用化看板 / selector 联不到 custom chart dataView" | **C-12** |
+| "加盟店老板手机成绩单 / 换店后财务空白 / 对比不要写多少家店" | **门店手机成绩单** |
 | "v7 page+card 被 60004 草稿页面卡住" / "移动端 phoneLayout 怎么注入" | **D** |
 | "常规表单建改用 guands form；历史兼容 / LLM 中转报错" | **E** |
 | "想给现有 BI 接 AI，该治理还是该重搭" / "AI-native ADS 怎么设计" | **方法论** |
@@ -381,7 +385,7 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.1.11** (2026-09-14) — 对齐官方 guanskill 0.1.35。多个基础指标一次查询，计算显式取原始数值；逐项识别批量失败和上线审批；适配页面草稿重置、资源目录及追加确认。表单结构优先用官方命令，历史绕行按复现条件启用。核验说明见 [官方 CLI 兼容说明](references/official-cli-compatibility.md)。
+**最新：V3.1.12** (2026-09-14) — 门店手机成绩单经验 + 脱敏离线 HTML 样本。官方全家桶版本仍按 V3.1.11（guanskill 0.1.35）。见 [part-c-store-mobile-scorecard.md](references/part-c-store-mobile-scorecard.md) 与 [examples/store-mobile-scorecard/](examples/store-mobile-scorecard/)。
 
 **V3.1.10** (2026-08-25) — 官方全家桶对齐到 `guanskill` **0.1.29**（guancli **1.0.53** / guanvis **0.1.41** / guanetl **0.1.29** / guanwf **0.1.828** / guands **0.1.28** / guanmetric **0.1.10**）。重点：企业 OIDC 与安全凭据、SuperApp 整包下载、文件/标准输入多行 SQL；页面与目录原地管理、发布目标目录；`calc-field apply` 计算字段期望态协调。既有写入与删除安全闸保持不变。
 

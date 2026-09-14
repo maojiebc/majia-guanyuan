@@ -45,6 +45,8 @@ node ./my-page/scripts/patch_selector_linkage.js \
 
 模板里只放了 `executive` + `trend` 两个起手模块。实战中常用的另 4 个（city / matrix / structure / actions）按相同的"data contract → GDHTML mount → renderChart 注册"结构扩出来即可，组件可以复用 `GDHTML.bar / stacked / lineSvg / scatterSvg / esc / money / yuan / pct`，不必重写。
 
+门店老板每天打开的手机成绩单不要用本模板硬套六模块驾驶舱，走 [门店手机成绩单](../../references/part-c-store-mobile-scorecard.md) 和 [离线样本](../../examples/store-mobile-scorecard/)。
+
 ## 与 Part C 其他章节的关系
 
 - C-1 ~ C-11：既有页面的 HTML/JS 注入 hack（runtime DOM）
