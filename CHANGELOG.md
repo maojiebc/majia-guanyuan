@@ -7,6 +7,21 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.2.1] — 2026-09-20
+
+### Changed
+
+- 对齐官方 guanskill 0.1.39：guancli 1.0.62、guanvis 0.1.49、guanetl 0.1.37、guanwf 0.1.836、guands 0.1.35、guanmetric 0.1.18。
+- 指标批量处理补充 `--fail-on-error` 与 `valueFormat: "both"`，明确计算值和展示值的用途；未知筛选/排序字段报错后修正字段，不删条件。
+- 补充下游存在性检查的数量与错误边界、SQL 文件输出、内部 OAuth2 认证、BI >= 8.3.2 的 settings 覆盖条件与按平台安装。
+- 修正工作流调度兼容参数与 Python 镜像版本解析说明；增加机器可读的官方版本审阅记录，供定时检查使用。
+- 刷新双语 README、Skill 路由、版本元数据及架构图；旧案例与历史版本记录保留。
+
+### Verification and scope
+
+- npm 发布信息、官方随包变更记录、命令帮助与七个官方 Skill 内容一致性检查；Skill 格式、安全及版本审计。
+- 未重跑生产 BI 查询、写入或调度；商店接收、审核通过和本机同步分别核验。
+
 ## [3.2.0] — 2026-09-15
 
 ### Added

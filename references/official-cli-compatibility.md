@@ -1,20 +1,36 @@
 # 官方 CLI 更新兼容说明
 
-核验日期：2026-09-14。适用于 majia-guanyuan v3.1.11。本次依据 npm 官方发布包的 CHANGELOG、随包 Skill 和本机 `--help` 对齐；本地分析用合成数据验证。未重新运行线上 BI 业务链，也未用生产数据测试写入。
+核验日期：2026-09-20。适用于 majia-guanyuan v3.2.1。依据 npm 官方发布包的 CHANGELOG、随包 Skill 与本机命令帮助核对；没有在生产 BI 上重跑业务读写。
 
 ## 当前版本与来源
 
-`@guandata/guanskill@0.1.35` 发布于 2026-09-11；npm latest、聚合包精确依赖与本机 `guanskill version` 一致。CLI 和 Skill 文件分别核验；安装完成后应逐文件比较随包 Skill 与已安装目录，不能仅看版本号。
+`@guandata/guanskill@0.1.39` 发布于 2026-09-19；本机与聚合包精确依赖一致。六组件 latest 另行检查，不能把聚合包版本当成全部上游发布状态。机器可读记录见 [official-cli-baseline.json](official-cli-baseline.json)。
 
 | 组件 | 上次基线 | 当前版本 | 官方随包变更记录 |
 |---|---|---|---|
-| guanskill | 0.1.29 | 0.1.35 | [CHANGELOG](https://unpkg.com/@guandata/guanskill@0.1.35/CHANGELOG.md) |
-| guancli | 1.0.53 | 1.0.58 | [CHANGELOG](https://unpkg.com/@guandata/guancli@1.0.58/CHANGELOG.md) |
-| guanvis | 0.1.41 | 0.1.47 | [CHANGELOG](https://unpkg.com/@guandata/guanvis@0.1.47/CHANGELOG.md) |
-| guanetl | 0.1.29 | 0.1.34 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.34/CHANGELOG.md) |
-| guanwf | 0.1.828 | 0.1.833 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.833/CHANGELOG.md) |
-| guands | 0.1.28 | 0.1.32 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.32/CHANGELOG.md) |
-| guanmetric | 0.1.10 | 0.1.15 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.15/CHANGELOG.md) |
+| guanskill | 0.1.35 | 0.1.39 | [CHANGELOG](https://unpkg.com/@guandata/guanskill@0.1.39/CHANGELOG.md) |
+| guancli | 1.0.58 | 1.0.62 | [CHANGELOG](https://unpkg.com/@guandata/guancli@1.0.62/CHANGELOG.md) |
+| guanvis | 0.1.47 | 0.1.49 | [CHANGELOG](https://unpkg.com/@guandata/guanvis@0.1.49/CHANGELOG.md) |
+| guanetl | 0.1.34 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.37/CHANGELOG.md) |
+| guanwf | 0.1.833 | 0.1.836 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.836/CHANGELOG.md) |
+| guands | 0.1.32 | 0.1.35 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.35/CHANGELOG.md) |
+| guanmetric | 0.1.15 | 0.1.18 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.18/CHANGELOG.md) |
+
+## 1.0.59–1.0.62 需要调整的行为
+
+批量查询用于自动处理时加 `--fail-on-error`：任一项失败会非零退出，但仍保留完整 JSON；默认行为仍可能部分失败却退出 0，必须逐项读 `results[].status`。需要计算又需要展示时指定 `valueFormat: "both"`，一次返回原始 `rows` 和 `formattedRows`，计算只使用原始值。
+
+筛选支持 `=`、`!=`、`<>`、`<`、`<=`、`>`、`>=`，条件组键名是 `conditions`，不是 `children`。指标维度、筛选、排序现在校验真实字段；`METRIC_UNSUPPORTED_DIMENSION` / `FILTER_UNKNOWN_FIELD` 应回查指标详情后纠正字段，不删除原条件重跑。公共维度名只有唯一映射时可直接用，有歧义不能猜。
+
+`ds execute-sql -o result.csv` 可直接保存结果，不必为换输出格式再查一次；该功能不保证旧 BI 环境的 SQL 接口可用。`ds get <ds_id> --validate-downstream` 核对血缘里的残留资源：只有业务状态 1002 或 HTTP 404 才判不存在；认证、网络和解析失败必须保留。单次最多 100 个下游、总超时 30 秒，不能把未检查部分说成无依赖，也不能据此自动删除资源。
+
+`app publish --overwrite-settings` 仅 BI >= 8.3.2 生效。低版本或版本查询失败、无法解析时保留线上 `settings.json`；显式传参不代表一定覆盖成功。
+
+内部 OAuth2 应用认证须由宿主注入服务地址、访问凭据及用户身份。CLI 不保存、交换或刷新该凭据；OAuth2 与 OIDC 环境同时存在会报错，不回退本地 profile。不要把宿主环境凭据写进 Skill 或发布包。PAT 登录现保存 Domain，多 profile 可按 Domain 筛选。
+
+`guanwf schedule set --failure-strategy` 已废弃，仅兼容 CONTINUE；END 在本地失败且不写入，失败后的走向由 FAILURE / ALL 连线决定。Python 版本优先从 `/api/python-images/list` 的 `pythonVersion` 读取；旧接口降级读 `/api/system-images/list?type=PYTHON` 的 `runtimeEnv`；字段缺失或不能识别才回退兼容契约 Python 3.8，不从镜像名称或说明猜版本。
+
+1.0.62 及对应五个原生组件改为按系统和架构下载平台包，命令用法不变。缺平台包或版本不匹配时按启动器提示修复安装，不改业务命令绕过。guanvis 本轮无新增建卡行为，主要同步共享认证与内部依赖。
 
 ## 指标取数：先保住数值和结果结构
 
@@ -60,6 +76,6 @@ SuperApp 已支持 list/download。更新已知应用先定位 appId 并显式�
 
 ## 本次验证范围
 
-核对 npm 版本、精确依赖、七个入口的已安装 Skill 内容，以及相关命令帮助。用合成本地 CSV/JSON 验证 analyze 的对齐、除零、TopN 分母及失败时保留输出。发布前另检查 Skill 格式、版本一致性、敏感信息、包内容和架构图。
+本轮核对 npm 版本、精确依赖、七个官方 Skill 的逐文件一致性，以及批量查询、下游检查和调度的命令帮助。发布前检查 Skill 格式、版本一致性、敏感信息和架构图；先前本地 analyze 合成数据验证保留为历史记录，不冒充本轮重跑。
 
 上述不代表新版在任意 BI 版本都已通过线上写入验收。历史生产案例保留原日期和适用环境；批量取数、审批、草稿重置、表单同步及工作流输出绑定的线上结果，须在具体业务任务中按目标环境验收。
