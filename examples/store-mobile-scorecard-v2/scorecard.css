@@ -8,6 +8,10 @@ b,strong,.scoreval,.kpi b,.barval,.peerrank b,.point b,td{font-variant-numeric:t
 
 /* 顶部 */
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:2px 0 10px}
+.top>div{min-width:0;flex:1}
+.store-heading{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+.store-heading h1{overflow-wrap:anywhere}
+.store-code{display:inline-block;max-width:100%;padding:1px 7px;border:1px solid var(--line);border-radius:5px;background:#F5F3F1;color:var(--muted);font-size:12px;line-height:1.6;font-weight:500;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .top h1{font-size:var(--text-title);line-height:1.3;margin:0;letter-spacing:-.3px}
 .top p{margin:4px 0 0;font-size:var(--text-support);color:var(--muted)}
 .top p.stale{color:var(--warn)}
@@ -227,6 +231,19 @@ b,strong,.scoreval,.kpi b,.barval,.peerrank b,.point b,td{font-variant-numeric:t
 
 .scoretop>.link,#sec-coupons .sechead>.link{flex-shrink:0;white-space:nowrap}
 .data-disclaimer{margin:4px 2px 0;font-size:var(--text-meta);line-height:1.7;color:var(--muted);overflow-wrap:anywhere}
+
+/* Only the added repurchase row and its short comparison note. */
+.repurchase-line{display:flex;align-items:baseline;justify-content:space-between;gap:4px;margin-top:8px;line-height:1.5}
+.vscol .repurchase-line span{font-size:13px;font-weight:400;color:var(--muted);white-space:nowrap}
+.repurchase-line strong{font-size:14px;white-space:nowrap}
+.repurchase-line .repurchase-state{font-size:12px;font-weight:500;white-space:normal;text-align:right}
+.repurchase-note strong{font-weight:650;color:var(--ink)}
+
+#sec-membervs .vscol em{min-height:42px}
+.repurchase-line:has(.repurchase-state){flex-wrap:wrap}
+.repurchase-line .repurchase-state{white-space:nowrap}
+
+.member-review strong{font-weight:650}
 
 /* Offline wrapper: production view uses native branch/store selectors. */
 html.demo,html.demo body{height:100%;overflow:hidden}

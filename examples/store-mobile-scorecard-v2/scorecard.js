@@ -37,14 +37,21 @@
     return next;
   }
   function viewLimit(i) { return i === V.peer ? 20000 : 10000; }
-  var S = { period: '昨天', grain: 'day', point: null, soupWay: '堂食', open: {}, lastRead: null, demoStore: null, demoBranch: null };
+  var S = { period: '昨天', grain: 'day', point: null, soupWay: '堂食', open: {}, lastRead: null };
   var D = [], FIN = new Map(), SYNC = null, ANCHOR = null, PERIODS = null, STORE = null, CTX = null;
 
   /* ---------- 基础工具 ---------- */
   var esc = function (v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var num = function (v) { if (v === null || v === undefined || v === '') return null; var n = Number(v); return Number.isFinite(n) ? n : null; };
   var fmt = function (v, d) { d = d || 0; return num(v) == null ? '—' : Number(v).toLocaleString('zh-CN', { minimumFractionDigits: d, maximumFractionDigits: d }); };
-  var pct = function (v, d) { if (d === undefined) d = 1; return num(v) == null ? '—' : fmt(v * 100, d) + '%'; };
+  // Display only: whole percentages; keep sub-1% differences visible.
+  var pctNumber = function (v) {
+    var n = num(v); if (n == null) return '—'; if (n === 0) return '0';
+    var x = n * 100, a = Math.abs(x);
+    if (a < .05) return (x < 0 ? '−' : '') + '＜0.1';
+    return x.toLocaleString('zh-CN', { maximumFractionDigits: a < 1 ? 1 : 0 });
+  };
+  var pct = function (v) { return num(v) == null ? '—' : pctNumber(v) + '%'; };
   var money = function (v) { if (num(v) == null) return ['—', '']; var a = Math.abs(v); return a >= 100000 ? [fmt(v / 10000, 1), '万元'] : [fmt(v, 0), '元']; };
   var divide = function (a, b) { return num(a) != null && num(b) != null && b !== 0 ? a / b : null; };
   var sum = function (rs, k) { return rs.reduce(function (a, r) { return a + (num(r[k]) || 0); }, 0); };
@@ -76,7 +83,7 @@
     var keys = Array.from(FIN.keys()).sort();
     ANCHOR = keys.length ? keys[keys.length - 1] : null;
     PERIODS = ANCHOR ? periods(ANCHOR) : null;
-    CTX = (D[V.context] || [])[0] || null;
+    CTX = customerMetricRows(V.context)[0] || null;
     STORE = CTX && CTX['门店名称'] ? CTX['门店名称'] : null;
     if (!STORE) {
       var finRows = D[V.fin] || [];
@@ -117,7 +124,7 @@
     if (num(cur) == null || num(prev) == null || (!opts.pp && prev === 0)) return '<span class="delta na' + (opts.small ? ' small' : '') + '">' + esc(label) + '无数据</span>';
     var r = opts.pp ? cur - prev : cur / prev - 1, eps = opts.pp ? 0.005 : 0.005;
     var cls = Math.abs(r) < eps ? 'flat' : r > 0 ? 'up' : 'down', arrow = cls === 'up' ? '▲' : cls === 'down' ? '▼' : '●';
-    var text = opts.pp ? fmt(Math.abs(r) * 100, 1) + ' 个点' : pct(Math.abs(r));
+    var text = opts.pp ? pctNumber(Math.abs(r)) + ' 个点' : pct(Math.abs(r));
     return '<span class="delta ' + cls + (opts.small ? ' small' : '') + '">' + arrow + ' ' + text + (label ? '<small>' + esc(label) + '</small>' : '') + '</span>';
   }
   function tick(v, max) { if (max >= 10000) return v === 0 ? '0' : fmt(v / 10000, 1) + '万'; if (max >= 1000) return v === 0 ? '0' : fmt(v / 1000, 1) + 'k'; return fmt(v); }
@@ -257,15 +264,39 @@
 
   /* ---------- 顾客 ---------- */
   function isMember(r) { var v = String(r['是否会员'] || ''); return v === '会员' || v === '是'; }
+  function customerStoreCode() {
+    var rows = D[V.newold] || [];
+    var ids = Array.from(new Set(rows.map(function (r) { return String(r['门店编号'] || '').trim(); })));
+    return ids.length === 1 && ids[0] ? ids[0] : null;
+  }
+  function customerMetricRows(view) {
+    var code = customerStoreCode(), rows = D[view] || [];
+    return code ? rows.filter(function (r) { return String(r['门店编号'] || '').trim() === code; }) : [];
+  }
   function periodMembers() {
     if (S.period === '昨天') {
-      return sum((D[V.member] || []).filter(function (r) { return date(r['订单日期']) === ANCHOR; }), '消费会员数');
+      return sum(customerMetricRows(V.member).filter(function (r) { return date(r['订单日期']) === ANCHOR; }), '消费会员数');
     }
     var spec = S.period === '近7天' ? [V.member7, '消费会员_近7天'] : S.period === '近30天' ? [V.member30, '消费会员_近30天'] : [V.memberMonth, '消费会员_本月'];
-    return spec[0] < 0 ? null : num(((D[spec[0]] || [])[0] || {})[spec[1]]);
+    return spec[0] < 0 ? null : sum(customerMetricRows(spec[0]), spec[1]);
+  }
+  function customerState() {
+    var rs = D[V.status] || [], ids = Array.from(new Set(rs.map(function (r) { return String(r['门店编号'] || '').trim(); })));
+    if (!rs.length || ids.length !== 1 || !ids[0]) return empty('顾客归属待核验，暂不展示流失判断');
+    var first = date(rs[0]['顾客观察开始日']), end = date(rs[0]['统计截止日']);
+    var valid = /^\d{4}-\d{2}-\d{2}$/.test(first) && /^\d{4}-\d{2}-\d{2}$/.test(end) && first <= end;
+    var age = valid ? Math.floor((pd(end) - pd(first)) / 86400000) : null;
+    var mature = age != null && age >= 90;
+    var notice = mature ? '' : '<p class="warn">90天流失：' + (age == null ? '缺少可核验消费历史，暂不判断。' : '观察期不足。最早可核验消费日为 ' + esc(first) + '，尚未满90天。') + '</p>';
+    var status = group(rs.filter(function (r) { return (num(r['顾客数']) || 0) > 0 && (mature || String(r['顾客状态'] || '').indexOf('流失') === -1); }), '顾客状态').map(function (g) {
+      return { name: g.name || '未知', value: sum(g.rows, '顾客数') };
+    }).sort(function (a, b) { return b.value - a.value; });
+    var total = sum(status, 'value'); status.forEach(function (s) { s.share = divide(s.value, total); s.display = fmt(s.value) + ' 人'; });
+    return notice + bars(status, { max: 6, emptyText: '暂无已确认属于本店的顾客数据' });
   }
   function customers() {
-    var p = P(), no = D[V.newold] || [];
+    var p = P(), no = customerMetricRows(V.newold);
+    if (!customerStoreCode()) return section('customers', '顾客与会员', '', empty('暂无可确认属于单一门店编号的顾客数据'));
     var inP = function (rg) { return no.filter(function (r) { return inRange(date(r['订单日期']), rg); }); };
     var pick = function (rg) {
       var rs = inP(rg), t = sum(rs, '顾客人次'), nw = sum(rs.filter(function (r) { return r['顾客属性'] === '新客'; }), '顾客人次');
@@ -274,8 +305,6 @@
     };
     var cur = pick(p.cur), cmp = pick(p.cmp);
     var memVal = periodMembers(), memLabel = p.short + ' · 卡号去重';
-    var status = group((D[V.status] || []), '顾客状态').map(function (g) { return { name: g.name || '未知', value: sum(g.rows, '顾客数') }; }).sort(function (a, b) { return b.value - a.value; });
-    var stTotal = sum(status, 'value'); status.forEach(function (s) { s.share = divide(s.value, stTotal); s.display = fmt(s.value) + ' 人'; });
     var mix = [
       { name: '新客', value: cur.nw, display: fmt(cur.nw) + ' 人次', share: cur.share },
       { name: '老客', value: cur.old, display: fmt(cur.old) + ' 人次', share: divide(cur.old, cur.total) }
@@ -286,7 +315,7 @@
       '<div class="kpi"><span>到店人次<small>' + esc(p.short) + ' · 每日累加</small></span><b>' + fmt(cur.total) + '</b>' + delta(cur.total, cmp.total, p.cmpLabel, { small: true }) + '</div></div>';
     return section('customers', '顾客与会员', '消费会员是所选周期内卡号去重；到店人次是每日累加',
       kpis + '<h3>新老客</h3><p class="sub">按下单当天的身份；人次是每日人数累加</p>' + bars(mix, { max: 2 }) +
-      '<h3>近期堂食的顾客 <span class="badge">当前快照</span></h3><p class="sub">按最后一单在本店，不随上面的周期变</p>' + bars(status, { max: 6 }));
+      '<h3>本店顾客状态 <span class="badge">当前快照</span></h3><p class="sub">按顾客最后消费门店编号归属，不随上面的周期变</p>' + customerState());
   }
   function pickMember(rs, names) {
     var set = Array.isArray(names) ? names : [names];
@@ -322,6 +351,45 @@
     var check = way === '堂食' ? '请优先检查POS收银时是否按规范点选汤底，并核对商品映射。' : '请核查外卖商品与汤底的映射是否完整。';
     return '<div class="data-warning" role="note" data-warning="soup"><b>汤底记录明显不足</b><p>近7天 ' + fmt(total) + ' 笔' + esc(way) + '订单中，仅 ' + fmt(valid) + ' 笔能识别汤底（' + pct(valid / total, 1) + '）。' + check + '当前排行仅代表已识别订单。</p></div>';
   }
+  function repurchaseData(label) {
+    var r = CTX || {};
+    return { rate: num(r[label + '堂食复购率']), state: r[label + '堂食复购参评状态'] || '',
+      benchmark: num(r['同店型' + label + '复购前25门槛']), peers: num(r['同店型' + label + '复购门店数']) };
+  }
+  function repurchaseLine(label) {
+    var d = repurchaseData(label), text = d.state === '观察期不足' ? '观察期不足' : pct(d.rate);
+    return '<div class="repurchase-line"><span>堂食复购率</span><strong' + (d.state === '观察期不足' ? ' class="repurchase-state"' : '') + '>' + esc(text) + '</strong></div>';
+  }
+  function repurchaseReview() {
+    var m = repurchaseData('会员'), n = repurchaseData('非会员');
+    if (m.state === '观察期不足' && n.state === '观察期不足') return '本店可核验营业历史不足30天，暂不评定复购水平。';
+    function part(label, d) {
+      if (d.state === '观察期不足') return label + '复购观察期不足';
+      if (d.state === '暂无顾客' || d.rate == null) return label + '暂无足够的复购数据';
+      if (d.state === '样本不足') return label + '复购样本不足，暂不评定';
+      if (d.state !== '可对比' || d.benchmark == null || d.peers < 10) return label + '同店型参照样本不足，暂不评定';
+      var target = '同店型前25%水平（' + label + '门槛' + pct(d.benchmark) + '）';
+      if (d.rate >= d.benchmark) return label + '复购率<strong>已达到</strong>' + target;
+      return label + '复购率距' + target + '还差<strong>' + pctNumber(d.benchmark - d.rate) + '个百分点</strong>';
+    }
+    return part('会员', m) + '；' + part('非会员', n) + '。';
+  }
+  function memberReview(liftF, liftS) {
+    var text = '';
+    if (memberAnomalyData()) text = '消费频次和金额包含待核查订单，暂不判断会员价值。';
+    else {
+      if (num(liftF) != null) {
+        var freqDiff = fmt(Math.abs(liftF), 1);
+        text = freqDiff === '0.0' ? '会员与非会员人均到店次数<strong>接近</strong>' : '会员人均到店比非会员<strong>' + (liftF > 0 ? '多' : '少') + freqDiff + '次</strong>';
+      }
+      if (num(liftS) != null) {
+        var spendDiff = fmt(Math.abs(liftS));
+        text += (text ? '，' : '会员比非会员') + (spendDiff === '0' ? '人均贡献接近' : '人均贡献<strong>' + (liftS > 0 ? '多' : '少') + '¥' + spendDiff + '</strong>');
+      }
+      if (text) text += '。';
+    }
+    return '<div class="data-warning member-review" role="note"><b>消费频次与复购</b><p>' + text + repurchaseReview() + '</p></div>';
+  }
   function memberVs() {
     var rs = D[V.membase] || [];
     if (!rs.length) return '';
@@ -340,19 +408,16 @@
       { name: '非会员', value: revN || 0, display: '¥' + fmt(revN), share: divide(revN, tot) }
     ];
     function vsCard(title, freq, people, spend, aov) {
-      return '<div class="vscol"><span>' + title + '</span><b>' + fmt(freq, 1) + '<small>次</small></b><em>人均到店 · ' + fmt(people) + ' 人</em>' +
+      return '<div class="vscol"><span>' + title + '</span><b>' + fmt(freq, 1) + '<small>次</small></b><em>人均到店 · ' + fmt(people) + ' 人</em>' + repurchaseLine(title) +
         '<div class="vsrow"><div><strong class="subn">¥' + fmt(spend, 0) + '</strong><em>人均贡献</em></div>' +
         '<div class="side"><strong>¥' + fmt(aov, 0) + '</strong><em>客单价</em></div></div></div>';
     }
     var vs = '<div class="vs">' + vsCard('会员', fM, nM, spendM, aovM) + vsCard('非会员', fN, nN, spendN, aovN) + '</div>';
     var liftF = (num(fM) != null && num(fN) != null) ? fM - fN : null;
     var liftS = (num(spendM) != null && num(spendN) != null) ? spendM - spendN : null;
-    var note = '<p class="note">会员人均' + (liftF == null ? '' : (liftF >= 0 ? '多 ' : '少 ') + fmt(Math.abs(liftF), 1) + ' 次') +
-      (liftS == null ? '' : '、' + (liftS >= 0 ? '多 ¥' : '少 ¥') + fmt(Math.abs(liftS), 0)) +
-      '。金额是该组营业额，不是比非会员多赚的增量。人数少时，合计不一定更高。</p>';
     return section('membervs', '会员和非会员 <span class="badge">近 30 天</span>',
       esc(win) + ' · 可识别顾客 · 频次 = 去重订单 ÷ 去重人数 · 不跟上面的周期走',
-      memberAnomalyWarning() + vs + '<p class="sub">组内营业额</p>' + bars(revBars, { max: 2 }) + (memberAnomalyData() ? '<p class="note">以上指标包含待核查订单，暂不宜直接用于判断会员价值。</p>' : note));
+      memberAnomalyWarning() + vs + memberReview(liftF, liftS) + '<p class="sub">组内营业额</p>' + bars(revBars, { max: 2 }));
   }
 
   /* ---------- 私域 ---------- */
@@ -368,7 +433,7 @@
       '<div class="kpi"><span>券核销<small>' + esc(p.short) + '</small></span><b>' + fmt(cpN) + '<small>张</small></b>' + delta(cpN, cpP, p.cmpLabel, { small: true }) + '</div></div>';
     var health = '<div class="health"><div><span>好友流失率</span><b>' + pct(fri['流失率'], 0) + '</b></div><div><span>退群率</span><b>' + pct(grp['退群率'], 0) + '</b></div></div>';
     var note = '<p class="note">本期入群 ' + fmt(gAdd) + ' 人次（每日累加）。好友和群是两套名单，不能相除当转化。</p>';
-    return section('private', '私域', '企微好友、社群 · 存量和本期新增分开看', kpis + health + note);
+    return section('private', '私域', '福利官好友、熟客群 · 存量和本期新增分开看', kpis + health + note);
   }
   function coupons() {
     var p = P(), cp = D[V.coupons] || [];
@@ -392,8 +457,9 @@
       '<p><b>营业额、订单数、客单价</b>：来自 DWS 财务订单表，含堂食和外卖各渠道。客单价 = 营业额 ÷ 订单数。日均按有营业的天数算，不把停业日当 0。</p>' +
       '<p><b>对比</b>：昨天对比"上周同一天"和"前一天"；近 7 天对比前 7 天；近 30 天对比前 30 天；本月对比上月 1 日到同一天（上月天数不够时改比日均）。涨跌 0.5% 以内显示为持平。</p>' +
       '<p><b>跟其他门店比</b>：按分公司、地理城市、门店类型看近 7 天日均营业额的名次和中位数。不展示对比组有多少家门店，也不展示其他门店名称。</p>' +
-      '<p><b>顾客与会员</b>：消费会员按所选周期内会员卡号去重，不是每日人数的日均或加总。会员订单占比和新老客来自同一张新老客表，统计已完成且可识别顾客的POS订单，不含外卖；人次是每日累加。"近期堂食的顾客"是最后一单在本店的当前快照。不取 RFM。</p>' +
-      '<p><b>会员 vs 非会员</b>：固定看近 30 天，不跟顶部周期走。来自顾客标识聚合表：消费频次 = 该组去重订单 ÷ 该组去重人数；客单价 = 该组营业额 ÷ 该组去重订单；人均贡献 = 该组营业额 ÷ 该组去重人数。组内营业额是可识别顾客里该组的金额，不是增量。已排除未知标识和会员饮品赠品。</p>' +
+      '<p><b>顾客与会员</b>：消费会员按所选周期内会员卡号去重，不是每日人数的日均或加总。会员订单占比和新老客来自同一张新老客表，统计已完成且可识别顾客的POS订单，不含外卖；人次是每日累加。"本店顾客状态"按最后消费门店编号与当前门店编号关联，名称只用于展示。90天观察期从该编号最早可核验的消费历史起算，不采用人工开业日期；不足90天时暂不判断流失。不取 RFM。</p>' +
+      '<p><b>会员 vs 非会员</b>：固定看近 30 天，不跟顶部周期走。来自顾客标识聚合表：消费频次 = 该组去重订单 ÷ 该组去重人数；客单价 = 该组营业额 ÷ 该组去重订单；人均贡献 = 该组营业额 ÷ 该组去重人数。组内营业额是可识别顾客里该组的金额，不是会员带来的增量。人数少时，合计不一定更高。已排除未知标识和会员饮品赠品。</p>' +
+      '<p><b>堂食复购率</b>：固定近30天，以门店编号和顾客标识去重；至少两个不同日期有有效堂食消费的顾客数 ÷ 同期堂食顾客数。同日多单只算一天，排除未知标识、非正金额订单和会员饮品赠品。同一顾客标识在周期内有会员订单则归会员组，只进入一组。本指标单独计算，不改变其他指标口径。观察起点沿用可核验消费历史，不采用人工开业日期；不足30天暂不判断。优秀门店参照为同类型运营门店复购率的第75分位，即进入前25%的门槛，会员和非会员分别计算、分别比较。每组至少50名顾客，参照门店至少10家；不足时暂不评定。是否达到门槛及相差百分点按未取整原值判断，展示精度沿用页面统一规则。</p>' +
       '<p><b>私域</b>：在联好友、在群人数、流失率、退群率是当前存量。新加好友、入群、券核销按事件日期跟周期走，合计是人次。好友和群不能相除算转化。</p>' +
       '<p><b>券</b>：按核销张数看所选周期里用得最多的券类型，跟顶部周期走。</p>' +
       '<p><b>饭点</b>：按下单整点分桶。早餐 6–10 点，午餐 10–14 点，下午茶 14–17 点，晚餐 17–21 点，宵夜 21 点到次日 6 点。条按近 7 天订单数从高到低排，最忙的在最上面。</p>' +
@@ -525,14 +591,14 @@
   function memberPeerGap(value) {
     if (num(value) == null) return '暂无法比较';
     if (Math.abs(value) < 0.0005) return '与中位数持平';
-    return (value > 0 ? '高于中位数 ' : '低于中位数 ') + fmt(Math.abs(value) * 100, 1) + ' 个百分点';
+    return (value > 0 ? '高于中位数 ' : '低于中位数 ') + pctNumber(Math.abs(value)) + ' 个百分点';
   }
   function memberPeerChange(r) {
     var change = num(r['会员对比变化']);
     if (r['会员对比状态'] !== '可参评' || r['会员对比前期状态'] !== '可参评' || change == null) return '<span class="kpisub">暂不比较前后期变化</span>';
     var flat = Math.abs(change) < 0.0005;
     return '<span class="delta ' + (flat ? 'flat' : change > 0 ? 'up' : 'down') + '">' +
-      (flat ? '持平' : (change > 0 ? '提升 ' : '下降 ') + fmt(Math.abs(change) * 100, 1) + ' 个百分点') + '<small>比前30天</small></span>';
+      (flat ? '持平' : (change > 0 ? '提升 ' : '下降 ') + pctNumber(Math.abs(change)) + ' 个百分点') + '<small>比前30天</small></span>';
   }
   function memberPeerGroups(r) {
     return [
@@ -585,14 +651,23 @@
   }
 
   /* ---------- 渲染 ---------- */
+  function storeHeading() {
+    var code = CTX && CTX['门店编号'] != null ? String(CTX['门店编号']).trim() : customerStoreCode();
+    if (!code) {
+      var contextRows = (D[V.context] || []).filter(function (r) { return !STORE || r['门店名称'] === STORE; });
+      var codes = Array.from(new Set(contextRows.map(function (r) { return r['门店编号'] == null ? '' : String(r['门店编号']).trim(); })));
+      if (codes.length === 1 && codes[0]) code = codes[0];
+    }
+    return '<div class="store-heading"><h1>' + esc(STORE || '所选门店') + '</h1>' + (code ? '<span class="store-code" aria-label="门店编号 ' + esc(code) + '">编号 ' + esc(code) + '</span>' : '') + '</div>';
+  }
   function header() {
     var today = (window.SCORECARD_FIXTURE && window.SCORECARD_FIXTURE.today) || dstr(new Date()), yesterday = addDays(today, -1), fresh = ANCHOR === yesterday;
     var sub = fresh ? '数据到昨天 ' + md(ANCHOR) + ' ' + wd(ANCHOR) : '数据到 ' + md(ANCHOR) + ' ' + wd(ANCHOR) + '，昨天的还没同步';
-    return '<header class="top"><div><h1>' + esc(STORE || '所选门店') + '</h1><p class="' + (fresh ? 'fresh' : 'stale') + '">' + esc(sub) + '</p></div><button class="iconbtn" data-action="methods" aria-label="口径说明">i</button></header>' + seg('period', ['昨天', '近7天', '近30天', '本月'], S.period);
+    return '<header class="top"><div>' + storeHeading() + '<p class="' + (fresh ? 'fresh' : 'stale') + '">' + esc(sub) + '</p></div><button class="iconbtn" data-action="methods" aria-label="口径说明">i</button></header>' + seg('period', ['昨天', '近7天', '近30天', '本月'], S.period);
   }
   function render() {
     var scroll = A.scrollTop;
-    if (!ANCHOR) { A.innerHTML = '<main class="shell"><header class="top"><div><h1>' + esc(STORE || '所选门店') + '</h1><p class="stale">近 70 天没有财务数据</p></div></header>' + empty((STORE || '所选门店') + '近 70 天没有营业数据。可换一家门店，或等财务表同步后再看。') + '</main>'; return; }
+    if (!ANCHOR) { A.innerHTML = '<main class="shell"><header class="top"><div>' + storeHeading() + '<p class="stale">近 70 天没有财务数据</p></div></header>' + empty((STORE || '所选门店') + '近 70 天没有营业数据。可换一家门店，或等财务表同步后再看。') + '</main>'; return; }
     var truncated = D.some(function (r, i) { return r.length >= viewLimit(i); });
     A.innerHTML = '<main class="shell">' + header() + (truncated ? '<div class="warn">部分数据达到取数上限，个别数字可能不完整。</div>' : '') +
       scorecard() + trend() + peer() + channels() + customers() + memberPeer() + memberVs() + privateDomain() + coupons() + hours() + products() +

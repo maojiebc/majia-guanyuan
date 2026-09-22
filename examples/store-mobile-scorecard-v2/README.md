@@ -11,6 +11,14 @@ node examples/store-mobile-scorecard-v2/test.cjs
 
 <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/examples/store-mobile-scorecard-v2/preview.png" alt="V2券转化明细，合成数据" width="390"/>
 
+## 2026-09-23 同步
+
+本次对齐当前线上移动版的前端与SQL口径。门店名称旁显示编号标签，随选店变化；长店名自动换行，编号缺失或归属不唯一时隐藏。保留字符串编号的前导零。
+
+顾客状态按门店编号归属，90天观察期不足时不判断流失。会员和非会员新增固定近30天的堂食跨日复购率，以及同店型前25%参照；观察期不足、每组顾客不足50名或参照门店不足10家时暂不评定。城北店合成样本包含观察期不足场景。百分比以整数为主，小于1%的差异保留显示。
+
+客单价翻倍的根因与上游修复见 [订单关联去重](../../references/order-join-cardinality.md)。公开包保持合成数据，生产门店特例已替换为明确的示例占位。
+
 ## 可以直接体验
 
 顶部先选分公司，再选门店；同分公司按固定近7天总营业额降序排列。示例城南店演示会员集中高额订单与堂食汤底缺失，示例镇中店没有异常警示，示例北区的城北店演示无券核销与会员识别覆盖不足。
@@ -30,7 +38,7 @@ node examples/store-mobile-scorecard-v2/test.cjs
 | `scorecard.js` / `scorecard.css` | 当前前端交互与统一字号间距；离线筛选器适配在 JS 末尾 |
 | `build.mjs` | 固定种子生成三个门店的合成聚合数据，封装单文件 HTML |
 | `test.cjs` | 叠券去重、折扣加权、未知金额、跨周期隔离与异常边界检查 |
-| `etl/pipeline.json` | 10类逻辑输入、26个计算步骤与19个输出的依赖关系 |
+| `etl/pipeline.json` | 10类逻辑输入、28个计算步骤与19个输出的依赖关系 |
 | `etl/*.sql` | Spark SQL 计算参考，`input1` 等顺序由 pipeline 声明 |
 | [完整实践说明](../../references/part-c-store-mobile-scorecard-v2.md) | 数据口径、性能取舍、移动规范与发布验证 |
 | [券关联排查](../../references/coupon-order-link-diagnosis.md) | “已核销但无关联订单”的分层追溯方式 |

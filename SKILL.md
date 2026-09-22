@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、v7 发布兼容、移动端 phoneLayout、门店手机成绩单、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、门店手机成绩单、换店滤空、phoneLayout、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
 license: MIT
 metadata:
-  version: "3.2.1"
+  version: "3.2.2"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanmetric
 ---
 
-# 观远 BI · 马甲实战版（V3.2.1）
+# 观远 BI · 马甲实战版（V3.2.2）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -51,11 +51,11 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.2.1（2026-09-20）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.2.2（2026-09-23）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> 🆕 **V3.2.1**（2026-09-20）：对齐 guancli 1.0.62 与 guanskill 0.1.39；补齐批量失败判定、原始值与展示值一次返回、字段校验、下游检查及工作流调度兼容。详见 [兼容说明](references/official-cli-compatibility.md)；完整历史见 [CHANGELOG.md](CHANGELOG.md)。
+> 🆕 **V3.2.2**（2026-09-23）：同步当前门店移动看板：门店编号标签、按编号归属的顾客状态、观察期保护、堂食跨日复购与同店型前25%参照；补充订单 JOIN 重复导致金额翻倍的排查。详见 [移动看板 V2](examples/store-mobile-scorecard-v2/README.md)；完整历史见 [CHANGELOG.md](CHANGELOG.md)。
 
 ---
 
@@ -84,7 +84,7 @@ metadata:
 | **`guanmetric`** | 0.1.18 | 指标定义与管理 | 指标建/改/删、主题/目录、公共维度、指标树、查询加速、业务字典、Excel 模板及 `--check-only` 预检；批量上下线用 `batch online/offline`，先 dry-run、按依赖顺序逐项处理。失败不回滚已成功项，blocked 先核对影响再确认；上线请求获接受后仍须回读审批/发布状态。复合指标只引用原子或复合指标；指标查数仍走 guancli。 |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
-| **`majia-guanyuan`**（本 skill） | **3.2.1** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（19 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
+| **`majia-guanyuan`**（本 skill） | **3.2.2** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（19 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
 **一句话路由**：标准查数 / 洞察 / Dashboard Agent → `guancli`；标准建卡/发布/截图 / `live` 实时工程 → `guanvis`；标准 ETL → `guanetl`；数据流 → `guanwf`；数据源/数据集 → `guands`；指标建/改/删 + 指标主题/目录 + 公共维度 + **指标树 / 查询加速** → `guanmetric`。**任何一个遇到官方 DSL/命令够不着的字段、报错、状态机、反向工程、业务口径**——回到本 skill 对应 Part。
 
@@ -1044,9 +1044,9 @@ new GDPlugin().init(renderChart);
 
 > 顶部 🆕 callout 是最新版摘要；完整逐版记录见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。以下只留最近三版一句话索引：
 
+- **V3.2.2**（2026-09-23）同步移动看板编号标签、顾客归属与复购规则，更新脱敏前端和28步SQL参考。
 - **V3.2.1**（2026-09-20）对齐 guanskill 0.1.39 / guancli 1.0.62，修正指标批量结果与工作流调度说明。
 - **V3.2.0**（2026-09-15）手机成绩单 V2、19输出专供ETL、异常提示与券转化明细，全部示例为合成数据。
-- **V3.1.12**（2026-09-14）门店手机成绩单经验 + 脱敏离线 HTML 样本；官方全家桶版本仍按 3.1.11。
 ## 👤 作者 / 联系
 
 **马甲（@maojiebc）** · 超级马甲

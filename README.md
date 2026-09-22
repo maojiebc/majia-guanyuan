@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.2.1-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.2.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -387,7 +387,7 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.2.1** (2026-09-20) — 跟进 guancli 1.0.62 / guanskill 0.1.39。批量取数可明确失败并同时返回计算值和展示值；错误字段不再静默忽略；修正工作流调度参数，核对官方 Skill 内容。详见 [兼容说明](references/official-cli-compatibility.md)。
+**最新：V3.2.2** (2026-09-23) — 同步当前移动看板的门店编号标签、顾客编号归属、观察期和堂食复购规则，更新脱敏源码、离线示例及28步SQL参考。补充订单关联重复导致金额翻倍的修复经验。详见 [移动看板 V2](examples/store-mobile-scorecard-v2/README.md)。
 
 **V3.2.0** (2026-09-15) — 手机成绩单 V2：专供 ETL、按近7天营业额选店、统一手机排版、冻结明细、确定性异常提示与券转化。新增 [可离线操作的V2案例](examples/store-mobile-scorecard-v2/README.md)、[计算与交互说明](references/part-c-store-mobile-scorecard-v2.md) 和 [券关联排查](references/coupon-order-link-diagnosis.md)。所有展示数据为合成样本，官方 CLI 版本不变。
 

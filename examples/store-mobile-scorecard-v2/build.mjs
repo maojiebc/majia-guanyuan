@@ -295,8 +295,19 @@ function buildStore(name, spec) {
     { 是否会员: '非会员', 消费人数: nonPeople, 订单数: nonOrders, 营收贡献: Math.round(nonPeople * spec.nonSpend), 消费频次: Number((nonOrders / nonPeople).toFixed(4)) },
   ];
 
+  const code = name === STORE_A ? 'DEMO001' : name === STORE_B ? 'DEMO002' : 'DEMO003';
+  [newold, member, member7, member30, memberMonth, status, context].forEach(rs => rs.forEach(r => { r['门店编号'] = code; }));
+  status.forEach(r => { r['顾客观察开始日'] = spec.noCoupons ? addDays(ANCHOR, -18) : addDays(ANCHOR, -180); r['统计截止日'] = ANCHOR; });
   const ctx=context[0]; ctx['统计截止日']=ANCHOR;
   membase.forEach(r=>r['统计截止日']=ANCHOR);
+  Object.assign(ctx, {'堂食复购开始日':addDays(ANCHOR,-29), '堂食复购截止日':ANCHOR, '堂食复购观察天数':spec.noCoupons?19:181});
+  for (const [label, basePeople, rate, target] of [['会员',memPeople,.32,.35],['非会员',nonPeople,.19,.18]]) {
+    const people = label === '会员' && spec.anomaly ? 40 : basePeople;
+    const repeat = Math.round(people*rate);
+    Object.assign(ctx, {[label+'堂食顾客数']:people, [label+'堂食复购顾客数']:repeat,
+      [label+'堂食复购率']:spec.noCoupons?null:repeat/people, [label+'堂食复购参评状态']:spec.noCoupons?'观察期不足':people<50?'样本不足':'可对比',
+      ['同店型'+label+'复购门店数']:24, ['同店型'+label+'复购中位']:target-.08, ['同店型'+label+'复购前25门槛']:target});
+  }
   // 模拟集中高额订单影响小体量会员群体；不照搬真实异常的金额或笔数。
   if (spec.anomaly) {
     Object.assign(membase[0],{消费人数:40,订单数:120,营收贡献:7200,消费频次:3});
@@ -320,15 +331,15 @@ function buildStore(name, spec) {
   const named = {
     fin: toCols(fin, ['订单日期', '门店名称', '取餐方式', '渠道名称', '营业额', '订单数', '同步时间']),
     hours: toCols(hours, ['订单日期', '下单时段', '取餐方式', '订单数', '营业额']),
-    newold: toCols(newold, ['订单日期', '顾客属性', '是否会员', '顾客人次', '订单数', '营业额']),
-    member: toCols(member, ['订单日期', '消费会员数']),
-    member7: toCols(member7, ['消费会员_近7天']),
-    member30: toCols(member30, ['消费会员_近30天']),
-    memberMonth: toCols(memberMonth, ['消费会员_本月']),
+    newold: toCols(newold, ['门店编号', '订单日期', '顾客属性', '是否会员', '顾客人次', '订单数', '营业额']),
+    member: toCols(member, ['门店编号', '订单日期', '消费会员数']),
+    member7: toCols(member7, ['门店编号', '消费会员_近7天']),
+    member30: toCols(member30, ['门店编号', '消费会员_近30天']),
+    memberMonth: toCols(memberMonth, ['门店编号', '消费会员_本月']),
     membase: toCols(membase, ['是否会员', '消费人数', '订单数', '营收贡献', '消费频次', '统计截止日']),
     products: toCols(products, ['产品', '订单数']),
     soup: toCols(soup, ['口味', '取餐方式', '订单数']),
-    status: toCols(status, ['顾客状态', '是否会员', '顾客数']),
+    status: toCols(status, ['门店编号', '顾客观察开始日', '统计截止日', '顾客状态', '是否会员', '顾客数']),
     friends: toCols(friends, ['在联好友', '流失率']),
     groups: toCols(groups, ['在群人数', '退群率']),
     frienddaily: toCols(frienddaily, ['添加日期', '添加好友']),

@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.2.1-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.2.2-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -390,7 +390,7 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.2.1** (2026-09-20) — Align with guancli 1.0.62 / guanskill 0.1.39: batch failure exit codes, raw and formatted values in one query, strict field validation, downstream checks and corrected workflow scheduling. See [compatibility notes](references/official-cli-compatibility.md).
+**Latest: V3.2.2** (2026-09-23) — Sync the current mobile scorecard: store-code badges, code-based customer identity, observation windows, cross-day dine-in repurchase and top-quartile benchmarks. Includes sanitized source, an offline demo, 28 SQL steps and a guide to diagnosing duplicated order revenue. See [V2 example](examples/store-mobile-scorecard-v2/README.md).
 
 **V3.2.0** (2026-09-15) — Mobile scorecard V2: dedicated ETL, revenue-ranked store filters, consistent typography, frozen detail tables, deterministic alerts and coupon conversion details. [Offline V2 example](examples/store-mobile-scorecard-v2/README.md), [implementation guide](references/part-c-store-mobile-scorecard-v2.md), and [coupon linkage diagnosis](references/coupon-order-link-diagnosis.md). All displayed data is synthetic; official CLI pins are unchanged.
 

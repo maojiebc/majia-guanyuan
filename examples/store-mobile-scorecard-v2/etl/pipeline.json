@@ -15,6 +15,61 @@
   ],
   "steps": [
     {
+      "name": "identified_daily",
+      "sql": "identified_daily.sql",
+      "inputs": {
+        "input1": "identified_orders",
+        "input2": "store_master"
+      },
+      "output": true
+    },
+    {
+      "name": "customer_status",
+      "sql": "customer_status.sql",
+      "inputs": {
+        "input1": "customer_status_source",
+        "input2": "store_master",
+        "input3": "finance_source"
+      },
+      "output": true
+    },
+    {
+      "name": "member_daily",
+      "sql": "member_daily.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master"
+      },
+      "output": true
+    },
+    {
+      "name": "member_7d",
+      "sql": "member_7d.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master"
+      },
+      "output": true
+    },
+    {
+      "name": "member_30d",
+      "sql": "member_30d.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master"
+      },
+      "output": true
+    },
+    {
+      "name": "member_month",
+      "sql": "member_month.sql",
+      "inputs": {
+        "input1": "orders",
+        "input2": "store_master"
+      },
+      "output": true
+    },
+    {
       "name": "active_stores",
       "sql": "active_stores.sql",
       "inputs": {
@@ -34,19 +89,20 @@
       "output": false
     },
     {
+      "name": "member_peer_eligibility",
+      "sql": "member_peer_eligibility.sql",
+      "inputs": {
+        "input1": "identified_orders",
+        "input2": "finance_source",
+        "input3": "store_master"
+      },
+      "output": false
+    },
+    {
       "name": "finance_daily",
       "sql": "finance_daily.sql",
       "inputs": {
         "input1": "finance_source",
-        "input2": "active_stores"
-      },
-      "output": true
-    },
-    {
-      "name": "identified_daily",
-      "sql": "identified_daily.sql",
-      "inputs": {
-        "input1": "identified_orders",
         "input2": "active_stores"
       },
       "output": true
@@ -74,15 +130,6 @@
       "sql": "hours_daily.sql",
       "inputs": {
         "input1": "orders",
-        "input2": "active_stores"
-      },
-      "output": true
-    },
-    {
-      "name": "customer_status",
-      "sql": "customer_status.sql",
-      "inputs": {
-        "input1": "customer_status_source",
         "input2": "active_stores"
       },
       "output": true
@@ -136,15 +183,6 @@
       "output": true
     },
     {
-      "name": "member_daily",
-      "sql": "member_daily.sql",
-      "inputs": {
-        "input1": "orders",
-        "input2": "active_stores"
-      },
-      "output": true
-    },
-    {
       "name": "dormant_customers",
       "sql": "dormant_customers.sql",
       "inputs": {
@@ -158,7 +196,8 @@
       "sql": "revenue_peers.sql",
       "inputs": {
         "input1": "finance_source",
-        "input2": "active_stores"
+        "input2": "active_stores",
+        "input3": "store_master"
       },
       "output": true
     },
@@ -172,43 +211,10 @@
       "output": true
     },
     {
-      "name": "member_7d",
-      "sql": "member_7d.sql",
+      "name": "member_peer_ranking",
+      "sql": "member_peer_ranking.sql",
       "inputs": {
-        "input1": "orders",
-        "input2": "store_master",
-        "input3": "active_stores"
-      },
-      "output": true
-    },
-    {
-      "name": "member_30d",
-      "sql": "member_30d.sql",
-      "inputs": {
-        "input1": "orders",
-        "input2": "store_master",
-        "input3": "active_stores"
-      },
-      "output": true
-    },
-    {
-      "name": "member_month",
-      "sql": "member_month.sql",
-      "inputs": {
-        "input1": "orders",
-        "input2": "store_master",
-        "input3": "active_stores"
-      },
-      "output": true
-    },
-    {
-      "name": "member_peer_eligibility",
-      "sql": "member_peer_eligibility.sql",
-      "inputs": {
-        "input1": "identified_orders",
-        "input2": "finance_source",
-        "input3": "store_master",
-        "input4": "active_stores"
+        "input1": "member_peer_eligibility"
       },
       "output": false
     },
@@ -222,10 +228,12 @@
       "output": false
     },
     {
-      "name": "member_peer_ranking",
-      "sql": "member_peer_ranking.sql",
+      "name": "dinein_repurchase",
+      "sql": "dinein_repurchase.sql",
       "inputs": {
-        "input1": "member_peer_eligibility"
+        "input1": "orders",
+        "input2": "store_master",
+        "input3": "customer_status"
       },
       "output": false
     },
@@ -235,6 +243,14 @@
       "inputs": {
         "input1": "orders",
         "input2": "member_comparison"
+      },
+      "output": false
+    },
+    {
+      "name": "repurchase_peers",
+      "sql": "repurchase_peers.sql",
+      "inputs": {
+        "input1": "dinein_repurchase"
       },
       "output": false
     },
@@ -255,7 +271,8 @@
         "input3": "store_ordering",
         "input4": "member_peer_ranking",
         "input5": "member_anomaly_evidence",
-        "input6": "soup_coverage"
+        "input6": "soup_coverage",
+        "input7": "repurchase_peers"
       },
       "output": true
     }
