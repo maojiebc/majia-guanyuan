@@ -7,6 +7,21 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.2.3] — 2026-09-28
+
+### Changed
+
+- 对齐 guanskill 0.1.41：guancli 1.0.63、guanvis 0.1.50、guanetl 0.1.38、guanmetric 0.1.19；guanwf 0.1.836 与 guands 0.1.35 不变。
+- 单条指标查询先检查 `--explain-requests -f json` 请求计划，说明与 dry-run、raw、批量查询的区别及筛选/排序/高级计算组合边界。
+- 标准模板创建指标路由官方 Flow，保留状态、逐项回读；结果未知先 reconcile，审批后 verify，不盲目重复创建。编辑使用对应类型专用命令，保留取数字段。
+- 补充 ETL 输入按数据集实际类型导出/校验，以及页面 init 默认保留已有 schema.js 的行为。
+- 刷新兼容基线、双语 README 最近三版、Skill 路由、隐藏 Marketplace 元数据和架构图；保留 3.2.2 已提交的脱敏案例更新。
+
+### Verification and scope
+
+- 核对 npm、官方 CHANGELOG 与 Skill、相关命令帮助；七个官方 Skill 逐文件一致性；本地 schema.js 保留检查；格式、版本与严格安全审计。
+- 没有执行生产 BI 取数、创建、编辑或调度。Flow 说明来自官方契约，不等同本租户验证；各商店提交与公开状态分别回读。
+
 ## [3.2.2] — 2026-09-23
 
 ### Changed

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-20",
-  "skillVersion": "3.2.1",
+  "reviewedAt": "2026-09-28",
+  "skillVersion": "3.2.3",
   "packages": {
-    "@guandata/guanskill": "0.1.39",
-    "@guandata/guancli": "1.0.62",
-    "@guandata/guanvis": "0.1.49",
-    "@guandata/guanetl": "0.1.37",
+    "@guandata/guanskill": "0.1.41",
+    "@guandata/guancli": "1.0.63",
+    "@guandata/guanvis": "0.1.50",
+    "@guandata/guanetl": "0.1.38",
     "@guandata/guanwf": "0.1.836",
     "@guandata/guands": "0.1.35",
-    "@guandata/guanmetric": "0.1.18"
+    "@guandata/guanmetric": "0.1.19"
   }
 }
