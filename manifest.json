@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/skill-manifest",
   "name": "majia-guanyuan",
   "displayName": "观远 BI · 马甲实战版",
-  "version": "3.2.3",
-  "description": "观远 BI · 马甲实战版：标准查询、指标批量取数、ETL、数据集、表单和看板操作使用官方六组件；补充整库治理、业务口径、引擎报错、自定义图表、v7 发布与 SuperApp 兼容经验。官方基线 guanskill 0.1.41；各组件版本和迁移边界见 references/official-cli-compatibility.md。",
+  "version": "3.3.0",
+  "description": "观远 BI · 马甲实战版：标准查询、指标批量取数、ETL、数据集、表单和看板操作使用官方六组件；补充看板口径档案与只读逐格验收、整库治理、业务口径、引擎报错、自定义图表、v7 发布与 SuperApp 兼容经验。官方基线 guanskill 0.1.41；各组件版本和迁移边界见 references/official-cli-compatibility.md。",
   "license": "MIT",
   "author": "maojiebc",
   "authorDisplayName": "超级马甲",
@@ -85,6 +85,16 @@
       {
         "name": "OpenAI Codex",
         "role": "Contributed ExecPlan specification used in B-17.11"
+      }
+    ],
+    "referenceProjects": [
+      {
+        "name": "JeremyWXL/guanbi-agent-builder",
+        "author": "Jeremy",
+        "url": "https://github.com/JeremyWXL/guanbi-agent-builder",
+        "license": "MIT",
+        "referenceVersion": "4.8.1",
+        "role": "Dashboard definitions, scoped sampling and regression evidence workflow; independently reimplemented after real read-only validation."
       }
     ]
   }

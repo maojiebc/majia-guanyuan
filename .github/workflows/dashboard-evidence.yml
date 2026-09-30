@@ -1,0 +1,28 @@
+name: Dashboard evidence regressions
+on:
+  push:
+    paths:
+      - 'scripts/dashboard_evidence.py'
+      - 'tests/test_dashboard_evidence.py'
+      - 'examples/dashboard-evidence/**'
+      - '.github/workflows/dashboard-evidence.yml'
+  pull_request:
+    paths:
+      - 'scripts/dashboard_evidence.py'
+      - 'tests/test_dashboard_evidence.py'
+      - 'examples/dashboard-evidence/**'
+      - '.github/workflows/dashboard-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Synthetic regressions
+        run: python3 -m unittest discover -s tests -p 'test_dashboard_evidence.py'
+      - name: Offline evidence example
+        run: python3 examples/dashboard-evidence/offline_demo.py --out "${{ runner.temp }}/dashboard-evidence-demo"

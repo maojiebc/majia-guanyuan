@@ -1,9 +1,9 @@
 ---
 name: majia-guanyuan
-description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、v7 发布兼容、移动端 phoneLayout、门店手机成绩单、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、门店手机成绩单、换店滤空、phoneLayout、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
+description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、看板口径档案与只读逐格验收、v7 发布兼容、移动端 phoneLayout、门店手机成绩单、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：看板口径档案、看板答案对账、观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、门店手机成绩单、换店滤空、phoneLayout、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
 license: MIT
 metadata:
-  version: "3.2.3"
+  version: "3.3.0"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanmetric
 ---
 
-# 观远 BI · 马甲实战版（V3.2.3）
+# 观远 BI · 马甲实战版（V3.3.0）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -37,6 +37,7 @@ metadata:
 | 你想做 | 走 |
 |---|---|
 | 查数据、建卡、出报表、标准 ETL / 数据集 CRUD / 指标写 / 洞察问答 | **🧭 路由层** → 交给官方全家桶（`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`），见路由总表 |
+| 给已有看板接 AI / 固化指标口径 / 核对答案与页面筛选 / 检测公式或隐藏筛选变化 | [看板口径档案与只读验收](references/dashboard-evidence.md)，用 `scripts/dashboard_evidence.py` 管理本地定义、原始取数与逐格断言 |
 | 扫整库 ETL 治理 / 新建/修改/删除 ETL / 字段使用度审计 / 修复 ETL 报错 | **Part B：ETL 治理与写入** |
 | 把整条 SmartETL 链改写成 SQL 版 + 页面副本验收 + 差异定位 + 空快照阻塞 | **Part B-17：全链路重写方法论**（拆到 [references/part-b17-fullchain-rewrite.md](references/part-b17-fullchain-rewrite.md)） |
 | 30+ 张表批量迁移 / 跨多日工程 / 复杂重构需要项目化追踪 | **B-17.11 ExecPlan 工作法**（同上文件 §11） |
@@ -51,11 +52,11 @@ metadata:
 | 不知道用哪个 | 看 Part B "推荐工作流" 章节，或直接读各 Part 章节末尾的"实战 ID 速查" |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.2.3（2026-09-28）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.3.0（2026-09-30）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> 🆕 **V3.2.3**（2026-09-28）：对齐 guanskill 0.1.41 / guancli 1.0.63；单指标先检查请求计划，指标批量创建使用官方 Flow 并保留恢复状态，补充 ETL 输入类型修复和页面初始化保护。详见 [兼容说明](references/official-cli-compatibility.md)；完整历史见 [CHANGELOG.md](CHANGELOG.md)。
+> 🆕 **V3.3.0**（2026-09-30）：新增看板口径档案、继承页面默认筛选的原始取数、逐格对账与公式/筛选变化检测；两张真实看板只读验证，16 项正向断言通过、5 项错配断言被拒绝。参考并致谢 Jeremy 的 guanbi-agent-builder。见 [操作说明](references/dashboard-evidence.md) 与 [验证边界](docs/dashboard-evidence-validation.md)；官方基线保持 guancli 1.0.63 / guanskill 0.1.41。
 
 ---
 
@@ -93,6 +94,8 @@ metadata:
 **当前执行边界**：单条指标取数先以相同参数检查 `--explain-requests -f json` 的请求计划；计划不是取数成功证明。同轮独立基础指标走批量查询，逐项检查失败；用于计算的单指标结果显式取原始数值。编辑既有资源须保留 ID、权限、调度与数据，不能用删除重建代替。新资源先核对环境与实际目录路径。常规表单结构创建/编辑优先走 `guands form`；历史 API 片段仅在具体兼容问题已复现时使用。完整迁移说明见 [官方 CLI 兼容说明](references/official-cli-compatibility.md)。
 
 **为什么还要本 skill**：整库治理的取舍、业务口径、BI 引擎报错、历史 v7/自定义图表兼容、SuperApp 的 LLM 中转问题与 ADS 架构判断，仍需结合实际业务和目标环境处理。先走官方正常路径，失败后再按本 skill 的适用条件定位；旧记录不代表最新版仍有同一个问题。
+
+**看板口径档案与验收（V3.3.0）**：给已有看板接 AI 或核对答案时，读 [dashboard-evidence.md](references/dashboard-evidence.md)。先明确 profile、页面和所选卡片；脚本保留公式、别名、时间宏和联动定义，继承页面默认筛选取原始值，再按具体数据行及字段验证。数字出现在别处不能通过；空结果、失败或疑似截断不能通过。定义变化要重新确认；档案始终为 draft。CUSTOM 前端另按 Part C 验收，不能拿空 preview 代替。工具仅调用官方只读命令，生产证据留在本地，不上传公开仓库。参考 Jeremy 的 guanbi-agent-builder，见 [来源与致谢](ATTRIBUTIONS.md)。
 
 **降歧义**：6 个官方 skill + 本 skill 同时启用时，只读场景（查 dsId/ETL）可能在 `guancli` 与本 skill 间双触发。本 skill **不与官方抢只读**——遇到纯查询/取数，直接路由 `guancli`，别自己拼 API。
 
@@ -1000,6 +1003,7 @@ new GDPlugin().init(renderChart);
 
 | 文件 | 何时读 | 行数 |
 |---|---|---|
+| [dashboard-evidence.md](references/dashboard-evidence.md) | 看板接 AI、口径档案、原始值及页面筛选对账、逐格断言与定义变化复查；脚本 `dashboard_evidence.py` | ~100 |
 | [part-b-payload.md](references/part-b-payload.md) | 写新 ETL payload / 复用 4 阶段脚本时 | ~175 |
 | [part-b-errors.md](references/part-b-errors.md) | execute 失败、对照 `task error` 找修复方案时 | ~150 |
 | [part-b-sdk.md](references/part-b-sdk.md) | 30+ 表批量改造、写 `transformV2ToV3` 时 | ~60 |
@@ -1044,9 +1048,9 @@ new GDPlugin().init(renderChart);
 
 > 顶部 🆕 callout 是最新版摘要；完整逐版记录见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。以下只留最近三版一句话索引：
 
+- **V3.3.0**（2026-09-30）新增看板口径档案、页面默认筛选原始取数、逐格对账及变化检测；真实只读验证与来源致谢。
 - **V3.2.3**（2026-09-28）对齐 guanskill 0.1.41；指标请求计划、创建恢复与编辑保护、ETL 输入类型和页面初始化保护。
 - **V3.2.2**（2026-09-23）同步移动看板编号标签、顾客归属与复购规则，更新脱敏前端和28步SQL参考。
-- **V3.2.1**（2026-09-20）对齐 guanskill 0.1.39 / guancli 1.0.62，修正指标批量结果与工作流调度说明。
 ## 👤 作者 / 联系
 
 **马甲（@maojiebc）** · 超级马甲

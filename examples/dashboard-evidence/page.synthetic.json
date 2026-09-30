@@ -1,0 +1,32 @@
+{
+  "pgId": "page-demo",
+  "name": "合成门店渠道日报",
+  "meta": {"linkages": {"selector-demo": ["card-demo"]}},
+  "settings": {},
+  "cards": [
+    {
+      "cdId": "selector-demo",
+      "name": "门店",
+      "cdType": "SELECTOR",
+      "content": {"defaultValue": {"valueType": "FIXED_VALUE", "value": ["演示一店"]}}
+    },
+    {
+      "cdId": "card-demo",
+      "name": "渠道日报",
+      "cdType": "CHART",
+      "content": {
+        "chartType": "DATA_GRID",
+        "dsId": "dataset-demo",
+        "meta": {"chartMain": {"zoneData": {
+          "row": [
+            {"name": "订单日期", "fdId": "date-demo"},
+            {"name": "门店名称", "fdId": "store-demo"},
+            {"name": "渠道名称", "fdId": "channel-demo"}
+          ],
+          "metric": [{"name": "营业额", "fdId": "revenue-demo", "aggrType": "SUM"}],
+          "filters": []
+        }}}
+      }
+    }
+  ]
+}

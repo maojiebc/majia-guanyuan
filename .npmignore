@@ -11,6 +11,7 @@ config.json
 .cache/
 data/columns_cache/
 data/
+/dashboard-evidence/
 
 # Git / OS
 .git/

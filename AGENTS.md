@@ -13,6 +13,7 @@ A Claude Code Skill for **Guandata BI (观远 BI)** — a tool-agnostic agent sk
 
 Current structure — a router layer plus the hard-bone Parts:
 - **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`)
+- **Dashboard evidence** — local draft definitions, official read-only scoped card samples, row/field assertions and definition-change detection; see `references/dashboard-evidence.md`.
 - **Part B** — ETL governance, write, delete (incl. SmartETL full-chain rewrite methodology and ExecPlan workflow)
 - **Part C** — Custom chart HTML/CSS/JS injection & debugging on existing pages
 - **Part C-12** — HTML application-style dashboard generation (descriptor patch linking selector → custom-chart dataView)
@@ -40,7 +41,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.2.3"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.3.0"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
@@ -70,9 +71,12 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       install.js          ← npm CLI: install/list/uninstall to 4 agent tools.
     scripts/
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
+      dashboard_evidence.py   ← Local definitions/sample/verify/diff, official read-only CLI calls only.
     templates/            ← html-dashboard template pack (Part C-12).
     examples/store-mobile-scorecard-v2/ ← Current synthetic mobile demo and dedicated SQL reference.
     examples/store-mobile-scorecard/ ← Offline desensitized mobile scorecard sample (V1).
+    examples/dashboard-evidence/ ← Synthetic evidence workflow; no live BI connection.
+    tests/test_dashboard_evidence.py ← Regressions for scoped sampling and cell-bound assertions.
     docs/                 ← Supplementary docs.
     references/official-cli-compatibility.md ← Current official versions and migration boundaries.
     references/            ← Progressive-disclosure playbooks (13 .md files + restaurant-bi-formulas/ pointer):
