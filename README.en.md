@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.2.3-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.3.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -17,6 +17,8 @@
 [![BI](https://img.shields.io/badge/Guandata-BI_6.x_/_7.x-purple)](https://www.guandata.com/)
 
 **[中文 README](README.md)** · English ↓
+
+**New dashboard evidence tools:** capture local draft definitions, read raw values with resolved page defaults, verify a named field in a specific row, and recheck changed formulas or filters. Read-only comparison on two real dashboards passed 16 positive assertions and rejected 5 deliberately wrong claims. See the [guide](references/dashboard-evidence.md) and [verification scope](docs/dashboard-evidence-validation.md). Thanks to [JeremyWXL/guanbi-agent-builder](https://github.com/JeremyWXL/guanbi-agent-builder) for the workflow inspiration; [source and MIT notice](ATTRIBUTIONS.md).
 
 **Latest mobile example:** [V2 offline demo and source](examples/store-mobile-scorecard-v2/README.md) · [ETL and metric definitions](references/part-c-store-mobile-scorecard-v2.md).
 
@@ -34,12 +36,13 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.2.3 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.63 query / guanvis 0.1.50 card-build & publish & screenshot & live / guanetl 0.1.38 ETL / guanwf 0.1.836 dataflow / guands 0.1.35 data sources / guanmetric 0.1.19 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.3.0 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.63 query / guanvis 0.1.50 card-build & publish & screenshot & live / guanetl 0.1.38 ETL / guanwf 0.1.836 dataflow / guands 0.1.35 data sources / guanmetric 0.1.19 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
 |---|---|---|
 | 🧭 **Routing layer** | Query data, build cards, reports, standard ETL / dataset CRUD | The official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`) |
+| **Dashboard evidence** | Draft definitions, page-scoped raw samples, exact row/field assertions and change review | [dashboard-evidence.md](references/dashboard-evidence.md) |
 | 🅱️ **Part B** | Whole-warehouse ETL governance + engine error manual + dual-source field audit | "Scan ETLs and tell me what to delete" / "Why does direct-save fail?" / "Is this field cut safe?" |
 | 🅱️ **B-17** | Full-chain rewrite methodology | "Rewrite this SmartETL chain as pure SQL" / "Replica page verification / card-level comparison" |
 | 🆎 **Part C / C-12** | Custom chart injection debugging + HTML application dashboard + store mobile scorecard | "payload_json parsing fails" / "fixed card misaligned" / "more advanced / application dashboard" / "franchise-owner phone scorecard" |
@@ -390,11 +393,12 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.2.3** (2026-09-28) — Official compatibility patch: query request plans, metric creation recovery and edit protection, actual ETL input types, and preservation of existing page schema files.
+**Latest: V3.3.0** (2026-09-30) — Dashboard definitions, page-default raw samples, cell-bound assertions and change detection; includes bounded real read-only evidence and upstream credit. See the [guide](references/dashboard-evidence.md).
+
+**V3.2.3** (2026-09-28) — Official compatibility patch: query request plans, metric creation recovery and edit protection, actual ETL input types, and preservation of existing page schema files.
 
 **V3.2.2** (2026-09-23) — Sync the current mobile scorecard: store-code badges, code-based customer identity, observation windows, cross-day dine-in repurchase and top-quartile benchmarks. Includes sanitized source, an offline demo, 28 SQL steps and a guide to diagnosing duplicated order revenue. See [V2 example](examples/store-mobile-scorecard-v2/README.md).
 
-**V3.2.1** (2026-09-20) — Aligned with guancli 1.0.62, batch failure reporting, field validation and workflow scheduling compatibility.
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).
 

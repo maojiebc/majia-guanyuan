@@ -7,6 +7,25 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.3.0] — 2026-09-30
+
+### Added
+
+- 本地看板口径档案、所选卡片原始取数、逐格断言与定义变化检测：`scripts/dashboard_evidence.py` 的 snapshot/sample/verify/diff。仅调用官方 `page get` 与 `card preview`，认证使用明确的既有 profile。
+- 原始值、明确文件路径、页面默认筛选及实际解析日志；保留别名、去重聚合、高级计算、隐藏时间宏与选择器级联。失败、空值、缺文件、疑似截断及定义漂移不能通过验收。
+- 按具体数据行、输出字段、取数范围和显式容差对账；CUSTOM 前端保留定义待人工核对，不当作空成功。合成离线示例、回归测试及 GitHub Actions。
+- 按需加载的操作说明与脱敏验证记录。感谢 JeremyWXL/guanbi-agent-builder 提供看板学习、档案及回归验收思路，记录固定参考版本、重新实现范围，保留上游 MIT 原文。
+
+### Changed
+
+- Skill 路由、双语 README、版本与隐藏 Marketplace 元数据、架构图、安装文件清单增加新能力。官方兼容基线保持 guanskill 0.1.41 / guancli 1.0.63。
+
+### Verification and scope
+
+- 两张真实看板只读提取 34 张卡片定义，9 张所选数据卡取数成功；16 项独立参照断言通过，5 项故意错配被拒绝；CUSTOM 与行数上限控制被拦住。业务确认仍为 draft。
+- 标准库回归、合成示例与发布脱敏检查；原始配置、门店、生产数值及日志只留本地。
+- 不新建或删改正式 BI 资源；没有验证前端渲染、任意自然语言问题、上游 ETL、指标平台或 SQL 直查。此次发布范围为 GitHub。
+
 ## [3.2.3] — 2026-09-28
 
 ### Changed

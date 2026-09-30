@@ -65,6 +65,9 @@ const FILES_TO_COPY = [
   'config.example.json',
   'scripts',
   'references',
+  'examples/dashboard-evidence',
+  'docs/dashboard-evidence-validation.md',
+  'tests/test_dashboard_evidence.py',
 ];
 
 // ---------- helpers ----------
@@ -91,10 +94,11 @@ function copyRecursive(src, dest) {
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     for (const entry of fs.readdirSync(src)) {
       // 排除运行时缓存与本地 config（防止把别人的 dev 状态发出去）
-      if (entry === '.cache' || entry === 'columns_cache' || entry === 'config.json' || entry === '.DS_Store' || entry === 'node_modules') continue;
+      if (entry === '.cache' || entry === '__pycache__' || entry === 'columns_cache' || entry === 'config.json' || entry === '.DS_Store' || entry === 'node_modules') continue;
       copyRecursive(path.join(src, entry), path.join(dest, entry));
     }
   } else {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.copyFileSync(src, dest);
   }
 }
@@ -261,7 +265,7 @@ function cmdInstall(args) {
 
   if (installed > 0) {
     log(`\nNext steps (V3 — the official family is the prerequisite):`);
-    log(`  npm install -g @guandata/guanskill   # 前置：官方观远全家桶 (guancli/guanvis/guanetl/guanwf/guands/guanadmin)`);
+    log(`  npm install -g @guandata/guanskill   # 前置：官方观远全家桶 (guancli/guanvis/guanetl/guanwf/guands/guanmetric)`);
     log(`  guanskill install-skill              # 装齐 7 个官方 skill 到 ~/.agents/skills/`);
     log(`  guancli auth login                   # 登录 BI（全家桶共用一套 profile）`);
     log(`\nDocs: https://github.com/maojiebc/majia-guanyuan`);

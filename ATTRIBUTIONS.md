@@ -38,6 +38,18 @@ This skill is built on top of multiple predecessors and contributions from the G
 
 ---
 
+## Dashboard evidence reference / 看板口径验收参考
+
+感谢 Jeremy 开源 [JeremyWXL/guanbi-agent-builder](https://github.com/JeremyWXL/guanbi-agent-builder)，提供从看板学习指标/维度定义、沉淀口径档案、采样并建立回归问题库的思路。
+
+参考固定版本：v4.8.1，[Git commit 7008a42](https://github.com/JeremyWXL/guanbi-agent-builder/tree/7008a42d903558cb4522dbfc9fbfd8df9523fd0c)。上游 MIT 版权及许可原文保留于 [references/third-party/guanbi-agent-builder-LICENSE.txt](references/third-party/guanbi-agent-builder-LICENSE.txt)，包括 `Copyright (c) 2026 Jeremy` 与作者的非官方声明。
+
+V3.3.0 的借鉴范围是看板定义档案、卡片采样、结构化问答验收与变化提示的方法。`scripts/dashboard_evidence.py` 为本项目重新实现：使用官方 guancli，保留隐藏时间宏与别名、继承实际页面默认筛选、显式文件与原始值取数、按具体数据行和字段验收，并用完整定义变化指纹要求复查。没有整套移植向导、工作台、记忆系统或 SQL/指标调用封装；不宣称继承上游测试结果。
+
+These local evidence tools were independently reimplemented after read-only production comparison. Credit goes to Jeremy for the dashboard-learning and regression-evidence workflow. Our test and deployment claims apply only to the cases documented in [the verification record](docs/dashboard-evidence-validation.md).
+
+---
+
 ## 🎓 Experience Contributors / 经验贡献者
 
 ### CTO Zhang Jin (张进) — Guandata BI

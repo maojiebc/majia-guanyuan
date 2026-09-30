@@ -29,6 +29,9 @@
 - Restaurant chain BI formula library (60+ SQL patterns, RFM, repurchase, DWD wide-table paradigms): moved to https://github.com/maojiebc/majia-huiyuan (公式库/); `references/restaurant-bi-formulas/` here is a pointer only.
 - `templates/html-dashboard/`: GDHTML shared runtime + base CSS (calibrated to the design baseline) + starter modules + selector linkage patch script.
 - `scripts/inject_phone_layout.py`: mobile phoneLayout ZIP injection for v7 pages.
+- `references/dashboard-evidence.md`: local draft dashboard definitions, scoped raw card samples, exact row/field assertions and definition change review; inspired by JeremyWXL/guanbi-agent-builder, credited in ATTRIBUTIONS.md.
+- `scripts/dashboard_evidence.py`: snapshot/sample/verify/diff; remote calls are limited to official page get and card preview.
+- `examples/dashboard-evidence/`: synthetic offline demonstration; `docs/dashboard-evidence-validation.md` records the bounded real-BI read-only verification.
 
 ## Author
 

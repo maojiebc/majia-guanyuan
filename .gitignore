@@ -13,6 +13,9 @@ data/columns_cache/
 # Local dual-agent sync lock (per-machine; not for distribution)
 .skill-sync.json
 
+# Private dashboard definitions, resolved filters and production query samples
+/dashboard-evidence/
+
 # macOS
 .DS_Store
 .AppleDouble

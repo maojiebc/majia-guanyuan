@@ -32,7 +32,7 @@
   <text x="720" y="50" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">观远 BI · 马甲实战版 · 全链路 Agent Skill</text>
   <g transform="translate(720, 64)">
     <rect x="-86" y="0" width="172" height="24" rx="12" fill="#0f172a"/>
-    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.2.3  ·  2026-09-28</text>
+    <text x="0" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fef3c7">v3.3.0  ·  2026-09-30</text>
   </g>
   <text x="720" y="112" text-anchor="middle" font-size="13.5" fill="#475569">官方全家桶之上的实战增益层　·　标准活路由官方，硬骨头落到本 skill 三支柱</text>
   <text x="720" y="132" text-anchor="middle" font-size="11.5" fill="#94a3b8">手机成绩单 V2：专供 ETL · 冻结明细 · 规则告警 · 券转化　｜　前置 @guandata/guanskill</text>
@@ -175,7 +175,7 @@
     <text x="20" y="11" font-size="15" font-weight="700" fill="#0f172a">majia-guanyuan 实战增益层</text>
     <g transform="translate(248, -4)">
       <rect width="64" height="18" rx="9" fill="#0f172a"/>
-      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.2.3</text>
+      <text x="32" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fef3c7">本 skill 3.3.0</text>
     </g>
     <text x="332" y="11" font-size="11.5" fill="#64748b">官方 DSL / 命令覆盖不到的硬骨头 · 三大支柱</text>
   </g>
@@ -220,8 +220,8 @@
     <rect width="430" height="372" rx="14" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)"/>
     <rect width="430" height="8" rx="3" fill="#8b5cf6"/>
     <text x="24" y="44" font-size="11" fill="#8b5cf6" font-weight="700" letter-spacing="1.5">支柱 ② · 方法论层</text>
-    <text x="24" y="76" font-size="21" font-weight="700" fill="#0f172a">范式判断 · 哲学层</text>
-    <text x="24" y="99" font-size="12" fill="#64748b">不是操作手册，是该不该做 / 怎么取舍</text>
+    <text x="24" y="76" font-size="21" font-weight="700" fill="#0f172a">范式判断 · 口径验收</text>
+    <text x="24" y="99" font-size="12" fill="#64748b">判断取舍 · 原始值与页面筛选逐格对账</text>
     <line x1="24" y1="118" x2="406" y2="118" stroke="#f1f5f9"/>
 
     <!-- AI-native ADS -->
@@ -234,7 +234,7 @@
       <text x="146" y="27" font-size="10.5" fill="#8b5cf6" font-weight="600">哲学层文档</text>
       <text x="14" y="56" font-size="11" fill="#475569">客户问"想给 BI 接 AI" → 判断 治理 vs 重搭</text>
       <text x="14" y="76" font-size="11" fill="#475569">7 条 AI-friendly 字段约束 · ODS+DWD 不动 / ADS 重建</text>
-      <text x="14" y="96" font-size="11" fill="#475569">预算分配 30% + 30% + 40% · 反模式 8 条</text>
+      <text x="14" y="96" font-size="11" fill="#475569">看板口径档案 · 默认筛选取数 · 逐格验收与变化复查</text>
     </g>
 
     <!-- Part B governance -->
