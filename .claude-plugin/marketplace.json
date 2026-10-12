@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "观远 BI · 马甲实战版：标准操作使用官方六组件；补充受限环境取数速查、只读汇总与数字出处、串行分块与恢复、看板口径档案与逐格验收，以及 ETL 治理、引擎报错、自定义图表、v7 发布和 SuperApp 兼容经验。官方版本以 references/official-cli-compatibility.md 的已审阅基线为准。",
-    "version": "3.4.0",
+    "version": "3.4.1",
     "homepage": "https://github.com/maojiebc/majia-guanyuan",
     "repository": "https://github.com/maojiebc/majia-guanyuan"
   },
