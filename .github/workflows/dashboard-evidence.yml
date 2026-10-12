@@ -1,16 +1,20 @@
-name: Dashboard evidence regressions
+name: Read-only query and dashboard regressions
 on:
   push:
     paths:
-      - 'scripts/dashboard_evidence.py'
-      - 'tests/test_dashboard_evidence.py'
-      - 'examples/dashboard-evidence/**'
+      - 'scripts/*.py'
+      - 'tests/test_*.py'
+      - 'examples/**'
+      - 'SKILL.md'
+      - 'references/**'
       - '.github/workflows/dashboard-evidence.yml'
   pull_request:
     paths:
-      - 'scripts/dashboard_evidence.py'
-      - 'tests/test_dashboard_evidence.py'
-      - 'examples/dashboard-evidence/**'
+      - 'scripts/*.py'
+      - 'tests/test_*.py'
+      - 'examples/**'
+      - 'SKILL.md'
+      - 'references/**'
       - '.github/workflows/dashboard-evidence.yml'
 permissions:
   contents: read
@@ -23,6 +27,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Synthetic regressions
-        run: python3 -m unittest discover -s tests -p 'test_dashboard_evidence.py'
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
       - name: Offline evidence example
         run: python3 examples/dashboard-evidence/offline_demo.py --out "${{ runner.temp }}/dashboard-evidence-demo"
+      - name: Offline aggregate example
+        run: python3 examples/etl-preview-aggregate/offline_demo.py --out "${{ runner.temp }}/aggregate-demo"
+      - name: Offline chunked extraction example
+        run: python3 examples/bounded-extract/offline_demo.py --out "${{ runner.temp }}/extract-demo"

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 import hashlib
 import json
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -106,6 +107,40 @@ def aggregation_semantics(aggregation, formula):
     return "unknown"
 
 
+def field_additivity(aggregation, formula, advanced):
+    """Flag explicit non-additive definitions; never infer safe summation from SUM."""
+    name = str(aggregation or '').upper()
+    if name in {'CNT_DISTINCT', 'COUNT_DISTINCT', 'COUNTDISTINCT', 'DISTINCT_COUNT', 'DCOUNT'}:
+        return 'not-additive', 'Distinct counts cannot be summed across overlapping populations'
+    if name in {'AVG', 'AVERAGE', 'MIN', 'MAX'}:
+        return 'not-additive', 'Averages and extrema require recomputation from the underlying scope'
+    if isinstance(formula, str):
+        # Remove field identifiers and literals before recognizing explicit operators.
+        expression = re.sub(r'\[[^\]]*\]|`[^`]*`', '__field__', formula)
+        expression = re.sub(r"'(?:[^'\\]|\\.|'')*'|\"(?:[^\"\\]|\\.)*\"", '__literal__', expression)
+        if re.search(r'(?i)\b(CNT_DISTINCT|COUNT_DISTINCT|DCOUNT)\s*\(|\bCOUNT\s*\(\s*DISTINCT\b', expression):
+            return 'not-additive', 'Formula explicitly computes a distinct count'
+        if re.search(r'(?i)\b(RANK|DENSE_RANK|ROW_NUMBER)\s*\(', expression):
+            return 'not-additive', 'Formula explicitly computes ordinal positions'
+        if re.search(r'(?i)/\s*(?:\(*\s*)?(?:(?:SUM|COUNT|AVG|MIN|MAX)\s*\(|__field__)', expression):
+            return 'not-additive', 'Formula divides by a varying aggregate/field denominator'
+    if isinstance(advanced, dict):
+        kind = advanced.get('advType')
+        value = advanced.get('advValue') or {}
+        if not isinstance(value, dict):
+            return 'unknown', 'Unrecognized advanced calculation payload'
+        category = value.get('baseTableCalc', {}).get('category') if isinstance(value.get('baseTableCalc'), dict) else None
+        if kind == 'RUNNING_TOTAL' or (kind == 'TABLE_CALC' and category == 'RUNNING_TOTAL'):
+            return 'not-additive', 'Running totals already include preceding periods'
+        if kind == 'RANK' or (kind == 'TABLE_CALC' and category == 'RANK'):
+            return 'not-additive', 'Ranks are ordinal positions, not quantities'
+        if kind == 'LEVEL_PERCENTAGE' or (kind in {'COMPARATIVE', 'REPETITION'} and value.get('valueType') == 'RATE'):
+            return 'not-additive', 'Ratios/rates require their own numerator and denominator'
+    if advanced or formula:
+        return 'unknown', 'Formula/advanced calculation needs definition and aggregation review'
+    return 'unknown', 'Confirm data grain and mutually exclusive scopes before adding SUM/COUNT values'
+
+
 def make_snapshot(page, profile, record_timezone="Asia/Singapore"):
     if not profile:
         raise EvidenceError("An explicit official CLI profile is required")
@@ -119,11 +154,13 @@ def make_snapshot(page, profile, record_timezone="Asia/Singapore"):
         for path, zone, field in zone_fields(content):
             formula = field.get("formula") or declared.get(field.get("fdId"), {}).get("formula")
             number_format = field.get("fieldFormat", {}).get("numberFormat", {})
+            additivity, additivity_reason = field_additivity(field.get('aggrType'), formula, field.get('advCalc'))
             fields.append({"path": path, "zone": zone, "fieldId": field.get("fdId"),
                            "sourceName": field.get("name"), "outputName": field.get("alias") or field.get("name"),
                            "aggregation": field.get("aggrType"), "formula": formula,
                            "advancedCalculation": copy.deepcopy(field.get("advCalc")),
                            "aggregationSemantics": aggregation_semantics(field.get("aggrType"), formula),
+                           "additivity": additivity, "additivityReason": additivity_reason,
                            "displayUnit": number_format.get("suffix") or number_format.get("prefix") or None,
                            "definition": copy.deepcopy(field)})
             if zone == "filters":

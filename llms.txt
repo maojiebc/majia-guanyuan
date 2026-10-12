@@ -1,6 +1,6 @@
 # majia-guanyuan
 
-> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It is a battle-tested augmentation layer on top of Guandata's official CLI family (guancli / guanvis / guanetl / guanwf / guands / guanmetric), covering what the official DSL cannot reach: ETL governance judgment, BI engine error playbooks, custom chart injection, HTML application dashboards with visual design baselines, v7 draft-release state-machine bypasses, SuperApp reverse-engineering, AI-native ADS methodology, and a restaurant BI formula library.
+> A tool-agnostic Agent Skill for Guandata BI (观远 BI), created by 超级马甲 / maojiebc. It is a battle-tested augmentation layer on top of Guandata's official CLI family (guancli / guanvis / guanetl / guanwf / guands / guanmetric), covering restricted query orchestration, provenance, safe chunked extraction, and what the official DSL cannot reach: ETL governance judgment, BI engine error playbooks, custom chart injection, HTML application dashboards with visual design baselines, v7 draft-release state-machine bypasses, SuperApp reverse-engineering, AI-native ADS methodology, and a restaurant BI formula library.
 
 ## Primary Links
 
@@ -12,6 +12,11 @@
 - Attribution: https://github.com/maojiebc/majia-guanyuan/blob/main/ATTRIBUTIONS.md
 
 ## Skill Contents
+
+- `references/restricted-query-playbook.md`: 14 restricted-environment query pitfalls; small SQL aggregate provenance and sandbox boundaries.
+- `scripts/etl_preview_aggregate.py`: official local SQL preview only, terminal-text results and calibration; no create/save/run.
+- `scripts/bounded_extract.py` and `references/bounded-extraction.md`: counted serial chunks, local ledger, split and evidence-gated recovery.
+- `references/part-b-governance.md` / `references/part-c-runtime.md`: details moved out of the small Skill router.
 
 - `SKILL.md`: routing layer and core operating rules for agents (standard query/card/ETL work routes to the official CLI family; this skill keeps the hard parts).
 - `references/official-cli-compatibility.md`: verified official versions, metric JSON/raw values, batch status, placement and legacy fallback boundaries.

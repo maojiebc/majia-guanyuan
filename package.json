@@ -1,7 +1,7 @@
 {
   "name": "@supermajia/majia-guanyuan",
-  "version": "3.3.0",
-  "description": "观远 BI · 马甲实战版：标准查询、指标批量取数、ETL、数据集、表单和看板操作使用官方六组件；补充看板口径档案与只读逐格验收、整库治理、业务口径、引擎报错、自定义图表、v7 发布与 SuperApp 兼容经验。官方基线 guanskill 0.1.41；各组件版本和迁移边界见 references/official-cli-compatibility.md。",
+  "version": "3.4.0",
+  "description": "观远 BI · 马甲实战版：标准操作使用官方六组件；补充受限环境取数速查、只读汇总与数字出处、串行分块与恢复、看板口径档案与逐格验收，以及 ETL 治理、引擎报错、自定义图表、v7 发布和 SuperApp 兼容经验。官方版本以 references/official-cli-compatibility.md 的已审阅基线为准。",
   "keywords": [
     "claude-code",
     "claude-skill",
@@ -57,7 +57,9 @@
     "docs/",
     "examples/store-mobile-scorecard-v2/",
     "examples/dashboard-evidence/",
-    "tests/test_dashboard_evidence.py"
+    "tests/test_*.py",
+    "examples/etl-preview-aggregate/",
+    "examples/bounded-extract/"
   ],
   "engines": {
     "node": ">=20.0.0"

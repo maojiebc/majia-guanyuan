@@ -15,6 +15,39 @@ ev = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ev)
 
 
+class AdditivityTests(unittest.TestCase):
+    def test_observed_nested_running_total_is_not_additive(self):
+        advanced = {'advType': 'TABLE_CALC', 'advValue': {'advType': 'TABLE_CALC',
+                    'baseTableCalc': {'category': 'RUNNING_TOTAL', 'aggrFunc': 'SUM',
+                                      'accDirection': 'DOWN', 'window': {'windowType': 'SINGLE_COLUMN'}}}}
+        p = page(); metric = p['cards'][0]['content']['meta']['chartMain']['zoneData']['metric'][0]
+        metric.update(aggrType='SUM', advCalc=advanced)
+        field = ev.make_snapshot(p, 'synthetic')['cards'][0]['fields'][0]
+        self.assertEqual(field['additivity'], 'not-additive')
+        self.assertIn('preceding', field['additivityReason'])
+
+    def test_native_running_total_rank_and_actual_rate_payload(self):
+        for advanced in ({'advType': 'RUNNING_TOTAL'}, {'advType': 'RANK'},
+                         {'advType': 'COMPARATIVE', 'advValue': {'valueType': 'RATE'}},
+                         {'advType': 'LEVEL_PERCENTAGE'}):
+            self.assertEqual(ev.field_additivity('SUM', None, advanced)[0], 'not-additive')
+
+    def test_distinct_and_average_require_recomputation(self):
+        for aggregation in ('CNT_DISTINCT', 'AVG', 'MIN', 'MAX'):
+            self.assertEqual(ev.field_additivity(aggregation, None, None)[0], 'not-additive')
+
+    def test_sum_and_unknown_payload_are_not_guessed_additive(self):
+        self.assertEqual(ev.field_additivity('SUM', None, None)[0], 'unknown')
+        self.assertEqual(ev.field_additivity('SUM', None, {'advType': 'UNREVIEWED'})[0], 'unknown')
+
+    def test_explicit_ratio_distinct_and_rank_formulas(self):
+        for formula in ('SUM([numerator]) / SUM([denominator])', 'COUNT(DISTINCT [customer])',
+                        'RANK() OVER (ORDER BY [value])'):
+            self.assertEqual(ev.field_additivity(None, formula, None)[0], 'not-additive')
+        self.assertEqual(ev.field_additivity(None, 'SUM([amount]) / 100', None)[0], 'unknown')
+        self.assertEqual(ev.field_additivity(None, 'SUM([field/with/slash])', None)[0], 'unknown')
+
+
 def page():
     metric = {"name": "客户标识", "alias": "新增客户", "fdId": "field-example",
               "aggrType": "CNT_DISTINCT", "fieldFormat": {"numberFormat": {"suffix": "人"}}}
