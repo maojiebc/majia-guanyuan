@@ -5,6 +5,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.4.0] - 2026-10-12
+
+### Added
+- 受限环境取数速查：集中 14 类接口、预览、权限、完整性与历史范围问题；补充官方只读查询何时回到本 Skill。
+- `etl_preview_aggregate.py`：只调用官方 edit/export/preview、ds get/preview，批准沙箱或未持久化种子工作区；输出终端文本结果、来源/SQL 哈希、时间、版本、校准与结果哈希。脚本无 create/save/run/schedule 能力。
+- `bounded_extract.py`：单并发、5 秒开始间隔、60000 行上限、日期二分、JSONL 读回与账本；慢请求暂停、超时未知状态持有、人工终态证据后缩小范围恢复。所有原始行保留，空结果不补零。
+- 标准库回归、离线示例和 Skill 相对链接/路由检查。
+
+### Changed
+- 档案显式标记累计、变化率/占比、排名和去重计数不能相加；普通 SUM/COUNT 在粒度未确认时仍为 unknown。
+- 主文约 80KB 下沉到约 36KB；Part 选择表保留，历史原文另存并调整相对链接。本 Skill 的分工行不再写死过期版本。
+- 发现 --raw 跳过显示列投影，分块脚本改为校验后本地投影，避免宣称它降低服务端扫描量。
+
+### Verification and scope
+- 测试环境完成一次小数据集汇总及 COUNT/rowCount 校准、一条明确日期/记录范围的分块读取与完成块续跑；没有向生产 BI 发请求。
+- 用户单独授权申请测试沙箱 ID；未保存、未物化输出、未触发 ETL 正式运行或改调度。SQL 预览结果保持 terminal-text，原始数值精度/类型不自动保证；累计原生与历史 TABLE_CALC 结构分别核对。
+- 拆分、超时、慢请求、未知状态恢复与哈希损坏用合成测试，不宣称制造真实服务端超时或验证所有 BI 版本。
+- 官方 CLI 基线和兼容版本表不变，本轮不混装独立新组件。
+
 ## [Unreleased]
 
 ## [3.3.0] — 2026-09-30

@@ -4,7 +4,7 @@
 > 兼容 **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** 等所有支持 SKILL.md 的 agent 工具。
 > 60+ 张 ETL 创建/重构/修复 + 治理扫描 + 自定义图表注入排障的真实战场记录。
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.3.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.4.0-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -26,6 +26,10 @@
 
 ---
 
+## 受限环境取数（v3.4.0）
+
+SQL 直查不可用时，先读受限取数手册。小结果汇总能留下数字出处，大表分块能检查是否取全并断点续跑；超时不会自动重发。结果限制与操作见 [受限取数](references/restricted-query-playbook.md) 和 [分块读取](references/bounded-extraction.md)。
+
 ## 概述
 
 **V3.0.0 重定位**：观远官方已把"查数 / 建卡 / ETL / 数据流 / 数据源 / 截图 / 管理"做成公网全家桶（`npm i -g @guandata/guanskill`）。本 skill 从早期"自造全栈 + fallback"**彻底重构为「官方全家桶之上的实战增益层」**——退役 2789 行自造 HTTP 客户端 `guandata.py`、删 ~1600 行死代码、砍掉所有镜像官方命令的章节。
@@ -35,7 +39,7 @@
 - **💪 实战增益层（本 skill 主体）**：只攻官方 DSL/命令覆盖不到的硬骨头——3 大支柱：① **治理与引擎踩坑**（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源审计 + B-17 全链路重写）② **前端注入与发布状态机**（Part C 既有页自定义图表注入排障 + Part C-12 HTML 应用化看板 descriptor patch + Part D v7 草稿-发布状态机绕过 + phoneLayout）③ **反向工程与方法论**（Part E SuperApp 开放应用反向工程 + AI-native ADS 数据架构方法论 + 餐饮 BI 公式实战库）。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.3.0 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.63 查数 / guanvis 0.1.50 建卡发布截图 live / guanetl 0.1.38 ETL / guanwf 0.1.836 数据流 / guands 0.1.35 数据源 / guanmetric 0.1.19 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 历史兼容 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.4.0 · 马甲实战版 架构图：官方全家桶路由层（guancli 1.0.63 查数 / guanvis 0.1.50 建卡发布截图 live / guanetl 0.1.38 ETL / guanwf 0.1.836 数据流 / guands 0.1.35 数据源 / guanmetric 0.1.19 指标写，6 件套）+ 本 skill 实战增益层 3 支柱——① 治理与引擎踩坑（Part B ETL 整库治理判断 + 10 类引擎报错手册 + 双源字段审计 + B-17 全链路重写/ExecPlan）② 前端注入与发布状态机（Part C 既有页自定义图表 HTML/JS 注入排障 + Part C-12 HTML 应用化看板 descriptor patch 联 dataView + Part D v7 草稿-发布状态机绕过 + customChart autoBootstrap + 移动端 phoneLayout ZIP inject）③ 反向工程与方法论（Part E SuperApp 开放应用反向工程 + form 历史兼容 + LLM 中转 ILLEGAL_JSON_RES 三路径解析 + AI-native ADS 设计方法论）" width="100%"/>
 </p>
 
 | 层 | 你想做 | 走 |
@@ -390,11 +394,11 @@ majia-guanyuan/
 
 ## 📋 版本记录
 
-**最新：V3.3.0** (2026-09-30) — 看板口径档案、默认筛选原始取数、逐格对账与变化检测；真实只读验证及开源来源致谢。见 [操作说明](references/dashboard-evidence.md)。
+**最新：V3.4.0** (2026-10-12) — SQL 直查不可用时，先读受限取数手册。小结果汇总能留下数字出处，大表分块能检查是否取全并断点续跑；超时不会自动重发。结果限制与操作见 [受限取数](references/restricted-query-playbook.md) 和 [分块读取](references/bounded-extraction.md)。
+
+**V3.3.0** (2026-09-30) — 看板口径档案、默认筛选原始取数、逐格对账与变化检测；真实只读验证及开源来源致谢。见 [操作说明](references/dashboard-evidence.md)。
 
 **V3.2.3** (2026-09-28) — 跟进官方请求计划、指标创建恢复与编辑保护、ETL 输入类型修复和页面初始化保护。详见 [兼容说明](references/official-cli-compatibility.md)。
-
-**V3.2.2** (2026-09-23) — 同步当前移动看板的门店编号标签、顾客编号归属、观察期和堂食复购规则，更新脱敏源码、离线示例及28步SQL参考。补充订单关联重复导致金额翻倍的修复经验。详见 [移动看板 V2](examples/store-mobile-scorecard-v2/README.md)。
 
 
 完整变更历史见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。

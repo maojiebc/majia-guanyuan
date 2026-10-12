@@ -13,6 +13,7 @@ A Claude Code Skill for **Guandata BI (观远 BI)** — a tool-agnostic agent sk
 
 Current structure — a router layer plus the hard-bone Parts:
 - **🧭 Router layer** — standard query/card/ETL/dataset CRUD routed to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`)
+- **Restricted queries** — SQL unavailable, aggregate provenance, counted serial chunks and unknown-request holds; see `references/restricted-query-playbook.md` and `references/bounded-extraction.md`. Normal calls still use official CLI.
 - **Dashboard evidence** — local draft definitions, official read-only scoped card samples, row/field assertions and definition-change detection; see `references/dashboard-evidence.md`.
 - **Part B** — ETL governance, write, delete (incl. SmartETL full-chain rewrite methodology and ExecPlan workflow)
 - **Part C** — Custom chart HTML/CSS/JS injection & debugging on existing pages
@@ -41,12 +42,12 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.3.0"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.4.0"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
 - **Authentication is via `guancli auth login`** — the official family shares one profile; this skill no longer reads `config.json`. Do not commit any `config.json` (still in `.gitignore` defensively). `config.example.json` is kept as a legacy schema reference only.
-- **Do not re-route standard work to self-built code** — standard query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
+- **Do not re-route standard work to self-built code** — normal query / card / ETL / dataset CRUD all go to the official family (`guancli` / `guanvis` / `guanetl` / `guanwf` / `guands` / `guanmetric`). This skill keeps only what the official DSL/commands can't reach (governance judgment, engine-level error playbooks, state-machine bypass, reverse-engineering, business formulas). The self-built `scripts/guandata.py` was retired in v3.0.0 (recover from git tag `v2.1.14` if ever needed).
 - **Do not edit contributor originals in `references/`** — `etl-rewrite-original.md` + `custom-chart-playbook.md` (CTO Zhang Jin), `execplan-spec.md` + `agents-rule.md` (OpenAI Codex) are verbatim. Cite, don't edit. (The 马甲-distilled references are maintained docs and may be updated. `restaurant-bi-formulas/` moved to the standalone repo majia-huiyuan on 2026-07-12 — only a pointer README remains here.)
 - **Do not strip version frontmatter** in `SKILL.md`. Bump `metadata.version` and update the version log section per the changelog convention when making changes.
 - **Do not add tool-specific code paths** (e.g., `if claude_code: ...`) inside scripts or SKILL.md. The skill is tool-agnostic on purpose.
@@ -70,12 +71,18 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
     bin/
       install.js          ← npm CLI: install/list/uninstall to 4 agent tools.
     scripts/
+      readonly_query.py        ← Closed official command grammar, process-group cleanup and local locks.
+      etl_preview_aggregate.py ← Small SQL preview results and provenance; approved sandbox only.
+      bounded_extract.py      ← Counted serial chunks, split, ledger and guarded recovery.
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
       dashboard_evidence.py   ← Local definitions/sample/verify/diff, official read-only CLI calls only.
     templates/            ← html-dashboard template pack (Part C-12).
     examples/store-mobile-scorecard-v2/ ← Current synthetic mobile demo and dedicated SQL reference.
     examples/store-mobile-scorecard/ ← Offline desensitized mobile scorecard sample (V1).
     examples/dashboard-evidence/ ← Synthetic evidence workflow; no live BI connection.
+    examples/etl-preview-aggregate/ ← Synthetic aggregate result/provenance demonstration.
+    examples/bounded-extract/ ← Synthetic cap/split/complete demonstration.
+    tests/test_*.py ← Restricted queries, process guards, Skill links and dashboard regressions.
     tests/test_dashboard_evidence.py ← Regressions for scoped sampling and cell-bound assertions.
     docs/                 ← Supplementary docs.
     references/official-cli-compatibility.md ← Current official versions and migration boundaries.
