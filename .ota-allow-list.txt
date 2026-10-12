@@ -313,3 +313,11 @@ LLM 拼权限判断超复杂
 
 # 合成门店名，固定种子离线样本，不对应真实主体。
 示例林荫店
+
+# Specific ordinary phrases reviewed against OTA 0.23 name-shape findings.
+刚发布完
+探明完整集
+文件超
+复杂度超
+单刚好
+多强

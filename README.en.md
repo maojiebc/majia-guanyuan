@@ -4,7 +4,7 @@
 > Compatible with **Claude Code** · **OpenClaw** · **Codex** · **Hermes (gbrain)** and any agent that recognizes `SKILL.md` frontmatter.
 > Battle-tested with 60+ ETL create/refactor/repair operations + governance scans + custom chart injection debugging.
 
-[![Skill Version](https://img.shields.io/badge/skill-v3.4.0-blue)](./SKILL.md)
+[![Skill Version](https://img.shields.io/badge/skill-v3.4.1-blue)](./SKILL.md)
 [![GitHub Release](https://img.shields.io/github/v/release/maojiebc/majia-guanyuan?label=release&color=success)](https://github.com/maojiebc/majia-guanyuan/releases)
 [![skills.sh](https://skills.sh/b/maojiebc/majia-guanyuan)](https://skills.sh/maojiebc/majia-guanyuan)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -25,9 +25,9 @@
 ---
 
 
-**Compatibility update:** aligned with guancli 1.0.63 / guanskill 0.1.41. Inspect single-query request plans before fetching; use the official metric creation flow and reconcile uncertain results before retrying. Existing page schema files are preserved by default. See [compatibility notes](references/official-cli-compatibility.md).
+**Compatibility update:** aligned with guancli 1.0.65 / guanskill 0.1.44. Inspect single-query request plans before fetching; use the official metric creation flow and reconcile uncertain results before retrying. Existing page schema files are preserved by default. See [compatibility notes](references/official-cli-compatibility.md).
 
-## Restricted queries (v3.4.0)
+## Restricted queries
 
 When direct SQL is unavailable, use the restricted-query guide. Small aggregate previews include provenance; large datasets can be read in counted, resumable chunks. Unknown timed-out requests are held for review. See the [guide](references/restricted-query-playbook.md), [extraction workflow](references/bounded-extraction.md), and [validation limits](docs/restricted-query-validation.md).
 
@@ -40,7 +40,7 @@ Two layers:
 - **💪 Battle-tested layer (the body of this skill)**: only the hard bones official DSL/commands can't reach — 3 pillars: ① **governance & engine traps** (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source audit + B-17 full-chain rewrite) ② **front-end injection & publish state machine** (Part C custom chart injection debugging + Part C-12 HTML application dashboard descriptor patch + Part D v7 draft-release state-machine bypass + phoneLayout) ③ **reverse-engineering & methodology** (Part E SuperApp open-app reverse-engineering + AI-native ADS data-architecture methodology + restaurant BI formula library).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.4.0 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.63 query / guanvis 0.1.50 card-build & publish & screenshot & live / guanetl 0.1.38 ETL / guanwf 0.1.836 dataflow / guands 0.1.35 data sources / guanmetric 0.1.19 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
+  <img src="https://raw.githubusercontent.com/maojiebc/majia-guanyuan/main/docs/architecture.png" alt="majia-guanyuan v3.4.1 · Majia Battle-Tested Edition architecture: official family routing layer (guancli 1.0.65 query / guanvis 0.1.53 card-build & publish & screenshot & live / guanetl 0.1.40 ETL / guanwf 0.1.838 dataflow / guands 0.1.37 data sources / guanmetric 0.1.21 metric writes, six components) + this skill's battle-tested layer 3 pillars — ① governance & engine traps (Part B whole-warehouse ETL governance judgment + 10-category engine error manual + dual-source field audit + B-17 full-chain rewrite/ExecPlan) ② front-end injection & publish state machine (Part C custom chart HTML/JS injection debugging + Part C-12 HTML application dashboard descriptor patch linking dataView + Part D v7 draft-release state-machine bypass + customChart autoBootstrap + mobile phoneLayout ZIP inject) ③ reverse-engineering & methodology (Part E SuperApp open-app reverse-engineering + legacy form compatibility + LLM bridge ILLEGAL_JSON_RES triple-path parsing + AI-native ADS design methodology + restaurant BI formulas playbook)" width="100%"/>
 </p>
 
 | Layer | What you want | Goes to |
@@ -397,11 +397,12 @@ This skill stands on the shoulders of multiple predecessors and experience contr
 
 ## 📋 Version History
 
-**Latest: V3.4.0** (2026-10-12) — When direct SQL is unavailable, use the restricted-query guide. Small aggregate previews include provenance; large datasets can be read in counted, resumable chunks. Unknown timed-out requests are held for review. See the [guide](references/restricted-query-playbook.md), [extraction workflow](references/bounded-extraction.md), and [validation limits](docs/restricted-query-validation.md).
+**Latest: V3.4.1** (2026-10-12) — Aligns official CLI 1.0.65, typed SQL output and preservation guards; weekly checks also track companion-project commits and large-result handling.
+
+**V3.4.0** (2026-10-12) — When direct SQL is unavailable, use the restricted-query guide. Small aggregate previews include provenance; large datasets can be read in counted, resumable chunks. Unknown timed-out requests are held for review. See the [guide](references/restricted-query-playbook.md), [extraction workflow](references/bounded-extraction.md), and [validation limits](docs/restricted-query-validation.md).
 
 **V3.3.0** (2026-09-30) — Dashboard definitions, page-default raw samples, cell-bound assertions and change detection; includes bounded real read-only evidence and upstream credit. See the [guide](references/dashboard-evidence.md).
 
-**V3.2.3** (2026-09-28) — Official compatibility patch: query request plans, metric creation recovery and edit protection, actual ETL input types, and preservation of existing page schema files.
 
 
 Full changelog: [CHANGELOG.md](CHANGELOG.md) or [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases).

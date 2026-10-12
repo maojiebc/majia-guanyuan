@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for
 the project's specific patch / minor / major rules.
 
+## [3.4.1] - 2026-10-12
+
+### Changed
+- 对齐 guanskill 0.1.44：guancli 1.0.65、guanvis 0.1.53、guanetl 0.1.40、guands 0.1.37、guanwf 0.1.838、guanmetric 0.1.21。
+- SQL typed输出与精度消费、Gateway外部写入边界、表单子行分页完整性、ETL保存结果/新鲜版本、旧日期筛选器和物理字段保全规则；不机械改号或混装。
+- 追加审阅 guanbi-agent-builder v4.8.2，保留原v4.8.1实现来源/MIT，吸收行数上限与分批成本纪律；到达上限仍保守判断可能截断。
+- 每周只读检查覆盖官方npm和附属项目完整提交，独立记录审阅基线；同版本新提交也触发审阅，失败不当无更新。
+- 补充六处已人工核验的普通技术措辞审计例外，保持按具体词组而非整行放行。
+
+### Verification and scope
+- 本机CLI及七个官方Skill逐文件一致，相关命令帮助已核对；只使用合成测试和离线示例，没有生产BI请求，未执行Gateway调用或任何保存/运行。
+- 本版本保留v3.4.0的临时ETL终端文本限制，不因SQL支持typed而宣称ETL结果有原始类型保证。
+
 ## [3.4.0] - 2026-10-12
 
 ### Added

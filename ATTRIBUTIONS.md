@@ -46,6 +46,8 @@ This skill is built on top of multiple predecessors and contributions from the G
 
 V3.3.0 的借鉴范围是看板定义档案、卡片采样、结构化问答验收与变化提示的方法。`scripts/dashboard_evidence.py` 为本项目重新实现：使用官方 guancli，保留隐藏时间宏与别名、继承实际页面默认筛选、显式文件与原始值取数、按具体数据行和字段验收，并用完整定义变化指纹要求复查。没有整套移植向导、工作台、记忆系统或 SQL/指标调用封装；不宣称继承上游测试结果。
 
+2026-10-12 追加审阅 v4.8.2，[完整提交 9c0f089](https://github.com/JeremyWXL/guanbi-agent-builder/commit/9c0f0895ed70220af38d24caeca82e59eeafe4a7)。只补入大数据量提醒、聚合优先和分批成本说明；不把上游“达到上限”表述当作截断的充分证明，本项目仍保守标记 possibly-truncated。已审阅提交见 [跟进基线](references/guanbi-agent-builder-baseline.json)。保留 v4.8.1 的实现来源与 MIT 原文，不宣称新版原样通过真实 BI 验收。
+
 These local evidence tools were independently reimplemented after read-only production comparison. Credit goes to Jeremy for the dashboard-learning and regression-evidence workflow. Our test and deployment claims apply only to the cases documented in [the verification record](docs/dashboard-evidence-validation.md).
 
 ---
