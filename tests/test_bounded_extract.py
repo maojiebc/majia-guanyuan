@@ -15,7 +15,9 @@ from readonly_query import QueryError, private_output, validate_command
 
 class Clock:
     def __init__(self):
-        self.now = time.time()
+        # Whole seconds round-trip exactly through ISO microseconds. A live
+        # fractional timestamp can round upward and look future-dated.
+        self.now = float(int(time.time()))
 
     def __call__(self):
         return self.now
