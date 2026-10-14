@@ -34,3 +34,5 @@ jobs:
         run: python3 examples/etl-preview-aggregate/offline_demo.py --out "${{ runner.temp }}/aggregate-demo"
       - name: Offline chunked extraction example
         run: python3 examples/bounded-extract/offline_demo.py --out "${{ runner.temp }}/extract-demo"
+      - name: Independent extraction acceptance example
+        run: python3 examples/extraction-evidence/offline_demo.py --out "${{ runner.temp }}/extract-acceptance-demo"

@@ -45,6 +45,19 @@ class ReadOnlyGuardsTests(unittest.TestCase):
         self.assertNotIn('GUANCLI_TOKEN', popen.call_args.kwargs['env'])
         self.assertNotIn('GUANCLI_OIDC_BASE_URL', popen.call_args.kwargs['env'])
 
+    def test_explicit_profile_cannot_be_redirected_by_oauth2_environment(self):
+        class FakeProc:
+            returncode = 0
+            def communicate(self, timeout):
+                return '{}', ''
+        overrides = {'GUANCLI_OAUTH2_BASE_URL': 'https://example.invalid',
+                     'GUANCLI_OAUTH2_ACCESS_TOKEN': 'synthetic-token',
+                     'GUANCLI_OAUTH2_UID': 'example', 'GUANCLI_OAUTH2_LOGIN_ID': 'example'}
+        with patch.dict('os.environ', overrides), \
+                patch('readonly_query.subprocess.Popen', return_value=FakeProc()) as popen:
+            ReadOnlyCLI('synthetic').run('guancli', ['ds', 'get', 'dataset-example', '--raw'])
+        self.assertFalse(set(overrides) & set(popen.call_args.kwargs['env']))
+
     def test_serial_and_bounded_flags_cannot_be_overridden(self):
         for args in (['preview', 'id_1', '--dir', '/tmp/demo', '--max-parallel', '2'],
                      ['preview', 'id_1', '--dir', '/tmp/demo', '--max-parallel', '1', '--timeout', '121'],

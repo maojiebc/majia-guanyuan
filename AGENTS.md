@@ -42,7 +42,7 @@ Before performing any work in this repo, always:
 | Hermes / gbrain | `<workspace>/skills/majia-guanyuan/` | `SKILL.md` (this `AGENTS.md` serves as the resolver pointer) |
 | Other agents | Anywhere; see `manifest.json` and `SKILL.md` frontmatter | `SKILL.md` |
 
-The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.4.1"`) is the universal handshake every agent should parse.
+The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadata.version: "3.5.0"`) is the universal handshake every agent should parse.
 
 ## Hard rules (do not violate)
 
@@ -74,6 +74,7 @@ The `SKILL.md` frontmatter (`name: majia-guanyuan`, `description: ...`, `metadat
       readonly_query.py        ← Closed official command grammar, process-group cleanup and local locks.
       etl_preview_aggregate.py ← Small SQL preview results and provenance; approved sandbox only.
       bounded_extract.py      ← Counted serial chunks, split, ledger and guarded recovery.
+      extraction_evidence.py  ← Independent local coverage/scope/hash acceptance and source notes.
       inject_phone_layout.py  ← Part D mobile phoneLayout ZIP-inject helper (stdlib only).
       dashboard_evidence.py   ← Local definitions/sample/verify/diff, official read-only CLI calls only.
     templates/            ← html-dashboard template pack (Part C-12).

@@ -67,3 +67,7 @@ python3 examples/bounded-extract/offline_demo.py --out /private/tmp/bounded-extr
 ```
 
 合成示例先触顶，再分成两个互斥日期块，四行全部保留，其中包含重复候选键。真实环境验收状态另见发布验证文档；离线通过不表示生产取数已经验证。
+
+## 完成后独立验收
+
+status=complete 后再按 [取数验收](extraction-evidence.md) 核对覆盖、互斥及实际数据范围，并产生可复查的数字出处。计划投影保留日期、前缀和基础筛选字段；否则不能核实范围。验收只读本地文件，不增加 BI 查询。

@@ -1,5 +1,15 @@
 # Changelog
 
+## V3.5.0（2026-10-13）取数完成后的独立验收
+
+- 新增本地 extraction_evidence.py：核对计划指纹、每前缀日期覆盖与互斥、逐行范围和基础筛选、字段一致性、哈希/行数与来源版本。无 BI 请求、不改账本、不清锁、不补取。
+- 验收报告和数字出处包含来源、期间、筛选、块与行数及文件证据；显式选择的加总以本地十进制计算，空值另计、重复行保留，业务可相加性和单位另行确认。
+- 两次独立测试环境预览，一行与一个空块通过；本地漏块和范围外日期错误控制均拒绝。未连接生产，未 save/run/schedule。
+- 对齐官方 guanskill 0.1.46 / CLI 1.0.66 / vis 0.1.55 / etl 0.1.41 / wf 0.1.839：官方 analyze report 的完整候选池声明、参数改名分阶段保护、多键 JOIN 与输入预览范围边界。修复本项目显式 profile 被外部 OAuth2 环境重定向的风险。
+- 审阅附属项目4.8.3—4.8.5，吸收4.8.4的出处范围与口径纪律；工作台和首次开场白不移植，原实现来源与 MIT 原文保留。每周兼容检查、每三周一轮能力迭代，实际改动才发版。
+- 94项合成回归通过，新增完整离线验收示例；官方七个 Skill 的153个随包文件与本机内容一致。来源观察一致不代表冻结快照，业务验收仍为 false。
+
+
 All notable changes to **majia-guanyuan** are recorded here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project follows [Semantic Versioning](https://semver.org/) — see SKILL.md for

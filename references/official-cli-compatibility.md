@@ -1,20 +1,30 @@
 # 官方 CLI 更新兼容说明
 
-核验日期：2026-10-12。适用于 majia-guanyuan v3.4.1。依据 npm 官方发布包的 CHANGELOG、随包 Skill 与本机命令帮助核对；没有在生产 BI 上重跑业务读写。
+核验日期：2026-10-13（本机客户端日期；官方部分包标注2026-10-14）。适用于 majia-guanyuan v3.5.0。依据 npm 官方发布包的 CHANGELOG、随包 Skill 与本机命令帮助核对；没有在生产 BI 上重跑业务读写。
 
 ## 当前版本与来源
 
-`@guandata/guanskill@0.1.44` 发布于 2026-10-12；本机、聚合包精确依赖和六组件 npm latest 一致。机器可读审阅记录见 [official-cli-baseline.json](official-cli-baseline.json)。CLI 与已安装 Skill 分开验证。
+`@guandata/guanskill@0.1.46` 官方包标注2026-10-14；本机、聚合包精确依赖和六组件 npm latest 一致。机器可读审阅记录见 [official-cli-baseline.json](official-cli-baseline.json)。CLI 与已安装 Skill 分开验证。
 
 | 组件 | 上次已审阅基线 | 当前版本 | 官方随包变更记录 |
 |---|---|---|---|
-| guanskill | 0.1.41 | 0.1.44 | [CHANGELOG](https://unpkg.com/@guandata/guanskill@0.1.44/CHANGELOG.md) |
-| guancli | 1.0.63 | 1.0.65 | [CHANGELOG](https://unpkg.com/@guandata/guancli@1.0.65/CHANGELOG.md) |
-| guanvis | 0.1.50 | 0.1.53 | [CHANGELOG](https://unpkg.com/@guandata/guanvis@0.1.53/CHANGELOG.md) |
-| guanetl | 0.1.38 | 0.1.40 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.40/CHANGELOG.md) |
-| guanwf | 0.1.836 | 0.1.838 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.838/CHANGELOG.md) |
-| guands | 0.1.35 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.37/CHANGELOG.md) |
-| guanmetric | 0.1.19 | 0.1.21 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.21/CHANGELOG.md) |
+| guanskill | 0.1.44 | 0.1.46 | [CHANGELOG](https://unpkg.com/@guandata/guanskill@0.1.46/CHANGELOG.md) |
+| guancli | 1.0.65 | 1.0.66 | [CHANGELOG](https://unpkg.com/@guandata/guancli@1.0.66/CHANGELOG.md) |
+| guanvis | 0.1.53 | 0.1.55 | [CHANGELOG](https://unpkg.com/@guandata/guanvis@0.1.55/CHANGELOG.md) |
+| guanetl | 0.1.40 | 0.1.41 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.41/CHANGELOG.md) |
+| guanwf | 0.1.838 | 0.1.839 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.839/CHANGELOG.md) |
+| guands | 0.1.37 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.37/CHANGELOG.md) |
+| guanmetric | 0.1.21 | 0.1.21 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.21/CHANGELOG.md) |
+
+## 本轮官方更新：本地排名、编辑保护与预览范围
+
+实际入口是 `guancli analyze report`，不是顶层 report；它只读取本地 CSV/JSON，不连接 BI、不隐式聚合。先确认完整候选池与业务粒度，再选择 --group-by 或 --global、声明 --complete-input。这个开关只是调用方声明，不证明后端分页完成。补充指标用显式键做 left 对齐，补充侧必须唯一，未匹配保持 null，不让补充对象扩大候选池；不能从某指标的 TopN 子集推导另一指标全池排名。批量 envelope 选择成功的 --result-id，计算只取原始值。详情以官方 analysis-primitives.md 和当前帮助为准。本地分块验收提供范围与文件证据，不自动授予排名候选池或业务口径正确性。
+
+参数候选值改名使用官方 mapParameterValues，与编辑前快照一起核对当前工程公式、独立选项和默认值，先 preview/diff 与 parameter update --dry-run。映射只覆盖注册资源，不能据此称其他页面或数据集已同步。全局参数更新与页面发布是两个独立写入，分别回读；失败保留分步状态，不宣称原子完成，不通过 pack/upload 绕过引用校验。未变历史引用可以按官方规则保留并警告；新增或修改引用无法核验则停止发布。真实写入未在本轮执行。
+
+多键 JOIN 保留并核对全部关联键，不能把两个输入字段各自列表当作只有首键有效的条件。guanetl 0.1.41 已修复原生复合条件兼容；升级不证明业务键类型、基数、匹配率或输出口径已正确，仍用限定范围 preview 对照。数据库输入的 preview 位于 action 顶层，编辑已有节点优先保留有效范围。普通 DATAFLOW 的默认 LIMITED/10000 与 DB_DATAFLOW 的 ALL/config.limit=10000 有不同含义：ALL 不受该 limit 限流，不能把这个数字当安全样本预算。旧节点原有范围不靠重建改成默认值。
+
+本项目的受限读取包装显式使用 profile，并剥离外部 OAuth2 与 OIDC 目标覆盖变量；否则已选择的测试环境仍可能被宿主注入身份重定向。标准官方 CLI 的宿主认证仍遵守官方合同，此保护只作用于本项目的私有 profile 取数路径。
 
 ## 2026-10-12 官方更新：类型化 SQL 与数据保全
 
@@ -97,11 +107,11 @@ guands 0.1.36 的 dataset import/get JSON 不再混入轮询诊断，诊断在 s
 
 | 组件 | 当前边界 |
 |---|---|
-| guanmetric | `batch online/offline` 先 dry-run；`--file` 输入为 `{"ids":[...]}`，依赖指标按基础到下游排序。`failed/blocked` 时完整输出但非零退出，已成功项不回滚；不要整批盲重试。口径冲突或下游影响须确认后才可 `--confirm`。请求接受不等于最终上线，审批状态须回读。 |
-| guanetl | 0.1.34 移除全局 `task`，任务 ID 不再作为对外等待入口。首次执行用 `run <etl_id> --wait`；已触发但不知结果时只读 `guancli etl get <etl_id>`。再次 run 可能重跑并重复追加，不能用重跑代替查询。 |
-| guands | 0.1.32 移除全局 `task`。创建/刷新时使用对应命令的 `--wait`，import 默认等待；已提交后先读数据集状态，不再调用旧 task 命令。append-data/replace-data 真正写入需 `--yes`，不加时只打印计划并非零退出。 |
+| guanmetric | 0.1.21 | 0.1.21 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.21/CHANGELOG.md) |
+| guanetl | 0.1.40 | 0.1.41 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.41/CHANGELOG.md) |
+| guands | 0.1.37 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.37/CHANGELOG.md) |
 | 新资源目录 | ETL 本体目录与输出数据集目录来自不同树；页面、数据集也须使用对应类型的真实目录。先核对环境、资源名、目录路径与 ID，已有授权覆盖具体落位时直接继续；缺少会改变结果的目标信息才确认。完成后回读路径、链接和资源状态。 |
-| guanwf | 0.1.829 起增加 Python 运行环境、内存预检及输出绑定；NO_GO/UNKNOWN 按官方规则处理，不把未知判成安全。CREATE_NEW 首跑成功后须完成绑定并发布保存，才可继续运行。`run --validate` 只在已有草稿执行且不注册真实输出；它不是纯本地验证，不用于试跑生产工作流。写入的 `--confirm`、并发检查、保存回读及输出验收保留。 |
+| guanwf | 0.1.838 | 0.1.839 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.839/CHANGELOG.md) |
 
 `guanetl rmdir` 只删除空 ETL 目录，是不可恢复的物理删除，需明确授权目标并传 `--yes`；它不是 ETL 删除命令。WebService 数据集写入仍由官方 CLI 拒绝，不能用内部 API 或其他数据集类型绕过。修改资源必须保持原 ID 与下游引用，不能删除后重建同名资源。
 
@@ -117,6 +127,6 @@ SuperApp 已支持 list/download。更新已知应用先定位 appId 并显式�
 
 ## 本次验证范围
 
-本轮核对七个 npm 包及聚合包精确依赖，更新本机CLI并手动运行 install-skill，逐文件核对七个官方Skill；SQL typed、card preview默认上限、gateway与主题目录的本机帮助已读取。PromptScript不支持官方安装器的全局安装，核心Agents/Codex等已逐文件核验，不把安装器的汇总退出码当所有工具安装完成。
+核对当前聚合包精确依赖与六组件，安装官方聚合包后显式 install-skill，七个官方 Skill 的153个随包文件与本机逐文件一致。实际读取 analyze report 和数据集预览帮助，并在已授权的独立测试环境完成两次小范围预览与本地验收；生产 BI 未请求，ETL/页面/参数未实写。安装器提示 PromptScript 不支持全局安装，不把其汇总结果当作所有助手已安装。
 
-附属项目新增一个提交（v4.8.2），仅审阅并选择性吸收数据量提醒、聚合优先及分批成本说明。真实BI验证仍沿用带日期的历史记录，没有宣称上游新版或本次官方版本已在任意租户完成线上验收。每周检查覆盖npm与附属GitHub提交，任何检查失败都不能报告无更新，机器基线只在审阅后推进。
+附属项目从4.8.2到4.8.5新增三个提交。审阅固定提交的 CHANGELOG 与相关变更，工作台数组渲染和首次开场白与当前工具无关，不移植；4.8.4 的数字出处须附期间、筛选与口径纪律已吸收，原实现来源及MIT保持。作者反馈 PR #3 尚待审阅，不重复提交。机器基线仅在审阅完成后推进，安装与离线测试均不代表任意生产租户已经验收。
