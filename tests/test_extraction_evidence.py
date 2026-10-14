@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -169,6 +170,15 @@ class EvidenceTests(unittest.TestCase):
 
     def test_path_escape_is_rejected(self):
         self.state['chunks'][0]['file'] = '../outside.jsonl'; self.save(); self.rejected()
+
+    def test_delivery_failure_does_not_leave_a_success_report(self):
+        report = self.report()
+        module = importlib.import_module('extraction_evidence')
+        target = self.root / 'failed-delivery'
+        with patch('extraction_evidence.Path.write_text', side_effect=OSError('synthetic disk failure')):
+            with self.assertRaises(OSError):
+                module.write_report(report, target)
+        self.assertFalse(target.exists())
 
     def test_cli_writes_private_report_without_mutating_ledger(self):
         script = ROOT / 'scripts/extraction_evidence.py'

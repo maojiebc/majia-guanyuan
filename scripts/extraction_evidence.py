@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import tempfile
 
 from bounded_extract import load_plan, scope
 from readonly_query import QueryError, atomic_json, digest, private_output
@@ -221,8 +222,7 @@ def build_report(plan_path, sum_columns=()):
 
 def write_report(report, target):
     target = private_output(target)
-    target.mkdir(parents=True, exist_ok=False)
-    atomic_json(target / 'acceptance.json', report)
+    target.parent.mkdir(parents=True, exist_ok=True)
     numbers = '\n'.join(f"{name}：{value['value'] if value['value'] is not None else '无非空数值'}；空值行 {value['nullRows']}"
                         for name, value in report['sums'].items())
     text = (f"来源：{report['profile']} / {report['datasetId']}\n"
@@ -234,7 +234,26 @@ def write_report(report, target):
             f"计划指纹：{report['planFingerprint']}\n账本哈希：{report['ledgerSha256']}\n"
             f"来源版本证据：{report['sourceVersionEvidence']}；不是冻结快照。\n{numbers}\n"
             "仅核验账号可见计划范围；历史全集、业务口径、可相加性与单位仍需确认。\n")
-    (target / 'source-note.txt').write_text(text, encoding='utf-8')
+    with tempfile.TemporaryDirectory(prefix='.extraction-acceptance-', dir=target.parent) as temporary:
+        stage = Path(temporary)
+        (stage / 'source-note.txt').write_text(text, encoding='utf-8')
+        atomic_json(stage / 'acceptance.json', report)
+        # Reserve a new destination only after both outputs exist. The passed
+        # JSON is the last commit marker; errors never leave it on its own.
+        target.mkdir(exist_ok=False)
+        moved = []
+        try:
+            for name in ('source-note.txt', 'acceptance.json'):
+                (stage / name).replace(target / name)
+                moved.append(name)
+        except OSError:
+            for name in moved:
+                (target / name).unlink()
+            try:
+                target.rmdir()
+            except OSError:
+                pass  # Never remove unrelated files a concurrent writer added.
+            raise
     return target
 
 

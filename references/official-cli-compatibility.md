@@ -107,11 +107,11 @@ guands 0.1.36 的 dataset import/get JSON 不再混入轮询诊断，诊断在 s
 
 | 组件 | 当前边界 |
 |---|---|
-| guanmetric | 0.1.21 | 0.1.21 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.21/CHANGELOG.md) |
-| guanetl | 0.1.40 | 0.1.41 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.41/CHANGELOG.md) |
-| guands | 0.1.37 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.37/CHANGELOG.md) |
+| guanmetric | `batch online/offline` 先 dry-run；`--file` 输入为 `{"ids":[...]}`，依赖指标按基础到下游排序。`failed/blocked` 时完整输出但非零退出，已成功项不回滚；不要整批盲重试。口径冲突或下游影响须确认后才可 `--confirm`。请求接受不等于最终上线，审批状态须回读。 |
+| guanetl | 0.1.34 移除全局 `task`，任务 ID 不再作为对外等待入口。首次执行用 `run <etl_id> --wait`；已触发但不知结果时只读 `guancli etl get <etl_id>`。再次 run 可能重跑并重复追加，不能用重跑代替查询。 |
+| guands | 0.1.32 移除全局 `task`。创建/刷新时使用对应命令的 `--wait`，import 默认等待；已提交后先读数据集状态，不再调用旧 task 命令。append-data/replace-data 真正写入需 `--yes`，不加时只打印计划并非零退出。 |
 | 新资源目录 | ETL 本体目录与输出数据集目录来自不同树；页面、数据集也须使用对应类型的真实目录。先核对环境、资源名、目录路径与 ID，已有授权覆盖具体落位时直接继续；缺少会改变结果的目标信息才确认。完成后回读路径、链接和资源状态。 |
-| guanwf | 0.1.838 | 0.1.839 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.839/CHANGELOG.md) |
+| guanwf | 0.1.829 起增加 Python 运行环境、内存预检及输出绑定；NO_GO/UNKNOWN 按官方规则处理，不把未知判成安全。CREATE_NEW 首跑成功后须完成绑定并发布保存，才可继续运行。`run --validate` 只在已有草稿执行且不注册真实输出；它不是纯本地验证，不用于试跑生产工作流。写入的 `--confirm`、并发检查、保存回读及输出验收保留。 |
 
 `guanetl rmdir` 只删除空 ETL 目录，是不可恢复的物理删除，需明确授权目标并传 `--yes`；它不是 ETL 删除命令。WebService 数据集写入仍由官方 CLI 拒绝，不能用内部 API 或其他数据集类型绕过。修改资源必须保持原 ID 与下游引用，不能删除后重建同名资源。
 
