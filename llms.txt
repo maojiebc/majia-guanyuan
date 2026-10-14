@@ -52,3 +52,7 @@
 
 - `scripts/check_upstream_updates.py`: read-only npm and companion GitHub commit checks; failures never advance review baselines.
 - `references/guanbi-agent-builder-baseline.json`: reviewed companion version/commit, distinct from the original implementation reference.
+
+- `scripts/extraction_evidence.py`: local-only acceptance of completed extraction coverage, row scope, hashes/counts and explicit decimal sums.
+- `references/extraction-evidence.md`: independent acceptance, source notes and evidence limits.
+- `docs/iteration-strategy.md`: weekly compatibility reviews and three-week practical capability iterations.

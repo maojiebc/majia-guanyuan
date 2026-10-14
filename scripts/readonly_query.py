@@ -125,6 +125,8 @@ class ReadOnlyCLI:
         env = dict(os.environ, GUANCLI_PROFILE=self.profile)
         # OIDC/base URL overrides would silently change the selected target.
         for key in ('GUANCLI_OIDC_BASE_URL', 'GUANCLI_OIDC_ACCESS_TOKEN',
+                    'GUANCLI_OAUTH2_BASE_URL', 'GUANCLI_OAUTH2_ACCESS_TOKEN',
+                    'GUANCLI_OAUTH2_UID', 'GUANCLI_OAUTH2_LOGIN_ID',
                     'GUANCLI_BASE_URL', 'GUANCLI_TOKEN', 'GUANCLI_PATH'):
             env.pop(key, None)
         command = [tool, *args]

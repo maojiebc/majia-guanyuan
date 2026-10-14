@@ -321,3 +321,9 @@ LLM 拼权限判断超复杂
 复杂度超
 单刚好
 多强
+
+# v3.5.0: public upstream commit and literal synthetic decimal/clock fixtures.
+e57c55b7a092f31d0c49bd1ade6deac22bdbeec1
+123456789012345678901234567890.01
+123456789012345678901234567890.03
+1700000000.0
