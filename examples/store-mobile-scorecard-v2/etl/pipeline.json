@@ -11,7 +11,8 @@
     "identified_orders",
     "dormant_source",
     "order_products",
-    "groups_source"
+    "groups_source",
+    "member_registry"
   ],
   "steps": [
     {
@@ -273,6 +274,25 @@
         "input5": "member_anomaly_evidence",
         "input6": "soup_coverage",
         "input7": "repurchase_peers"
+      },
+      "output": true
+    },
+    {
+      "name": "acq_daily",
+      "sql": "acq_daily.sql",
+      "inputs": {
+        "input1": "member_registry",
+        "input2": "store_context"
+      },
+      "output": true
+    },
+    {
+      "name": "acq_peers",
+      "sql": "acq_peers.sql",
+      "inputs": {
+        "input1": "acq_daily",
+        "input2": "finance_daily",
+        "input3": "store_context"
       },
       "output": true
     }

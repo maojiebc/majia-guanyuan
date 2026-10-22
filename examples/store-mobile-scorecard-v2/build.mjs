@@ -38,11 +38,13 @@ function toCols(rows, names) {
 }
 
 function detectV(data) {
-  const next = { fin: -1, hours: -1, newold: -1, member: -1, member7: -1, member30: -1, memberMonth: -1, membase: -1, products: -1, soup: -1, status: -1, friends: -1, groups: -1, frienddaily: -1, groupdaily: -1, coupons: -1, dormant: -1, context: -1, rfm: -1, peer: -1 };
+  const next = { fin: -1, hours: -1, newold: -1, member: -1, member7: -1, member30: -1, memberMonth: -1, membase: -1, products: -1, soup: -1, status: -1, friends: -1, groups: -1, frienddaily: -1, groupdaily: -1, coupons: -1, dormant: -1, context: -1, rfm: -1, peer: -1, acq: -1, acqPeer: -1 };
   const has = (names, n) => names.includes(n);
   data.forEach((view, i) => {
     const n = view.map((c) => c.name);
-    if (has(n, '同步时间') && has(n, '渠道名称')) next.fin = i;
+    if (has(n, '注册渠道') && has(n, '新增会员')) next.acq = i;
+    else if (has(n, '每百单入会')) next.acqPeer = i;
+    else if (has(n, '同步时间') && has(n, '渠道名称')) next.fin = i;
     else if (has(n, '下单时段')) next.hours = i;
     else if (has(n, '顾客属性')) next.newold = i;
     else if (has(n, '消费会员_近7天')) next.member7 = i;
@@ -73,7 +75,7 @@ function packViews(named) {
     named.hours, named.status, named.friends, named.groups,
     named.frienddaily, named.groupdaily, named.coupons,
     named.membase, named.member, named.member7, named.member30, named.memberMonth,
-    named.dormant, named.context, named.peer,
+    named.dormant, named.context, named.acq, named.peer, named.acqPeer,
   ];
 }
 
@@ -328,7 +330,29 @@ function buildStore(name, spec) {
     '会员对比识别覆盖率':spec.noCoupons?.65:.94,'会员对比状态':spec.noCoupons?'识别覆盖不足':'可参评',
     '会员对比前期占比':ratio-.025,'会员对比前期状态':spec.noCoupons?'识别覆盖不足':'可参评','会员对比变化':.025});
 
+  const acq = [];
+  const acqSpec = spec.acq || { mini: 3, pay: 2, device: .5, firstShare: .5 };
+  finDays.forEach((date, idx) => {
+    const boost = weekdayBoost(date), late = idx >= 35;
+    [['微信小程序', acqSpec.mini], ['支付宝碰一下', late ? acqSpec.pay : 0], ['支付设备入会', idx >= 45 ? acqSpec.device : 0]].forEach(([ch, rate]) => {
+      const n = Math.round(rate * boost * (0.6 + rand() * 0.8));
+      if (n <= 0) return;
+      const byFirst = ch === '微信小程序' ? Math.round(n * acqSpec.firstShare * 0.6) : Math.round(n * Math.min(1, acqSpec.firstShare + .3));
+      acq.push({ 门店名称: name, 门店编号: code, 注册日期: date, 注册渠道: ch, 新增会员: n, 按首单门店归属: Math.min(n, byFirst), 统计截止日: ANCHOR, 专供更新时间: sync });
+    });
+    if (acqSpec.platform && idx < 10) acq.push({ 门店名称: name, 门店编号: code, 注册日期: date, 注册渠道: '饿了么会员通', 新增会员: 2, 按首单门店归属: 0, 统计截止日: ANCHOR, 专供更新时间: sync });
+  });
+  const inWin = (d, a, b) => d >= addDays(ANCHOR, -a) && d <= addDays(ANCHOR, -b);
+  const dineOrders = (a, b) => fin.filter((r) => r.取餐方式 === '堂食' && inWin(r.订单日期, a, b)).reduce((t, r) => t + r.订单数, 0);
+  const newMembers = (a, b) => acq.filter((r) => r.注册渠道 !== '饿了么会员通' && inWin(r.注册日期, a, b)).reduce((t, r) => t + r.新增会员, 0);
+  const acqPeer = [{ 门店名称: name, 门店编号: code, 拉新对比开始日: addDays(ANCHOR, -29), 拉新对比截止日: ANCHOR,
+    拉新参评状态: '可参评', 拉新近30天新增: newMembers(29, 0), 拉新近30天堂食订单: dineOrders(29, 0),
+    每百单入会: newMembers(29, 0) * 100 / dineOrders(29, 0), 拉新前期状态: '可参评', 拉新前期每百单入会: newMembers(59, 30) * 100 / dineOrders(59, 30),
+    统计截止日: ANCHOR, 专供更新时间: sync }];
+
   const named = {
+    acq: toCols(acq, ['门店名称', '门店编号', '注册日期', '注册渠道', '新增会员', '按首单门店归属', '统计截止日', '专供更新时间']),
+    acqPeer: toCols(acqPeer, Object.keys(acqPeer[0])),
     fin: toCols(fin, ['订单日期', '门店名称', '取餐方式', '渠道名称', '营业额', '订单数', '同步时间']),
     hours: toCols(hours, ['订单日期', '下单时段', '取餐方式', '订单数', '营业额']),
     newold: toCols(newold, ['门店编号', '订单日期', '顾客属性', '是否会员', '顾客人次', '订单数', '营业额']),
@@ -380,6 +404,7 @@ const specA = {
   churn: 0.18, leave: 0.09, addFriend: 6, addGroup: 3, coupon: 18,
   identShare: 0.58, memPeopleShare: 0.27, memFreq: 1.8, nonFreq: 1.3, memSpend: 59, nonSpend: 50,
   opened: '2023-05-16', branch: '示例南区', city: '示例市', type: '乡镇店',
+  acq: { mini: 3.2, pay: 1.6, device: .6, firstShare: .55 },
 };
 const specB = {
   anomaly: true, seed: 77, base: 11800, yesterday: 15120, dineShare: 0.54, ac: 31.2, newShare: 0.19,
@@ -387,11 +412,12 @@ const specB = {
   churn: 0.14, leave: 0.07, addFriend: 9, addGroup: 5, coupon: 27,
   identShare: 0.61, memPeopleShare: 0.33, memFreq: 1.86, nonFreq: 1.28, memSpend: 58, nonSpend: 49,
   opened: '2022-11-08', branch: '示例南区', city: '示例市', type: '社区店',
+  acq: { mini: 2.4, pay: 7.5, device: 1.2, firstShare: .7, platform: true },
 };
 
 const viewsA = buildStore(STORE_A, specA);
 const viewsB = buildStore(STORE_B, specB);
-const viewsC = buildStore(STORE_C,{...specA,seed:93,base:4600,yesterday:5200,branch:'示例北区',type:'社区店',noCoupons:true});
+const viewsC = buildStore(STORE_C,{...specA,seed:93,base:4600,yesterday:5200,branch:'示例北区',type:'社区店',noCoupons:true,acq:{mini:.25,pay:0,device:0,firstShare:.3}});
 // 同店营业额排行与首屏保持一致。
 for (const v of [viewsA,viewsB,viewsC]) {
  const p=v[detectV(v).peer], names=p.find(c=>c.name==='门店名称').data, rev=p.find(c=>c.name==='营业额').data;
@@ -411,6 +437,21 @@ for(const [name,v] of Object.entries(demoViews)) {
   ctx['会员对比'+label+'分位']=q<=.1?'前10%':q<=.25?'前25%':q<=.5?'前50%':q<=.75?'后50%':'后25%';
  }
  v[detectV(v).context]=toCols([ctx],Object.keys(ctx));
+}
+const acqCohort=PEERS.map((p,i)=>({...p,rate:(i%11)*.35+.3}));
+for(const [name,v] of Object.entries(demoViews)) {
+ const pv=v[detectV(v).acqPeer], row=Object.fromEntries(pv.map(c=>[c.name,c.data[0]])), ctx=contexts[name];
+ const me=acqCohort.find(p=>p.name===name); if(me) me.rate=row['每百单入会'];
+}
+for(const [name,v] of Object.entries(demoViews)) {
+ const pv=v[detectV(v).acqPeer], row=Object.fromEntries(pv.map(c=>[c.name,c.data[0]])), ctx=contexts[name];
+ for(const [label,key,field] of [['分公司','branch','分公司'],['城市','city','地理城市'],['店型','type','门店类型']]) {
+  const group=acqCohort.filter(p=>p[key]===ctx[field]).map(p=>p.rate).sort((a,b)=>a-b),n=group.length;
+  const rank=1+group.filter(r=>r>row['每百单入会']).length,q=rank/n;
+  row['拉新'+label+'名次']=rank;row['拉新'+label+'中位']=(group[Math.floor((n-1)/2)]+group[Math.floor(n/2)])/2;
+  row['拉新'+label+'分位']=q<=.1?'前10%':q<=.25?'前25%':q<=.5?'前50%':q<=.75?'后50%':'后25%';
+ }
+ v[detectV(v).acqPeer]=toCols([row],Object.keys(row));
 }
 const mapA = detectV(viewsA);
 const mapB = detectV(viewsB);
@@ -462,7 +503,7 @@ ${css}
 </style>
 </head>
 <body>
-<div class="demo-banner">脱敏演示 · 虚构门店与虚构数字 · 数据锚点 2026-03-20 · 双击即可离线点 · V2 · 不含真实品牌 / 门店 / 金额</div>
+<div class="demo-banner">脱敏演示 · 虚构门店与虚构数字 · 数据锚点 2026-03-20 · 双击即可离线点 · V2（同步 v2.15）· 不含真实品牌 / 门店 / 金额</div>
 <div class="demo-wrap"><div class="demo-filters"><label>分公司<select id="demo-branch"></select></label><label>门店 · 近7天营业额降序<select id="demo-store"></select></label></div><div id="app"></div></div>
 <script>
 window.SCORECARD_FIXTURE = ${JSON.stringify(fixture)};

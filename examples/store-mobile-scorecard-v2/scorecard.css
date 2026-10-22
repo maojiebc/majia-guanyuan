@@ -245,13 +245,344 @@ b,strong,.scoreval,.kpi b,.barval,.peerrank b,.point b,td{font-variant-numeric:t
 
 .member-review strong{font-weight:650}
 
-/* Offline wrapper: production view uses native branch/store selectors. */
+/* 生意走势：渠道与对比 */
+.trend-controls{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.trend-tabs{display:grid;grid-template-columns:repeat(3,1fr);padding:3px;gap:2px;background:#F3F4F5;border-radius:8px;flex:1;max-width:260px}
+.trend-tabs button{min-height:40px;padding:0 12px;border-radius:6px;font-size:14px;color:var(--muted);font-weight:600}
+.trend-tabs button.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px #0000000d}
+.trend-compare{min-height:44px;padding:0 16px;border:1px solid #DADDE1;border-radius:8px;font-size:14px;white-space:nowrap}
+.trend-compare.active{background:var(--brand-tint);border-color:var(--brand);color:var(--brand-deep);font-weight:600}
+.trend-summary{font-size:13px;color:var(--muted);margin:10px 0 8px;min-height:21px}
+.chart .trend-line{stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .trend-week-axis{font-size:12px}
+.trend-point{display:block;padding:10px 12px}
+.trend-date{font-size:14px;margin-bottom:6px}
+.trend-detail{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;padding:6px 0}
+.trend-detail+.trend-detail{border-top:1px solid #EBDDD5}
+.trend-way{display:flex;align-items:center;gap:6px;font-size:14px}
+.trend-way i{width:7px;height:7px;border-radius:50%}
+.trend-detail b{font-size:16px;white-space:nowrap}
+.trend-detail b small{font-size:13px}
+.trend-detail .pointcmp{flex-basis:100%;text-align:right;line-height:1.4}
+.trend-footnote{font-size:12px;color:var(--muted);margin:6px 0 0}
+
+/* Desktop only: compact overview and independent content columns. */
+@media (min-width:960px){
+  .shell{max-width:1480px;padding:12px 16px 20px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px 14px;align-items:start}
+  .shell>.top{grid-column:span 7;margin:0;align-self:center}
+  .shell>.top h1{font-size:20px}
+  .shell>.top p{font-size:12px;margin-top:0}
+  .shell>.top .iconbtn{width:28px;height:28px;font-size:13px}
+  .shell>.seg{grid-column:span 5;position:static;box-shadow:none;align-self:center;justify-self:end;width:100%;max-width:360px}
+  .shell>.seg button{min-height:32px;font-size:13px}
+  .shell>.score{grid-column:1 / -1;margin:0;padding:12px 16px;display:grid;grid-template-columns:minmax(150px,1fr) minmax(190px,1fr) minmax(290px,1.5fr);grid-template-areas:"top top bar" "value delta split" "value meta split";gap:2px 20px;align-items:center;border-radius:10px;min-width:0}
+  .scoretop{grid-area:top;gap:10px;font-size:12px;justify-content:flex-start}
+  .score .link{min-height:22px;font-size:12px;margin-left:10px}
+  .scoreval{grid-area:value;font-size:38px;margin:0;line-height:1.2;letter-spacing:-.8px}
+  .scoreval .cur{font-size:20px;vertical-align:4px}
+  .scoreval .unit{font-size:14px}
+  .score .deltas{grid-area:delta;gap:6px}
+  .score .delta{font-size:12px;padding:2px 6px}
+  .score .delta small{font-size:11px}
+  .scoremeta{grid-area:meta;font-size:13px;margin:0;line-height:1.5}
+  .scoremeta small{font-size:11px}
+  .score .splitbar{grid-area:bar;height:5px;margin:0}
+  .score .splitrows{grid-area:split;grid-template-columns:1fr 1fr;margin:2px 0 0;gap:8px}
+  .score .splitrow{display:grid;grid-template-columns:7px minmax(0,1fr);gap:2px 6px;align-content:center;min-height:56px}
+  .score .sw{width:6px;height:6px}
+  .score .swname{font-size:13px}
+  .score .swname small{display:inline;margin-left:5px;font-size:11px}
+  .score .swval{grid-column:2;display:flex;align-items:baseline;justify-content:flex-start;gap:6px;font-size:17px;white-space:nowrap}
+  .score .swval .delta{font-size:11px;padding:0}
+  .desk-row{grid-column:1 / -1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;align-items:stretch}
+  .desk-row>.sec{margin:0;padding:14px;min-width:0}
+  .desk-row .sechead{margin-bottom:8px;gap:8px}
+  .desk-row .sechead h2{font-size:16px}
+  .desk-row .sub{font-size:12px;margin-top:2px}
+  #sec-trend .sechead{margin-bottom:6px}
+  #sec-trend .sechead .seg button{min-height:28px;padding:0 10px;font-size:12px}
+  #sec-trend .trend-tabs{max-width:230px;padding:2px}
+  #sec-trend .trend-tabs button{min-height:28px;font-size:12px}
+  #sec-trend .trend-compare{min-height:32px;font-size:12px;padding:0 12px}
+  #sec-trend .trend-summary{margin:4px 0 0;font-size:12px;min-height:18px}
+  #sec-trend .chart{margin:0;cursor:crosshair}
+  #sec-trend .chart .axis{font-size:12px}
+  #sec-trend .range{min-height:20px;height:20px}
+  #sec-trend .trend-point{padding:6px 8px;margin-top:0}
+  #sec-trend .trend-date{font-size:11px;margin:0;color:var(--muted)}
+  #sec-trend .trend-detail{padding:2px 0;gap:2px 8px}
+  #sec-trend .trend-way{font-size:12px}
+  #sec-trend .trend-detail b{margin-left:auto;font-size:14px}
+  #sec-trend .trend-detail b small{font-size:12px}
+  #sec-trend .trend-detail .pointcmp{flex-basis:auto;margin-left:0}
+  #sec-trend .legend{margin-top:4px;font-size:11px}
+  #sec-trend .trend-footnote{margin-top:2px;font-size:11px}
+  #sec-peer .peers{gap:6px}
+  #sec-peer .peer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;align-items:center;padding:9px 10px}
+  #sec-peer .peername{font-size:13px}
+  #sec-peer .peername small{display:none}
+  #sec-peer .peerrank b{font-size:17px}
+  #sec-peer .peerrank small{font-size:11px}
+  #sec-peer .cmpbars{margin:0;gap:3px}
+  #sec-peer .cmprow{grid-template-columns:28px minmax(0,1fr) 60px;gap:6px;font-size:11px}
+  #sec-peer .cmprow b{font-size:12px}
+  #sec-peer .track{height:4px}
+  .desk-row .bars{gap:9px;margin-top:6px}
+  .desk-row .barlabel,.desk-row .barval{font-size:13px}
+  .desk-row .barval small{font-size:12px}
+  .desk-row .kpi{padding:8px 10px;gap:3px}
+  .desk-row .kpi>span{font-size:13px}
+  .desk-row .kpi>span small{font-size:11px;margin-top:2px}
+  .desk-row .kpi b{font-size:22px}
+  .desk-row .empty{padding:14px 10px;font-size:13px}
+  .desk-row .note{font-size:12px;margin-top:6px}
+  #sec-membervs .vscol em{min-height:0}
+  .shell>.warn,.shell>.empty,.shell>.foot,.shell>.data-disclaimer{grid-column:1 / -1;margin:0}
+  .shell>.foot{padding:0;border-top:1px solid var(--line);font-size:12px}
+  .shell>.data-disclaimer{margin-top:-6px;font-size:11px}
+  .overlay{align-items:center;padding:24px}
+  .sheet{max-width:960px;max-height:calc(100vh - 48px);border-radius:12px;padding:24px}
+  .sheet.daily-sheet{max-height:calc(100vh - 48px);padding:20px 24px}
+  .sheet .close{width:auto;min-width:112px;padding:0 24px;align-self:flex-end;min-height:36px}
+  .sheet th,.sheet td{padding:10px 12px}
+  .sheet .daily-tabs{max-width:460px;width:100%}
+  .sheet .daily-tabs button{min-height:36px}
+  .sheet table.daily td:first-child{white-space:normal}
+}
+
+/* ================= 新设计 v3（原型） ================= */
+/* 吸顶条：周期切换 + 区块导航（手机、平板） */
+.stickybar{position:sticky;top:0;z-index:5;background:var(--paper);margin:0 -14px;padding:0 14px 6px;box-shadow:0 1px 0 var(--line)}
+.stickybar .seg{position:static;box-shadow:none}
+.secnav{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.secnav::-webkit-scrollbar{display:none}
+.secnav button{flex-shrink:0;min-height:36px;padding:0 12px;border-radius:18px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:var(--text-support);font-weight:500}
+.secnav button.active{background:var(--brand-tint);border-color:var(--brand-mid);color:var(--brand-deep);font-weight:600}
+
+
+/* 区块标题：标题 + 周期标签 + 本区口径 */
+.sectitle{min-width:0}
+.titlerow{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+.titlerow h2{font-size:var(--text-section);margin:0;line-height:1.4}
+.scope{display:inline-flex;align-items:center;padding:1px 8px;border-radius:10px;font-size:var(--text-meta);font-weight:500;line-height:1.7;white-space:nowrap}
+.scope.follow{background:var(--brand-tint);color:var(--brand-deep)}
+.scope.fixed{background:#F1EFEC;color:var(--muted)}
+.helpbtn{position:relative;width:24px;height:24px;border-radius:50%;border:1px solid #DCD3CC;color:var(--muted);font-size:13px;font-weight:600;line-height:1;display:inline-grid;place-items:center}
+.helpbtn::before{content:'';position:absolute;inset:-10px}
+.h3row{display:flex;align-items:center;gap:8px;margin:14px 0 4px}.h3row h3{margin:0}
+
+/* 没数据的区块只占一行 */
+.sec-slim{padding:14px}
+.sec-slim .slimtext{margin:6px 0 0;font-size:var(--text-support);color:var(--muted);line-height:1.6}
+
+/* 可点的行一律带箭头 */
+.chev{color:var(--muted);font-size:20px;line-height:1;margin-left:6px;flex-shrink:0;font-weight:400}
+.score .chev{color:rgba(255,255,255,.8)}
+.peerhead .chev{align-self:center}
+.peerhead .peername{flex:1;min-width:0}
+.peerhead .peerrank{text-align:right}
+
+/* 名次用中性色，好坏看分位 */
+.peerrank b{color:var(--ink)}
+.peerrank .tier.good{color:var(--good);font-weight:600}
+.peerrank .tier.weak{color:var(--warn);font-weight:600}
+.member-peer-summary b{color:var(--ink)}
+
+/* 无数据的涨跌不再加粗 */
+.delta.na{font-weight:400;color:var(--muted);background:none;padding-left:0}
+
+/* 走势：一组页签 + 图上直接拖 */
+#sec-trend .sechead{display:flex;justify-content:space-between;align-items:center}
+.trend-tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1.7fr;max-width:none;width:100%}
+.trend-tabs button{padding:0 6px;white-space:nowrap}
+.chart{touch-action:pan-y;-webkit-user-select:none;user-select:none;cursor:crosshair}
+.trend-hint{margin:2px 0 6px;font-size:var(--text-meta);color:var(--muted)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sr-only:focus{position:static!important;width:100%;height:auto;clip:auto;margin:4px 0}
+
+
+/* Desktop/tablet: keep the compact composition while improving legibility. */
+.top{justify-content:flex-start;align-items:center}
+.top>div{flex:0 1 auto}
+.top .iconbtn{width:32px;height:32px;font-size:14px;position:relative}
+.top .iconbtn::before{content:'';position:absolute;inset:-6px}
+.helpbtn{width:28px;height:28px;flex-shrink:0}
+.helpbtn::before{inset:-8px}
+.secnav button{min-height:44px}
+.trend-tabs button{min-height:44px}
+.sechead:has(.seg){flex-wrap:wrap}
+.score .splitrow{position:relative;padding-right:14px}
+.score .splitrow>.chev{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0}
+.score .swname small{display:block;margin:3px 0 0}
+.score .swval{flex-wrap:wrap;justify-content:flex-end;gap:3px 8px}
+.scope{font-size:12px}
+.score .delta.na{color:rgba(255,255,255,.92)}
+.desk-row>.sec-slim{padding:12px 14px}
+.sec-slim .slimtext{margin-top:4px}
+.stickybar>.seg{margin:0}
+.shell-tab .secnav{display:none}
+@media (min-width:720px) and (max-width:959px){
+  .shell{max-width:960px;padding:14px 20px 24px}
+  .stickybar{margin:0 -20px;padding:0 20px 6px}
+  .desk-row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;align-items:stretch;margin-bottom:14px}
+  .desk-row>.sec{margin:0;padding:14px;min-width:0}
+  .desk-row .sechead{flex-wrap:wrap}
+  .desk-row .barhead{flex-wrap:wrap}
+  .shell>.score{margin:12px 0}
+}
+@media (min-width:960px){
+  .shell>.top{justify-content:flex-start;gap:12px}
+  .shell>.top h1{font-size:22px}
+  .shell>.top p{font-size:13px}
+  .shell>.stickybar{grid-column:span 5;position:static;margin:0;padding:0;box-shadow:none;background:none;align-self:center;justify-self:end;width:100%;max-width:380px}
+  .shell>.stickybar .seg button{min-height:36px;font-size:14px}
+  .secnav{display:none}
+  .scoretop,.score .link,.scoremeta{font-size:14px}
+  .score .delta{font-size:13px}
+  .score .delta small{font-size:12px}
+  .score .swname{font-size:14px}
+  .score .swname small{font-size:12px}
+  .score .swval{font-size:18px;justify-content:flex-start}
+  .score .swval .delta{font-size:12px}
+  .score .splitrow{grid-template-columns:7px minmax(0,1fr);padding-right:14px}
+  .desk-row .sechead h2{font-size:18px}
+  .desk-row .sub,.desk-row .note{font-size:13px}
+  .desk-row .barlabel,.desk-row .barval,.desk-row .kpi>span{font-size:14px}
+  .desk-row .barval small,.desk-row .kpi>span small{font-size:13px}
+  .desk-row .empty{font-size:14px}
+  #sec-trend .trend-tabs{max-width:none;padding:2px}
+  #sec-trend .trend-tabs button{min-height:36px;font-size:14px}
+  #sec-trend .sechead .seg button{min-height:32px;font-size:13px}
+  #sec-trend .trend-summary{font-size:13px;margin:6px 0 0}
+  #sec-trend .chart .axis,#sec-trend .chart .trend-week-axis{font-size:13px}
+  #sec-trend .trend-date,#sec-trend .legend,#sec-trend .trend-footnote{font-size:13px}
+  #sec-trend .trend-way,#sec-trend .trend-detail b small{font-size:13px}
+  #sec-trend .trend-detail b{font-size:16px}
+  #sec-peer .peer{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  #sec-peer .peername{font-size:14px}
+  #sec-peer .peerrank small{font-size:12px}
+  #sec-peer .cmprow{grid-template-columns:28px minmax(0,1fr) 64px;font-size:12px}
+  #sec-peer .cmprow b{font-size:13px}
+  .foot,.shell>.foot,.shell>.data-disclaimer{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Match the existing narrow/mobile shell gutters. */
+@media (max-width:360px){.stickybar{margin:0 -10px;padding-left:10px;padding-right:10px}}
+@media (min-width:560px) and (max-width:719px){.stickybar{margin:0 -20px;padding-left:20px;padding-right:20px}}
+
+/* 关键口径常驻卡片；完整说明使用明确文字入口，空数据时同样保留。 */
+.helpbtn{width:auto;height:auto;min-height:32px;padding:5px 8px;border-radius:6px;font-size:13px;line-height:1.5;white-space:nowrap;display:inline-flex;align-items:center;color:var(--muted);background:#fff}
+.helpbtn::before{inset:-6px 0}
+.caliber-summary{margin:0 0 12px;font-size:13px;line-height:1.65;color:var(--muted)}
+.sec-slim .caliber-summary{margin:8px 0}
+
+/* 手机顶部压缩为 80px：周期40px、文字导航38px、底部2px。 */
+.shell-mob .stickybar{padding-top:0;padding-bottom:2px}
+.shell-mob .stickybar>.seg{padding:2px;border-radius:6px}
+.shell-mob .stickybar>.seg button{min-height:36px;font-size:14px;padding:0 6px;border-radius:4px}
+.shell-mob .secnav{gap:2px;padding:0}
+.shell-mob .secnav button{position:relative;min-width:44px;min-height:38px;padding:0 8px;border:0;border-radius:0;background:transparent;font-size:14px;line-height:1.4}
+.shell-mob .secnav button.active{background:transparent;color:var(--brand-deep)}
+.shell-mob .secnav button.active::after{content:'';position:absolute;bottom:2px;left:50%;width:18px;height:2px;transform:translateX(-50%);border-radius:1px;background:var(--brand)}
+.chart .week-amount{font-size:11px;font-weight:600;paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none}
+
+/* ================= v2.15：宽屏按主题成行 + 会员拉新 ================= */
+.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:1 / -1}
+
+/* 商品：菜和汤底宽屏并排 */
+.prod-grid>.prod-col>:first-child{margin-top:12px}
+.desk-row .span-12 .prod-grid,.desk-row .span-8 .prod-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px}
+.desk-row .prod-grid>.prod-col>:first-child{margin-top:4px}
+
+/* 会员拉新 */
+.acq-dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:1px;background:var(--brand)}
+.acq-dot.pay{background:var(--brand-mid)}.acq-dot.other{background:#C9C2BC}
+.chart .acq-mini{fill:var(--brand)}.chart .acq-pay{fill:var(--brand-mid)}.chart .acq-other{fill:#C9C2BC}
+.chart rect.partial{opacity:.5}
+.chart .acq-total{font-size:13px;font-weight:600;fill:var(--ink)}
+.chart .baseline{stroke:#D9D0C9;stroke-width:1}
+.acq-chart{cursor:default;touch-action:auto}
+.acq-kpis .kpi>span{display:block}
+.acq-mix{grid-column:1 / -1;gap:6px}
+.acq-bar{height:8px;margin:2px 0;background:#F5EFEA}
+.acq-bar i{background:var(--brand)}.acq-bar i.pay{background:var(--brand-mid)}.acq-bar i.other{background:#C9C2BC}
+.acq-mixrow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:var(--text-body);line-height:1.5}
+.acq-mixrow>span small{display:block;margin-left:13px;font-size:var(--text-meta);color:var(--muted);line-height:1.4}
+.kpi .acq-mixrow b{font-size:var(--text-label);font-weight:600;letter-spacing:0;white-space:nowrap}
+.kpi .acq-mixrow b small{font-size:var(--text-support);margin-left:0}
+.acq-basis{display:flex;flex-direction:column;gap:6px;margin-top:6px;padding-top:8px;border-top:1px dashed var(--line)}
+.acq-basis-title{font-size:var(--text-support);color:var(--muted)}
+.acq-basis .acq-mixrow>span small{margin-left:0}
+
+/* 名次列表 */
+.ranklist{margin-top:4px;border:1px solid var(--line);border-radius:8px;background:#FFFDFB;overflow:hidden}
+.rankme{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:9px 12px;background:var(--brand-tint)}
+.rankme span{font-size:var(--text-support);color:var(--muted)}
+.rankme b{font-size:var(--text-label);font-weight:700}
+.rankrow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(96px,auto) 12px;align-items:center;gap:4px 10px;width:100%;min-height:54px;padding:7px 10px 7px 12px;text-align:left;border-top:1px solid var(--line)}
+.ranklist>.rankrow:first-child{border-top:0}
+.rk-group{font-size:var(--text-body);font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.rk-pos{display:flex;flex-direction:column;align-items:flex-end;line-height:1.3;white-space:nowrap}
+.rk-pos b{font-size:var(--text-label);font-weight:700}
+.rk-pos small{font-size:var(--text-meta);color:var(--muted)}
+.rk-pos .tier.good{color:var(--good);font-weight:600}.rk-pos .tier.weak{color:var(--warn);font-weight:600}
+.rk-med{display:flex;flex-direction:column;align-items:flex-end;font-size:var(--text-support);line-height:1.35;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rk-med small{font-size:var(--text-meta);color:var(--muted)}
+.rankrow .chev{margin-left:0}
+.rankrow.off{grid-template-columns:minmax(0,1fr) auto}
+.rk-off{font-size:var(--text-support);color:var(--muted)}
+.acq-note{margin:8px 0 0;font-size:var(--text-support);line-height:1.65;color:var(--muted)}
+.acq-note b{color:var(--ink);font-weight:600}
+.acq-split>div>.h3row:first-child{margin-top:16px}
+.h3row{flex-wrap:wrap;row-gap:4px}.h3row h3{flex-shrink:0;white-space:nowrap}
+.acq-chart{margin-top:6px}
+
+/* 宽屏：会员拉新的两个 KPI 和来源并排，近 8 周与排名并排 */
+.desk-row .acq-kpis{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr)}
+.desk-row .acq-mix{grid-column:auto}
+.desk-row .acq-split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 24px}
+.desk-row .acq-split.single{grid-template-columns:1fr}
+
+@media (min-width:960px){
+  .shell>.desk-row{margin:0}
+  .desk-row>.sec{padding:14px 16px}
+  .desk-row .acq-note{font-size:13px}
+  .desk-row .acq-split>div>.h3row:first-child{margin-top:14px}
+}
+@media (min-width:720px) and (max-width:959px){
+  .desk-row>.sec{padding:14px}
+}
+/* 上下叠放的区块组：最后一个区块撑满剩余高度 */
+.desk-stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.desk-stack>.sec{margin:0;padding:14px 16px;min-width:0}
+.desk-stack>.sec:last-child{flex:1}
+
+@media (min-width:960px){
+  .span-12 .ranklist{display:grid;grid-template-columns:minmax(170px,.75fr) repeat(3,minmax(0,1fr))}
+  .span-12 .rankme{flex-direction:column;justify-content:center;gap:2px;padding:8px 14px}
+  .span-12 .rankrow{border-top:0;border-left:1px solid var(--line);min-height:58px}
+  .desk-row .rk-group{font-size:14px}
+  .desk-row .rk-pos b{font-size:16px}
+  .desk-row .rk-med,.desk-row .rankme span{font-size:13px}
+  .desk-row .rk-pos small,.desk-row .rk-med small{font-size:12px}
+  .desk-row .acq-mixrow{font-size:14px}
+}
+@media (min-width:960px){
+  #sec-customers .kpis,#sec-private .kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #sec-customers .kpi>span small,#sec-private .kpi>span small{font-size:12px}
+}
+@media (min-width:720px) and (max-width:959px){
+  #sec-customers.span-12 .kpis,#sec-private.span-12 .kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* ===== 离线示例外框（线上不需要） ===== */
 html.demo,html.demo body{height:100%;overflow:hidden}
 .demo-banner{font:13px/1.5 system-ui,sans-serif;color:#795218;background:#fff3df;padding:8px 12px;text-align:center}
-.demo-wrap{max-width:430px;margin:auto;height:calc(100dvh - 55px);display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line)}
-.demo-filters{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line);flex-shrink:0}
+.demo-wrap{max-width:1480px;margin:auto;height:calc(100dvh - 55px);display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line)}
+.demo-filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);max-width:560px;width:100%;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line);flex-shrink:0}
 .demo-filters label{font-size:13px;color:var(--muted)}
 .demo-filters select{width:100%;display:block;font:14px/1.5 system-ui,sans-serif;min-height:44px;margin-top:3px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);padding:4px}
 .demo #app{flex:1;min-height:0;height:auto;overflow:auto}
-.demo .overlay{width:min(100%,430px);max-width:430px;left:50%;right:auto;transform:translateX(-50%);top:55px}
+.demo .overlay{top:55px}
 @media(max-width:480px){.demo-banner{font-size:12px}.demo-wrap{height:calc(100dvh - 55px);border:0}}
