@@ -44,3 +44,28 @@ rep.CTX['同店型会员复购门店数']=9;assert(rep.repurchaseReview().includ
 rep.CTX['同店型会员复购门店数']=10;rep.CTX['会员堂食复购率']=.35;assert(rep.repurchaseReview().includes('已达到'));
 assert.equal(rep.pct(.004),'0.4%');assert.equal(rep.pct(0),'0%');assert.equal(rep.pct(null),'—');
 console.log('PASS: repurchase observation/sample gates, unrounded threshold comparison and small percentages.');
+
+// Member acquisition: channel groups, platform members excluded, first-order attribution split, absolute deltas.
+const q={D:[],V:{acq:0},CTX:{'门店编号':'001'},STORE:'示例店'};vm.createContext(q);
+vm.runInContext(src.slice(src.indexOf('  var esc ='),src.indexOf('  function rows('))+src.slice(src.indexOf('  function delta('),src.indexOf('  function tick('))+src.slice(src.indexOf('  var ACQ_GROUP'),src.indexOf('  function acqWeeks('))+src.slice(src.indexOf('  function acqBasis('),src.indexOf('  function acquisition()')),q);
+const reg=(d,ch,n,f,code)=>({'门店编号':code||'001','门店名称':'示例店','注册日期':d,'注册渠道':ch,'新增会员':n,'按首单门店归属':f});
+q.D=[[reg('2026-03-19','微信小程序',4,1),reg('2026-03-20','支付宝碰一下',6,6),reg('2026-03-20','支付设备入会',2,1),reg('2026-03-20','饿了么会员通',9,0),reg('2026-03-20','新渠道',1,0),reg('2026-03-20','微信小程序',50,0,'002')]];
+let m=q.acqSum(q.ownRows(0),['2026-03-19','2026-03-20']);
+assert.equal(m.total,13);assert.equal(m.mini,4);assert.equal(m.pay,8);assert.equal(m.other,1);assert.equal(m.excluded,9);assert.equal(m.byFirst,8);assert.equal(Object.keys(m.days).length,2);
+m=q.acqSum(q.ownRows(0),['2026-03-20','2026-03-20']);assert.equal(m.total,9);
+assert(q.acqBasis({total:13,byFirst:8}).includes('5'));assert(q.acqBasis({total:13,byFirst:8}).includes('62%'));
+assert.equal(q.acqBasis({total:13,byFirst:null}),'');assert.equal(q.acqBasis({total:0,byFirst:0}),'');
+q.D=[[{'门店编号':'001','门店名称':'示例店','注册日期':'2026-03-20','注册渠道':'微信小程序','新增会员':3}]];
+assert.equal(q.acqSum(q.ownRows(0),['2026-03-20','2026-03-20']).byFirst,null);
+assert.equal(q.perHundred(3,0),null);assert.equal(q.perHundred(3,200),1.5);
+assert(q.absDelta(4,1,'上周五',0,' 人').includes('▲ 3 人'));assert(!q.absDelta(4,1,'上周五',0,' 人').includes('%'));
+assert(q.absDelta(1.04,1.0,'前7天',1,' 人').includes('持平'));assert(q.absDelta(null,1,'前7天',1,' 人').includes('无数据'));
+console.log('PASS: acquisition channel groups, platform exclusion, first-order split, per-hundred and absolute deltas.');
+
+// Rank list: own value once, one row per group, unavailable groups stay unclickable.
+const k={};vm.createContext(k);
+vm.runInContext(src.slice(src.indexOf('  var esc ='),src.indexOf('  function rows('))+src.slice(src.indexOf('  var CHEV ='),src.indexOf('  function bars('))+src.slice(src.indexOf('  function rankList('),src.indexOf('  function table(')),k);
+const html=k.rankList({label:'本店',value:'1.2 人'},[{action:'acq-peer',key:'分公司',label:'示例南区',rank:2,tier:'前25%',med:'0.8 人',gap:'比中位高 0.4 人'},{label:'示例市',off:'可比样本不足，暂不排名'}]);
+assert.equal((html.match(/rankrow/g)||[]).length,2);assert.equal((html.match(/<button/g)||[]).length,1);assert(html.includes('tier good'));assert.equal((html.match(/1\.2 人/g)||[]).length,1);
+assert.equal(k.gapText(0.04,' 人',1,0.05),'与中位持平');assert.equal(k.gapText(-0.4,' 人',1,0.05),'比中位低 0.4 人');
+console.log('PASS: rank list rows, disabled groups and median gap wording.');
