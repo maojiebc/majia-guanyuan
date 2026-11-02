@@ -53,7 +53,12 @@ def stable_content(value):
     result = {}
     for key, item in value.items():
         if key == "dsInfo" and isinstance(item, dict):
-            result[key] = {k: stable_content(item[k]) for k in ("dsId", "aliasMap", "columns") if k in item}
+            result[key] = {k: stable_content(item[k]) for k in
+                           ("dsId", "aliasMap", "columns", "dynamicParameters") if k in item}
+            # Dataset-level parameter declarations change query meaning just as chart parameters do.
+            config = item.get("config")
+            if isinstance(config, dict) and "dynamicParameters" in config:
+                result[key]["config"] = {"dynamicParameters": stable_content(config["dynamicParameters"])}
         else:
             result[key] = stable_content(item)
     return result
