@@ -120,6 +120,18 @@ class SnapshotTests(unittest.TestCase):
             with self.subTest(page=p):
                 self.assertNotEqual(base["definitionFingerprint"], ev.make_snapshot(p, "demo")["definitionFingerprint"])
 
+    def test_dataset_parameter_defaults_are_preserved_and_change_the_fingerprint(self):
+        p = page()
+        declared = [{'dpId': 'param-example', 'name': '开始日期', 'defaultValue': '2026-01-01'}]
+        p['cards'][0]['content']['dsInfo']['config'] = {'dynamicParameters': declared}
+        before = ev.make_snapshot(p, 'demo')
+        saved = before['cards'][0]['definition']['content']['dsInfo']['config']['dynamicParameters']
+        self.assertEqual(saved, declared)
+        p['cards'][0]['content']['dsInfo']['config']['dynamicParameters'][0]['defaultValue'] = '2026-02-01'
+        after = ev.make_snapshot(p, 'demo')
+        self.assertNotEqual(before['definitionFingerprint'], after['definitionFingerprint'])
+        self.assertTrue(ev.compare_snapshots(before, after)['changed'])
+
     def test_refresh_metadata_does_not_change_definition(self):
         p = page(); p["utime"] = "new"; p["cards"][0]["content"]["dsInfo"].update(rowCount=99, utime="new")
         self.assertEqual(ev.make_snapshot(page(), "demo")["definitionFingerprint"], ev.make_snapshot(p, "demo")["definitionFingerprint"])

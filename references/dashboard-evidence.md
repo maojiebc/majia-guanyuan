@@ -102,3 +102,7 @@ python3 examples/dashboard-evidence/offline_demo.py --out dashboard-evidence/off
 ```
 
 离线示例验证合成 POS 金额正确时通过、拿另一渠道金额或错误范围时拒绝。真实后台验证的公开摘要见 [docs/dashboard-evidence-validation.md](../docs/dashboard-evidence-validation.md)；原始资源 ID、生产金额、门店及日志保留在私有证据目录。
+
+## 参数化看板的范围
+
+数据集层与图表层的dynamicParameters属于定义，声明/默认值改变须重新采集复查。旧版快照若丢失数据集参数也需重建。当前sample命令不提供动态传参，不能声称支持用户指定的任意参数范围；先核已声明参数和实际默认值。含DYNAMIC_PARAMS的公式不直接内联SQL，未知公式不判为自由聚合。默认参数下的空结果不能推成整个数据集无数据。

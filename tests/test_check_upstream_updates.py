@@ -19,6 +19,43 @@ class UpstreamChecks(unittest.TestCase):
         return {'schemaVersion': 1, 'repository': check.BUILDER_REPO,
                 'reviewedCommit': 'a' * 40, 'reviewedVersion': '4.8.1'}
 
+    def npm_current(self):
+        result = {p: {'version': '1.0.0', 'dependencies': {}} for p in check.PACKAGES}
+        result[check.PACKAGES[0]]['dependencies'] = dict.fromkeys(check.PACKAGES[1:], '1.0.0')
+        result['@guandata/guancli']['version'] = '1.0.1'
+        return result
+
+    def test_lag_keeps_an_exact_install_set_and_independent_review_target(self):
+        plan = check.review_plan(self.npm_current())
+        self.assertFalse(plan['latestSetCoherent'])
+        self.assertTrue(plan['canReviewIndependently'])
+        self.assertEqual(plan['aggregatePackages']['@guandata/guancli'], '1.0.0')
+        self.assertEqual(plan['additionalReviewPackages'], {'@guandata/guancli': '1.0.1'})
+
+    def test_non_exact_aggregate_dependency_rejected_instead_of_mixed(self):
+        current = self.npm_current()
+        current[check.PACKAGES[0]]['dependencies']['@guandata/guancli'] = '^1.0.0'
+        with self.assertRaises(ValueError):
+            check.review_plan(current)
+
+    def test_already_reviewed_lag_is_not_a_new_update(self):
+        current = self.npm_current()
+        baseline = {p: v['version'] for p, v in current.items()}
+        dependencies = current[check.PACKAGES[0]]['dependencies']
+        self.assertEqual(check.compare(baseline, current)['status'], 'review_required')
+        result = check.compare(baseline, current, dependencies)
+        self.assertEqual(result['status'], 'unchanged')
+        self.assertEqual(len(result['aggregateMismatches']), 1)
+
+    def test_changed_aggregate_pin_requires_review_even_when_latest_is_unchanged(self):
+        current = self.npm_current()
+        baseline = {p: v['version'] for p, v in current.items()}
+        reviewed = dict(current[check.PACKAGES[0]]['dependencies'])
+        current[check.PACKAGES[0]]['dependencies']['@guandata/guancli'] = '1.0.1'
+        result = check.compare(baseline, current, reviewed)
+        self.assertEqual(result['status'], 'review_required')
+        self.assertEqual(result['aggregateChanges'][0]['package'], '@guandata/guancli')
+
     def test_version_is_read_only_from_frontmatter(self):
         self.assertEqual(check.builder_version('---\nversion: "4.8.2"\n---\n# v9.0.0'), '4.8.2')
         with self.assertRaises(ValueError):

@@ -1,22 +1,48 @@
 # 官方 CLI 更新兼容说明
 
-核验日期：2026-10-13（本机客户端日期；官方部分包标注2026-10-14）。适用于 majia-guanyuan v3.5.0。依据 npm 官方发布包的 CHANGELOG、随包 Skill 与本机命令帮助核对；没有在生产 BI 上重跑业务读写。
+核验日期：2026-11-02（客户端日期）。适用于 majia-guanyuan v3.5.1。本轮验证限官方包、Skill、命令帮助、离线计划与本地合成回归；未请求生产 BI，未验证目标租户的写权限或业务结果。
 
-## 当前版本与来源
+## 当前版本与安装组合
 
-`@guandata/guanskill@0.1.46` 官方包标注2026-10-14；本机、聚合包精确依赖和六组件 npm latest 一致。机器可读审阅记录见 [official-cli-baseline.json](official-cli-baseline.json)。CLI 与已安装 Skill 分开验证。
-
-| 组件 | 上次已审阅基线 | 当前版本 | 官方随包变更记录 |
+| 组件 | 上次审阅 | 本轮审阅 | 本机聚合固定版本 |
 |---|---|---|---|
-| guanskill | 0.1.44 | 0.1.46 | [CHANGELOG](https://unpkg.com/@guandata/guanskill@0.1.46/CHANGELOG.md) |
-| guancli | 1.0.65 | 1.0.66 | [CHANGELOG](https://unpkg.com/@guandata/guancli@1.0.66/CHANGELOG.md) |
-| guanvis | 0.1.53 | 0.1.55 | [CHANGELOG](https://unpkg.com/@guandata/guanvis@0.1.55/CHANGELOG.md) |
-| guanetl | 0.1.40 | 0.1.41 | [CHANGELOG](https://unpkg.com/@guandata/guanetl@0.1.41/CHANGELOG.md) |
-| guanwf | 0.1.838 | 0.1.839 | [CHANGELOG](https://unpkg.com/@guandata/guanwf@0.1.839/CHANGELOG.md) |
-| guands | 0.1.37 | 0.1.37 | [CHANGELOG](https://unpkg.com/@guandata/guands@0.1.37/CHANGELOG.md) |
-| guanmetric | 0.1.21 | 0.1.21 | [CHANGELOG](https://unpkg.com/@guandata/guanmetric@0.1.21/CHANGELOG.md) |
+| guanskill | 0.1.46 | 0.1.52 | 0.1.52 |
+| guancli | 1.0.66 | 1.0.69、1.0.70 | 1.0.69 |
+| guanvis | 0.1.55 | 0.1.60 | 0.1.60 |
+| guanetl | 0.1.41 | 0.1.45 | 0.1.45 |
+| guanwf | 0.1.839 | 0.1.842 | 0.1.842 |
+| guands | 0.1.37 | 0.1.40 | 0.1.40 |
+| guanmetric | 0.1.21 | 0.1.23 | 0.1.23 |
 
-## 本轮官方更新：本地排名、编辑保护与预览范围
+聚合包精确依赖 CLI 1.0.69，npm 单组件 latest 为1.0.70。两者不混装：本机聚合组合保持不变；1.0.70 在隔离 prefix 安装，只核对帮助和随包文档。机器记录中的 packages 是已审阅版本，aggregateDependencies 是聚合固定组合，verification 说明实际验证范围，不能把审阅记录当作安装证明。官方 CHANGELOG 见 [guanskill0.1.52](https://unpkg.com/@guandata/guanskill@0.1.52/CHANGELOG.md)、[CLI1.0.70](https://unpkg.com/@guandata/guancli@1.0.70/CHANGELOG.md)，其余组件见相同固定版本的随包记录。
+
+检查器 reviewPlan 给出 aggregatePackages 和 additionalReviewPackages；latestSetCoherent=false 表示不可把所有 latest 当作同一聚合安装组合，canReviewIndependently=true 只表示可以继续审阅，不是发布批准。完成审阅后记录 aggregateDependencies；已知滞后仍会显示，但不再被当作新的版本变化。聚合固定依赖、版本或附属提交再次改变时重新审阅。来源失败仍为 check_failed，不推进任何基线。
+
+## 2026-11-02 需要调整的行为
+
+**卡片复制与页面编辑。** 已有目标页中复制单卡走 `guancli card copy <cd_id> --page-id <target_page_id> --dry-run`。离线计划不证明权限；真实复制是一次写入，结果未知先查副本，不重发。返回新卡ID不代表布局或发布完成；默认不创建页面/草稿。此前附属项目“没有单卡另存”的版本说明不适用于当前 CLI。整页独立副本仍用 page save-as；不能把旧 attachCard 工程或卡ID搬到新页冒充副本。guanvis 支持文本正文/宏原地编辑，并保护旧复杂报表的只读引用、隐藏卡的 LOD 依赖及高级计算；局部修改不能改成整页重建。洞察配置编辑路由官方 guancli/guanvis，实际目标、写入与发布分别核对。
+
+**指标查询与DSL。** 常规基础指标遵循当前官方只读查询入口；保留同参数 explain 计划核对，但不手工复用旧 session/modify 请求来“查数”。泛化查询最低 BI8.2.0；BI8.4 的指标和公共维度合同以当前 Skill 为准，不把旧JSON字段猜成新字段。指标权限查询仅用于读权限，不授权或撤销权限。guanmetric DSL 先检出/预览/plan，再按现有范围 apply；helper和声明不是不可信代码沙箱，不运行陌生来源工程；preview/plan不是写入成功。恢复沿原state/reconcile，缺失ID或未知响应不得重建。完整新DSL不在本轮移植。
+
+**ETL保存与取消。** Agent编辑/创建用 --require-plan，导出、校验及目标预览后生成新的保存计划；核对 intent=create/new-copy/overwrite 与真实授权，携带同一计划保存。计划失效则重新读取并核对；禁止改保护状态或借保存计划扩大调度/输出/写入范围。v2计划只按稳定节点处理服务端明确 created:false 的临时输出ID，不放松已物化绑定保护。新单根 cascade-run 与旧 run --run-upstream 语义不同，不能混用后补发下游；根成功不证明整链成功，输出元信息检查也不证明数据同代。只读调度资源分析会增加服务负载，应定向限定范围。
+
+预览的明确额度拒绝可由官方有界排队；提交结果未知、轮询失败和超时不得由外层再发同一次请求。原生预览取消必须看明确终态；强制退出、WASI旧宿主或本地超时都不证明远端停止。本项目保持单并发、120秒预算及未知请求留锁纪律，不因新版取消能力自动解锁。单根执行和保存/调度都是独立业务操作，本次未执行。
+
+**数据集。** 文件导出优先 `guands dataset export`，先明确环境、数据集、范围、格式与输出；dry-run不证明全量或权限，服务端行列权限与文件内容、数量仍需验收。不能把受限导出或样本补成全量；受限环境下的计数分块作为有明确理由的后备。WebService、分组字段、飞书建集和行列权限已有官方入口；只读查看配置不等于获准修改权限。高性能模式转换保留dsId但会影响现有计算，需对应业务授权；超时先读转换状态，不能重发、换字段重建或假称回滚。模型同步按物理字段身份核计划，不能只凭别名配对。表单写入成功、关联数据集刷新与结构同步是三个阶段；不因刷新失败重写已成功的表单行。
+
+**代理与认证。** CLI1.0.70 支持API代理地址与BI资源链接分别处理；此次只核版本、帮助及随包资料，未验证真实代理或跨站凭据。不能将资源URL可打开当成API目标已核对；本项目显式profile的认证覆盖隔离仍保留。
+
+## 附属项目审阅与吸收范围
+
+审阅 JeremyWXL/guanbi-agent-builder 从4.8.5至4.12.1的固定提交变化，最新提交 de79210e841931d5efd14854183f75a0c5b9b4ae。原4.8.1实现参考与MIT保留。本轮吸收参数上下文、未知公式不推定可自由聚合、数据集API与卡片读取权限分别判定、产物需实际校验的纪律；未移植向导、诊断评分、分析写作或卡片重建器，不继承其545项测试或真实租户结论。
+
+数据集层动态参数原来被本地快照排除；现保留 dsInfo.dynamicParameters 及 dsInfo.config.dynamicParameters，参数默认值变化会使定义指纹改变。旧参数化快照需重新采集。图表层声明原已保留；缺少声明或期望取值时不猜参数。当前本地采样器不新增动态传参接口，只能说明已核定的默认范围；含 DYNAMIC_PARAMS 的公式不得直接内联SQL，不以默认参数空结果推断全期无数据。UNKNOWN公式保持unknown，单位换算先核原始单位。PR#3仍开放，本轮没有重复评论或提交。
+
+## 本轮验证与限制
+
+本机原已安装聚合0.1.52，显式 install-skill 后七个官方Skill的183个随包文件与 .agents 逐文件哈希一致；安装器提示PromptScript不支持全局安装，未称所有工具都已安装。核对9项帮助/离线计划，包括虚构ID的card copy dry-run，未复制真实卡片。CLI1.0.70隔离安装仅核帮助。检查器的滞后组合、已审阅滞后、新固定依赖、非精确版本拒绝及数据集参数快照合成回归通过。没有BI业务取数、保存、运行、调度、模式或权限变更；上线与业务验收分别记录。
+
+## 2026-10-13 更新：本地排名、编辑保护与预览范围
 
 实际入口是 `guancli analyze report`，不是顶层 report；它只读取本地 CSV/JSON，不连接 BI、不隐式聚合。先确认完整候选池与业务粒度，再选择 --group-by 或 --global、声明 --complete-input。这个开关只是调用方声明，不证明后端分页完成。补充指标用显式键做 left 对齐，补充侧必须唯一，未匹配保持 null，不让补充对象扩大候选池；不能从某指标的 TopN 子集推导另一指标全池排名。批量 envelope 选择成功的 --result-id，计算只取原始值。详情以官方 analysis-primitives.md 和当前帮助为准。本地分块验收提供范围与文件证据，不自动授予排名候选池或业务口径正确性。
 
@@ -113,7 +139,7 @@ guands 0.1.36 的 dataset import/get JSON 不再混入轮询诊断，诊断在 s
 | 新资源目录 | ETL 本体目录与输出数据集目录来自不同树；页面、数据集也须使用对应类型的真实目录。先核对环境、资源名、目录路径与 ID，已有授权覆盖具体落位时直接继续；缺少会改变结果的目标信息才确认。完成后回读路径、链接和资源状态。 |
 | guanwf | 0.1.829 起增加 Python 运行环境、内存预检及输出绑定；NO_GO/UNKNOWN 按官方规则处理，不把未知判成安全。CREATE_NEW 首跑成功后须完成绑定并发布保存，才可继续运行。`run --validate` 只在已有草稿执行且不注册真实输出；它不是纯本地验证，不用于试跑生产工作流。写入的 `--confirm`、并发检查、保存回读及输出验收保留。 |
 
-`guanetl rmdir` 只删除空 ETL 目录，是不可恢复的物理删除，需明确授权目标并传 `--yes`；它不是 ETL 删除命令。WebService 数据集写入仍由官方 CLI 拒绝，不能用内部 API 或其他数据集类型绕过。修改资源必须保持原 ID 与下游引用，不能删除后重建同名资源。
+`guanetl rmdir` 只删除空 ETL 目录，是不可恢复的物理删除，需明确授权目标并传 `--yes`；它不是 ETL 删除命令。WebService 的创建、编辑、调度及模型同步现有官方入口；追加、替换或其他写入是否受支持须按当前 Skill/命令核实，不能用内部 API 或伪装类型绕过拒绝。修改资源必须保持原 ID 与下游引用，不能删除后重建同名资源。
 
 ## 页面与 SuperApp：先走官方正常路径
 
@@ -125,7 +151,7 @@ guands 0.1.36 的 dataset import/get JSON 不再混入轮询诊断，诊断在 s
 
 SuperApp 已支持 list/download。更新已知应用先定位 appId 并显式传入；`--update-if-exists` 是同名更新选项，不替代目标核验。`app publish --skip-build` 仅用于可信且已验证的 dist；`--overwrite-settings` 控制是否覆盖线上 `settings.json`，非交互未指定时保留线上配置。以当前 `--help` 的 settings.json 拼写为准，CHANGELOG 个别条目写作 setting.json。
 
-## 本次验证范围
+## 2026-10-13 验证范围
 
 核对当前聚合包精确依赖与六组件，安装官方聚合包后显式 install-skill，七个官方 Skill 的153个随包文件与本机逐文件一致。实际读取 analyze report 和数据集预览帮助，并在已授权的独立测试环境完成两次小范围预览与本地验收；生产 BI 未请求，ETL/页面/参数未实写。安装器提示 PromptScript 不支持全局安装，不把其汇总结果当作所有助手已安装。
 

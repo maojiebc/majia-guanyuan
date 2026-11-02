@@ -50,6 +50,8 @@ V3.3.0 的借鉴范围是看板定义档案、卡片采样、结构化问答验�
 
 2026-10-13 追加审阅 v4.8.3—v4.8.5，[完整提交 e57c55b](https://github.com/JeremyWXL/guanbi-agent-builder/commit/e57c55b7a092f31d0c49bd1ade6deac22bdbeec1)。吸收 v4.8.4 的出处须附数据期间、筛选与首次指标口径纪律，落实到本地验收报告与引用边界；未移植工作台数组渲染与首次开场白。原 v4.8.1 实现参考和 MIT 原文保留，独立验收脚本为本项目原创，不宣称继承上游测试。
 
+2026-11-02 追加审阅4.9.0—4.12.1，[固定提交 de79210](https://github.com/JeremyWXL/guanbi-agent-builder/commit/de79210e841931d5efd14854183f75a0c5b9b4ae)。吸收动态参数上下文、未知公式不猜可加和产物实际校验纪律；以本项目独立合成例复现数据集参数快照遗漏并修正。诊断/向导/重建器未移植，不继承上游测试。原实现参考和MIT原文保留。
+
 These local evidence tools were independently reimplemented after read-only production comparison. Credit goes to Jeremy for the dashboard-learning and regression-evidence workflow. Our test and deployment claims apply only to the cases documented in [the verification record](docs/dashboard-evidence-validation.md).
 
 ---

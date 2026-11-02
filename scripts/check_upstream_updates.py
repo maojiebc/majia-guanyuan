@@ -71,16 +71,36 @@ def fetch(package):
     return {'version': data['version'], 'dependencies': data.get('dependencies', {})}
 
 
-def compare(baseline, current):
+def review_plan(current):
+    """Keep the coherent aggregate install separate from newer review-only packages."""
+    dependencies = current[PACKAGES[0]]['dependencies']
+    if any(not isinstance(dependencies.get(p), str)
+           or not VERSION.fullmatch(dependencies[p]) for p in PACKAGES[1:]):
+        raise ValueError('Aggregate must pin all six component versions exactly')
+    aggregate = {PACKAGES[0]: current[PACKAGES[0]]['version'],
+                 **{p: dependencies[p] for p in PACKAGES[1:]}}
+    additional = {p: current[p]['version'] for p in PACKAGES[1:]
+                  if dependencies[p] != current[p]['version']}
+    return {'aggregatePackages': aggregate, 'additionalReviewPackages': additional,
+            'latestSetCoherent': not additional, 'canReviewIndependently': True}
+
+
+def compare(baseline, current, reviewed_aggregate=None):
     changes = [{'package': p, 'reviewed': baseline[p], 'latest': current[p]['version']}
                for p in PACKAGES if baseline[p] != current[p]['version']]
-    dependencies = current['@guandata/guanskill']['dependencies']
+    dependencies = current[PACKAGES[0]]['dependencies']
     mismatches = [{'package': p, 'aggregate': dependencies.get(p), 'latest': current[p]['version']}
                   for p in PACKAGES[1:] if dependencies.get(p) != current[p]['version']]
+    aggregate_changes = [] if reviewed_aggregate is None else [
+        {'package': p, 'reviewed': reviewed_aggregate.get(p), 'current': dependencies.get(p)}
+        for p in PACKAGES[1:] if reviewed_aggregate.get(p) != dependencies.get(p)]
+    unreviewed_lag = bool(mismatches) and reviewed_aggregate != {
+        p: dependencies.get(p) for p in PACKAGES[1:]}
     downgrades = [c['package'] for c in changes if
                   tuple(map(int, c['latest'].split('.'))) < tuple(map(int, c['reviewed'].split('.')))]
-    return {'status': 'review_required' if changes or mismatches else 'unchanged',
-            'changes': changes, 'aggregateMismatches': mismatches, 'downgrades': downgrades}
+    return {'status': 'review_required' if changes or aggregate_changes or unreviewed_lag else 'unchanged',
+            'changes': changes, 'aggregateMismatches': mismatches,
+            'aggregateChanges': aggregate_changes, 'downgrades': downgrades}
 
 
 def main():
@@ -96,9 +116,15 @@ def main():
             raise ValueError('Invalid reviewed baseline schema or package set')
         if not all(isinstance(v, str) and VERSION.fullmatch(v) for v in versions.values()):
             raise ValueError('Invalid reviewed baseline version')
+        reviewed_aggregate = baseline.get('aggregateDependencies')
+        if reviewed_aggregate is not None and (set(reviewed_aggregate) != set(PACKAGES[1:])
+                or not all(isinstance(v, str) and VERSION.fullmatch(v)
+                           for v in reviewed_aggregate.values())):
+            raise ValueError('Invalid reviewed aggregate dependency set')
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
             current = dict(zip(PACKAGES, pool.map(fetch, PACKAGES)))
-        result = compare(versions, current)
+        result = compare(versions, current, reviewed_aggregate)
+        result['reviewPlan'] = review_plan(current)
         if args.builder_baseline:
             builder_baseline = json.loads(args.builder_baseline.read_text())
             result['builder'] = compare_builder(builder_baseline, fetch_builder(builder_baseline))
