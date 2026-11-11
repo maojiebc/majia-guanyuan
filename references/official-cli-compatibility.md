@@ -1,22 +1,54 @@
 # 官方 CLI 更新兼容说明
 
-核验日期：2026-11-02（客户端日期）。适用于 majia-guanyuan v3.5.1。本轮验证限官方包、Skill、命令帮助、离线计划与本地合成回归；未请求生产 BI，未验证目标租户的写权限或业务结果。
+核验日期：2026-11-11（客户端日期）。适用于 majia-guanyuan v3.5.2。本轮是官方文档/帮助审阅与本地实际运算验证，不是生产BI业务验收。
 
 ## 当前版本与安装组合
 
-| 组件 | 上次审阅 | 本轮审阅 | 本机聚合固定版本 |
-|---|---|---|---|
-| guanskill | 0.1.46 | 0.1.52 | 0.1.52 |
-| guancli | 1.0.66 | 1.0.69、1.0.70 | 1.0.69 |
-| guanvis | 0.1.55 | 0.1.60 | 0.1.60 |
-| guanetl | 0.1.41 | 0.1.45 | 0.1.45 |
-| guanwf | 0.1.839 | 0.1.842 | 0.1.842 |
-| guands | 0.1.37 | 0.1.40 | 0.1.40 |
-| guanmetric | 0.1.21 | 0.1.23 | 0.1.23 |
+| 组件 | 上次审阅 | 当前审阅及本机聚合固定版本 |
+|---|---|---|
+| guanskill | 0.1.52 | 0.1.55 |
+| guancli | 1.0.70（另核聚合1.0.69） | 1.0.72 |
+| guanvis | 0.1.60 | 0.1.62 |
+| guanetl | 0.1.45 | 0.1.45 |
+| guanwf | 0.1.842 | 0.1.842 |
+| guands | 0.1.40 | 0.1.41 |
+| guanmetric | 0.1.23 | 0.1.23 |
 
-聚合包精确依赖 CLI 1.0.69，npm 单组件 latest 为1.0.70。两者不混装：本机聚合组合保持不变；1.0.70 在隔离 prefix 安装，只核对帮助和随包文档。机器记录中的 packages 是已审阅版本，aggregateDependencies 是聚合固定组合，verification 说明实际验证范围，不能把审阅记录当作安装证明。官方 CHANGELOG 见 [guanskill0.1.52](https://unpkg.com/@guandata/guanskill@0.1.52/CHANGELOG.md)、[CLI1.0.70](https://unpkg.com/@guandata/guancli@1.0.70/CHANGELOG.md)，其余组件见相同固定版本的随包记录。
+聚合0.1.55的六组件精确依赖与latest一致，机器基线见[official-cli-baseline.json](official-cli-baseline.json)。官方随包记录：[聚合](https://unpkg.com/@guandata/guanskill@0.1.55/CHANGELOG.md)、[CLI](https://unpkg.com/@guandata/guancli@1.0.72/CHANGELOG.md)、[可视化](https://unpkg.com/@guandata/guanvis@0.1.62/CHANGELOG.md)、[数据集](https://unpkg.com/@guandata/guands@0.1.41/CHANGELOG.md)。安装组合、审阅范围及真实业务验收分别记录。
 
-检查器 reviewPlan 给出 aggregatePackages 和 additionalReviewPackages；latestSetCoherent=false 表示不可把所有 latest 当作同一聚合安装组合，canReviewIndependently=true 只表示可以继续审阅，不是发布批准。完成审阅后记录 aggregateDependencies；已知滞后仍会显示，但不再被当作新的版本变化。聚合固定依赖、版本或附属提交再次改变时重新审阅。来源失败仍为 check_failed，不推进任何基线。
+## 2026-11-11 更新：精确计算、字段选择与指标快照
+
+### 连续计算直接使用官方pipeline
+
+多个本地步骤使用 `guancli analyze pipeline plan.json --validate` 后再执行 `--output-dir <新的私有结果目录>`，不要另写通用计算器。输入路径相对计划文件，宿主先快照允许访问的文件；原生指标file回执所指的实际数据也必须安全快照并改写路径，不能只保护外层回执。输入只消费raw/both的成功项，批量按唯一resultId选项，不合并失败项或猜嵌套路径。
+
+completeInput:true只是声明；仍要独立确认期间、筛选、候选池、粒度和分页。`--validate`只验结构，不读数据；rowCount不符、offset非零或达到limit的表会拒绝计算。最多50个输入、合计32MiB，每个输入10000行，最多50步/10个输出，预览最多30行不等于完整结果行数。关联必须显式选键及NULL策略，不能让多对多匹配增行或用有值交集替代资格范围；concat保留重复实体，未匹配与除零保持null，不能补成0。
+
+pipeline输出独立的 `analysis-pipeline/v1`，计算值使用numerator/denominator字符串分数；原始标量保留类型。继续计算读取精确JSON，不反读舍入CSV/Markdown；percent消费未乘100的比例，unit只是标签，不替换原始单位或做换算。旧单步analyze和report仍是analysis/v1，不能因底层复用就称其全部改成精确分数。标准输入错误看结构化code，不匹配文案；I/O/超时/交付故障不能冒充参数错误。结果目录必须不存在，失败不交付成功回执；plan.json对外需映射授权路径，不公开私有目录。
+
+[合成离线示例](../examples/local-analysis-plan/README.md)实际得到Amount=3/10、Ratio=1/3及33.33%展示；触及上限的输入和覆盖已有结果目录均被拒绝。没有连接BI，不证明任意真实数据集完整或口径正确。
+
+### 自助取数选择参与查询的真实字段
+
+CUSTOM_REPORT主表格的字段窗格控制zoneFilter，--columns只是返回后裁剪，不能用隐藏列模拟改分组。先读全部可选字段，再把用户表达映射成真实key；不同日期、含税口径或同名候选有歧义时核实，不按相似名称猜。显式选择用 --report-fields key:<key>，默认为replace；它保持字段原区域、顺序、公式和聚合，可能改变查询粒度但不修改页面。字段窗格也不替代 --with-default-filters 的行筛选。
+
+追问“在刚才结果里再加字段”时合并上一轮真实集合并使用replace，同时保留有效行筛选；add是加入页面当前选择，不代表上一轮显式选择。动态维度与zoneFilter不能同时保证生效时停止，不能默默删参数。JSON多级列名含层级路径及转义/重名后缀，后续按实际输出列精确选取；需计算使用 --value-format raw，不把格式化小数和显示单位当原值。本项目本地采样封装不新增report-fields接口，要求显式选择时直接路由当前官方CLI。
+
+### 指标快照不能当作实时权限和取数验收
+
+新工程仍用metric-init；--merge仅刷新指定旧ID并追加新ID，--refresh回读全部旧指标，--force全量替换不是追加。三个选项互斥，已知环境冲突仍拒绝。旧快照环境不全时先明确归属，不能用别名猜Domain；跨8.4协议边界先整体刷新，不能混合新旧条目。Flow/DSL交接必须是flow export的独立文件，核usable、唯一ID和环境，再逐项回读服务端正式状态，不直接用IR/state或历史来源指纹代替。
+
+`guanvis check-metric-snapshot`只读回读同ID定义并重编译工程；unchanged只表示已跟踪投影/查询字段未变，不代表权限、审批、完整血缘或运行态取数通过。changed/incompatible/unverified须分别复核，不自动刷新基线。多公共维度候选时必须在卡片源脚本显式选择publicDimensionId，不选首项、不猜fdId等价；同名指标/维度用实际ID消歧。新选择不修改指标本体，也不凭快照检查通过跳过取数验收。
+
+### 编辑保留与MongoDB路由
+
+Tab内筛选器组在checkout/edit/publish中应保留组结构。guanvis新增page save-as，但服务端PAT权限隔离验收尚未完成，不能仅因命令存在就宣称PAT可交付；目标环境和业务写入仍另行核对。MongoDB使用官方dataset mongodb columns/preview/create/update，不走JDBC建集或普通account探查。先限定集合、字段、样本、筛选和日期转换，再按官方原地编辑保留dsId/fdId，不能删后重建。这些写入本轮未执行。
+
+## 本轮验证与来源交接
+
+使用已授权机械检测器的同轮回执时，先验证成功终态、无模型执行、7包和附属提交、来源main/固定检查器/基线哈希及结果指纹。已消费、已审阅与已发布分别留证；过期按合同做一次有界恢复，不能把脚本review_required当兼容通过。本轮固定检查器代码未变。
+
+本机聚合0.1.55已装，显式install-skill后逐文件核对七个官方Skill的190个文件；PromptScript不支持全局安装的提示保留，不声称所有工具均成功。实际运行官方pipeline合成正例、计划校验、上限拒绝和已有结果保护，并核对相关帮助。附属4.12.1及完整提交未变，没有重复反馈或移植其功能。生产BI请求、保存/运行/调度/权限写入均为0；历史实测和上游自报测试不计为本轮业务验收。
 
 ## 2026-11-02 需要调整的行为
 

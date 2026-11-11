@@ -1,30 +1,28 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-11-02",
-  "skillVersion": "3.5.1",
+  "reviewedAt": "2026-11-11",
+  "skillVersion": "3.5.2",
   "packages": {
-    "@guandata/guanskill": "0.1.52",
-    "@guandata/guancli": "1.0.70",
-    "@guandata/guanvis": "0.1.60",
+    "@guandata/guanskill": "0.1.55",
+    "@guandata/guancli": "1.0.72",
+    "@guandata/guanvis": "0.1.62",
     "@guandata/guanetl": "0.1.45",
     "@guandata/guanwf": "0.1.842",
-    "@guandata/guands": "0.1.40",
+    "@guandata/guands": "0.1.41",
     "@guandata/guanmetric": "0.1.23"
   },
   "aggregateDependencies": {
-    "@guandata/guancli": "1.0.69",
-    "@guandata/guanvis": "0.1.60",
+    "@guandata/guancli": "1.0.72",
+    "@guandata/guanvis": "0.1.62",
     "@guandata/guanetl": "0.1.45",
     "@guandata/guanwf": "0.1.842",
-    "@guandata/guands": "0.1.40",
+    "@guandata/guands": "0.1.41",
     "@guandata/guanmetric": "0.1.23"
   },
   "verification": {
-    "aggregateRuntime": "0.1.52 with guancli1.0.69; official seven Skills183files hash-verified",
-    "additionalReviewPackages": {
-      "@guandata/guancli": "1.0.70:isolated installation, help/package review only"
-    },
+    "aggregateRuntime": "0.1.55 with exact six dependencies, official seven Skills file hashes verified",
+    "additionalReviewPackages": {},
     "productionBIRequests": 0,
-    "scope": "compatibility rules, command help, synthetic tests and offline card-copy plan; no business or permission acceptance"
+    "scope": "package/Skill/help review, native local pipeline positive/existing-output/cap cases; no business or permission acceptance"
   }
 }
