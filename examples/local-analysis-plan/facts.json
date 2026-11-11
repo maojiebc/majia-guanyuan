@@ -1,0 +1,12 @@
+[
+  {
+    "Group": "Example",
+    "Amount": "0.1",
+    "Base": "0.3"
+  },
+  {
+    "Group": "Example",
+    "Amount": "0.2",
+    "Base": "0.6"
+  }
+]

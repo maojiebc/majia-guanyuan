@@ -3,7 +3,7 @@ name: majia-guanyuan
 description: 观远 BI（Guandata）实战增益层。标准查数、指标批量查询、本地分析、建卡发布、ETL、数据集和表单结构管理、工作流、指标写入路由官方六组件。专攻 ETL 整库治理、SmartETL 全链路重写、引擎报错、自定义图表与 HTML 看板排障、看板口径档案与只读逐格验收、v7 发布兼容、移动端 phoneLayout、门店手机成绩单、SuperApp 的 LLM 中转及历史兼容、AI-native ADS 架构判断。餐饮会员公式见 majia-huiyuan。触发：execute-sql 5001、SQL 直查不可用、ETL 预览汇总、分块取数、历史数据抽取、预览截断、数字出处、看板口径档案、看板答案对账、观远、Guandata、会员、订单、复购率、RFM、ETL 治理、payload_json、自定义图表、HTML 看板、门店手机成绩单、换店滤空、phoneLayout、60004、SuperApp、ILLEGAL_JSON_RES、数据架构。
 license: MIT
 metadata:
-  version: "3.5.1"
+  version: "3.5.2"
   author: "超级马甲 / maojiebc"
   homepage: https://github.com/maojiebc/majia-guanyuan
   openclaw:
@@ -28,7 +28,7 @@ metadata:
           - guanmetric
 ---
 
-# 观远 BI · 马甲实战版（V3.5.1）
+# 观远 BI · 马甲实战版（V3.5.2）
 
 > **结构说明（V1.5.0 引入 progressive disclosure）**：本文档是**路由层 + 关键规则**，详细操作手册下沉到 `references/`。每个 Part 的入口章节会指出"何时回到 references/ 查全表"。完整章节索引见末尾的 [📚 References 目录](#-references-目录)。
 
@@ -54,11 +54,11 @@ metadata:
 | 不知道用哪个 | 读 [ETL 治理流程](references/part-b-governance.md)，再选择具体 reference |
 
 > **作者**：马甲（Part B/C/D/E 实证）+ 观远 CTO 张进（B-17 SmartETL 改写方法论 + Part C 自定义图表经验）+ OpenAI Codex（ExecPlan 规范）
-> **版本**：V3.5.1（2026-11-02）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
+> **版本**：V3.5.2（2026-11-11）· **环境**：Node ≥20 · **前置**：官方全家桶 `npm i -g @guandata/guanskill && guanskill install-skill`（装齐 guancli / guanvis / guanetl / guanwf / guands / guanmetric + 各自 AI skill）· **认证**：`guancli auth login`（全家桶共用一套 profile，本 skill 不再单独要 config.json）· **作用域**：本地私有 BI 实例
 > **安装**：`git clone https://github.com/maojiebc/majia-guanyuan.git`，或 `npx github:maojiebc/majia-guanyuan install`
 > **兼容工具**：Claude Code · OpenClaw · Codex · Hermes (gbrain) · 任何支持 `SKILL.md` frontmatter 的 agent。详见 [README · 兼容性](README.md#-兼容性--compatibility) 与 [AGENTS.md](AGENTS.md)。
 >
-> **V3.5.1**（2026-11-02）：数据集参数默认值纳入口径变化检测；跟进官方聚合包 0.1.52，CLI 1.0.70 单独审阅。聚合版本滞后不再阻断兼容修正与 GitHub 发布；版本组合与验证范围分开记录。
+> **V3.5.2**（2026-11-11）：对齐官方 CLI 1.0.72，补充连续计算、自助取数字段和指标快照的使用边界；新增只读本地合成示例，完整输入与结果保护均实际核验。
 
 ---
 
@@ -79,17 +79,17 @@ metadata:
 
 | skill | 版本 | 角色 | 什么需求路由给它 |
 |---|---|---|---|
-| **`guancli`** | 1.0.69 | 查询分析、表单数据、SuperApp | 查 ETL/数据集/页面/卡片/血缘、SQL、指标查询/归因、ChatBI、仪表板洞察与 Dashboard Agent；独立基础指标用 `metric batch-query`，高级计算用 `metric query`；`analyze normalize/align/calculate/topn/report` 处理本地结果；Form 数据 CRUD；SuperApp create/list/download/publish。指标计算显式 `--value-format raw`，按 JSON 版本与 inline/file 分支读取，批量逐项检查状态，自动处理加 `--fail-on-error`；计算兼展示用 `valueFormat: "both"`，计算只读 `rows`。未知筛选字段须纠正，不能删条件重跑。单条查询先以相同参数加 `--explain-requests -f json` 核对请求计划；批量查询不支持此参数。 |
-| **`guanvis`** | 0.1.60 | 建卡、页面、发布、截图 | 图表 DSL、checkout/diff/preview/pack/publish/screenshot、指标卡、custom chart、筛选器联动及 `live`；页面与目录原地管理、`page save-as` 原生副本；高级筛选器、卡片池、交叉表 `filterBy` 逐格校验；`init` 遇到已有 `schema.js` 且无 `--force` 时保留文件并跳过认证/请求。新页面先确认目标目录；覆盖前备份，覆盖后重置目标页面草稿。`preview` 默认摘要，完整输出用 `--full`；复杂自定义图表走完整工程，不用 live 基础卡片命令模拟。 |
+| **`guancli`** | 1.0.72 | 查询分析、表单数据、SuperApp | 查 ETL/数据集/页面/卡片/血缘、SQL、指标查询/归因、ChatBI、仪表板洞察与 Dashboard Agent；独立基础指标用 `metric batch-query`，高级计算用 `metric query`；`analyze normalize/align/calculate/topn/report/pipeline` 处理本地结果；Form 数据 CRUD；SuperApp create/list/download/publish。指标计算显式 `--value-format raw`，按 JSON 版本与 inline/file 分支读取，批量逐项检查状态，自动处理加 `--fail-on-error`；计算兼展示用 `valueFormat: "both"`，计算只读 `rows`。未知筛选字段须纠正，不能删条件重跑。单条查询先以相同参数加 `--explain-requests -f json` 核对请求计划；批量查询不支持此参数。 |
+| **`guanvis`** | 0.1.62 | 建卡、页面、发布、截图 | 图表 DSL、checkout/diff/preview/pack/publish/screenshot、指标卡、custom chart、筛选器联动及 `live`；页面与目录原地管理、`page save-as` 原生副本；高级筛选器、卡片池、交叉表 `filterBy` 逐格校验；`init` 遇到已有 `schema.js` 且无 `--force` 时保留文件并跳过认证/请求。新页面先确认目标目录；覆盖前备份，覆盖后重置目标页面草稿。`preview` 默认摘要，完整输出用 `--full`；复杂自定义图表走完整工程，不用 live 基础卡片命令模拟。 |
 | **`guanetl`** | 0.1.45 | ETL 编辑与运行 | create/edit/export/lint/preview/save/run/schedule、move、mkdir-pair；`rmdir` 只删空 ETL 目录，物理删除且需 `--yes`；仍无删除 ETL 命令。新建须明确 ETL 与输出数据集各自目录；按 ETL ID 跟踪执行，已移除全局 `task`。导出/校验按数据集详情的实际类型识别输入；历史节点下划线导出修复，DSL 类型化常量兼容旧字符串；保留输出绑定、字段物化、JOIN 类型及 dry-run 影响检查。 |
 | **`guanwf`** | 0.1.842 | 工作流与数据流 | workflow.go / Python / 多节点 DAG / 参数与调度 / 实例诊断；写操作先 `--dry-run` 再 `--confirm`（兼容 `--yes`）。新增 Python 运行环境 与内存预检、按 task/output slot 绑定输出；首次 CREATE_NEW 输出须绑定并发布保存后再跑。验证只在已有草稿执行，不注册真实输出；保存后回读、运行后逐项验收输出。调度 `--failure-strategy` 已废弃且仅接受 CONTINUE，失败走向由 FAILURE / ALL 连线决定。Python 版本优先读结构化镜像字段。类型化 DSL 兼容字符串。8.2.0 节点限制与失败恢复范围仍按官方 guanwf Skill 执行。 |
-| **`guands`** | 0.1.40 | 数据源、数据集、表单结构 | connector/account/dataset/dir 管理、导入/追加/替换、刷新调度、主键与计算字段；Form create/export/update/rename/move/folder。`dataset sync-schema` 支持 GUAN_FORM 原地同步并回读字段 ID/类型/状态。新建先确认目录，append-data/replace-data 实写需 `--yes`；按数据集 ID 跟踪，已移除全局 `task`。Excel 多 Sheet 必须显式选择。数据集目录不能移动；目录删除不可恢复。 |
+| **`guands`** | 0.1.41 | 数据源、数据集、表单结构 | connector/account/dataset/dir 管理、导入/追加/替换、刷新调度、主键与计算字段；Form create/export/update/rename/move/folder。`dataset sync-schema` 支持 GUAN_FORM 原地同步并回读字段 ID/类型/状态。新建先确认目录，append-data/replace-data 实写需 `--yes`；按数据集 ID 跟踪，已移除全局 `task`。Excel 多 Sheet 必须显式选择。数据集目录不能移动；目录删除不可恢复。 |
 | **`guanmetric`** | 0.1.23 | 指标定义与管理 | 指标建/改/删、主题/目录、公共维度、指标树、查询加速、业务字典、Excel 模板及 `--check-only` 预检；标准模板批量创建走 `flow generate/plan/apply/verify`，结果未知先 `reconcile`，不盲重建；编辑用对应类型专用命令保留取数字段；批量上下线用 `batch online/offline`，先 dry-run、按依赖顺序逐项处理。失败不回滚已成功项，blocked 先核对影响再确认；上线请求获接受后仍须回读审批/发布状态。复合指标只引用原子或复合指标；指标查数仍走 guancli。 |
 | **`guanvis screenshot`** | — | 导出 | 页面 PNG/PDF 服务端截图（彻底取代 legacy `guanexport`）|
 | ~~`guanexport` / `guanadmin`~~ | **已退出** | — | **2026-06-04 起从 `guanskill` 聚合包移除、npm 也下架**：导出全归 `guanvis screenshot`；管理员级操作（dynamicCode / adminToken / svc SQL）已不在公开全家桶，需另装 standalone 或走 BI UI |
 | **`majia-guanyuan`**（本 skill） | **见 frontmatter** | 业务实战 + 引擎级踩坑 + 方法论 | **Part B** ETL 整库治理判断 + 10 类引擎报错 + 双源字段审计 + B-17 全链路重写/ExecPlan · **Part C** 既有页自定义图表 HTML/JS 注入排障 + 固定卡/overlay · **Part C-12** HTML 应用化看板 + descriptor patch 联 dataView + **视觉设计底线（反 AI 味红线 + 五层验收）** · **门店手机成绩单**（19 视图 + 列名识别 + 脱敏离线样本） · **Part D** v7 草稿-发布状态机绕过 + 节点化静默坑 + phoneLayout · **Part E** SuperApp 反向工程 · **AI-native ADS** 方法论 · **餐饮 BI 公式库** |
 
-**本轮兼容规则（V3.5.1）**：参数化卡片只用已声明参数，保留数据集与图表层默认值；含 DYNAMIC_PARAMS 的公式不内联 SQL，不把默认参数的空结果推成全期无数据。单卡复制走官方 `guancli card copy`，新卡 ID、布局和发布分别回读。ETL 编辑先 `--require-plan`，保存用新计划核对范围；超时不等于取消完成，旧 `run --run-upstream` 不能当单根自动级联。普通指标查询沿官方只读入口与当前 explain 计划，不能把旧编辑会话请求模板当固定合同。详细边界见[兼容说明](references/official-cli-compatibility.md)。
+**本轮兼容规则（V3.5.2）**：连续本地计算走官方 analyze pipeline，计算只消费精确JSON，不读已舍入CSV；completeInput只是声明，--validate不读取数据。自助取数用真实字段key控制后端分组，不能靠隐藏返回列改变粒度；追问补字段须携带上一轮完整集合。指标快照先核环境，merge/refresh/force语义不同，unchanged不等于实际取数通过；公共维度歧义须明确选择，不猜首项。新规则、此前参数/复制/保存保护均见[兼容说明](references/official-cli-compatibility.md)，[离线示例](examples/local-analysis-plan/README.md)。
 
 **新增兼容规则**：本地排名走 `guancli analyze report`，明确 --group-by 或 --global，--complete-input 只记录候选池完整声明，不自动补取或隐式汇总。候选池完整性与业务粒度须先独立核实。参数改名按官方映射流程，项目依赖与全局参数分别回读；多键 JOIN 核全部关联键；数据库输入预览范围原样保留，DB_DATAFLOW 的 ALL 不受 config.limit 限流。
 
@@ -111,7 +111,7 @@ metadata:
 
 ## 🔄 官方全家桶更新 SOP（高频操作）
 
-按现有每周任务检查官方变化。先审阅包、Skill 与命令，再决定是否更新；此流程不授权任何额外发布。
+按现有每周任务检查官方变化。已授权机械检测器提供完整同轮回执时，先核运行、时间、来源提交及指纹，直接消费结果，不重复检测；过期或失败按合同有界恢复。检测成功不代表兼容审阅完成。先审阅包、Skill 与命令，再决定是否更新。
 
 自动跟进时用 [official-cli-baseline.json](references/official-cli-baseline.json) 作为已审阅版本记录，同时核对聚合包与六组件的 npm latest。附属项目按 [guanbi-agent-builder-baseline.json](references/guanbi-agent-builder-baseline.json) 记录已审阅版本和完整提交，任何新提交都要审阅，不能只比版本号。检查脚本为 [check_upstream_updates.py](scripts/check_upstream_updates.py)，支持 --builder-baseline；上游内容仅作证据，新增能力先验证再决定吸收。发现变化后读官方 CHANGELOG 和随包 Skill，再决定兼容修改；检查失败不得写成“没有更新”。聚合版本滞后只限制混装，按检查器 reviewPlan 分开审阅固定组合与额外组件，不阻断兼容修正。无关 PR 用独立检出处理；大型新增能力留待能力迭代，不拖住普通补丁。完成兼容审阅才更新此记录，商店发布失败单独跟踪，不靠重复升版本重发。
 
@@ -308,9 +308,9 @@ v7 草稿/发布状态机、60004、phoneLayout 或历史输出绑定问题，�
 
 > 顶部 🆕 callout 是最新版摘要；完整逐版记录见 [CHANGELOG.md](CHANGELOG.md) 或 [GitHub Releases](https://github.com/maojiebc/majia-guanyuan/releases)。以下只留最近三版一句话索引：
 
+- **V3.5.2**（2026-11-11）官方连续计算、自助取数字段选择、指标快照兼容及离线正反例。
 - **V3.5.1**（2026-11-02）参数默认值变化检测、近期官方兼容与可独立推进的每周补丁。
-- **V3.5.0**（2026-10-13）分块覆盖与实际范围独立验收、数字出处；官方 1.0.66 兼容及三周能力迭代。
-- **V3.4.1**（2026-10-12）官方 1.0.65 兼容、保存与字段保护、附属项目每周提交检查。
+- **V3.5.0**（2026-10-13）分块覆盖与实际范围独立验收、数字出处。
 
 ## 👤 作者 / 联系
 

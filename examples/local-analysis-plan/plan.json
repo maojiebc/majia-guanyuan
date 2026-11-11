@@ -1,0 +1,61 @@
+{
+  "inputs": [
+    {
+      "id": "facts",
+      "inputFile": "facts.json",
+      "completeInput": true
+    }
+  ],
+  "pipeline": {
+    "summary": {
+      "groupBy": [
+        "Group"
+      ],
+      "measures": [
+        {
+          "input": "facts",
+          "field": "Amount",
+          "outputField": "Amount",
+          "operation": "sum"
+        },
+        {
+          "input": "facts",
+          "field": "Base",
+          "outputField": "Base",
+          "operation": "sum"
+        }
+      ],
+      "calculations": [
+        {
+          "outputField": "Ratio",
+          "operator": "divide",
+          "left": {
+            "field": "Amount"
+          },
+          "right": {
+            "field": "Base"
+          }
+        }
+      ],
+      "columns": [
+        {
+          "field": "Group",
+          "label": "Group",
+          "format": "text"
+        },
+        {
+          "field": "Amount",
+          "label": "Amount",
+          "format": "number",
+          "decimals": 2
+        },
+        {
+          "field": "Ratio",
+          "label": "Ratio",
+          "format": "percent",
+          "decimals": 2
+        }
+      ]
+    }
+  }
+}
