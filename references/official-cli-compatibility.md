@@ -1,20 +1,34 @@
 # 官方 CLI 更新兼容说明
 
-核验日期：2026-11-11（客户端日期）。适用于 majia-guanyuan v3.5.2。本轮是官方文档/帮助审阅与本地实际运算验证，不是生产BI业务验收。
+核验日期：2026-11-23（客户端日期）。适用于 majia-guanyuan v3.5.3。本轮核验官方发布包、随包 Skill 和隔离安装的命令帮助。
 
 ## 当前版本与安装组合
 
-| 组件 | 上次审阅 | 当前审阅及本机聚合固定版本 |
+| 组件 | 上次审阅 | npm latest 及本次隔离安装 |
 |---|---|---|
-| guanskill | 0.1.52 | 0.1.55 |
-| guancli | 1.0.70（另核聚合1.0.69） | 1.0.72 |
-| guanvis | 0.1.60 | 0.1.62 |
-| guanetl | 0.1.45 | 0.1.45 |
-| guanwf | 0.1.842 | 0.1.842 |
-| guands | 0.1.40 | 0.1.41 |
-| guanmetric | 0.1.23 | 0.1.23 |
+| guanskill | 0.1.55 | 0.1.56 |
+| guancli | 1.0.72 | 1.0.73 |
+| guanvis | 0.1.62 | 0.1.63 |
+| guanetl | 0.1.45 | 0.1.46 |
+| guanwf | 0.1.842 | 0.1.843 |
+| guands | 0.1.41 | 0.1.41 |
+| guanmetric | 0.1.23 | 0.1.24 |
 
-聚合0.1.55的六组件精确依赖与latest一致，机器基线见[official-cli-baseline.json](official-cli-baseline.json)。官方随包记录：[聚合](https://unpkg.com/@guandata/guanskill@0.1.55/CHANGELOG.md)、[CLI](https://unpkg.com/@guandata/guancli@1.0.72/CHANGELOG.md)、[可视化](https://unpkg.com/@guandata/guanvis@0.1.62/CHANGELOG.md)、[数据集](https://unpkg.com/@guandata/guands@0.1.41/CHANGELOG.md)。安装组合、审阅范围及真实业务验收分别记录。
+聚合包 0.1.56 固定的六个依赖与此表一致。机器基线见 [official-cli-baseline.json](official-cli-baseline.json)。官方变更记录见 [聚合包](https://unpkg.com/@guandata/guanskill@0.1.56/CHANGELOG.md)、[CLI](https://unpkg.com/@guandata/guancli@1.0.73/CHANGELOG.md)、[可视化](https://unpkg.com/@guandata/guanvis@0.1.63/CHANGELOG.md)、[ETL](https://unpkg.com/@guandata/guanetl@0.1.46/CHANGELOG.md)、[工作流](https://unpkg.com/@guandata/guanwf@0.1.843/CHANGELOG.md)和[指标](https://unpkg.com/@guandata/guanmetric@0.1.24/CHANGELOG.md)。
+
+## 2026-11-23 更新
+
+**指标排名。** 按当前指标名称排序时，1.0.73 优先解析为指标 ID，对指标聚合值排序。维度和指标同名时，先用相同参数加 `--explain-requests -f json` 核对排序 ID。若业务实际要按维度排序，定位明确的字段并重新核对计划。`--limit` 只限制返回行数。日期筛选在查询输入中使用 `YYYY-MM-DD`。
+
+**加速配置权限。** `metric get/search` 读取附加加速配置遇到 HTTP 403 或业务码 1004 时，仍可返回指标主体，同时在 stderr 提示。JSON 缺少 `accelerations` 表示该配置未知。已有字段、口径可按实际返回值继续核对，涉及加速状态的判断须单独保留未知。显式 `metric accelerate list` 仍报告权限拒绝，主请求认证失败与其他错误按实际失败处理。
+
+**SQL 输出。** 按当前官方入口确认 `-f json --typed` 的支持。消费类型化数值时用保留长整数和小数精度的 JSON 解析器，保留 NULL；结果类型变化不改变 SQL 直查所需版本、开关和授权。已有 5001 场景仍按受限取数手册处理。
+
+**页面标签页。** 根布局算第一层，最多三层。每层页签可容纳卡片组和筛选器组，第三层不可再嵌标签页。已有页面用官方 checkout 修改，核对原标签页与页签 ID、父层级、筛选器位置、联动目标、有效默认值以及图片引用。打包后再核这些项，实际发布后核编辑态和浏览态；异常默认值回查来源字段及取值，保留业务条件。验收现有页面时优先使用官方布局输出核证嵌套关系。
+
+**ETL、工作流和指标预检。** guanetl 保存 SQL 节点时将仍缺失或为 null 的 aliases 规范为空对象，已有有效映射应保留；有意清空前先核对 SQL 引用和输出字段。guanwf 以官方版本兼容表核对目标环境、节点和权限，服务端版本未知时保留阻碍；保存冲突按具体节点和字段重新核对，禁止用整条工作流覆盖冲突。原子指标发布在 BI 8.3.0 起执行官方保存冲突预检，早期版本或仅存草稿会跳过；下游影响校验和发布后回读仍需执行。离线数据同步节点等新增能力需要独立核对目标服务端及业务影响。
+
+验证限于隔离环境的精确版本安装、随包 Skill 比对、命令帮助及合成数据回归。附属项目 4.12.1 的完整主干提交未变。工作流运行、排序实际数据、页面发布与旧版租户写入不在本轮验证范围。
 
 ## 2026-11-11 更新：精确计算、字段选择与指标快照
 
@@ -44,7 +58,7 @@ CUSTOM_REPORT主表格的字段窗格控制zoneFilter，--columns只是返回后
 
 Tab内筛选器组在checkout/edit/publish中应保留组结构。guanvis新增page save-as，但服务端PAT权限隔离验收尚未完成，不能仅因命令存在就宣称PAT可交付；目标环境和业务写入仍另行核对。MongoDB使用官方dataset mongodb columns/preview/create/update，不走JDBC建集或普通account探查。先限定集合、字段、样本、筛选和日期转换，再按官方原地编辑保留dsId/fdId，不能删后重建。这些写入本轮未执行。
 
-## 本轮验证与来源交接
+## 2026-11-11 验证与来源交接
 
 使用已授权机械检测器的同轮回执时，先验证成功终态、无模型执行、7包和附属提交、来源main/固定检查器/基线哈希及结果指纹。已消费、已审阅与已发布分别留证；过期按合同做一次有界恢复，不能把脚本review_required当兼容通过。本轮固定检查器代码未变。
 
