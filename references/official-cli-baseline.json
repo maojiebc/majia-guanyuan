@@ -1,28 +1,28 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-11-11",
-  "skillVersion": "3.5.2",
+  "reviewedAt": "2026-11-23",
+  "skillVersion": "3.5.3",
   "packages": {
-    "@guandata/guanskill": "0.1.55",
-    "@guandata/guancli": "1.0.72",
-    "@guandata/guanvis": "0.1.62",
-    "@guandata/guanetl": "0.1.45",
-    "@guandata/guanwf": "0.1.842",
+    "@guandata/guanskill": "0.1.56",
+    "@guandata/guancli": "1.0.73",
+    "@guandata/guanvis": "0.1.63",
+    "@guandata/guanetl": "0.1.46",
+    "@guandata/guanwf": "0.1.843",
     "@guandata/guands": "0.1.41",
-    "@guandata/guanmetric": "0.1.23"
+    "@guandata/guanmetric": "0.1.24"
   },
   "aggregateDependencies": {
-    "@guandata/guancli": "1.0.72",
-    "@guandata/guanvis": "0.1.62",
-    "@guandata/guanetl": "0.1.45",
-    "@guandata/guanwf": "0.1.842",
+    "@guandata/guancli": "1.0.73",
+    "@guandata/guanvis": "0.1.63",
+    "@guandata/guanetl": "0.1.46",
+    "@guandata/guanwf": "0.1.843",
     "@guandata/guands": "0.1.41",
-    "@guandata/guanmetric": "0.1.23"
+    "@guandata/guanmetric": "0.1.24"
   },
   "verification": {
-    "aggregateRuntime": "0.1.55 with exact six dependencies, official seven Skills file hashes verified",
+    "aggregateRuntime": "Isolated 0.1.56 with exact six dependencies; 194 bundled files across seven official Skills match both isolated Buddy installs",
     "additionalReviewPackages": {},
     "productionBIRequests": 0,
-    "scope": "package/Skill/help review, native local pipeline positive/existing-output/cap cases; no business or permission acceptance"
+    "scope": "Release archive integrity, bundled Skills, isolated command help, synthetic repository regressions; no live BI acceptance"
   }
 }
